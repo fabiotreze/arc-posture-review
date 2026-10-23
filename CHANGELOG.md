@@ -6,14 +6,21 @@
 - **CHK-63 Defender for Servers per Arc machine:** reads the Defender for Servers plan on each `Microsoft.HybridCompute/machines` resource (resource-level Pricings API, read-only GET) and compares it with the subscription plan. FAIL if a machine has no plan (Free); WARN if the machine plan differs from the subscription (set on the machine itself); PASS if every machine inherits the subscription plan.
 - The analysis lists the plan per machine (tier, subplan, inherited or set on the machine, enabled extensions).
 - Release badge in the README.
+- GitHub Actions: a release is published automatically when a `vX.Y.Z` tag is pushed (notes from this CHANGELOG, script attached); PSScriptAnalyzer results in Security > Code scanning; Dependabot keeps the actions up to date.
 
 ### Changed
 - The cost estimate (CHK-53) uses the actual plan of each machine when it was read.
 - The script's `az rest` allowlist accepts one more read-only call: the Defender plan of an Arc machine.
 
+### Fixed
+- Roles not in the built-in map are labeled "Unmapped role (ID)" instead of "Custom/unknown" (many are built-in roles that do not affect the checks).
+- CHK-40 (AMA without DCR) is N/A when no connected machine has the Azure Monitor Agent, instead of PASS.
+- CHK-41 (Sentinel) states how many workspaces receive Arc machine data, consistent with the Arc-centric scope of CHK-45.
+
 ### Mudanças (pt-BR)
 - Nova verificação CHK-63: plano do Defender for Servers lido em cada máquina Arc. FAIL sem plano (Free); WARN se diferente da subscription; PASS se todas herdam.
 - A estimativa de custo usa o plano real de cada máquina; selo de release no README.
+- Correções: papéis fora do mapa aparecem como "não mapeado"; CHK-40 vira N/A sem AMA; CHK-41 informa quantos workspaces recebem dados do Arc.
 
 ## [3.3.0] — 2026-10-23
 

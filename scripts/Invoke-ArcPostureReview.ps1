@@ -332,7 +332,7 @@ authorizationresources
     '602da2ba-a5c2-41da-b01d-5360126ab525' = 'Virtual Machine Local User Login'; 'a6333a3e-0164-44c3-b281-7a577aff287f' = 'Windows Admin Center Administrator Login'
   }
   if ($DS['roles']) {
-    foreach ($r in @($DS['roles'])) { if (-not $r.roleName -and $BuiltinRoles.ContainsKey([string]$r.roleId)) { $r.roleName = $BuiltinRoles[[string]$r.roleId] } elseif (-not $r.roleName) { $r.roleName = 'Custom/unknown (' + [string]$r.roleId + ')' } }
+    foreach ($r in @($DS['roles'])) { if (-not $r.roleName -and $BuiltinRoles.ContainsKey([string]$r.roleId)) { $r.roleName = $BuiltinRoles[[string]$r.roleId] } elseif (-not $r.roleName) { $r.roleName = 'Unmapped role (' + [string]$r.roleId + ')' } }
     Save-Json 'roles' @($DS['roles'])
   }
 }
@@ -792,7 +792,7 @@ $Eval['CHK-41'] = {
   $sol = @($r | Where-Object { $_.type -eq 'microsoft.operationsmanagement/solutions' -and ([string]$_.name) -like 'SecurityInsights(*' })
   if (-not $sol.Count) {
     if (-not $w.Count) { Set-Result 'N/A' 0 'No Log Analytics workspace in scope (the SOC may be in another subscription).' }
-    else { Set-Result 'WARN' 0 "None of the $($w.Count) workspace(s) in scope has Microsoft Sentinel. Confirm whether the SOC uses a workspace in another subscription." }
+    else { $aw = (Get-ArcWorkspaceIds).Count; Set-Result 'WARN' 0 ("No workspace with Microsoft Sentinel. Workspaces in the Arc subscriptions: {0}; receiving Arc machine data through a DCR: {1}. Without Arc machine events in a Sentinel workspace, the SOC cannot see these servers. Confirm whether the SOC uses a workspace in another subscription." -f $w.Count, $aw) }
     return
   }
   $names = @($sol | ForEach-Object { (([string]$_.name) -replace '^SecurityInsights\(|\)$', '').ToLower() })
@@ -938,6 +938,7 @@ $Eval['CHK-40'] = {
   $destTxt = (@($dest.Keys | ForEach-Object { $_ + ' (' + $dest[$_] + ' DCR)' }) -join ', '); if (-not $destTxt) { $destTxt = 'not identified' }
   $withAma = @(Get-ArcConnected | Where-Object { $k.ContainsKey((Get-MachineKey $_.resourceGroup $_.name)) }).Count
   $ctx = " Connected machines with AMA: $withAma; with DCR: $($a.Count). DCRs in use: $($used.Count) of $($info.Count). Destinations: $destTxt."
+  if (-not $withAma) { Set-Result 'N/A' 0 ('No connected machine with Azure Monitor Agent (see CHK-39).' + $ctx); return }
   if ($rows.Count) { Set-Result 'WARN' $rows.Count ("$($rows.Count) machine(s) with AMA without an associated Data Collection Rule (agent not collecting data)." + $ctx) $rows }
   else { Set-Result 'PASS' 0 ('All machines with AMA have an associated DCR.' + $ctx) }
 }
