@@ -21,6 +21,17 @@ Kit somente leitura para avaliar a segurança de **servidores habilitados pelo A
 - **Relatórios** em HTML, Markdown e JSON, em **português** e **inglês**.
 - **Interface acessível:** status por ícone, texto e cor (paleta do Advisor/Defender), contraste AA, modo escuro, alto contraste e movimento reduzido.
 
+## Veja antes de rodar
+
+![Comece aqui: etapas e árvores de decisão](docs/images/start-here.pt-BR.png)
+
+![Fluxo da coleta somente leitura e das evidências](docs/images/collection-flow.pt-BR.png)
+
+**Relatório de exemplo** de uma subscription de laboratório (7 servidores Arc, SQL Server, Defender for Servers), anonimizado: subscription, conta, IDs e nomes de recursos de governança substituídos.
+[Abrir o relatório de exemplo](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.pt-BR.html) · [English](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.en-US.html)
+
+![Análise de exemplo](docs/images/sample-report.pt-BR.png)
+
 ## Como usar
 
 | Opção | Como |

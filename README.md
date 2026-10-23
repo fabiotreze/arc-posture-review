@@ -21,6 +21,17 @@ Read-only security assessment kit for **Azure Arc-enabled servers** and **SQL Se
 - **Reports** in HTML, Markdown and JSON, in **English** and **Brazilian Portuguese**.
 - **Accessible UI:** status shown by icon, text and color (Advisor/Defender palette), AA contrast, dark mode, high-contrast and reduced-motion support.
 
+## See it before you run it
+
+![Start here: stages and decision trees](docs/images/start-here.en-US.png)
+
+![Read-only collection and evidence flow](docs/images/collection-flow.en-US.png)
+
+**Sample report** from a lab subscription (7 Arc-enabled servers, SQL Server, Defender for Servers), anonymized: subscription, account, IDs and governance resource names replaced.
+[Open the sample report](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.en-US.html) · [Português](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.pt-BR.html)
+
+![Sample analysis](docs/images/sample-report.en-US.png)
+
 ## Use
 
 | Option | How |
@@ -58,6 +69,8 @@ arc-posture-review.en-US.html      offline HTML, English
 arc-posture-review.pt-BR.html      offline HTML, Portuguese
 scripts/Invoke-ArcPostureReview.ps1  standalone read-only collector (review it before running)
 docs/guide.en-US.md · guide.pt-BR.md  playbook with decision trees (Mermaid renders on GitHub)
+docs/examples/                     anonymized sample reports (en-US, pt-BR)
+docs/images/                       screenshots used in the README
 ```
 
 ## Feedback
