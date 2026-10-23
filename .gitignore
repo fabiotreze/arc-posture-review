@@ -1,0 +1,16 @@
+# build output
+build/
+# collected evidence: NEVER commit
+arc-posture-review-*/
+arc-posture-review-*.zip
+arc-posture-review-*.zip.sha256
+arc-posture-review-analysis-*.html
+arc-posture-review-report*
+evidencias-arc/
+arc-seguranca-*/
+*.zip
+# environment
+__pycache__/
+*.pyc
+.DS_Store
+.vscode/

@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this material, please cite it using the metadata below."
+title: "Arc Posture Review — read-only security assessment kit for Azure Arc-enabled servers"
+abstract: >-
+  Guided checklist, read-only PowerShell collector (Azure Resource Graph + Azure CLI) and
+  in-browser analysis to assess the security posture of Azure Arc-enabled servers and SQL Server
+  enabled by Azure Arc. Method based on the Cloud Adoption Framework Secure methodology and the
+  Microsoft Cloud Security Benchmark, with decision trees, action plan, recommended alerts and
+  reports in English and Brazilian Portuguese.
+type: software
+authors:
+  - family-names: "Costa"
+    given-names: "Fabio Rodrigues Vieira"
+    alias: "fabiotreze"
+repository-code: "https://github.com/fabiotreze/arc-posture-review"
+url: "https://fabiotreze.github.io/arc-posture-review/"
+version: "3.1.0"
+date-released: "2026-10-23"
+license: MIT
+keywords:
+  - azure-arc
+  - hybrid-cloud
+  - security-posture
+  - microsoft-cloud-security-benchmark
+  - defender-for-cloud
+  - azure-resource-graph
+  - sql-server-enabled-by-azure-arc
+  - powershell
