@@ -573,7 +573,7 @@ $Eval['CHK-29'] = {
       $sit = 'Supported'
       if ($mi -lt 0 -or $rel.date -lt $SupportCutoff) { $sit = 'Out of support' } elseif ($mi -lt $AgentSecFloor) { $sit = 'Vulnerable: update to 1.61 or later' } elseif ($rel.date -lt $warnCut) { $sit = 'Supported, more than 6 months old' }
       $cves = @(); if ($mi -ge 48 -and $mi -le 49) { $cves += 'CVE-2025-49692' }; if ($mi -ge 0 -and $mi -lt 51) { $cves += 'CVE-2025-26627' }; if ($mi -ge 0 -and $mi -lt 55) { $cves += 'CVE-2025-55316' }; if ($mi -ge 0 -and $mi -lt 61) { $cves += 'CVE-2026-26117' }
-      [pscustomobject]@{ name = $x.name; resourceGroup = $x.resourceGroup; subscriptionId = $x.subscriptionId; status = $x.status; agentVersion = $x.agentVersion; lancamento = ($rel.date.ToString('yyyy-MM') + $est); idadeMeses = (($Start.Year * 12 + $Start.Month) - ($rel.date.Year * 12 + $rel.date.Month)); suportadoAte = $rel.date.AddMonths(12).ToString('yyyy-MM'); situacao = $sit } ; cves = ($cves -join ', ') })
+      [pscustomobject]@{ name = $x.name; resourceGroup = $x.resourceGroup; subscriptionId = $x.subscriptionId; status = $x.status; agentVersion = $x.agentVersion; lancamento = ($rel.date.ToString('yyyy-MM') + $est); idadeMeses = (($Start.Year * 12 + $Start.Month) - ($rel.date.Year * 12 + $rel.date.Month)); suportadoAte = $rel.date.AddMonths(12).ToString('yyyy-MM'); situacao = $sit; cves = ($cves -join ', ') } })
   $out = @($rows | Where-Object { $_.situacao -eq 'Out of support' -or $_.situacao -like 'Vulnerable*' })
   $old = @($rows | Where-Object { $_.situacao -like 'Supported, *' })
   $dist = ($rows | Group-Object { (($_.agentVersion -split '\.')[0..1]) -join '.' } | Sort-Object Count -Descending | Select-Object -First 6 | ForEach-Object { "$($_.Name): $($_.Count)" }) -join '; '
@@ -756,14 +756,15 @@ $Eval['CHK-56'] = {
 $Eval['CHK-57'] = {
   $m = @(Get-ArcConnected)
   if (-not $m.Count) { Set-Result 'N/A' 0 'No connected machines in scope.'; return }
-  $pat = 'endpoint protection|antimalware|anti-malware|antivirus|EDR|Defender for Endpoint|endpoint detection'
+  $pat = 'endpoint protection|antimalware|anti-malware|\bantivirus\b|\bEDR\b|Defender for Endpoint|endpoint detection|Defender Antivirus'
   $d = @($DS['defender'] | Where-Object { ([string]$_.assessment) -match $pat })
+  $dHi = @($d | Where-Object { $_.severity -in @('High', 'Medium', 'Critical') })
   $k = Get-ExtIndex '^MDE\.(Windows|Linux)$'
   $noMde = @($m | Where-Object { -not $k.ContainsKey((Get-MachineKey $_.resourceGroup $_.name)) })
   $rows = @($d | Select-Object @{ n = 'item'; e = { $_.assessment } }, severity, machines) + @($noMde | Select-Object @{ n = 'item'; e = { 'No MDE extension: ' + $_.name } }, @{ n = 'severity'; e = { '' } }, @{ n = 'machines'; e = { 1 } })
   $det = "Endpoint protection recommendations with Unhealthy machines in Defender for Cloud: {0}. Connected machines without the MDE extension: {1} of {2}." -f $d.Count, $noMde.Count, $m.Count
-  if ($d.Count) { Set-Result 'FAIL' $d.Count $det $rows }
-  elseif ($noMde.Count) { Set-Result 'WARN' $noMde.Count $det $rows }
+  if ($dHi.Count) { Set-Result 'FAIL' $dHi.Count $det $rows }
+  elseif ($d.Count -or $noMde.Count) { Set-Result 'WARN' ($d.Count + $noMde.Count) $det $rows }
   else { Set-Result 'PASS' 0 $det }
 }
 $Eval['CHK-58'] = {

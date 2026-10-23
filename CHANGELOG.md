@@ -14,12 +14,18 @@
 - **Coverage inventory** in the guide (Appendix J): totals per domain, automated/documentary, severity, assessment layer and decision tree, with the change from the previous version.
 - References: Windows Server Management enabled by Azure Arc, Hotpatch, Windows/Linux security baselines, VM Insights, Change Tracking, Windows LAPS, BitLocker, Conditional Access and mandatory MFA.
 
+### Fixed
+- CHK-29 (agent version) failed with an evaluation error in v3.1.0 (`cves` column outside the result object). Found in a lab run and fixed; the collector now passes an automated check for this class of error.
+- The full report generated without a loaded package now states that automated checks show as TODO.
+- CHK-57 matched unrelated Defender recommendations (for example a removable drive scan setting) and failed on low severity items. It now matches whole words and fails only on high or medium severity; low severity gives a warning.
+
 ### Changed
 - English version shows ERROR, PARTIAL, MISSING and UNKNOWN instead of the Portuguese status codes (package codes unchanged, older packages still accepted).
 
 ### Mudanças (pt-BR)
 - 8 verificações novas (54 → 62): baseline de segurança do SO, auditoria de administradores locais, antivírus e EDR, insights e telemetria, mapa de recursos do Arc, Windows LAPS, criptografia de disco e Acesso Condicional/MFA.
 - Inventário de cobertura por versão no guia (Anexo J); status em inglês na versão en-US.
+- Correção: o CHK-29 (versão do agente) dava erro de avaliação na v3.1.0; relatório sem pacote carregado agora avisa que as automáticas ficam TODO.
 
 ## [3.1.0] — 2026-10-23
 
