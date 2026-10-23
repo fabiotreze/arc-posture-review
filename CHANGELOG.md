@@ -20,11 +20,13 @@
 - CHK-57 matched unrelated Defender recommendations (for example a removable drive scan setting) and failed on low severity items. It now matches whole words and fails only on high or medium severity; low severity gives a warning.
 
 ### Changed
+- **Arc-centric scope:** every check now starts from the collected `Microsoft.HybridCompute/machines`. Role assignments, policy assignments, Key Vaults and Log Analytics workspaces are evaluated only when they reach the Arc machines (management group, the machines' subscription or resource group, or workspaces that receive Arc data through a DCR). Resources from other resource groups are counted as "outside the Arc scope (ignored)" instead of affecting the result. Secure Score is labeled as a subscription-wide measure.
 - English version shows ERROR, PARTIAL, MISSING and UNKNOWN instead of the Portuguese status codes (package codes unchanged, older packages still accepted).
 
 ### Mudanças (pt-BR)
 - 8 verificações novas (54 → 62): baseline de segurança do SO, auditoria de administradores locais, antivírus e EDR, insights e telemetria, mapa de recursos do Arc, Windows LAPS, criptografia de disco e Acesso Condicional/MFA.
 - Inventário de cobertura por versão no guia (Anexo J); status em inglês na versão en-US.
+- Escopo centrado no Azure Arc: papéis, policies, Key Vaults e workspaces só contam quando alcançam as máquinas Arc; o resto aparece como ignorado.
 - Correção: o CHK-29 (versão do agente) dava erro de avaliação na v3.1.0; relatório sem pacote carregado agora avisa que as automáticas ficam TODO.
 
 ## [3.1.0] — 2026-10-23
