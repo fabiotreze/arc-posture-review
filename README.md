@@ -1,7 +1,7 @@
 # Arc Posture Review
 
 [![Code: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
-[![Docs: CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-lightgrey.svg)](LICENSE-DOCS)
+[![Docs: CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-EF9421.svg)](LICENSE-DOCS)
 
 **English** · [Português](README.pt-BR.md)
 
@@ -66,4 +66,6 @@ Questions, corrections and proposals are welcome through [issues](../../issues),
 
 ## License
 
-Code: [MIT](LICENSE). Documentation and playbook content: [CC BY 4.0](LICENSE-DOCS).
+- **Code** (the PowerShell script and the JavaScript, CSS and PowerShell inside the HTML files): [MIT](LICENSE).
+- **Documentation and playbook text** (docs/, README, DISCLAIMER and the text of the HTML files): [CC BY 4.0](LICENSE-DOCS). Suggested credit: *"Arc Posture Review" by Fabio Rodrigues Vieira Costa, https://github.com/fabiotreze/arc-posture-review*.
+- Third-party content referenced or briefly quoted (Microsoft Learn, public security research) and trademarks (Microsoft, Azure, Azure Arc) are not relicensed and remain with their owners.

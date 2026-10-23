@@ -2,12 +2,25 @@ Creative Commons Attribution 4.0 International (CC BY 4.0)
 
 Copyright (c) 2026 Fabio Rodrigues Vieira Costa
 
-The documentation and playbook content of this repository (docs/ and the texts of
-the HTML files) are licensed under the Creative Commons
-Attribution 4.0 International License.
+Scope
+- Licensed under CC BY 4.0: the documentation and playbook text in docs/,
+  the README files, DISCLAIMER.md and the human-readable text inside the
+  HTML files.
+- Licensed under the MIT License (see LICENSE): all source code, including the
+  PowerShell script in scripts/ and the JavaScript, CSS and embedded PowerShell
+  inside the HTML files.
+- Not covered by this license: third-party content that is referenced or
+  briefly quoted (including Microsoft Learn documentation and public security
+  research) and third-party trademarks (Microsoft, Azure, Azure Arc and
+  others), which remain the property of their respective owners.
 
 Legal code: https://creativecommons.org/licenses/by/4.0/legalcode
-Summary: https://creativecommons.org/licenses/by/4.0/
+Summary:    https://creativecommons.org/licenses/by/4.0/
 
-You may copy, redistribute, adapt and use the material, including commercially, as long as
-you give appropriate credit, indicate if changes were made and provide a link to the license.
+You may copy, redistribute, adapt and use the material, including commercially,
+as long as you give appropriate credit, indicate if changes were made and
+provide a link to the license.
+
+Suggested attribution:
+"Arc Posture Review" by Fabio Rodrigues Vieira Costa,
+https://github.com/fabiotreze/arc-posture-review, licensed under CC BY 4.0.

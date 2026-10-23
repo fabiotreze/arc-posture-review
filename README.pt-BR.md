@@ -1,5 +1,8 @@
 # Arc Posture Review
 
+[![Code: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
+[![Docs: CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-EF9421.svg)](LICENSE-DOCS)
+
 [English](README.md) · **Português**
 
 Kit somente leitura para avaliar a segurança de **servidores habilitados pelo Azure Arc** e do **SQL Server habilitado pelo Azure Arc**. Um único HTML offline guia a avaliação, gera um coletor PowerShell somente leitura e analisa o pacote de evidências localmente no navegador.
@@ -37,3 +40,9 @@ Kit somente leitura para avaliar a segurança de **servidores habilitados pelo A
 Dúvidas e correções por [issues](../../issues), citando a documentação oficial e sem dados do seu ambiente.
 
 Licenças: código [MIT](LICENSE); documentação [CC BY 4.0](LICENSE-DOCS).
+
+## Licença
+
+- **Código** (o script PowerShell e o JavaScript, CSS e PowerShell dentro dos HTML): [MIT](LICENSE).
+- **Documentação e texto do playbook** (docs/, README, DISCLAIMER e o texto dos HTML): [CC BY 4.0](LICENSE-DOCS). Crédito sugerido: *"Arc Posture Review" por Fabio Rodrigues Vieira Costa, https://github.com/fabiotreze/arc-posture-review*.
+- Conteúdo de terceiros referenciado ou citado brevemente (Microsoft Learn, pesquisas públicas de segurança) e marcas (Microsoft, Azure, Azure Arc) não são relicenciados e continuam com seus donos.
