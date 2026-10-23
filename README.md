@@ -9,6 +9,23 @@ Read-only security assessment kit for **Azure Arc-enabled servers** and **SQL Se
 
 > Personal, independent project. Not an official Microsoft tool. Built from years of field delivery experience and public Microsoft documentation, consolidated with the help of AI agents and reviewed by the author. Validate recommendations against official documentation; you are responsible for how you use it. See [DISCLAIMER.md](DISCLAIMER.md).
 
+## What it is for
+
+**Focus: the security posture of Azure Arc-enabled servers** (and SQL Server enabled by Azure Arc). It answers one question: *is this Arc estate configured, protected and operated securely, and what should be fixed first?*
+
+Security decisions start before the first server is connected (onboarding credentials, network path) and end after it is removed (orphaned resources, leftover identities). That is why the guide covers the whole server lifecycle: plan, connect, protect, operate, decommission.
+
+| You want to | Use | Result |
+|---|---|---|
+| **Assess an existing Arc estate** (main use) | Steps 2–5: generate the read-only script, run it in Cloud Shell, load the `.zip` | Findings per check, prioritized action plan, report |
+| **Plan or review an onboarding** | Guide → *Start here* → decision trees D1–D3, D2 and D9; documentary checks as a design checklist | Design decisions recorded before the rollout |
+| **Prepare a security conversation or workshop** | Guide, decision trees and the sample report | Shared vocabulary and a structured agenda |
+| **Track progress** | Run the collection again and compare the `.json` exports | Before/after evidence |
+
+**Why so many references and diagrams?** Every check points to the public Microsoft source behind it (Microsoft Cloud Security Benchmark control, Cloud Adoption Framework, product documentation), and every decision has a tree that explains the *why*. Findings can be traced and defended instead of being opinions.
+
+**What it is not:** it does not install, connect or change anything (read-only); it does not replace Defender for Cloud, Secure Score or Azure Policy (it reads them); and it is not official Microsoft guidance.
+
 ## What you get
 
 - **Public Microsoft method:** the *sustain security posture* cycle of the [Cloud Adoption Framework — Secure](https://learn.microsoft.com/azure/cloud-adoption-framework/secure/overview), measured against the [Microsoft Cloud Security Benchmark](https://learn.microsoft.com/security/benchmark/azure/introduction) (MCSB v1, mapped to CIS Controls v8, NIST SP 800-53 and PCI-DSS).

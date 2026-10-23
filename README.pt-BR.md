@@ -9,6 +9,23 @@ Kit somente leitura para avaliar a segurança de **servidores habilitados pelo A
 
 > Projeto pessoal e independente. Não é uma ferramenta oficial da Microsoft. Construído a partir de anos de experiência em entregas de campo e da documentação pública da Microsoft, consolidado com apoio de agentes de IA e revisado pelo autor. Valide as recomendações na documentação oficial; o uso é de responsabilidade de quem executa. Veja [DISCLAIMER.md](DISCLAIMER.md).
 
+## Para que serve
+
+**Foco: a postura de segurança dos servidores habilitados pelo Azure Arc** (e do SQL Server habilitado pelo Azure Arc). Responde a uma pergunta: *este ambiente Arc está configurado, protegido e operado com segurança, e o que corrigir primeiro?*
+
+As decisões de segurança começam antes do primeiro servidor conectado (credenciais de onboarding, caminho de rede) e terminam depois que ele é removido (recursos órfãos, identidades esquecidas). Por isso o guia cobre o ciclo de vida inteiro do servidor: planejar, conectar, proteger, operar, desativar.
+
+| Você quer | Use | Resultado |
+|---|---|---|
+| **Avaliar um ambiente Arc existente** (uso principal) | Etapas 2–5: gerar o script somente leitura, rodar no Cloud Shell, carregar o `.zip` | Achados por verificação, plano de ação priorizado, relatório |
+| **Planejar ou revisar um onboarding** | Guia → *Comece aqui* → árvores D1–D3, D2 e D9; itens documentais como checklist de desenho | Decisões registradas antes do rollout |
+| **Preparar uma conversa ou workshop de segurança** | Guia, árvores de decisão e relatório de exemplo | Vocabulário comum e pauta estruturada |
+| **Acompanhar a evolução** | Rodar a coleta de novo e comparar os `.json` exportados | Evidência de antes e depois |
+
+**Por que tantas referências e diagramas?** Cada verificação aponta para a fonte pública da Microsoft que a sustenta (controle do Microsoft Cloud Security Benchmark, Cloud Adoption Framework, documentação do produto), e cada decisão tem uma árvore que explica o *porquê*. Os achados podem ser rastreados e defendidos, em vez de serem opinião.
+
+**O que não é:** não instala, não conecta e não altera nada (somente leitura); não substitui o Defender for Cloud, o Secure Score ou o Azure Policy (ele os lê); e não é orientação oficial da Microsoft.
+
 ## O que entrega
 
 - **Método público da Microsoft:** ciclo de sustentação de postura do [Cloud Adoption Framework — Secure](https://learn.microsoft.com/azure/cloud-adoption-framework/secure/overview), medido pelo [Microsoft Cloud Security Benchmark](https://learn.microsoft.com/security/benchmark/azure/introduction) (MCSB v1, com mapeamento para CIS Controls v8, NIST SP 800-53 e PCI-DSS).
@@ -48,9 +65,21 @@ Kit somente leitura para avaliar a segurança de **servidores habilitados pelo A
 
 **Permissões:** Reader no management group ou nas subscriptions. **Privacidade:** os campos ficam só no navegador da sua máquina; pacote e relatórios têm dados do ambiente e são confidenciais.
 
-Dúvidas e correções por [issues](../../issues), citando a documentação oficial e sem dados do seu ambiente.
+## Repositório
 
-Licenças: código [MIT](LICENSE); documentação [CC BY 4.0](LICENSE-DOCS).
+```
+index.html                           versão em inglês (GitHub Pages)
+arc-posture-review.en-US.html        HTML offline, inglês
+arc-posture-review.pt-BR.html        HTML offline, português
+scripts/Invoke-ArcPostureReview.ps1  coletor somente leitura avulso (revise antes de executar)
+docs/guide.en-US.md · guide.pt-BR.md playbook com árvores de decisão (o GitHub renderiza o Mermaid)
+docs/examples/                       relatórios de exemplo anonimizados (en-US, pt-BR)
+docs/images/                         imagens usadas no README
+```
+
+## Contribuições
+
+Dúvidas, correções e sugestões são bem-vindas por [issues](../../issues), citando a documentação oficial da Microsoft. Nunca inclua dados de clientes ou do seu ambiente. Questões de segurança: veja [SECURITY.md](SECURITY.md).
 
 ## Licença
 
