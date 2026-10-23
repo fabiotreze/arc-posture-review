@@ -30,7 +30,7 @@ Security decisions start before the first server is connected (onboarding creden
 ## What you get
 
 - **Public Microsoft method:** the *sustain security posture* cycle of the [Cloud Adoption Framework — Secure](https://learn.microsoft.com/azure/cloud-adoption-framework/secure/overview), measured against the [Microsoft Cloud Security Benchmark](https://learn.microsoft.com/security/benchmark/azure/introduction) (MCSB v2, mapped to CIS Controls v8.1, NIST SP 800-53, PCI-DSS v4, NIST CSF 2.0 and ISO 27001).
-- **63 checks** (44 automated, 19 documentary), each with assessment layer, MCSB control and decision tree.
+- **64 checks** (45 automated, 19 documentary), each with assessment layer, MCSB control and decision tree.
 - **9 decision trees** (onboarding, organization, connectivity, identity, extensions, protection, versions and legacy, decommissioning, cost) plus program execution.
 - **Read-only collector** (`Invoke-ArcPostureReview.ps1`): Azure Resource Graph and Azure CLI read commands only, paginated, multi-subscription or management group, effective-permission pre-check (Reader is enough), and an optional machine limit for large estates (risk-prioritized sample).
 - **Local analysis:** quick read, kit index on the Secure Score model (points by severity, share of healthy machines, same root cause counted once), compliance by layer and MCSB control, Defender for Cloud Secure Score, one-row-per-action plan with gain, timeframe and owner, 9 recommended alerts, agent and extension versions on the run date, cost estimate, and evidence per finding.
@@ -60,7 +60,7 @@ Security decisions start before the first server is connected (onboarding creden
 
 ![Read-only collection and evidence flow](docs/images/collection-flow.en-US.png)
 
-**Sample report** (v3.8.2) from a lab subscription (7 Arc-enabled servers, 3 evaluated in a risk-prioritized sample; SQL Server, Defender for Servers), anonymized: subscription, account, IDs and governance resource names replaced.
+**Sample report** (v3.8.3) from a lab subscription (7 Arc-enabled servers, 3 evaluated in a risk-prioritized sample; SQL Server, Defender for Servers), anonymized: subscription, account, IDs and governance resource names replaced.
 [Open the sample report](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.en-US.html) · [Português](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.pt-BR.html)
 
 ![Sample analysis](docs/images/sample-report.en-US.png)
@@ -71,7 +71,7 @@ Security decisions start before the first server is connected (onboarding creden
 |---|---|
 | Online | https://fabiotreze.github.io/arc-posture-review/ (English) · [Português](https://fabiotreze.github.io/arc-posture-review/arc-posture-review.pt-BR.html) |
 | Offline | Download [`arc-posture-review.en-US.html`](arc-posture-review.en-US.html) or [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html) and open it in Edge or Chrome |
-| Script only | [`scripts/Invoke-ArcPostureReview.ps1`](scripts/Invoke-ArcPostureReview.ps1): all 63 checks, current subscription by default |
+| Script only | [`scripts/Invoke-ArcPostureReview.ps1`](scripts/Invoke-ArcPostureReview.ps1): all 64 checks, current subscription by default |
 | Read the guide | [docs/guide.en-US.md](docs/guide.en-US.md) · [docs/guide.pt-BR.md](docs/guide.pt-BR.md) |
 
 Flow: **Start here → Prepare collection → Run summary → Analysis → Plan and delivery**

@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v3.8.2 — 23/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
+**Versão v3.8.3 — 23/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 
@@ -67,7 +67,7 @@ Cada verificação pertence a uma camada. Só as camadas 1 a 3 medem conformidad
 | 3 · Requisito do Arc | Requisito documentado do produto (suporte, ESU, rede, extensões, remoção) | Sim (indicador próprio) | 17 |
 | 4 · Decisão do cliente | Parâmetro decidido pelo cliente (tier, regiões, tags, retenção, uso por tier) | Não: mede aderência à decisão | 10 |
 | P · Programa | Execução do programa (piloto, ondas, automação, revisão) | Não | 4 |
-| F · FinOps | Custo e licenciamento | Não | 1 |
+| F · FinOps | Custo e licenciamento | Não | 2 |
 
 - Fonte oficial da medida: [painel de conformidade regulatória do Defender for Cloud](https://learn.microsoft.com/en-us/azure/defender-for-cloud/regulatory-compliance-dashboard) (MCSB), [Secure Score](https://learn.microsoft.com/en-us/azure/defender-for-cloud/secure-score-security-controls) e [Machine Configuration](https://learn.microsoft.com/en-us/azure/governance/machine-configuration/overview) para o baseline do SO.
 - Controles listados no baseline do Arc-enabled servers: NS-1, NS-2, IM-1, IM-3, IM-8, PA-1, PA-7, DP-1, DP-3, DP-4, AM-2, LT-1, LT-4, BR-1. Os demais (PV, ES, LT-3/5/6, IR) se aplicam ao servidor e à operação.
@@ -102,7 +102,7 @@ Cada árvore responde a uma pergunta com no máximo 5 decisões. O resultado da 
 | **D6** · Proteção, baseline, logs e detecção | O que precisa estar ligado em cada servidor? | LT-1, LT-3, LT-5, LT-6, ES-1, PV-4, IR-3 | CHK-08, CHK-09, CHK-27, CHK-31, CHK-32, CHK-33, CHK-34, CHK-36, CHK-39, CHK-40, CHK-41, CHK-43, CHK-44, CHK-45, CHK-54, CHK-55, CHK-57, CHK-58, CHK-61, CHK-63 |
 | **D7** · Versões, patches e legado | O servidor está atualizado e dentro do suporte? | PV-6 | CHK-28, CHK-29, CHK-30, CHK-42, CHK-51, CHK-52 |
 | **D8** · Remoção e recursos abandonados | O recurso Arc ainda corresponde a um servidor real? | AM-3 | CHK-37, CHK-38, CHK-49 |
-| **D9** · Custo e licenciamento | Quais serviços cobrados ativar e com qual benefício? | — | CHK-53, CHK-59 |
+| **D9** · Custo e licenciamento | Quais serviços cobrados ativar e com qual benefício? | — | CHK-53, CHK-59, CHK-64 |
 | **P** · Execução do programa | Como executar e sustentar com segurança? | — | CHK-46, CHK-47, CHK-48, CHK-50 |
 
 ### D1 — Onboarding
@@ -358,7 +358,7 @@ Pontos da documentação atual a considerar:
 - Não misturar, na mesma VNet/zona DNS, máquinas com e sem Private Link.
 - **SQL Server enabled by Azure Arc:** a conexão com o *Azure Arc data processing service* (`*.<region>.arcdataservices.com`, usado para upload de inventário e de uso/cobrança) **não suporta Private Link** — está listada em *Unsupported configurations*. Mesmo com o servidor em Private Link, liberar saída TCP 443 para `*.<region>.arcdataservices.com` (direta ou via proxy explícito/Azure Firewall — padrão *Private Path*), com autenticação Entra ID. Ver CTL-04.
 
-> **Verificado por:** CHK-17 — Modelo de conectividade em uso (Automático) · CHK-18 — Acesso público do Private Link Scope (Automático) · CHK-20 — Decisão de conectividade e liberações de rede (Documental) · CHK-34 — SQL Server: Defender for SQL e menor privilégio (Automático)
+> **Verificado por:** CHK-17 — Modelo de conectividade em uso (Automático) · CHK-18 — Acesso público do Private Link Scope (Automático) · CHK-20 — Decisão de conectividade e liberações de rede (Documental) · CHK-34 — SQL Server: Defender for SQL e menor privilégio (Automático) · CHK-64 — SQL Server: licença e envio de uso (faturamento) (Automático)
 
 #### DEC-06 — Quando usar Arc Gateway
 
@@ -872,7 +872,7 @@ flowchart TD
   Q3 -.-> R
 ```
 
-- **Verificado por:** CHK-53, CHK-59
+- **Verificado por:** CHK-53, CHK-59, CHK-64
 - **Controles MCSB:** — · **Detalhes:** REQ-09
 - **CAF (Arc-enabled servers):** [Governança de custos](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/hybrid/arc-enabled-servers/eslz-cost-governance)
 
@@ -920,7 +920,7 @@ O **plano de controle do Arc é gratuito**; o custo vem dos serviços habilitado
 
 - Referências: [Azure Arc pricing](https://azure.microsoft.com/en-us/pricing/details/azure-arc/core-control-plane/) · [Windows Server Management enabled by Azure Arc](https://learn.microsoft.com/en-us/azure/azure-arc/servers/windows-server-management-overview) · [Prepare to deliver ESUs](https://learn.microsoft.com/en-us/azure/azure-arc/servers/prepare-extended-security-updates) · [Cost governance for Arc-enabled servers (CAF, artigo descontinuado, remoção prevista em 30/10/2026)](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/hybrid/arc-enabled-servers/eslz-cost-governance)
 
-> **Verificado por:** CHK-53 — Custo: serviços cobrados e benefícios por máquina (Automático) · CHK-59 — Mapa de recursos do Arc em uso (Automático)
+> **Verificado por:** CHK-53 — Custo: serviços cobrados e benefícios por máquina (Automático) · CHK-59 — Mapa de recursos do Arc em uso (Automático) · CHK-64 — SQL Server: licença e envio de uso (faturamento) (Automático)
 
 ### P — Execução do programa
 
@@ -1037,6 +1037,7 @@ Mesma lista, na mesma ordem, do `arc-posture-review.pt-BR.html`. Camada: 1 MCSB 
 | CHK-57 | Antivírus e EDR saudáveis | Automático | Alta | 1 | ES-1, ES-2, ES-3 | D6 | Recomendações do Defender for Cloud sobre proteção de endpoint (antimalware, EDR, Defender for Endpoint) e presença da extensão MDE nas máquinas conectadas. | FAIL se houver recomendação de proteção de endpoint de severidade alta ou média com máquinas Unhealthy; WARN se houver recomendação de severidade baixa ou máquina conectada sem a extensão MDE. | CTL-06 |
 | CHK-61 | Criptografia do disco do sistema (BitLocker/dm-crypt) | Documental | Média | 2 | DP-4 | D6 | Criptografia do volume do sistema operacional, que protege a chave privada do agente Arc contra ataques offline (recomendação do CAF). | Evidência: BitLocker/dm-crypt ativo no volume do SO das máquinas Arc ou exceção registrada. | CTL-05 |
 | CHK-63 | Defender for Servers por máquina Arc | Automático | Alta | 1 | LT-1, ES-1 | D6 | Plano do Defender for Servers lido em cada máquina Arc (Pricings no nível de recurso): tier, subplano, se herda da subscription e extensões ativas. | FAIL se houver máquina sem Defender for Servers (Free); WARN se o plano da máquina for diferente do plano da subscription; PASS se todas herdam o plano da subscription. | CTL-06 |
+| CHK-64 | SQL Server: licença e envio de uso (faturamento) | Automático | Alta | F | AM-1, LT-1 | D9 | Por máquina com a extensão do SQL Server: LicenseType configurado na extensão (PAYG, Paid, LicenseOnly), uso de licença de core físico (pCore) e licenças pCore no escopo, estado da extensão, uploadStatus e horário do último envio de uso (timestampUTC), status da máquina e sistema operacional. | FAIL se houver envio de uso com erro, sem envio há mais de 24 horas, extensão com falha ou máquina com SQL fora de Connected (PAYG expira após 30 dias sem conexão); WARN se houver LicenseType vazio, LicenseType diferente do billingPlan da licença pCore ou SO anterior ao Windows Server 2016; N/A sem extensão do SQL. | REQ-09, DEC-05 |
 
 ### E · Operação, monitoramento e auditoria
 
@@ -1076,7 +1077,7 @@ Quando uma verificação der **FAIL** ou **WARN** (ou um item documental estiver
 | CHK-02 | Serviço Arc por tipo de ambiente | C | Arquitetura | (1) Registrar, para cada origem (físico, VMware, SCVMM, AWS/GCP, OCI), o método de onboarding escolhido. | Seguir o DEC-01: se precisa de ciclo de vida de VM, usar Arc VMware/SCVMM; em AWS/GCP com descoberta automática, Multicloud connector; demais casos, Arc-enabled servers. | [Opções de onboarding](https://learn.microsoft.com/en-us/azure/azure-arc/servers/deployment-options) |
 | CHK-03 | Landing zone e organização de recursos | C | Arquitetura | (1) Definir management groups, subscriptions e resource groups por ambiente e região; separar plataforma de workloads. | Usar a mesma estrutura da landing zone de Azure; resource group por ambiente/região facilita RBAC, policy e custo. | [Planejar implantação em escala](https://learn.microsoft.com/en-us/azure/azure-arc/servers/plan-at-scale-deployment) |
 | CHK-04 | Perfil de criticidade (Tier 0/1/2) | C | Segurança | (1) Classificar os servidores em Tier 0/1/2 e registrar a lista. (2) Aplicar controles mais restritivos ao Tier 0 (sem Run Command/SSH/WAC, allowlist mínima). | Tier 0 = controla identidade ou segurança (AD, PKI, backup, ferramentas de gestão). Na dúvida, classificar no tier mais alto. | [Visão geral de segurança do Arc](https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-overview) |
-| CHK-05 | Região dos metadados e residência de dados | M | Governança | (1) Confirmar as regiões permitidas pela política de dados do cliente. (2) Mover metadados para a região permitida: exige remover e refazer o onboarding da máquina. | Os metadados das máquinas ficam na região do recurso Arc. Só mudar se houver exigência regulatória ou contratual. | [Residência de dados](https://learn.microsoft.com/en-us/azure/azure-arc/servers/data-residency) |
+| CHK-05 | Região dos metadados e residência de dados | M | Governança | (1) Confirmar as regiões permitidas pela política de dados do cliente. (2) Mover metadados para a região permitida: exige remover e refazer o onboarding da máquina. | Os metadados das máquinas ficam na região do recurso Arc. Só mudar se houver exigência regulatória ou contratual. | [Residência de dados](https://learn.microsoft.com/en-us/azure/azure-arc/servers/data-residency) · [Dados, replicação e recuperação de desastre dos servidores Arc](https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-data-privacy) · [Pares de regiões do Azure](https://learn.microsoft.com/en-us/azure/reliability/regions-paired) · [Renomear e migrar servidores Arc entre regiões](https://learn.microsoft.com/en-us/azure/azure-arc/servers/manage-howto-migrate) |
 | CHK-06 | Tags recomendadas (boa prática) | M | Governança | (1) Definir o padrão de tags (opcional) e aplicar com Azure Policy (herdar do resource group ou exigir na criação). | Tags são boa prática, não requisito. Priorizar as que alimentam custo (costCenter) e operação (owner, patchWindow). | [Tags de recursos](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources) |
 | CHK-07 | Resource providers registrados | I | Plataforma | (1) Registrar os providers obrigatórios em cada subscription: Microsoft.HybridCompute, Microsoft.GuestConfiguration, Microsoft.HybridConnectivity (e Microsoft.AzureArcData para SQL). | Obrigatório quando FAIL: sem os providers o onboarding e as extensões falham. | [Pré-requisitos (resource providers)](https://learn.microsoft.com/en-us/azure/azure-arc/servers/prerequisites) |
 | CHK-08 | Atribuições de Azure Policy e baseline | C | Governança | (1) Atribuir a baseline de segurança do Arc e as policies de onboarding (AMA, Defender, Machine Configuration) no management group. (2) Revisar as atribuições em DoNotEnforce. | Começar em modo auditoria (Audit/AuditIfNotExists) e só depois habilitar DeployIfNotExists com tarefa de correção. | [Policies internas do Arc](https://learn.microsoft.com/en-us/azure/azure-arc/servers/policy-reference) · [Machine Configuration](https://learn.microsoft.com/en-us/azure/governance/machine-configuration/overview) |
@@ -1104,11 +1105,11 @@ Quando uma verificação der **FAIL** ou **WARN** (ou um item documental estiver
 | CHK-30 | Versões e atualização automática das extensões | C | Operação | (1) Atualizar a extensão SQL e o Azure Monitor Agent fora da janela de 12 meses (só versões lançadas no último ano são suportadas). (2) Habilitar a atualização automática das extensões e alinhar as atrasadas com a versão mais nova do parque. | Atualização automática é o padrão recomendado; desligar só com motivo documentado. | [Atualização automática de extensões](https://learn.microsoft.com/en-us/azure/azure-arc/servers/manage-automatic-vm-extension-upgrade) · [SQL Arc com menor privilégio](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/configure-least-privilege) · [Release notes da extensão SQL (Azure Arc)](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/release-notes) · [Versões do Azure Monitor Agent](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-extension-versions) |
 | CHK-31 | Defender for Servers | I | Segurança | (1) Habilitar Defender for Servers (Plano 1 ou 2) na subscription. | Plano 2 quando precisar de avaliação de vulnerabilidades sem agente, FIM e quando já usaria Update Manager/Machine Configuration (incluídos). Plano 1 para proteção de endpoint básica. | [Planejar Defender for Servers](https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers) · [Preços do Azure Arc](https://azure.microsoft.com/en-us/pricing/details/azure-arc/core-control-plane/) |
 | CHK-32 | Defender for Endpoint | I | Segurança | (1) Instalar o sensor do Defender for Endpoint (MDE.Windows/MDE.Linux) nas máquinas sem ele, via Defender for Cloud. | Se o MDE já foi instalado por outra ferramenta, confirmar o onboarding no portal do Defender. | [Integração com Defender for Endpoint](https://learn.microsoft.com/en-us/azure/defender-for-cloud/integration-defender-for-endpoint) · [Releases do Defender for Endpoint (sensor por plataforma)](https://learn.microsoft.com/en-us/defender-endpoint/microsoft-defender-endpoint-releases) |
-| CHK-33 | Recomendações do Defender | C | Segurança | (1) Tratar as recomendações High primeiro, agrupando por tipo (as de SQL costumam dominar o volume). | Corrigir ou isentar com justificativa; recomendação sem dono vira exceção formal. | [Planejar Defender for Servers](https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers) |
+| CHK-33 | Recomendações do Defender | C | Segurança | (1) Tratar as recomendações High primeiro, agrupando por tipo (as de SQL costumam dominar o volume). | Corrigir ou isentar com justificativa; recomendação sem dono vira exceção formal. | [Planejar Defender for Servers](https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers) · [Priorização por risco no Defender for Cloud](https://learn.microsoft.com/en-us/azure/defender-for-cloud/risk-prioritization) · [Regras de governança do Defender for Cloud (responsável e prazo)](https://learn.microsoft.com/en-us/azure/defender-for-cloud/governance-rules) · [Consultas do Resource Graph para o Defender for Cloud](https://learn.microsoft.com/en-us/azure/defender-for-cloud/resource-graph-samples) |
 | CHK-34 | SQL Server: Defender for SQL e menor privilégio | C | DBA | (1) Habilitar Defender for SQL nas subscriptions com SQL. (2) Atualizar a extensão SQL para versão com menor privilégio e auto-upgrade. (3) Revisar SQL em máquinas com Private Link (o serviço de processamento de dados não usa Private Link) e SQL em SO anterior ao Windows Server 2016. | SQL em SO sem suporte entra no plano de modernização (LEG). | [Defender for SQL em servidores](https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-sql-usage) · [SQL Arc com menor privilégio](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/configure-least-privilege) · [Private Link](https://learn.microsoft.com/en-us/azure/azure-arc/servers/private-link-security) |
 | CHK-35 | Contas locais e GPO do HIMDS | M | Operação | (1) Garantir 'Log on as a service' para NT SERVICE\himds na GPO e preservar as contas padrão do agente. | Validar em amostra antes de alterar GPOs em produção. | [Visão geral do agente](https://learn.microsoft.com/en-us/azure/azure-arc/servers/agent-overview) |
 | CHK-36 | Coleta local em amostra (agente e serviços) | M | Operação | (1) Rodar azcmagent show, azcmagent check e azcmagent config list numa amostra por perfil e anexar ao pacote. (2) Registrar tarefas agendadas e serviços do agente: Get-ScheduledTask -TaskName azcmagent (diária, SYSTEM) e Get-Service himds, GCArcService, ExtensionService, arcproxy com o tipo de início. | Amostra mínima: uma máquina por perfil de rede e de SO. | [Visão geral do agente](https://learn.microsoft.com/en-us/azure/azure-arc/servers/agent-overview) · [Solução de problemas de conexão do agente](https://learn.microsoft.com/en-us/azure/azure-arc/servers/troubleshoot-agent-onboard) |
-| CHK-37 | Máquinas desconectadas ou expiradas | I | Operação | (1) Desconectadas: verificar serviço himds, rede e proxy (azcmagent check) e reconectar. (2) Expired (mais de 45 dias sem conexão): refazer o onboarding. (3) Desativadas ou migradas: remover o recurso Arc para não deixar órfãos. | Se a máquina não existe mais, remover. Se existe, reconectar. Expired sempre exige novo onboarding. | [Solução de problemas de conexão do agente](https://learn.microsoft.com/en-us/azure/azure-arc/servers/troubleshoot-agent-onboard) · [Desinstalar o agente e limpar recursos](https://learn.microsoft.com/en-us/azure/azure-arc/servers/uninstall-agent) |
+| CHK-37 | Máquinas desconectadas ou expiradas | I | Operação | (1) Desconectadas: verificar serviço himds, rede e proxy (azcmagent check) e reconectar. (2) Expired (mais de 45 dias sem conexão): refazer o onboarding. (3) Desativadas ou migradas: remover o recurso Arc para não deixar órfãos. | Se a máquina não existe mais, remover. Se existe, reconectar. Expired sempre exige novo onboarding. | [Solução de problemas de conexão do agente](https://learn.microsoft.com/en-us/azure/azure-arc/servers/troubleshoot-agent-onboard) · [Desinstalar o agente e limpar recursos](https://learn.microsoft.com/en-us/azure/azure-arc/servers/uninstall-agent) · [Servidores Arc em cenários desconectados](https://learn.microsoft.com/en-us/azure/azure-arc/servers/troubleshoot-connectivity) · [Dados, replicação e recuperação de desastre dos servidores Arc](https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-data-privacy) |
 | CHK-38 | Recomendações do Advisor | M | Operação | (1) Revisar e tratar as recomendações do Advisor para os recursos Arc. | Seguir a severidade indicada pelo Advisor. | [Azure Advisor](https://learn.microsoft.com/en-us/azure/advisor/advisor-overview) |
 | CHK-39 | Azure Monitor Agent | C | Operação | (1) Implantar o AMA nas máquinas conectadas via Azure Policy (DeployIfNotExists) ou DCR. | Se a máquina não precisa de logs, documentar; caso contrário, AMA é o padrão (o MMA foi descontinuado). | [Azure Monitor Agent](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-overview) |
 | CHK-40 | Associação a DCR | C | Operação | (1) Associar uma DCR às máquinas com AMA (eventos de segurança, desempenho e Syslog conforme o perfil). | AMA sem DCR não coleta nada: definir as DCRs por perfil antes de expandir. | [Coleta de dados com DCR](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-data-collection) |
@@ -1125,7 +1126,7 @@ Quando uma verificação der **FAIL** ou **WARN** (ou um item documental estiver
 | CHK-51 | Legado, fim de suporte e ESU | I | Infraestrutura | (1) Windows Server 2012/2012 R2: isolar, monitorar e migrar (sem patches desde 13/10/2026). (2) Windows Server 2016: atribuir a licença ESU via Arc antes de 12/01/2027 e atualizar o agente para 1.62+. | ESU do 2016 exige Software Assurance (ou Server Subscription); sem isso, priorizar a migração. | [ESU via Azure Arc](https://learn.microsoft.com/en-us/azure/azure-arc/servers/prepare-extended-security-updates) · [Windows Server Management (benefícios SA)](https://learn.microsoft.com/en-us/azure/azure-arc/servers/windows-server-management-overview) |
 | CHK-52 | Exceções de legado e plano de saída | C | Infraestrutura | (1) Registrar exceções de legado com dono, prazo e controles compensatórios e aprovar o roadmap de migração. | Toda máquina legada precisa de data de saída. | [ESU via Azure Arc](https://learn.microsoft.com/en-us/azure/azure-arc/servers/prepare-extended-security-updates) |
 | CHK-53 | Custo: serviços cobrados e benefícios por máquina | C | FinOps | (1) Atestar Software Assurance nos servidores Windows elegíveis (Azure Arc › Azure Benefits - Windows Server). (2) Revisar Defender P1 × P2 e as policies de Machine Configuration que incluem servidores Arc sem necessidade. (3) Criar orçamento e alerta no Cost Management por resource group ou tag. | Atestar só com SA ou licença por assinatura válida. Se a maioria dos servidores usa Update Manager e Machine Configuration, o Plano 2 do Defender pode compensar. | [Windows Server Management (benefícios SA)](https://learn.microsoft.com/en-us/azure/azure-arc/servers/windows-server-management-overview) · [Preços do Azure Arc](https://azure.microsoft.com/en-us/pricing/details/azure-arc/core-control-plane/) · [Planejar Defender for Servers](https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers) |
-| CHK-54 | Ameaças e vulnerabilidades (Defender for Cloud) | I | Segurança | (1) Investigar e tratar os alertas ativos High no Defender for Cloud/XDR (máquina, processo, usuário e linha do tempo). (2) Priorizar as vulnerabilidades High/Critical pelo número de máquinas afetadas e corrigir via Update Manager ou WSUS. (3) Acompanhar o Secure Score no resumo executivo e na revisão mensal. | A severidade é a do Defender. Alerta ativo sem dono é incidente; vulnerabilidade sem correção possível exige exceção com controle compensatório. | [Planejar Defender for Servers](https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers) · [Integração com Defender for Endpoint](https://learn.microsoft.com/en-us/azure/defender-for-cloud/integration-defender-for-endpoint) |
+| CHK-54 | Ameaças e vulnerabilidades (Defender for Cloud) | I | Segurança | (1) Investigar e tratar os alertas ativos High no Defender for Cloud/XDR (máquina, processo, usuário e linha do tempo). (2) Priorizar as vulnerabilidades High/Critical pelo número de máquinas afetadas e corrigir via Update Manager ou WSUS. (3) Acompanhar o Secure Score no resumo executivo e na revisão mensal. | A severidade é a do Defender. Alerta ativo sem dono é incidente; vulnerabilidade sem correção possível exige exceção com controle compensatório. | [Planejar Defender for Servers](https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers) · [Integração com Defender for Endpoint](https://learn.microsoft.com/en-us/azure/defender-for-cloud/integration-defender-for-endpoint) · [Consultas do Resource Graph para o Defender for Cloud](https://learn.microsoft.com/en-us/azure/defender-for-cloud/resource-graph-samples) |
 | CHK-55 | Baseline de segurança do sistema operacional | C | Segurança | (1) Atribuir a política built-in do Azure compute security baseline (Windows e Linux) no management group ou na subscription das máquinas Arc, primeiro em modo de auditoria. (2) Tratar as configurações não conformes por prioridade (Critical e Important) e registrar exceções com justificativa. (3) Para Windows Server 2025, avaliar o baseline personalizável (OSConfig) antes de aplicar correção automática. | O baseline é o equivalente na nuvem ao GPO de segurança: começar auditando, comparar com o GPO atual e só então corrigir. Não cobre LAPS nem BitLocker (CHK-60 e CHK-61). | [Baseline de segurança do Windows (Machine Configuration)](https://learn.microsoft.com/en-us/azure/governance/policy/samples/guest-configuration-baseline-windows) · [Baseline de segurança do Linux (Machine Configuration)](https://learn.microsoft.com/en-us/azure/governance/policy/samples/guest-configuration-baseline-linux) · [Machine Configuration](https://learn.microsoft.com/en-us/azure/governance/machine-configuration/overview) · [CAF: segurança, governança e conformidade do Arc](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/hybrid/arc-enabled-servers/eslz-security-governance-and-compliance) |
 | CHK-56 | Auditoria dos administradores locais | C | Segurança | (1) Atribuir a política de Machine Configuration que audita os membros do grupo Administradores local, com a lista aprovada por perfil. (2) Remover contas e grupos não aprovados; administrador local também controla o agente e pode usar a identidade da máquina. | Quem é administrador local controla o agente: tratar como acesso privilegiado (CTL-04). | [Machine Configuration](https://learn.microsoft.com/en-us/azure/governance/machine-configuration/overview) · [CAF: segurança, governança e conformidade do Arc](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/hybrid/arc-enabled-servers/eslz-security-governance-and-compliance) · [Identidade e autorização](https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-identity-authorization) |
 | CHK-57 | Antivírus e EDR saudáveis | I | Segurança | (1) Tratar as recomendações de proteção de endpoint do Defender for Cloud (antimalware desatualizado, EDR ausente ou com falha). (2) Instalar ou corrigir o Defender for Endpoint nas máquinas sem a extensão MDE (ou confirmar o onboarding feito por outra ferramenta). | Antivírus e EDR saudáveis em toda máquina conectada; exceção só com controle compensatório registrado. | [Integração com Defender for Endpoint](https://learn.microsoft.com/en-us/azure/defender-for-cloud/integration-defender-for-endpoint) · [Planejar Defender for Servers](https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers) · [Releases do Defender for Endpoint (sensor por plataforma)](https://learn.microsoft.com/en-us/defender-endpoint/microsoft-defender-endpoint-releases) |
@@ -1135,6 +1136,7 @@ Quando uma verificação der **FAIL** ou **WARN** (ou um item documental estiver
 | CHK-61 | Criptografia do disco do sistema (BitLocker/dm-crypt) | M | Infraestrutura | (1) Habilitar BitLocker (Windows) ou dm-crypt (Linux) no volume do sistema operacional dos servidores Arc, começando pelos Tier 0 e pelos fisicamente expostos. (2) Guardar as chaves de recuperação no AD ou no Entra ID e testar a recuperação. | Sem criptografia, a chave privada do agente pode ser copiada de um disco ou backup e usada para se passar pelo servidor. | [BitLocker](https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/) · [CAF: segurança, governança e conformidade do Arc](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/hybrid/arc-enabled-servers/eslz-security-governance-and-compliance) |
 | CHK-62 | Acesso Condicional e MFA para quem administra o Azure | I | Identidade | (1) Exigir MFA por Acesso Condicional para o aplicativo de gerenciamento do Azure, sem exceções para contas administrativas. (2) Para papéis que executam código nos servidores (Contributor, Resource Administrator), exigir também dispositivo compatível ou estação de acesso privilegiado e ativação via PIM. | Quem gerencia o Azure consegue executar código nos servidores Arc: a identidade dessa pessoa é parte da superfície de ataque do servidor. | [Acesso Condicional do Microsoft Entra](https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview) · [MFA obrigatório para o Azure](https://learn.microsoft.com/en-us/entra/identity/authentication/concept-mandatory-multifactor-authentication) · [Plano de modernização rápida de acesso privilegiado](https://learn.microsoft.com/en-us/security/privileged-access-workstations/security-rapid-modernization-plan) · [Privileged Identity Management](https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/pim-configure) |
 | CHK-63 | Defender for Servers por máquina Arc | I | Segurança | (1) Habilitar o Defender for Servers nas máquinas Arc sem plano (Free), na subscription ou na própria máquina. (2) Revisar as máquinas com plano diferente da subscription: confirmar se a exceção é intencional (por exemplo, P1 por custo) e registrar o motivo; sem motivo, remover a configuração da máquina para voltar a herdar o plano da subscription. | Plano configurado por máquina sobrepõe o da subscription: uma máquina pode ficar em P1 ou Free numa subscription P2 sem que isso apareça na visão por subscription. | [Defender for Servers no nível de recurso](https://learn.microsoft.com/en-us/azure/defender-for-cloud/tutorial-enable-servers-plan) · [Pricings - Get (Defender for Cloud REST API)](https://learn.microsoft.com/en-us/rest/api/defenderforcloud-composite/pricings/get) · [Planejar Defender for Servers](https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers) |
+| CHK-64 | SQL Server: licença e envio de uso (faturamento) | I | DBA | (1) Corrigir primeiro as máquinas sem envio de uso há mais de 24 horas ou com uploadStatus diferente de OK: liberar a saída HTTPS 443 para dataprocessingservice.<região>.arcdataservices.com e telemetry.<região>.arcdataservices.com, usar proxy sem autenticação e confirmar o registro do provedor Microsoft.AzureArcData. (2) Reconectar antes de 30 dias as máquinas com SQL fora de Connected: com PAYG, a assinatura expira e o uso deixa de ser autorizado. (3) Definir o LicenseType de cada extensão (PAYG, Paid ou LicenseOnly) conforme o contrato; com licença de core físico (pCore), marcar UsePhysicalCoreLicense e alinhar o LicenseType ao billingPlan da licença. (4) Corrigir as extensões com falha e planejar a saída do Windows Server anterior ao 2016, que não atende o TLS exigido pelo serviço de processamento de dados. | O envio de uso a cada hora sustenta o faturamento PAYG, o registro das licenças com Software Assurance e a detecção de réplicas passivas de AG/FCI (cobradas a US$ 0 só quando detectadas). | [Licenciamento e faturamento do SQL Server habilitado pelo Azure Arc](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/manage-license-billing) · [Conectividade com o serviço de processamento de dados e telemetria do SQL Arc](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/troubleshoot-telemetry-endpoint) · [Diagnosticar a extensão do SQL Server (Azure Arc)](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/troubleshoot-extension) |
 
 ## 5) Alertas recomendados
 
@@ -1253,7 +1255,7 @@ arg("").resources
 flowchart LR
   A["A · Arquitetura e escopo<br/>DEC-01..04 · CTL-08<br/>CHK-01…CHK-05"] --> B["B · Governança e identidade<br/>REQ-01..09<br/>CHK-06…CHK-62"]
   B --> C["C · Conectividade e rede<br/>DEC-05..08 · CTL-01<br/>CHK-17…CHK-20"]
-  C --> D["D · Agente, extensões e proteção<br/>CTL-02..06<br/>CHK-21…CHK-63"]
+  C --> D["D · Agente, extensões e proteção<br/>CTL-02..06<br/>CHK-21…CHK-64"]
   D --> E["E · Operação e auditoria<br/>OPS-01..12 · CTL-07<br/>CHK-37…CHK-59"]
   E --> F["F · Legado<br/>LEG-01..04<br/>CHK-51…CHK-52"]
 ```
@@ -1358,7 +1360,7 @@ O fluxo completo está no **OPS-07** (individual) e no **OPS-08** (em escala), d
 | A · Arquitetura e escopo | DEC-01..DEC-04, CTL-08 | CHK-01, CHK-02, CHK-03, CHK-04, CHK-05 |
 | B · Governança e identidade | REQ-01..REQ-09 | CHK-06, CHK-07, CHK-08, CHK-09, CHK-10, CHK-11, CHK-12, CHK-13, CHK-14, CHK-15, CHK-16, CHK-53, CHK-56, CHK-60, CHK-62 |
 | C · Conectividade e rede | DEC-05..DEC-08, CTL-01 | CHK-17, CHK-18, CHK-19, CHK-20 |
-| D · Agente, extensões e proteção | CTL-02..CTL-06 | CHK-21, CHK-22, CHK-23, CHK-24, CHK-25, CHK-26, CHK-27, CHK-28, CHK-29, CHK-30, CHK-31, CHK-32, CHK-33, CHK-34, CHK-35, CHK-36, CHK-54, CHK-55, CHK-57, CHK-61, CHK-63 |
+| D · Agente, extensões e proteção | CTL-02..CTL-06 | CHK-21, CHK-22, CHK-23, CHK-24, CHK-25, CHK-26, CHK-27, CHK-28, CHK-29, CHK-30, CHK-31, CHK-32, CHK-33, CHK-34, CHK-35, CHK-36, CHK-54, CHK-55, CHK-57, CHK-61, CHK-63, CHK-64 |
 | E · Operação, monitoramento e auditoria | OPS-01..OPS-12, CTL-07 | CHK-37, CHK-38, CHK-39, CHK-40, CHK-41, CHK-42, CHK-43, CHK-44, CHK-45, CHK-46, CHK-47, CHK-48, CHK-49, CHK-50, CHK-58, CHK-59 |
 | F · Legado | LEG-01..LEG-04 | CHK-51, CHK-52 |
 
@@ -1399,7 +1401,7 @@ Modelo recomendado de evidência por servidor:
 | DEC-02 | Cenário misto (on-prem + AWS/GCP + OCI) | CHK-02 |
 | DEC-03 | Landing zone e organização de recursos | CHK-03 |
 | DEC-04 | Perfil de criticidade | CHK-04, CHK-26 |
-| DEC-05 | Modelo de conectividade | CHK-17, CHK-18, CHK-20, CHK-34 |
+| DEC-05 | Modelo de conectividade | CHK-17, CHK-18, CHK-20, CHK-34, CHK-64 |
 | DEC-06 | Quando usar Arc Gateway | CHK-17, CHK-20 |
 | DEC-07 | Quando usar Azure Firewall Explicit Proxy | CHK-17, CHK-20 |
 | DEC-08 | Público direto controlado | CHK-17, CHK-20 |
@@ -1411,7 +1413,7 @@ Modelo recomendado de evidência por servidor:
 | REQ-06 | Cross-subscription | CHK-16 |
 | REQ-07 | Política e baseline | CHK-08, CHK-09, CHK-27, CHK-55 |
 | REQ-08 | Segredos e credenciais | CHK-12, CHK-14, CHK-15 |
-| REQ-09 | Custo e licenciamento (gratuito × cobrado) | CHK-53, CHK-59 |
+| REQ-09 | Custo e licenciamento (gratuito × cobrado) | CHK-53, CHK-59, CHK-64 |
 | CTL-01 | DNS corporativo integrado ao Azure | CHK-19, CHK-20 |
 | CTL-02 | Extensões por allowlist/blocklist | CHK-22, CHK-23, CHK-24 |
 | CTL-03 | Operação remota segura | CHK-21, CHK-24, CHK-25, CHK-26, CHK-44 |
@@ -1533,6 +1535,7 @@ Base de cada linha: [baseline do Arc-enabled servers](https://learn.microsoft.co
 | CHK-61 | Criptografia do disco do sistema (BitLocker/dm-crypt) | 2 · Baseline do SO | DP-4 | Não | Entrevista e evidência | D6 |
 | CHK-62 | Acesso Condicional e MFA para quem administra o Azure | 1 · MCSB | IM-6, IM-7 | Não | Entrevista e evidência | D4 |
 | CHK-63 | Defender for Servers por máquina Arc | 1 · MCSB | LT-1, ES-1 | LT-1 | Coleta (plano do Defender por máquina) | D6 |
+| CHK-64 | SQL Server: licença e envio de uso (faturamento) | F · FinOps | AM-1, LT-1 | AM-1 | Coleta (extensão do SQL: LicenseType, uploadStatus, último envio de uso) | D9 |
 
 Famílias MCSB: **NS** Segurança de rede · **IM** Gerenciamento de identidades · **PA** Acesso privilegiado · **DP** Proteção de dados · **AM** Gerenciamento de ativos · **LT** Registro em log e detecção de ameaças · **IR** Resposta a incidentes · **PV** Postura e gerenciamento de vulnerabilidades · **ES** Segurança de endpoint · **BR** Backup e recuperação · **DS** Segurança de DevOps · **AI** Segurança de inteligência artificial · **GS** Governança e estratégia (só no v1).
 
@@ -1767,6 +1770,32 @@ Famílias MCSB: **NS** Segurança de rede · **IM** Gerenciamento de identidades
 - MFA obrigatório para o Azure:  
   https://learn.microsoft.com/en-us/entra/identity/authentication/concept-mandatory-multifactor-authentication
 
+### Faturamento do SQL Server habilitado pelo Azure Arc
+- Licenciamento e faturamento (tipos de licença, pCore, réplicas passivas, envio de uso por hora, 30 dias sem conexão):  
+  https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/manage-license-billing
+- Conectividade com o serviço de processamento de dados e telemetria (uploadStatus, timestampUTC, TLS 1.2/1.3):  
+  https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/troubleshoot-telemetry-endpoint
+- Diagnosticar a extensão do SQL Server:  
+  https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/troubleshoot-extension
+
+### Continuidade e regiões
+- Dados, replicação e recuperação de desastre dos servidores Arc:  
+  https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-data-privacy
+- Servidores Arc em cenários desconectados:  
+  https://learn.microsoft.com/en-us/azure/azure-arc/servers/troubleshoot-connectivity
+- Renomear e migrar servidores Arc entre regiões:  
+  https://learn.microsoft.com/en-us/azure/azure-arc/servers/manage-howto-migrate
+- Pares de regiões do Azure:  
+  https://learn.microsoft.com/en-us/azure/reliability/regions-paired
+
+### Priorização no Defender for Cloud
+- Priorização por risco (Defender CSPM):  
+  https://learn.microsoft.com/en-us/azure/defender-for-cloud/risk-prioritization
+- Regras de governança (responsável e prazo):  
+  https://learn.microsoft.com/en-us/azure/defender-for-cloud/governance-rules
+- Consultas do Resource Graph para o Defender for Cloud:  
+  https://learn.microsoft.com/en-us/azure/defender-for-cloud/resource-graph-samples
+
 ## Anexo I) Nota de curadoria
 
 O artigo CAF de hybrid/enterprise-scale para Arc é tratado como referência histórica.  
@@ -1782,7 +1811,7 @@ A trilha primária deste guia é: **Landing Zone + Choose Service + Plan at Scal
 
 ### Inventário de cobertura
 
-Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que mudou em relação à v3.8.1.
+Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que mudou em relação à v3.8.2.
 
 **Por domínio**
 
@@ -1791,10 +1820,10 @@ Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que
 | A · Arquitetura e escopo | 5 | 2 | 3 | 1 | 3 | 1 |
 | B · Governança e identidade | 15 | 10 | 5 | 6 | 7 | 2 |
 | C · Conectividade e rede | 4 | 3 | 1 | 2 | 2 | 0 |
-| D · Agente, extensões e proteção | 21 | 17 | 4 | 11 | 10 | 0 |
+| D · Agente, extensões e proteção | 22 (+1) | 18 (+1) | 4 | 12 (+1) | 10 | 0 |
 | E · Operação, monitoramento e auditoria | 16 | 11 | 5 | 3 | 10 | 3 |
 | F · Legado | 2 | 1 | 1 | 2 | 0 | 0 |
-| **Total** | **63** | **44** | **19** | **25** | **32** | **6** |
+| **Total** | **64 (+1)** | **45 (+1)** | **19** | **26 (+1)** | **32** | **6** |
 
 **Por camada de avaliação e por árvore de decisão**
 
@@ -1805,10 +1834,10 @@ Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que
 | 3 · Requisito do Arc | 17 | D3 · Conectividade | 5 |
 | 4 · Decisão do cliente | 10 | D4 · Identidade e acesso | 11 |
 | P · Programa | 4 | D5 · Extensões e acesso remoto por tier | 5 |
-| F · FinOps | 1 | D6 · Proteção, baseline, logs e detecção | 20 |
+| F · FinOps | 2 (+1) | D6 · Proteção, baseline, logs e detecção | 20 |
 |  |  | D7 · Versões, patches e legado | 6 |
 |  |  | D8 · Remoção e recursos abandonados | 3 |
-|  |  | D9 · Custo e licenciamento | 2 |
+|  |  | D9 · Custo e licenciamento | 3 (+1) |
 |  |  | P · Execução do programa | 4 |
 
 **Por domínio do MCSB v2**
@@ -1819,8 +1848,8 @@ Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que
 | IM · Gerenciamento de identidades | 6 |  |
 | PA · Acesso privilegiado | 11 |  |
 | DP · Proteção de dados | 2 | O Arc não armazena dados do cliente; criptografia do disco do servidor é o CHK-61. |
-| AM · Gerenciamento de ativos | 15 |  |
-| LT · Registro em log e detecção de ameaças | 11 |  |
+| AM · Gerenciamento de ativos | 16 |  |
+| LT · Registro em log e detecção de ameaças | 12 |  |
 | IR · Resposta a incidentes | 3 | Coberto pelos alertas recomendados e pelo Defender. |
 | PV · Postura e gerenciamento de vulnerabilidades | 14 |  |
 | ES · Segurança de endpoint | 3 |  |
@@ -1828,12 +1857,13 @@ Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que
 | DS · Segurança de DevOps | 0 | Fora do escopo: não há pipeline de DevOps no Arc-enabled servers. |
 | AI · Segurança de inteligência artificial | 0 | Fora do escopo: não há carga de IA no Arc-enabled servers. |
 
-**Outros totais:** 9 alertas recomendados · 9 árvores de decisão · 60 referências de documentação no plano de ação. Verificações novas nesta versão: nenhuma.
+**Outros totais:** 9 alertas recomendados · 9 árvores de decisão · 70 referências de documentação no plano de ação. Verificações novas nesta versão: CHK-64 SQL Server: licença e envio de uso (faturamento).
 
 ### Histórico
 
 | Versão | Data | Mudanças |
 |---|---|---|
+| v3.8.3 | 23/10/2026 | Nova verificação CHK-64 (licença e envio de uso do SQL Server: LicenseType, pCore, uploadStatus e último envio); CHK-37 e CHK-29 com o parque inteiro (faixas de desconexão, incluindo 30 a 44 dias, e versões do agente) mesmo com amostra; CHK-33 com risco, caminhos de ataque, idade, isenções e responsável/prazo do Defender; CHK-38 destaca as recomendações do Advisor do Arc; consulta de alertas corrigida (campos do portal, só ativos Low/Medium/High). Novo anexo de continuidade quando a região fica indisponível e referências públicas de faturamento. |
 | v3.8.2 | 23/10/2026 | Vários resource groups numa coleta (-ResourceGroup rg-a, rg-b). Subscriptions aceitam IDs separados por vírgula numa única string, e o script para com erro se alguma não for encontrada (antes seguia para a subscription padrão). Ajuste de nome de função apontado pelo PSScriptAnalyzer; verificação do PSScriptAnalyzer antes de cada release. |
 | v3.8.1 | 23/10/2026 | Transparência das métricas: nova seção Como as métricas são calculadas (fórmula, números de hoje, pesos e ganho por controle); coluna Ganho com o índice antes e depois; indicadores do parque com a conta, a verificação de origem e cor por faixa. CHK-30 usa a versão da extensão SQL publicada no Azure quando é mais nova que a tabela. Relatório de exemplo atualizado. |
 | v3.8.0 | 23/10/2026 | Versões do agente e das extensões lidas do Azure na coleta (por região) e nomes de papéis lidos do Azure; AMA pela janela de suporte de 12 meses; DSC sinalizado; mapa de recursos ampliado; relatório indica amostra ou escopo inteiro, Secure Score por subscription, arquivo salvo mais curto; CHK-32 reconhece EDR de terceiros. |
@@ -1848,5 +1878,21 @@ Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que
 | v3.0.0 | 23/10/2026 | Projeto renomeado para Arc Posture Review (repositório, script Invoke-ArcPostureReview.ps1, pacote arc-posture-review-*.zip, arquivos pt-BR e en-US); cores de status e severidade no padrão do Advisor e do Defender for Cloud, com ícone, contraste AA, modo escuro e alto contraste; compatibilidade de pacote pelo esquema (pacotes v2.x continuam aceitos). |
 | v2.6.0 | 23/10/2026 | Versão em inglês (en-US) gerada da mesma fonte por tradução de segmentos (arquivos separados pt-BR e en-US); validação de estrutura e integridade do pacote importado (origem, versão, resultados, SHA-256 do manifest, arquivos fora do manifest, limites de tamanho) e SHA-256 do .zip impresso pelo script; rótulos legíveis nas tabelas; causa dependência ausente (Python) nas extensões com falha. |
 | v2.5.0 | 22/10/2026 | Guia reorganizado pelo método do CAF Secure (ciclo de sustentação) com medida pelo MCSB v1: camadas de avaliação, controle MCSB e árvore em cada verificação; 9 árvores de decisão (D1–D9) + execução do programa, com os itens DEC/REQ/CTL/OPS/LEG como detalhes; anexos para mapas, rastreabilidade, evidências e mapeamento MCSB; HTML com seções recolhíveis e placar por camada e controle MCSB. Nenhum conteúdo removido. |
-| v2.4.0 | 22/10/2026 | IDs CHK unificados com o checklist HTML v2 (63 verificações: 44 automáticas, 19 documentais); rastreabilidade nos dois sentidos; tags passam a ser recomendação (boa prática); DEC-05/06 atualizados com a documentação atual de Private Link e Arc gateway; novos CHK de região, Sentinel e SQL (menor privilégio); diagramas de fluxo, conectividade e coleta; ameaças e vulnerabilidades (CHK-54). |
+| v2.4.0 | 22/10/2026 | IDs CHK unificados com o checklist HTML v2 (64 verificações: 45 automáticas, 19 documentais); rastreabilidade nos dois sentidos; tags passam a ser recomendação (boa prática); DEC-05/06 atualizados com a documentação atual de Private Link e Arc gateway; novos CHK de região, Sentinel e SQL (menor privilégio); diagramas de fluxo, conectividade e coleta; ameaças e vulnerabilidades (CHK-54). |
 | v1.4.0 | — | Versão anterior (checklist CHK-01..22 manual). |
+
+## Anexo K) Continuidade quando a região do Azure fica indisponível
+
+Resumo da documentação pública (Data and privacy for Arc-enabled servers; Troubleshoot disconnected scenarios). A carga de trabalho no servidor continua rodando; o que para é a gestão pelo Azure.
+
+| Tema | O que a documentação diz | O que fazer |
+|---|---|---|
+| Replicação | Os dados são replicados para outra região da mesma geografia; em falha, o DNS aponta para a região de failover e os agentes reconectam sozinhos. | Nada a configurar. |
+| Geografia com uma só região do Arc | Os dados são copiados para backup, mas não há failover: os metadados continuam visíveis e não é possível alterar nem conectar servidores até a região voltar. | Confirmar se o Arc está disponível em uma segunda região da geografia (por exemplo, Brazil Southeast é de acesso restrito; Brazil South é pareada com South Central US, fora do Brasil). |
+| Status | Sem heartbeat por mais de 15 minutos, a máquina fica Disconnected. | Alerta de Resource Health (Unavailable). |
+| Identidade gerenciada | O HIMDS continua rodando, mas não obtém tokens do Entra ID. | Não depender só da identidade do Arc para funções críticas. |
+| Extensões | Continuam rodando; instalar, atualizar ou remover fica na fila por até 6 horas. | Evitar mudanças de extensão durante o incidente. |
+| Azure Policy | A atribuição fica guardada localmente por 14 dias. | Acima de 14 dias, reavaliar as atribuições. |
+| Azure Monitor Agent | Continua rodando com cache de poucos minutos; nada é enviado sem conexão. | Considerar perda de telemetria no RTO. |
+| SQL Server PAYG | O uso tolera interrupções de até 30 dias; acima disso a assinatura PAYG expira. | Monitorar o último envio de uso (CHK-64). |
+| Mudança de região | Exige remover extensões, desconectar e conectar de novo em outra região, com novo recurso e indisponibilidade. | Usar só como contingência planejada e testada; considerar residência de dados. |

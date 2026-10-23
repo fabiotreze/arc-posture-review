@@ -30,7 +30,7 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
 ## O que entrega
 
 - **Método público da Microsoft:** ciclo de sustentação de postura do [Cloud Adoption Framework — Secure](https://learn.microsoft.com/azure/cloud-adoption-framework/secure/overview), medido pelo [Microsoft Cloud Security Benchmark](https://learn.microsoft.com/security/benchmark/azure/introduction) (MCSB v2, com mapeamento para CIS Controls v8.1, NIST SP 800-53, PCI-DSS v4, NIST CSF 2.0 e ISO 27001).
-- **63 verificações** (44 automáticas, 19 documentais), cada uma com camada, controle MCSB e árvore de decisão.
+- **64 verificações** (45 automáticas, 19 documentais), cada uma com camada, controle MCSB e árvore de decisão.
 - **9 árvores de decisão** (onboarding, organização, conectividade, identidade, extensões, proteção, versões e legado, remoção, custo) e execução do programa.
 - **Coletor somente leitura** (`Invoke-ArcPostureReview.ps1`): apenas leitura via Azure Resource Graph e Azure CLI, paginado, várias subscriptions ou management group, com verificação prévia de permissões (Reader basta) e limite opcional de máquinas para ambientes grandes (amostra priorizada por risco).
 - **Análise local:** leitura rápida, índice do kit no modelo do Secure Score (pontos por severidade, proporção de máquinas saudáveis, mesma causa contada uma vez), conformidade por camada e por controle MCSB, Secure Score do Defender for Cloud, plano de ação em uma linha por ação com ganho, prazo e responsável, 9 alertas recomendados, versões do agente e das extensões na data da execução, estimativa de custo e evidências por achado.
@@ -60,7 +60,7 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
 
 ![Fluxo da coleta somente leitura e das evidências](docs/images/collection-flow.pt-BR.png)
 
-**Relatório de exemplo** (v3.8.2) de uma subscription de laboratório (7 servidores Arc, 3 avaliados em amostra priorizada por risco; SQL Server, Defender for Servers), anonimizado: subscription, conta, IDs e nomes de recursos de governança substituídos.
+**Relatório de exemplo** (v3.8.3) de uma subscription de laboratório (7 servidores Arc, 3 avaliados em amostra priorizada por risco; SQL Server, Defender for Servers), anonimizado: subscription, conta, IDs e nomes de recursos de governança substituídos.
 [Abrir o relatório de exemplo](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.pt-BR.html) · [English](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.en-US.html)
 
 ![Análise de exemplo](docs/images/sample-report.pt-BR.png)
@@ -71,7 +71,7 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
 |---|---|
 | Online | https://fabiotreze.github.io/arc-posture-review/arc-posture-review.pt-BR.html |
 | Offline | Baixe [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html) (ou [`.en-US.html`](arc-posture-review.en-US.html)) e abra no Edge ou Chrome |
-| Só o script | [`scripts/Invoke-ArcPostureReview.ps1`](scripts/Invoke-ArcPostureReview.ps1): as 63 verificações, subscription atual por padrão |
+| Só o script | [`scripts/Invoke-ArcPostureReview.ps1`](scripts/Invoke-ArcPostureReview.ps1): as 64 verificações, subscription atual por padrão |
 | Ler o guia | [docs/guide.pt-BR.md](docs/guide.pt-BR.md) · [docs/guide.en-US.md](docs/guide.en-US.md) |
 
 1. Abra o HTML e siga o **Comece aqui**: escolha as decisões nas árvores visuais e depois o escopo e as verificações.

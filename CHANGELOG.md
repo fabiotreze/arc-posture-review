@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.8.3] — 2026-10-23
+
+### New check
+- **CHK-64 · SQL Server: license and usage upload (billing).** Per machine with the SQL Server extension: LicenseType set on the extension, physical core license (pCore) use and pCore licenses in scope, extension state, `uploadStatus` and time of the last usage upload. FAIL when the upload fails, is older than 24 hours, the extension failed or a SQL machine is not Connected (PAYG expires after 30 days without connection); WARN for empty LicenseType, a pCore-licensed machine whose LicenseType differs from the license billingPlan (or with no pCore license in scope), or OS older than Windows Server 2016 (TLS 1.2/1.3 required). Based on the public *Manage licensing and billing* and *Troubleshoot connectivity to the data processing service* articles.
+
+### Checks
+- **CHK-37** shows the whole estate in scope, computed before the sample: Connected, disconnected up to 6 days, 7–29, 30–44 (expires at 45) and 45+ days, and Expired. The 30–44 range is called out because reconnecting then avoids a new onboarding.
+- **CHK-29** adds the agent version distribution and the count below 1.61 for the whole estate (FAIL if any, even when the sample has none).
+- **CHK-33** adds the Defender risk level (Critical/High), attack paths, age (open 90+ days), exemptions and, when available, remediation assignments (owner, overdue, no due date). Risk and attack paths require Defender CSPM.
+- **CHK-38** highlights the Arc-specific Advisor recommendations (expired, disconnected, agent version) to compare with CHK-37 and CHK-29.
+- **Alerts (CHK-54):** the query now reads the portal field names (`Status`, `Severity`, `ResourceIdentifiers`, with fallback) and keeps only active Low/Medium/High alerts, as in the Defender for Cloud samples. The previous query could miss active alerts.
+
+- Validated in a lab run (7 Arc servers, Cloud Shell): estate ranges, published versions, Defender risk/governance fields and the pCore license were read without errors.
+
+### Guide
+- New appendix *Continuity when the Azure region is unavailable* (what keeps running, what stops, single-region geographies, region change).
+- Public references added: SQL Server billing and data processing service, Arc data replication and disconnected scenarios, region pairs, Defender risk prioritization, governance rules and Resource Graph samples.
+
 ## [3.8.2] — 2026-10-23
 
 ### Collector
