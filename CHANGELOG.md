@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.5.1] — 2026-10-23
+
+### Fixed
+- Script reviewed with PSScriptAnalyzer (code scanning): empty `catch` blocks now log the error in verbose mode (`-Verbose`); functions renamed to standard PowerShell verbs (`Write-Result`, `Add-PermGap`, `Get-ArcWorkspaceId`); unused variable removed; the parameters `ActivityDays`, `RequiredTags` and `AllowedRegions` are written to the log. No change to the checks or results.
+
+### Changed
+- Code scanning excludes two style rules on purpose: positional parameters (the script style) and `Write-Host` (operator progress output).
+- The release automation runs only for numeric tags (`vX.Y.Z` with digits).
+- Dependabot groups action updates into one pull request per month.
+
+### Mudanças (pt-BR)
+- Script revisado pelo PSScriptAnalyzer: `catch` registra o erro com `-Verbose`, funções com verbos padrão, variável sem uso removida, parâmetros no log. As verificações não mudaram.
+- Code scanning ignora duas regras de estilo intencionais; release só com tags numéricas; Dependabot agrupado.
+
 ## [3.5.0] — 2026-10-23
 
 ### Changed

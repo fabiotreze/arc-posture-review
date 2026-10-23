@@ -18,6 +18,9 @@ jobs:
         with:
           path: .\scripts
           recurse: true
+          # Excluded on purpose: positional parameters are the script style (141 notes, no risk);
+          # Write-Host is the progress output shown to the operator.
+          excludeRule: '"PSAvoidUsingPositionalParameters", "PSAvoidUsingWriteHost"'
           output: results.sarif
       - name: Upload results to code scanning
         uses: github/codeql-action/upload-sarif@v3
