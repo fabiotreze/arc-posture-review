@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.5.0] — 2026-10-23
+
+### Changed
+- **Kit index on the Defender for Cloud Secure Score model:** each control is worth points by severity (High 3, Medium 2, Low 1) and scores by the share of healthy machines; checks with the same root cause (endpoint protection, telemetry, OS baseline, local agent configuration) form one control and count once; controls without assessment are left out. When the finding is not per machine, PASS = 100%, WARN = 50%, FAIL = 0.
+- **Quick read** at the top of the analysis: kit index with its coverage (checks evaluated, documentary pending), official Secure Score, and the three biggest gains (like the Secure Score potential increase).
+- **"What to do now" is one row per action**, grouping checks with the same cause, with findings, gain and owner; the step-by-step moved into Priorities, so it is no longer repeated.
+- A high-severity FAIL is always an immediate action.
+- New indicators: Defender for Servers, compliant OS baseline, periodic patch assessment, telemetry (DCR).
+
+### Fixed
+- Compliance text said MCSB v1; it now says v2.
+- Layers outside the compliance measure (customer decision, program, FinOps) no longer show a percentage.
+- A WARN with no item count shows "1 gap" instead of "0 findings".
+
+### Mudanças (pt-BR)
+- Índice do kit no modelo do Secure Score: pontos por severidade, proporção de máquinas saudáveis e causas comuns contadas uma vez.
+- Leitura rápida no topo (cobertura, Secure Score, maiores ganhos); plano de ação em uma linha por ação; FAIL de severidade alta sempre imediato; novos indicadores.
+- Correções: MCSB v2 no texto, camadas fora da conformidade sem percentual, "1 lacuna" em vez de "0 achado(s)".
+
 ## [3.4.0] — 2026-10-23
 
 ### Added

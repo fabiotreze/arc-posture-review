@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v3.4.0 — 2026-10-23.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
+**Version v3.5.0 — 2026-10-23.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 
@@ -71,7 +71,9 @@ Each check belongs to a layer. Only layers 1 to 3 measure compliance; layer 4 me
 
 - Official source for the measurement: [Defender for Cloud regulatory compliance dashboard](https://learn.microsoft.com/en-us/azure/defender-for-cloud/regulatory-compliance-dashboard) (MCSB), [Secure Score](https://learn.microsoft.com/en-us/azure/defender-for-cloud/secure-score-security-controls) and [Machine Configuration](https://learn.microsoft.com/en-us/azure/governance/machine-configuration/overview) for the OS baseline.
 - Controls listed in the Arc-enabled servers baseline: NS-1, NS-2, IM-1, IM-3, IM-8, PA-1, PA-7, DP-1, DP-3, DP-4, AM-2, LT-1, LT-4, BR-1. The others (PV, ES, LT-3/5/6, IR) apply to the server and to operations.
-- The weighted kit index (severity × status) is a reading aid: it **does not replace** the Secure Score or the MCSB compliance in Defender for Cloud.
+- The kit index follows the [Secure Score](https://learn.microsoft.com/en-us/azure/defender-for-cloud/secure-score-security-controls) model: each control is worth points by severity weight (High 3, Medium 2, Low 1) and scores by the share of healthy machines; checks with the same cause (for example, MDE missing in CHK-32 and CHK-57) form one control and count once; controls without assessment are left out; the gain of each action matches the Secure Score potential increase. When the finding is not per machine, PASS = 100%, WARN = 50%, FAIL = 0.
+- The MCSB control table follows the regulatory compliance dashboard: a control is met when all of its checks pass.
+- The index is a reading aid: it **does not replace** Secure Score or the Defender for Cloud MCSB compliance.
 
 ### 1.3 How to read the IDs and status
 
@@ -1777,7 +1779,7 @@ The primary track of this guide is: **Landing Zone + Choose Service + Plan at Sc
 
 ### Coverage inventory
 
-Totals calculated from the catalog in every version. In parentheses, what changed compared with v3.3.0.
+Totals calculated from the catalog in every version. In parentheses, what changed compared with v3.4.0.
 
 **By domain**
 
@@ -1786,21 +1788,21 @@ Totals calculated from the catalog in every version. In parentheses, what change
 | A · Architecture and scope | 5 | 2 | 3 | 1 | 3 | 1 |
 | B · Governance and identity | 15 | 10 | 5 | 6 | 7 | 2 |
 | C · Connectivity and network | 4 | 3 | 1 | 2 | 2 | 0 |
-| D · Agent, extensions, and protection | 21 (+1) | 17 (+1) | 4 | 11 (+1) | 10 | 0 |
+| D · Agent, extensions, and protection | 21 | 17 | 4 | 11 | 10 | 0 |
 | E · Operations, monitoring, and auditing | 16 | 11 | 5 | 3 | 10 | 3 |
 | F · Legacy | 2 | 1 | 1 | 2 | 0 | 0 |
-| **Total** | **63 (+1)** | **44 (+1)** | **19** | **25 (+1)** | **32** | **6** |
+| **Total** | **63** | **44** | **19** | **25** | **32** | **6** |
 
 **By assessment layer and by decision tree**
 
 | Layer | Checks | Tree | Checks |
 |---|---|---|---|
-| 1 · MCSB | 26 (+1) | D1 · Onboarding | 3 |
+| 1 · MCSB | 26 | D1 · Onboarding | 3 |
 | 2 · OS baseline | 5 | D2 · Organization and criticality | 4 |
 | 3 · Arc requirement | 17 | D3 · Connectivity | 5 |
 | 4 · Customer decision | 10 | D4 · Identity and access | 11 |
 | P · Program | 4 | D5 · Extensions and remote access per tier | 5 |
-| F · FinOps | 1 | D6 · Protection, baseline, logs, and detection | 20 (+1) |
+| F · FinOps | 1 | D6 · Protection, baseline, logs, and detection | 20 |
 |  |  | D7 · Versions, patches, and legacy | 6 |
 |  |  | D8 · Removal and abandoned resources | 3 |
 |  |  | D9 · Cost and licensing | 2 |
@@ -1823,12 +1825,13 @@ Totals calculated from the catalog in every version. In parentheses, what change
 | DS · DevOps security | 0 | Out of scope: there is no DevOps pipeline in Arc-enabled servers. |
 | AI · Artificial intelligence security | 0 | Out of scope: there is no AI workload in Arc-enabled servers. |
 
-**Other totals:** 9 recommended alerts · 9 decision trees · 56 documentation references in the action plan. New checks in this version: CHK-63 Defender for Servers per Arc machine.
+**Other totals:** 9 recommended alerts · 9 decision trees · 56 documentation references in the action plan. New checks in this version: none.
 
 ### History
 
 | Version | Data | Changes |
 |---|---|---|
+| v3.5.0 | 2026-10-23 | Kit index on the Defender for Cloud Secure Score model: points by severity, share of healthy machines, and checks with the same cause counted once; quick read with coverage, Secure Score and biggest gains; one-row-per-action plan; new indicators (Defender for Servers, compliant baseline, patches, telemetry); high-severity FAIL always immediate. |
 | v3.4.0 | 2026-10-23 | New check CHK-63: Defender for Servers plan read on each Arc machine (FAIL without a plan, WARN if different from the subscription); the cost estimate uses the actual machine plan. |
 | v3.3.0 | 2026-10-23 | Arc-centric scope: roles, policies, Key Vaults and workspaces count only when they reach the Arc machines (the others appear as ignored); Secure Score labeled as a subscription-wide measure; controls updated to MCSB v2 (preview), with the Governance and strategy domain remapped to AM, PV and PA; coverage inventory by MCSB v2 domain; references for MCSB v2, Windows Server 2025 baselines, Best Practices Assessment and Windows Recovery Environment. |
 | v3.2.0 | 2026-10-23 | Eight new checks (CHK-55 to CHK-62): OS security baseline with compliance, local administrators audit, healthy antivirus and EDR, insights and telemetry per machine, map of Arc capabilities in use, Windows LAPS, disk encryption and Conditional Access/MFA for Azure administrators; coverage inventory per version; ERROR/PARTIAL statuses shown in English in the en-US version; references for Windows Server Management, Hotpatch, baselines, VM Insights, Change Tracking, LAPS, BitLocker and Conditional Access. |

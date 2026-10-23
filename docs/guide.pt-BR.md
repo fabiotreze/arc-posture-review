@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v3.4.0 — 23/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
+**Versão v3.5.0 — 23/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 
@@ -71,7 +71,9 @@ Cada verificação pertence a uma camada. Só as camadas 1 a 3 medem conformidad
 
 - Fonte oficial da medida: [painel de conformidade regulatória do Defender for Cloud](https://learn.microsoft.com/en-us/azure/defender-for-cloud/regulatory-compliance-dashboard) (MCSB), [Secure Score](https://learn.microsoft.com/en-us/azure/defender-for-cloud/secure-score-security-controls) e [Machine Configuration](https://learn.microsoft.com/en-us/azure/governance/machine-configuration/overview) para o baseline do SO.
 - Controles listados no baseline do Arc-enabled servers: NS-1, NS-2, IM-1, IM-3, IM-8, PA-1, PA-7, DP-1, DP-3, DP-4, AM-2, LT-1, LT-4, BR-1. Os demais (PV, ES, LT-3/5/6, IR) se aplicam ao servidor e à operação.
-- O índice ponderado do kit (severidade × status) é um apoio de leitura: **não substitui** o Secure Score nem a conformidade MCSB do Defender for Cloud.
+- O índice do kit segue o modelo do [Secure Score](https://learn.microsoft.com/en-us/azure/defender-for-cloud/secure-score-security-controls): cada controle vale pontos pelo peso da severidade (Alta 3, Média 2, Baixa 1) e pontua pela proporção de máquinas saudáveis; verificações com a mesma causa (por exemplo, MDE ausente na CHK-32 e na CHK-57) formam um controle e contam uma vez; controles sem avaliação ficam fora da conta; o ganho de cada ação equivale ao potencial de aumento do Secure Score. Quando o achado não é por máquina, PASS = 100%, WARN = 50%, FAIL = 0.
+- A tabela por controle MCSB segue o painel de conformidade regulatória: o controle atende quando todas as verificações dele passam.
+- O índice é um apoio de leitura: **não substitui** o Secure Score nem a conformidade MCSB do Defender for Cloud.
 
 ### 1.3 Como ler os IDs e status
 
@@ -1777,7 +1779,7 @@ A trilha primária deste guia é: **Landing Zone + Choose Service + Plan at Scal
 
 ### Inventário de cobertura
 
-Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que mudou em relação à v3.3.0.
+Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que mudou em relação à v3.4.0.
 
 **Por domínio**
 
@@ -1786,21 +1788,21 @@ Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que
 | A · Arquitetura e escopo | 5 | 2 | 3 | 1 | 3 | 1 |
 | B · Governança e identidade | 15 | 10 | 5 | 6 | 7 | 2 |
 | C · Conectividade e rede | 4 | 3 | 1 | 2 | 2 | 0 |
-| D · Agente, extensões e proteção | 21 (+1) | 17 (+1) | 4 | 11 (+1) | 10 | 0 |
+| D · Agente, extensões e proteção | 21 | 17 | 4 | 11 | 10 | 0 |
 | E · Operação, monitoramento e auditoria | 16 | 11 | 5 | 3 | 10 | 3 |
 | F · Legado | 2 | 1 | 1 | 2 | 0 | 0 |
-| **Total** | **63 (+1)** | **44 (+1)** | **19** | **25 (+1)** | **32** | **6** |
+| **Total** | **63** | **44** | **19** | **25** | **32** | **6** |
 
 **Por camada de avaliação e por árvore de decisão**
 
 | Camada | Verificações | Árvore | Verificações |
 |---|---|---|---|
-| 1 · MCSB | 26 (+1) | D1 · Onboarding | 3 |
+| 1 · MCSB | 26 | D1 · Onboarding | 3 |
 | 2 · Baseline do SO | 5 | D2 · Organização e criticidade | 4 |
 | 3 · Requisito do Arc | 17 | D3 · Conectividade | 5 |
 | 4 · Decisão do cliente | 10 | D4 · Identidade e acesso | 11 |
 | P · Programa | 4 | D5 · Extensões e acesso remoto por tier | 5 |
-| F · FinOps | 1 | D6 · Proteção, baseline, logs e detecção | 20 (+1) |
+| F · FinOps | 1 | D6 · Proteção, baseline, logs e detecção | 20 |
 |  |  | D7 · Versões, patches e legado | 6 |
 |  |  | D8 · Remoção e recursos abandonados | 3 |
 |  |  | D9 · Custo e licenciamento | 2 |
@@ -1823,12 +1825,13 @@ Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que
 | DS · Segurança de DevOps | 0 | Fora do escopo: não há pipeline de DevOps no Arc-enabled servers. |
 | AI · Segurança de inteligência artificial | 0 | Fora do escopo: não há carga de IA no Arc-enabled servers. |
 
-**Outros totais:** 9 alertas recomendados · 9 árvores de decisão · 56 referências de documentação no plano de ação. Verificações novas nesta versão: CHK-63 Defender for Servers por máquina Arc.
+**Outros totais:** 9 alertas recomendados · 9 árvores de decisão · 56 referências de documentação no plano de ação. Verificações novas nesta versão: nenhuma.
 
 ### Histórico
 
 | Versão | Data | Mudanças |
 |---|---|---|
+| v3.5.0 | 23/10/2026 | Índice do kit no modelo do Secure Score do Defender for Cloud: pontos por severidade, proporção de máquinas saudáveis e verificações com a mesma causa contadas uma vez; leitura rápida com cobertura, Secure Score e maiores ganhos; plano de ação em uma linha por ação; novos indicadores (Defender for Servers, baseline conforme, patches, telemetria); FAIL de severidade alta sempre imediato. |
 | v3.4.0 | 23/10/2026 | Nova verificação CHK-63: plano do Defender for Servers lido em cada máquina Arc (FAIL sem plano, WARN se diferente da subscription); a estimativa de custo usa o plano real da máquina. |
 | v3.3.0 | 23/10/2026 | Escopo centrado no Azure Arc: papéis, policies, Key Vaults e workspaces só contam quando alcançam as máquinas Arc (os demais aparecem como ignorados); Secure Score rotulado como medida da subscription; controles atualizados para o MCSB v2 (preview), com o domínio Governança e estratégia remapeado para AM, PV e PA; inventário de cobertura por domínio do MCSB v2; referências do MCSB v2, baselines do Windows Server 2025, Best Practices Assessment e Windows Recovery Environment. |
 | v3.2.0 | 23/10/2026 | Oito verificações novas (CHK-55 a CHK-62): baseline de segurança do SO com conformidade, auditoria dos administradores locais, antivírus e EDR saudáveis, insights e telemetria por máquina, mapa de recursos do Arc em uso, Windows LAPS, criptografia de disco e Acesso Condicional/MFA para quem administra o Azure; inventário de cobertura por versão; status ERROR/PARTIAL exibidos em inglês na versão en-US; referências de Windows Server Management, Hotpatch, baselines, VM Insights, Change Tracking, LAPS, BitLocker e Acesso Condicional. |
