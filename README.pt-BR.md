@@ -60,7 +60,7 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
 
 ![Fluxo da coleta somente leitura e das evidências](docs/images/collection-flow.pt-BR.png)
 
-**Relatório de exemplo** (v3.8.1) de uma subscription de laboratório (7 servidores Arc, 3 avaliados em amostra priorizada por risco; SQL Server, Defender for Servers), anonimizado: subscription, conta, IDs e nomes de recursos de governança substituídos.
+**Relatório de exemplo** (v3.8.2) de uma subscription de laboratório (7 servidores Arc, 3 avaliados em amostra priorizada por risco; SQL Server, Defender for Servers), anonimizado: subscription, conta, IDs e nomes de recursos de governança substituídos.
 [Abrir o relatório de exemplo](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.pt-BR.html) · [English](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.en-US.html)
 
 ![Análise de exemplo](docs/images/sample-report.pt-BR.png)

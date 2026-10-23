@@ -13,6 +13,13 @@ jobs:
       - uses: actions/checkout@v7
       - name: Check version in the script
         run: grep -q "$GITHUB_REF_NAME" scripts/Invoke-ArcPostureReview.ps1 || { echo "Tag $GITHUB_REF_NAME not found in the script"; exit 1; }
+      - name: PSScriptAnalyzer gate (no Error/Warning findings)
+        shell: pwsh
+        run: |
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+          $found = @(Invoke-ScriptAnalyzer -Path ./scripts -Recurse -Settings ./PSScriptAnalyzerSettings.psd1)
+          $found | Format-Table Severity, RuleName, Line, Message -AutoSize -Wrap | Out-String -Width 200 | Write-Host
+          if ($found.Count) { Write-Error "$($found.Count) PSScriptAnalyzer finding(s): release not created. Fix and publish a new version."; exit 1 }
       - name: Extract release notes from CHANGELOG
         run: |
           v="${GITHUB_REF_NAME#v}"

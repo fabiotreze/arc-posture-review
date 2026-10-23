@@ -60,7 +60,7 @@ Security decisions start before the first server is connected (onboarding creden
 
 ![Read-only collection and evidence flow](docs/images/collection-flow.en-US.png)
 
-**Sample report** (v3.8.1) from a lab subscription (7 Arc-enabled servers, 3 evaluated in a risk-prioritized sample; SQL Server, Defender for Servers), anonymized: subscription, account, IDs and governance resource names replaced.
+**Sample report** (v3.8.2) from a lab subscription (7 Arc-enabled servers, 3 evaluated in a risk-prioritized sample; SQL Server, Defender for Servers), anonymized: subscription, account, IDs and governance resource names replaced.
 [Open the sample report](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.en-US.html) · [Português](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.pt-BR.html)
 
 ![Sample analysis](docs/images/sample-report.en-US.png)

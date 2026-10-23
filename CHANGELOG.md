@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.8.2] — 2026-10-23
+
+### Collector
+- `-ResourceGroup` accepts several resource groups in one collection (`-ResourceGroup 'rg-a','rg-b'` or `'rg-a,rg-b'`); the log shows the groups in scope.
+- `-Subscriptions` accepts comma- or semicolon-separated IDs or names in a single string, and every value is validated with the active account. If any subscription is not found, the script **stops with an error** before collecting (it used to warn and fall back to the default subscription).
+- Function `Get-AllPages` renamed to `Get-RestItem` (PSScriptAnalyzer PSUseSingularNouns, code scanning alert #161).
+
+### Quality gate
+- `PSScriptAnalyzerSettings.psd1`: shared analyzer settings (Error and Warning; positional parameters and Write-Host excluded on purpose).
+- Release workflow runs PSScriptAnalyzer before creating the release; any Error or Warning finding blocks the release.
+- `tools/Test-BeforePublish.ps1`: local check to run before commit and tag (analyzer, version consistency in script/CHANGELOG/CITATION, unused tag, `.nojekyll` and pages, noreply commit e-mail).
+
 ## [3.8.1] — 2026-10-23
 
 The v3.8.0 tag was published from an earlier build of the package; 3.8.1 contains everything planned for 3.8.0.

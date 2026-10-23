@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v3.8.1 — 23/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
+**Versão v3.8.2 — 23/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 
@@ -1782,7 +1782,7 @@ A trilha primária deste guia é: **Landing Zone + Choose Service + Plan at Scal
 
 ### Inventário de cobertura
 
-Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que mudou em relação à v3.8.0.
+Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que mudou em relação à v3.8.1.
 
 **Por domínio**
 
@@ -1834,6 +1834,7 @@ Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que
 
 | Versão | Data | Mudanças |
 |---|---|---|
+| v3.8.2 | 23/10/2026 | Vários resource groups numa coleta (-ResourceGroup rg-a, rg-b). Subscriptions aceitam IDs separados por vírgula numa única string, e o script para com erro se alguma não for encontrada (antes seguia para a subscription padrão). Ajuste de nome de função apontado pelo PSScriptAnalyzer; verificação do PSScriptAnalyzer antes de cada release. |
 | v3.8.1 | 23/10/2026 | Transparência das métricas: nova seção Como as métricas são calculadas (fórmula, números de hoje, pesos e ganho por controle); coluna Ganho com o índice antes e depois; indicadores do parque com a conta, a verificação de origem e cor por faixa. CHK-30 usa a versão da extensão SQL publicada no Azure quando é mais nova que a tabela. Relatório de exemplo atualizado. |
 | v3.8.0 | 23/10/2026 | Versões do agente e das extensões lidas do Azure na coleta (por região) e nomes de papéis lidos do Azure; AMA pela janela de suporte de 12 meses; DSC sinalizado; mapa de recursos ampliado; relatório indica amostra ou escopo inteiro, Secure Score por subscription, arquivo salvo mais curto; CHK-32 reconhece EDR de terceiros. |
 | v3.7.0 | 23/10/2026 | Limite de máquinas com amostra priorizada por risco (desconectadas, SO legado, agente abaixo de 1.61, SQL Server, tag de criticidade). Privacidade: a página bloqueia conexões de rede (Content Security Policy), pede confirmação antes de carregar o pacote, oculta e-mails nos arquivos salvos e tem botão para limpar os dados guardados no navegador. |
