@@ -2467,8 +2467,8 @@ else {
   $ArgScope = @('--subscriptions') + $SubIds
 }
 if ($ManagementGroup) { Write-Step ('Scope: management group ' + $ManagementGroup) }
-Write-Step ('Parameters: ActivityDays={0}; MaxMachines={3}; RequiredTags={1}; AllowedRegions={2}' -f $ActivityDays, (@($RequiredTags) -join ','), (@($AllowedRegions) -join ','), $MaxMachines)
 else { Write-Step ('Scope: ' + $SubIds.Count + ' subscription(s): ' + ($SubIds -join ', ')) }
+Write-Step ('Parameters: ActivityDays={0}; MaxMachines={3}; RequiredTags={1}; AllowedRegions={2}' -f $ActivityDays, (@($RequiredTags) -join ','), (@($AllowedRegions) -join ','), $MaxMachines)
 
 $Selected = @($Catalog | Where-Object { $Checks -contains $_.id })
 $Need = @($Selected | ForEach-Object { $_.ds } | Where-Object { $_ } | Sort-Object -Unique)
