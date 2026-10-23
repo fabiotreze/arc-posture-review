@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.6.1] — 2026-10-23
+
+### Fixed
+- The script from versions 3.5.1 and 3.6.0 stopped at start with *"The term 'else' is not recognized"*: a log line had been placed between `if` and `else`. Use 3.6.1 or later.
+- New automated check in the build: `else`, `elseif`, `catch` and `finally` must follow the closing brace of the previous block.
+
+### Mudanças (pt-BR)
+- Correção: o script das versões 3.5.1 e 3.6.0 parava no início com o erro de `else` não reconhecido. Use a 3.6.1 ou posterior.
+
 ## [3.6.0] — 2026-10-23
 
 ### Added

@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v3.6.0 — 2026-10-23.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
+**Version v3.6.1 — 2026-10-23.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 
@@ -1779,7 +1779,7 @@ The primary track of this guide is: **Landing Zone + Choose Service + Plan at Sc
 
 ### Coverage inventory
 
-Totals calculated from the catalog in every version. In parentheses, what changed compared with v3.5.0.
+Totals calculated from the catalog in every version. In parentheses, what changed compared with v3.6.0.
 
 **By domain**
 
@@ -1831,6 +1831,7 @@ Totals calculated from the catalog in every version. In parentheses, what change
 
 | Version | Data | Changes |
 |---|---|---|
+| v3.6.1 | 2026-10-23 | Fix: the 3.5.1 and 3.6.0 script stopped at start with an else not recognized error (log line placed between if and else). New automated check for this kind of error. |
 | v3.6.0 | 2026-10-23 | Machine limit (MaxMachines) for large estates, with a sample notice in the report; a single analysis file with the checklist record; collected statuses applied when the package loads; button to return to the analysis; summary by severity; script reviewed with PSScriptAnalyzer (catch with -Verbose, standard verbs, parameters in the log). |
 | v3.5.0 | 2026-10-23 | Kit index on the Defender for Cloud Secure Score model: points by severity, share of healthy machines, and checks with the same cause counted once; quick read with coverage, Secure Score and biggest gains; one-row-per-action plan; new indicators (Defender for Servers, compliant baseline, patches, telemetry); high-severity FAIL always immediate. |
 | v3.4.0 | 2026-10-23 | New check CHK-63: Defender for Servers plan read on each Arc machine (FAIL without a plan, WARN if different from the subscription); the cost estimate uses the actual machine plan. |
