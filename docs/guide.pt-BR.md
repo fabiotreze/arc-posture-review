@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v3.2.0 — 23/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
+**Versão v3.3.0 — 23/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 
@@ -44,7 +44,7 @@ flowchart LR
 
 ## 1) Método de avaliação
 
-O kit segue a prática pública da Microsoft para **sustentar a postura de segurança** do [Cloud Adoption Framework — Secure](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/secure/overview): avaliação recorrente, remediação priorizada, automação de controles e relatório com evidências. O padrão de medida é o [Microsoft Cloud Security Benchmark (MCSB)](https://learn.microsoft.com/en-us/security/benchmark/azure/introduction), o benchmark padrão do Defender for Cloud, cujos controles trazem o mapeamento para frameworks de mercado como **CIS Controls v8**, **NIST SP 800-53** e **PCI-DSS**. Os IDs usados são do **MCSB v1**, versão que tem o [baseline de segurança do Arc-enabled servers](https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-arc-enabled-servers-security-baseline) publicado.
+O kit segue a prática pública da Microsoft para **sustentar a postura de segurança** do [Cloud Adoption Framework — Secure](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/secure/overview): avaliação recorrente, remediação priorizada, automação de controles e relatório com evidências. O padrão de medida é o [Microsoft Cloud Security Benchmark (MCSB)](https://learn.microsoft.com/en-us/security/benchmark/azure/overview), o benchmark padrão do Defender for Cloud, cujos controles trazem o mapeamento para **CIS Controls v8.1**, **NIST SP 800-53 Rev.5**, **PCI-DSS v4**, **NIST CSF 2.0**, **ISO 27001:2022** e **SOC 2**. Os IDs usados são do **MCSB v2** (preview, substitui o v1). O [baseline de segurança do Arc-enabled servers](https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-arc-enabled-servers-security-baseline) publicado ainda usa o v1; como os IDs dos controles se mantêm entre as versões (o v2 retirou o domínio Governança e estratégia e acrescentou DevOps e IA), a coluna *No baseline do Arc?* continua válida.
 
 ### 1.1 Ciclo aplicado
 
@@ -973,10 +973,10 @@ Mesma lista, na mesma ordem, do `arc-posture-review.pt-BR.html`. Camada: 1 MCSB 
 | ID | Verificação | Tipo | Sev. | Camada | MCSB | Árvore | O que verifica | Critério | Referências |
 |---|---|---|---|---|---|---|---|---|---|
 | CHK-01 | Inventário e elegibilidade das máquinas Arc | Automático | Baixa | 3 | AM-1 | D1 | Máquinas por status, sistema operacional, região, fabricante/modelo e SQL Server detectado. | Informativo: base para os demais controles. | REQ-01 |
-| CHK-02 | Serviço Arc por tipo de ambiente | Documental | Média | 4 | GS-2 | D1 | Origem de cada máquina (on-premises, VMware, SCVMM, AWS/GCP, OCI) e serviço escolhido (Arc-enabled servers, multicloud connector, Arc VMware/SCVMM). | Evidência: decisão registrada por origem. | DEC-01, DEC-02 |
-| CHK-03 | Landing zone e organização de recursos | Documental | Média | 4 | GS-2 | D2 | Management group, subscriptions e resource groups por ambiente e região; plataforma separada de workloads. | Evidência: desenho aprovado. | DEC-03 |
-| CHK-04 | Perfil de criticidade (Tier 0/1/2) | Documental | Alta | 4 | GS-2, PA-1 | D2 | Classificação dos servidores e controles mais restritivos para Tier 0. | Evidência: lista de servidores por tier e controles por tier. | DEC-04 |
-| CHK-05 | Região dos metadados e residência de dados | Automático | Média | 4 | GS-3 | D2 | Região de cada máquina comparada com as regiões permitidas (opcional). | WARN se houver máquina fora das regiões permitidas; INFO sem lista. | CTL-08 |
+| CHK-02 | Serviço Arc por tipo de ambiente | Documental | Média | 4 | AM-2 | D1 | Origem de cada máquina (on-premises, VMware, SCVMM, AWS/GCP, OCI) e serviço escolhido (Arc-enabled servers, multicloud connector, Arc VMware/SCVMM). | Evidência: decisão registrada por origem. | DEC-01, DEC-02 |
+| CHK-03 | Landing zone e organização de recursos | Documental | Média | 4 | AM-1, AM-3 | D2 | Management group, subscriptions e resource groups por ambiente e região; plataforma separada de workloads. | Evidência: desenho aprovado. | DEC-03 |
+| CHK-04 | Perfil de criticidade (Tier 0/1/2) | Documental | Alta | 4 | AM-1, PA-1 | D2 | Classificação dos servidores e controles mais restritivos para Tier 0. | Evidência: lista de servidores por tier e controles por tier. | DEC-04 |
+| CHK-05 | Região dos metadados e residência de dados | Automático | Média | 4 | AM-2 | D2 | Região de cada máquina comparada com as regiões permitidas (opcional). | WARN se houver máquina fora das regiões permitidas; INFO sem lista. | CTL-08 |
 
 ### B · Governança e identidade
 
@@ -992,7 +992,7 @@ Mesma lista, na mesma ordem, do `arc-posture-review.pt-BR.html`. Camada: 1 MCSB 
 | CHK-13 | Modelo de identidade, PIM e revisão de acesso | Documental | Alta | 1 | PA-2, PA-4 | D4 | Grupos Entra por função, PIM/JIT para papéis privilegiados e revisão periódica. | Evidência: matriz de grupos e configuração do PIM. | REQ-03, OPS-12 |
 | CHK-14 | Segredos e credenciais de onboarding | Documental | Alta | 1 | IM-8 | D4 | Service principal dedicado, segredo com validade e guardado em cofre, nenhum segredo em script; identidade gerenciada quando possível. | Evidência: procedimento de rotação e local de guarda. | REQ-08 |
 | CHK-15 | Key Vaults | Automático | Baixa | 1 | DP-8 | D4 | Acesso público, purge protection e modelo de permissão RBAC. | WARN se algum cofre não seguir o baseline. | REQ-08 |
-| CHK-16 | Cenários cross-subscription | Documental | Média | 4 | GS-4 | D3 | Private Endpoint, Private Link Scope e ExpressRoute entre subscriptions; aprovação de conexões Pending. | Evidência: RBAC dos dois lados e fluxo de aprovação. | REQ-06 |
+| CHK-16 | Cenários cross-subscription | Documental | Média | 4 | AM-1, AM-4 | D3 | Private Endpoint, Private Link Scope e ExpressRoute entre subscriptions; aprovação de conexões Pending. | Evidência: RBAC dos dois lados e fluxo de aprovação. | REQ-06 |
 | CHK-53 | Custo: serviços cobrados e benefícios por máquina | Automático | Média | F | — | D9 | Estimativa mensal em preço de lista (USD) por servidor conectado: Defender for Servers P1/P2, Update Manager, Machine Configuration/Change Tracking e Windows Server PAYG; benefícios que zeram parte do custo (Software Assurance atestado, WS PAYG, ESU via Arc, Defender P2); itens variáveis (Log Analytics, Sentinel). | INFO com a estimativa; WARN se houver Windows Server pagando Update Manager/Machine Configuration sem benefício atestado (oportunidade se houver Software Assurance). | REQ-09 |
 | CHK-56 | Auditoria dos administradores locais | Automático | Média | 2 | PA-1, PA-7 | D4 | Auditoria do grupo Administradores local por Machine Configuration (políticas built-in de membros do grupo Administradores) nas máquinas Windows conectadas. | WARN se nenhuma máquina Windows conectada tiver auditoria ou se houver não conformidade; INFO com a cobertura parcial. | CTL-04, CTL-05 |
 | CHK-60 | Senha do administrador local (Windows LAPS) | Documental | Alta | 2 | PA-1, IM-8 | D4 | Windows LAPS (com backup no Active Directory ou no Microsoft Entra ID) ou solução equivalente: senha única e rotacionada do administrador local em cada servidor. | Evidência: política do Windows LAPS aplicada (GPO ou Intune) e amostra de servidores com senha gerenciada. | CTL-04, CTL-05 |
@@ -1049,7 +1049,7 @@ Mesma lista, na mesma ordem, do `arc-posture-review.pt-BR.html`. Camada: 1 MCSB 
 | CHK-47 | Rollout por ondas e rollback | Documental | Média | P | — | P | Ondas com critérios de avanço, pausa e rollback. | Evidência: plano aprovado. | OPS-02 |
 | CHK-48 | Método de automação por ambiente | Documental | Média | P | AM-2, PV-2 | P | Onboarding (service principal, SCCM/GPO, PowerShell/Ansible), Azure Policy e Automation por ambiente. | Evidência: script versionado e método por ambiente. | OPS-03 |
 | CHK-49 | Remoção individual e em escala | Documental | Média | 3 | AM-3 | D8 | Remover extensões, azcmagent disconnect, desinstalar o agente e limpar recursos órfãos via Resource Graph. | Evidência: procedimento documentado. | OPS-07, OPS-08 |
-| CHK-50 | KPIs de saúde e revisão periódica | Documental | Média | P | GS-5 | P | % Connected, heartbeat, extensões Succeeded e compliance de policy; revisão mensal de RBAC/PIM. | Evidência: painel e rito de revisão. | OPS-11, OPS-12 |
+| CHK-50 | KPIs de saúde e revisão periódica | Documental | Média | P | PV-2, PA-4 | P | % Connected, heartbeat, extensões Succeeded e compliance de policy; revisão mensal de RBAC/PIM. | Evidência: painel e rito de revisão. | OPS-11, OPS-12 |
 | CHK-58 | Insights e telemetria por máquina | Automático | Média | 3 | LT-3, LT-4 | D6 | Quais dados cada máquina conectada envia pelas Data Collection Rules: desempenho, VM Insights e mapa de dependências, eventos/Syslog, eventos de segurança e Change Tracking. | WARN se houver máquina conectada sem desempenho e sem eventos de segurança; INFO com a matriz de telemetria. | OPS-04, OPS-11 |
 | CHK-59 | Mapa de recursos do Arc em uso | Automático | Baixa | 3 | AM-1 | D9 | Recursos do Azure Arc ativos no parque: AMA, MDE, SQL, Change Tracking/FIM, VM Insights, Key Vault, Hybrid Worker, Admin Center, SSH, login com Entra ID, Custom Script, avaliação periódica de patches, benefícios do Windows Server Management, Hotpatch e ESU. | Informativo: mostra o que está em uso e o que está disponível e não usado. | REQ-09, OPS-11 |
 
@@ -1058,7 +1058,7 @@ Mesma lista, na mesma ordem, do `arc-posture-review.pt-BR.html`. Camada: 1 MCSB 
 | ID | Verificação | Tipo | Sev. | Camada | MCSB | Árvore | O que verifica | Critério | Referências |
 |---|---|---|---|---|---|---|---|---|---|
 | CHK-51 | Legado, fim de suporte e ESU | Automático | Alta | 3 | PV-6 | D7 | Windows Server 2008/2012/2012 R2 (ESU do 2012 encerrado em 13/10/2026) e Windows Server 2016 (fim do suporte em 12/01/2027; ESU via Arc com agente 1.62+), com o estado da licença ESU. | FAIL se houver 2008/2012/2012 R2 após o fim do ESU; WARN se houver 2016 sem ESU atribuído ou com agente anterior a 1.62. | LEG-01, LEG-03 |
-| CHK-52 | Exceções de legado e plano de saída | Documental | Alta | 4 | GS-5 | D7 | Registro de exceções com responsável, prazo e controles compensatórios; extensões não suportadas bloqueadas; migração para WS2019+. | Evidência: registro de exceções e roadmap aprovados. | LEG-01, LEG-02, LEG-04 |
+| CHK-52 | Exceções de legado e plano de saída | Documental | Alta | 4 | AM-3, PV-6 | D7 | Registro de exceções com responsável, prazo e controles compensatórios; extensões não suportadas bloqueadas; migração para WS2019+. | Evidência: registro de exceções e roadmap aprovados. | LEG-01, LEG-02, LEG-04 |
 
 ## 4) Plano de ação por verificação
 
@@ -1457,17 +1457,17 @@ Não há, na documentação pública de referência, um único artigo Arc com t�
 
 > **Verificado por:** CHK-32 — Defender for Endpoint (Automático) · CHK-41 — Microsoft Sentinel e cobertura das máquinas (Automático) · CHK-43 — Exportação do Activity Log (Automático) · CHK-44 — Operações sensíveis no período (Automático) · CHK-54 — Ameaças e vulnerabilidades (Defender for Cloud) (Automático)
 
-## Anexo G) Mapeamento das verificações para o MCSB v1
+## Anexo G) Mapeamento das verificações para o MCSB v2
 
-Base de cada linha: [baseline do Arc-enabled servers](https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-arc-enabled-servers-security-baseline), [MCSB](https://learn.microsoft.com/en-us/security/benchmark/azure/introduction) e documentação do produto. *No baseline do Arc?* indica se o controle aparece no baseline publicado do serviço.
+Base de cada linha: [baseline do Arc-enabled servers](https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-arc-enabled-servers-security-baseline), [MCSB](https://learn.microsoft.com/en-us/security/benchmark/azure/overview) e documentação do produto. *No baseline do Arc?* indica se o controle aparece no baseline publicado do serviço.
 
-| CHK | Verificação | Camada | Controle MCSB v1 | No baseline do Arc? | Como medir | Árvore |
+| CHK | Verificação | Camada | Controle MCSB v2 | No baseline do Arc? | Como medir | Árvore |
 |---|---|---|---|---|---|---|
 | CHK-01 | Inventário e elegibilidade das máquinas Arc | 3 · Requisito do Arc | AM-1 | Não | Coleta (Resource Graph) | D1 |
-| CHK-02 | Serviço Arc por tipo de ambiente | 4 · Decisão do cliente | GS-2 | Não | Decisão registrada | D1 |
-| CHK-03 | Landing zone e organização de recursos | 4 · Decisão do cliente | GS-2 | Não | Decisão registrada | D2 |
-| CHK-04 | Perfil de criticidade (Tier 0/1/2) | 4 · Decisão do cliente | GS-2, PA-1 | PA-1 | Decisão registrada (Tier por tag ou RG) | D2 |
-| CHK-05 | Região dos metadados e residência de dados | 4 · Decisão do cliente | GS-3 | Não | Coleta × regiões definidas pelo cliente | D2 |
+| CHK-02 | Serviço Arc por tipo de ambiente | 4 · Decisão do cliente | AM-2 | Não | Decisão registrada | D1 |
+| CHK-03 | Landing zone e organização de recursos | 4 · Decisão do cliente | AM-1, AM-3 | Não | Decisão registrada | D2 |
+| CHK-04 | Perfil de criticidade (Tier 0/1/2) | 4 · Decisão do cliente | AM-1, PA-1 | PA-1 | Decisão registrada (Tier por tag ou RG) | D2 |
+| CHK-05 | Região dos metadados e residência de dados | 4 · Decisão do cliente | AM-2 | Não | Coleta × regiões definidas pelo cliente | D2 |
 | CHK-06 | Tags recomendadas (boa prática) | 4 · Decisão do cliente | AM-1 | Não | Coleta × tags definidas pelo cliente | D2 |
 | CHK-07 | Resource providers registrados | 3 · Requisito do Arc | — | Não | Coleta (providers) | D1 |
 | CHK-08 | Atribuições de Azure Policy e baseline | 1 · MCSB | PV-2, AM-2 | AM-2 | Defender: conformidade regulatória MCSB | D6 |
@@ -1478,7 +1478,7 @@ Base de cada linha: [baseline do Arc-enabled servers](https://learn.microsoft.co
 | CHK-13 | Modelo de identidade, PIM e revisão de acesso | 1 · MCSB | PA-2, PA-4 | Não | Evidência documental | D4 |
 | CHK-14 | Segredos e credenciais de onboarding | 1 · MCSB | IM-8 | IM-8 | Evidência documental | D4 |
 | CHK-15 | Key Vaults | 1 · MCSB | DP-8 | Não | Defender: recomendações de Key Vault | D4 |
-| CHK-16 | Cenários cross-subscription | 4 · Decisão do cliente | GS-4 | Não | Decisão registrada | D3 |
+| CHK-16 | Cenários cross-subscription | 4 · Decisão do cliente | AM-1, AM-4 | Não | Decisão registrada | D3 |
 | CHK-17 | Modelo de conectividade em uso | 1 · MCSB | NS-2 | NS-2 | Coleta (modelo em uso) | D3 |
 | CHK-18 | Acesso público do Private Link Scope | 1 · MCSB | NS-2 | NS-2 | Coleta (Private Link Scope) | D3 |
 | CHK-19 | DNS privado do Arc | 3 · Requisito do Arc | NS-10 | Não | Coleta (zonas DNS) | D3 |
@@ -1512,9 +1512,9 @@ Base de cada linha: [baseline do Arc-enabled servers](https://learn.microsoft.co
 | CHK-47 | Rollout por ondas e rollback | P · Programa | — | Não | Evidência do programa | P |
 | CHK-48 | Método de automação por ambiente | P · Programa | AM-2, PV-2 | Não | Evidência do programa | P |
 | CHK-49 | Remoção individual e em escala | 3 · Requisito do Arc | AM-3 | Não | Procedimento documentado | D8 |
-| CHK-50 | KPIs de saúde e revisão periódica | P · Programa | GS-5 | Não | Evidência do programa | P |
+| CHK-50 | KPIs de saúde e revisão periódica | P · Programa | PV-2, PA-4 | Não | Evidência do programa | P |
 | CHK-51 | Legado, fim de suporte e ESU | 3 · Requisito do Arc | PV-6 | Não | Coleta × datas oficiais de ESU | D7 |
-| CHK-52 | Exceções de legado e plano de saída | 4 · Decisão do cliente | GS-5 | Não | Exceção formal | D7 |
+| CHK-52 | Exceções de legado e plano de saída | 4 · Decisão do cliente | AM-3, PV-6 | Não | Exceção formal | D7 |
 | CHK-53 | Custo: serviços cobrados e benefícios por máquina | F · FinOps | — | Não | Coleta × página de preços | D9 |
 | CHK-54 | Ameaças e vulnerabilidades (Defender for Cloud) | 1 · MCSB | LT-1, PV-5, IR-3 | LT-1 | Defender (alertas, vulnerabilidades, Secure Score) | D6 |
 | CHK-55 | Baseline de segurança do sistema operacional | 2 · Baseline do SO | PV-4 | PV-4 | Coleta (guest configuration e conformidade) | D6 |
@@ -1526,7 +1526,7 @@ Base de cada linha: [baseline do Arc-enabled servers](https://learn.microsoft.co
 | CHK-61 | Criptografia do disco do sistema (BitLocker/dm-crypt) | 2 · Baseline do SO | DP-4 | Não | Entrevista e evidência | D6 |
 | CHK-62 | Acesso Condicional e MFA para quem administra o Azure | 1 · MCSB | IM-6, IM-7 | Não | Entrevista e evidência | D4 |
 
-Famílias MCSB: **NS** Segurança de rede · **IM** Gerenciamento de identidades · **PA** Acesso privilegiado · **DP** Proteção de dados · **AM** Gerenciamento de ativos · **LT** Registro em log e detecção de ameaças · **IR** Resposta a incidentes · **PV** Postura e gerenciamento de vulnerabilidades · **ES** Segurança de endpoint · **BR** Backup e recuperação · **GS** Governança e estratégia.
+Famílias MCSB: **NS** Segurança de rede · **IM** Gerenciamento de identidades · **PA** Acesso privilegiado · **DP** Proteção de dados · **AM** Gerenciamento de ativos · **LT** Registro em log e detecção de ameaças · **IR** Resposta a incidentes · **PV** Postura e gerenciamento de vulnerabilidades · **ES** Segurança de endpoint · **BR** Backup e recuperação · **DS** Segurança de DevOps · **AI** Segurança de inteligência artificial · **GS** Governança e estratégia (só no v1).
 
 ## Anexo H) Referências oficiais Microsoft
 
@@ -1713,6 +1713,30 @@ Famílias MCSB: **NS** Segurança de rede · **IM** Gerenciamento de identidades
 - Azure Resource Graph — paginação e limites:  
   https://learn.microsoft.com/en-us/azure/governance/resource-graph/concepts/work-with-data
 
+### Microsoft Cloud Security Benchmark v2 (preview)
+- Visão geral e domínios:  
+  https://learn.microsoft.com/en-us/security/benchmark/azure/overview
+- Network security · Identity management · Privileged access · Data protection · Asset management:  
+  https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-network-security · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-identity-management · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-privileged-access · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-data-protection · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-asset-management
+- Logging and threat detection · Incident response · Posture and vulnerability management · Endpoint security · Backup and recovery:  
+  https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-logging-threat-detection · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-incident-response · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-posture-vulnerability-management · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-endpoint-security · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-backup-recovery
+- DevOps security · AI security (fora do escopo do Arc-enabled servers):  
+  https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-devops-security · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-artificial-intelligence-security
+- Mapeamento para Azure Policy e para CIS Controls v8.1:  
+  https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-controls-policy-mapping · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-cis-controls-mapping
+- Controles de conformidade regulatória do Azure Policy para o Arc-enabled servers:  
+  https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-controls-policy
+
+### Endurecimento e recuperação do Windows Server
+- Baseline de segurança do Windows Server 2025 (Machine Configuration):  
+  https://learn.microsoft.com/en-us/azure/governance/policy/samples/guest-configuration-baseline-windows-server-2025
+- Best Practices Assessment para Windows Server via Arc (exige SA ou WS PAYG):  
+  https://learn.microsoft.com/en-us/windows-server/manage/azure-arc/best-practices-assessment-for-windows-server
+- Windows Recovery Environment (WinRE), referência técnica:  
+  https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-recovery-environment--windows-re--technical-reference?view=windows-11
+- Contexto (blogs, não documentação oficial): auditoria e habilitação do WinRE no Arc (preview) · ferramentas de endurecimento do Windows Server · guia introdutório de terceiros:  
+  https://techcommunity.microsoft.com/blog/azurearcblog/public-preview-audit-and-enable-windows-recovery-environment-winre-for-azure-arc/4462939 · https://techcommunity.microsoft.com/blog/itopstalkblog/some-tools-and-techniques-for-hardening-windows-server/4539840 · https://www.bdrshield.com/blog/beginners-guide-securing-your-servers-using-azure-arc/
+
 ### Recursos do Arc para servidores e endurecimento do SO
 - Windows Server Management enabled by Azure Arc (Update Manager, Change Tracking, Machine Configuration, Admin Center, Remote Support, Best Practices Assessment, Site Recovery):  
   https://learn.microsoft.com/en-us/azure/azure-arc/servers/windows-server-management-overview
@@ -1750,41 +1774,59 @@ A trilha primária deste guia é: **Landing Zone + Choose Service + Plan at Scal
 
 ### Inventário de cobertura
 
-Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que mudou em relação à v3.1.0.
+Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que mudou em relação à v3.2.0.
 
 **Por domínio**
 
 | Domínio | Verificações | Automáticas | Documentais | Alta | Média | Baixa |
 |---|---|---|---|---|---|---|
 | A · Arquitetura e escopo | 5 | 2 | 3 | 1 | 3 | 1 |
-| B · Governança e identidade | 15 (+3) | 10 (+1) | 5 (+2) | 6 (+2) | 7 (+1) | 2 |
+| B · Governança e identidade | 15 | 10 | 5 | 6 | 7 | 2 |
 | C · Conectividade e rede | 4 | 3 | 1 | 2 | 2 | 0 |
-| D · Agente, extensões e proteção | 20 (+3) | 16 (+2) | 4 (+1) | 10 (+2) | 10 (+1) | 0 |
-| E · Operação, monitoramento e auditoria | 16 (+2) | 11 (+2) | 5 | 3 | 10 (+1) | 3 (+1) |
+| D · Agente, extensões e proteção | 20 | 16 | 4 | 10 | 10 | 0 |
+| E · Operação, monitoramento e auditoria | 16 | 11 | 5 | 3 | 10 | 3 |
 | F · Legado | 2 | 1 | 1 | 2 | 0 | 0 |
-| **Total** | **62 (+8)** | **43 (+5)** | **19 (+3)** | **24 (+4)** | **32 (+3)** | **6 (+1)** |
+| **Total** | **62** | **43** | **19** | **24** | **32** | **6** |
 
 **Por camada de avaliação e por árvore de decisão**
 
 | Camada | Verificações | Árvore | Verificações |
 |---|---|---|---|
-| 1 · MCSB | 25 (+2) | D1 · Onboarding | 3 |
-| 2 · Baseline do SO | 5 (+4) | D2 · Organização e criticidade | 4 |
-| 3 · Requisito do Arc | 17 (+2) | D3 · Conectividade | 5 |
-| 4 · Decisão do cliente | 10 | D4 · Identidade e acesso | 11 (+3) |
+| 1 · MCSB | 25 | D1 · Onboarding | 3 |
+| 2 · Baseline do SO | 5 | D2 · Organização e criticidade | 4 |
+| 3 · Requisito do Arc | 17 | D3 · Conectividade | 5 |
+| 4 · Decisão do cliente | 10 | D4 · Identidade e acesso | 11 |
 | P · Programa | 4 | D5 · Extensões e acesso remoto por tier | 5 |
-| F · FinOps | 1 | D6 · Proteção, baseline, logs e detecção | 19 (+4) |
+| F · FinOps | 1 | D6 · Proteção, baseline, logs e detecção | 19 |
 |  |  | D7 · Versões, patches e legado | 6 |
 |  |  | D8 · Remoção e recursos abandonados | 3 |
-|  |  | D9 · Custo e licenciamento | 2 (+1) |
+|  |  | D9 · Custo e licenciamento | 2 |
 |  |  | P · Execução do programa | 4 |
 
-**Outros totais:** 9 alertas recomendados · 9 árvores de decisão · 54 referências de documentação no plano de ação. Verificações novas nesta versão: CHK-55 Baseline de segurança do sistema operacional, CHK-56 Auditoria dos administradores locais, CHK-57 Antivírus e EDR saudáveis, CHK-58 Insights e telemetria por máquina, CHK-59 Mapa de recursos do Arc em uso, CHK-60 Senha do administrador local (Windows LAPS), CHK-61 Criptografia do disco do sistema (BitLocker/dm-crypt), CHK-62 Acesso Condicional e MFA para quem administra o Azure.
+**Por domínio do MCSB v2**
+
+| Domínio MCSB v2 | Verificações | Observação |
+|---|---|---|
+| NS · Segurança de rede | 5 |  |
+| IM · Gerenciamento de identidades | 6 |  |
+| PA · Acesso privilegiado | 11 |  |
+| DP · Proteção de dados | 2 | O Arc não armazena dados do cliente; criptografia do disco do servidor é o CHK-61. |
+| AM · Gerenciamento de ativos | 15 |  |
+| LT · Registro em log e detecção de ameaças | 10 |  |
+| IR · Resposta a incidentes | 3 | Coberto pelos alertas recomendados e pelo Defender. |
+| PV · Postura e gerenciamento de vulnerabilidades | 14 |  |
+| ES · Segurança de endpoint | 2 |  |
+| BR · Backup e recuperação | 0 | O baseline do Arc-enabled servers marca backup como não suportado pelo serviço: o backup do servidor é responsabilidade da solução de backup do cliente. |
+| DS · Segurança de DevOps | 0 | Fora do escopo: não há pipeline de DevOps no Arc-enabled servers. |
+| AI · Segurança de inteligência artificial | 0 | Fora do escopo: não há carga de IA no Arc-enabled servers. |
+
+**Outros totais:** 9 alertas recomendados · 9 árvores de decisão · 54 referências de documentação no plano de ação. Verificações novas nesta versão: nenhuma.
 
 ### Histórico
 
 | Versão | Data | Mudanças |
 |---|---|---|
+| v3.3.0 | 23/10/2026 | Escopo centrado no Azure Arc: papéis, policies, Key Vaults e workspaces só contam quando alcançam as máquinas Arc (os demais aparecem como ignorados); Secure Score rotulado como medida da subscription; controles atualizados para o MCSB v2 (preview), com o domínio Governança e estratégia remapeado para AM, PV e PA; inventário de cobertura por domínio do MCSB v2; referências do MCSB v2, baselines do Windows Server 2025, Best Practices Assessment e Windows Recovery Environment. |
 | v3.2.0 | 23/10/2026 | Oito verificações novas (CHK-55 a CHK-62): baseline de segurança do SO com conformidade, auditoria dos administradores locais, antivírus e EDR saudáveis, insights e telemetria por máquina, mapa de recursos do Arc em uso, Windows LAPS, criptografia de disco e Acesso Condicional/MFA para quem administra o Azure; inventário de cobertura por versão; status ERROR/PARTIAL exibidos em inglês na versão en-US; referências de Windows Server Management, Hotpatch, baselines, VM Insights, Change Tracking, LAPS, BitLocker e Acesso Condicional. |
 | v3.1.0 | 23/10/2026 | Piso de segurança do agente 1.61 (CVE-2025-49692, CVE-2025-26627, CVE-2025-55316, CVE-2026-26117) no CHK-29 e no ALR-03; tabela de CVEs com CVEs de serviço e da extensão SQL; tarefa agendada azcmagent, tarefa de implantação por GPO e serviços com início atrasado no catálogo de serviços; endurecimento do service principal de onboarding e da GPO; referências do CAF híbrido (áreas de design do Arc-enabled servers) e escolha do serviço Arc; estado ativo nos botões Expandir/Recolher tudo. |
 | v3.0.0 | 23/10/2026 | Projeto renomeado para Arc Posture Review (repositório, script Invoke-ArcPostureReview.ps1, pacote arc-posture-review-*.zip, arquivos pt-BR e en-US); cores de status e severidade no padrão do Advisor e do Defender for Cloud, com ícone, contraste AA, modo escuro e alto contraste; compatibilidade de pacote pelo esquema (pacotes v2.x continuam aceitos). |

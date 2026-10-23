@@ -28,7 +28,7 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
 
 ## O que entrega
 
-- **Método público da Microsoft:** ciclo de sustentação de postura do [Cloud Adoption Framework — Secure](https://learn.microsoft.com/azure/cloud-adoption-framework/secure/overview), medido pelo [Microsoft Cloud Security Benchmark](https://learn.microsoft.com/security/benchmark/azure/introduction) (MCSB v1, com mapeamento para CIS Controls v8, NIST SP 800-53 e PCI-DSS).
+- **Método público da Microsoft:** ciclo de sustentação de postura do [Cloud Adoption Framework — Secure](https://learn.microsoft.com/azure/cloud-adoption-framework/secure/overview), medido pelo [Microsoft Cloud Security Benchmark](https://learn.microsoft.com/security/benchmark/azure/introduction) (MCSB v2, com mapeamento para CIS Controls v8.1, NIST SP 800-53, PCI-DSS v4, NIST CSF 2.0 e ISO 27001).
 - **62 verificações** (43 automáticas, 19 documentais), cada uma com camada, controle MCSB e árvore de decisão.
 - **9 árvores de decisão** (onboarding, organização, conectividade, identidade, extensões, proteção, versões e legado, remoção, custo) e execução do programa.
 - **Coletor somente leitura** (`Invoke-ArcPostureReview.ps1`): apenas leitura via Azure Resource Graph e Azure CLI, paginado, várias subscriptions ou management group, com verificação prévia de permissões (Reader basta).

@@ -28,7 +28,7 @@ Security decisions start before the first server is connected (onboarding creden
 
 ## What you get
 
-- **Public Microsoft method:** the *sustain security posture* cycle of the [Cloud Adoption Framework — Secure](https://learn.microsoft.com/azure/cloud-adoption-framework/secure/overview), measured against the [Microsoft Cloud Security Benchmark](https://learn.microsoft.com/security/benchmark/azure/introduction) (MCSB v1, mapped to CIS Controls v8, NIST SP 800-53 and PCI-DSS).
+- **Public Microsoft method:** the *sustain security posture* cycle of the [Cloud Adoption Framework — Secure](https://learn.microsoft.com/azure/cloud-adoption-framework/secure/overview), measured against the [Microsoft Cloud Security Benchmark](https://learn.microsoft.com/security/benchmark/azure/introduction) (MCSB v2, mapped to CIS Controls v8.1, NIST SP 800-53, PCI-DSS v4, NIST CSF 2.0 and ISO 27001).
 - **62 checks** (43 automated, 19 documentary), each with assessment layer, MCSB control and decision tree.
 - **9 decision trees** (onboarding, organization, connectivity, identity, extensions, protection, versions and legacy, decommissioning, cost) plus program execution.
 - **Read-only collector** (`Invoke-ArcPostureReview.ps1`): Azure Resource Graph and Azure CLI read commands only, paginated, multi-subscription or management group, effective-permission pre-check (Reader is enough).

@@ -1,5 +1,25 @@
 # Changelog
 
+## [3.3.0] — 2026-10-23
+
+### Changed
+- **Arc-centric scope:** every check now starts from the collected `Microsoft.HybridCompute/machines`. Role assignments, policy assignments, Key Vaults and Log Analytics workspaces are evaluated only when they reach the Arc machines (management group, the machines' subscription or resource group, or workspaces that receive Arc data through a DCR). Resources from other resource groups are counted as "outside the Arc scope (ignored)" instead of affecting the result. Secure Score is labeled as a subscription-wide measure.
+- **Microsoft Cloud Security Benchmark v2 (preview):** control IDs updated to MCSB v2. The Governance and strategy (GS) domain, removed in v2, was remapped to Asset management, Posture and vulnerability management and Privileged access (CHK-02, 03, 04, 05, 16, 50, 52). Framework mappings now cite CIS Controls v8.1, NIST SP 800-53 Rev.5, PCI-DSS v4, NIST CSF 2.0, ISO 27001:2022 and SOC 2. The published Arc-enabled servers baseline still uses v1; control IDs are unchanged between versions.
+
+### Added
+- Coverage inventory by MCSB v2 domain (Appendix J), including the domains with no checks and why (backup, DevOps and AI are outside the Arc-enabled servers scope).
+- References: all MCSB v2 domains and mappings, Arc regulatory compliance controls, Windows Server 2025 security baseline, Best Practices Assessment, Windows Recovery Environment (WinRE).
+- Release check that confirms the same version in the HTML, guide, script, CHANGELOG and CITATION.
+- Saved analysis and report files now include the language, like the README: `arc-posture-review-analysis-<date>.pt-BR.html` / `.en-US.html`, and `arc-posture-review-report.pt-BR.md` / `.json`.
+
+### Fixed
+- Role checks (CHK-10, 11, 25) did not see built-in roles: Resource Graph does not return built-in role definitions per subscription, so role names came back empty. Built-in roles are now resolved by their published fixed IDs; unknown custom roles are labeled with their ID.
+
+### Mudanças (pt-BR)
+- Escopo centrado no Azure Arc: papéis, policies, Key Vaults e workspaces só contam quando alcançam as máquinas Arc; o resto aparece como ignorado.
+- Controles atualizados para o MCSB v2 (preview); o domínio Governança e estratégia foi remapeado; inventário de cobertura por domínio do MCSB v2; novas referências.
+- Arquivos salvos com o idioma no nome (.pt-BR / .en-US); correção: papéis built-in agora são reconhecidos nas verificações de RBAC.
+
 ## [3.2.0] — 2026-10-23
 
 ### Added
@@ -20,13 +40,11 @@
 - CHK-57 matched unrelated Defender recommendations (for example a removable drive scan setting) and failed on low severity items. It now matches whole words and fails only on high or medium severity; low severity gives a warning.
 
 ### Changed
-- **Arc-centric scope:** every check now starts from the collected `Microsoft.HybridCompute/machines`. Role assignments, policy assignments, Key Vaults and Log Analytics workspaces are evaluated only when they reach the Arc machines (management group, the machines' subscription or resource group, or workspaces that receive Arc data through a DCR). Resources from other resource groups are counted as "outside the Arc scope (ignored)" instead of affecting the result. Secure Score is labeled as a subscription-wide measure.
 - English version shows ERROR, PARTIAL, MISSING and UNKNOWN instead of the Portuguese status codes (package codes unchanged, older packages still accepted).
 
 ### Mudanças (pt-BR)
 - 8 verificações novas (54 → 62): baseline de segurança do SO, auditoria de administradores locais, antivírus e EDR, insights e telemetria, mapa de recursos do Arc, Windows LAPS, criptografia de disco e Acesso Condicional/MFA.
 - Inventário de cobertura por versão no guia (Anexo J); status em inglês na versão en-US.
-- Escopo centrado no Azure Arc: papéis, policies, Key Vaults e workspaces só contam quando alcançam as máquinas Arc; o resto aparece como ignorado.
 - Correção: o CHK-29 (versão do agente) dava erro de avaliação na v3.1.0; relatório sem pacote carregado agora avisa que as automáticas ficam TODO.
 
 ## [3.1.0] — 2026-10-23

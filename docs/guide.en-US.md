@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v3.2.0 — 2026-10-23.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
+**Version v3.3.0 — 2026-10-23.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 
@@ -44,7 +44,7 @@ flowchart LR
 
 ## 1) Assessment method
 
-The kit follows the public Microsoft practice to **sustain the security posture** of the [Cloud Adoption Framework — Secure](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/secure/overview): recurring assessment, prioritized remediation, control automation, and reporting with evidence. The measurement standard is the [Microsoft Cloud Security Benchmark (MCSB)](https://learn.microsoft.com/en-us/security/benchmark/azure/introduction), the default Defender for Cloud benchmark, whose controls include mappings to industry frameworks such as **CIS Controls v8**, **NIST SP 800-53**, and **PCI-DSS**. The IDs used are from **MCSB v1**, the version that has the published [Arc-enabled servers security baseline](https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-arc-enabled-servers-security-baseline).
+The kit follows the public Microsoft practice to **sustain the security posture** from the [Cloud Adoption Framework — Secure](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/secure/overview): recurring assessment, prioritized remediation, control automation and evidence-based reporting. The measurement standard is the [Microsoft Cloud Security Benchmark (MCSB)](https://learn.microsoft.com/en-us/security/benchmark/azure/overview), the default Defender for Cloud benchmark, whose controls map to **CIS Controls v8.1**, **NIST SP 800-53 Rev.5**, **PCI-DSS v4**, **NIST CSF 2.0**, **ISO 27001:2022** and **SOC 2**. The IDs used are from **MCSB v2** (preview, supersedes v1). The published [Arc-enabled servers security baseline](https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-arc-enabled-servers-security-baseline) still uses v1; because control IDs are kept across versions (v2 removed the Governance and strategy domain and added DevOps and AI), the *In the Arc baseline?* column remains valid.
 
 ### 1.1 Applied cycle
 
@@ -973,10 +973,10 @@ Same list, in the same order, as `arc-posture-review.en-US.html`. Layer: 1 MCSB 
 | ID | Check | Type | Sev. | Layer | MCSB | Tree | What it checks | Criterion | References |
 |---|---|---|---|---|---|---|---|---|---|
 | CHK-01 | Inventory and eligibility of Arc machines | Automated | Low | 3 | AM-1 | D1 | Machines by status, operating system, region, manufacturer/model, and detected SQL Server. | Informational: baseline for the other controls. | REQ-01 |
-| CHK-02 | Arc service per environment type | Documentary | Medium | 4 | GS-2 | D1 | Source of each machine (on-premises, VMware, SCVMM, AWS/GCP, OCI) and chosen service (Arc-enabled servers, multicloud connector, Arc VMware/SCVMM). | Evidence: decision recorded per source. | DEC-01, DEC-02 |
-| CHK-03 | Landing zone and resource organization | Documentary | Medium | 4 | GS-2 | D2 | Management group, subscriptions, and resource groups per environment and region; platform separated from workloads. | Evidence: approved design. | DEC-03 |
-| CHK-04 | Criticality profile (Tier 0/1/2) | Documentary | High | 4 | GS-2, PA-1 | D2 | Server classification and stricter controls for Tier 0. | Evidence: list of servers per tier and controls per tier. | DEC-04 |
-| CHK-05 | Metadata region and data residency | Automated | Medium | 4 | GS-3 | D2 | Region of each machine compared with the allowed regions (optional). | WARN if any machine is outside the allowed regions; INFO without a list. | CTL-08 |
+| CHK-02 | Arc service per environment type | Documentary | Medium | 4 | AM-2 | D1 | Source of each machine (on-premises, VMware, SCVMM, AWS/GCP, OCI) and chosen service (Arc-enabled servers, multicloud connector, Arc VMware/SCVMM). | Evidence: decision recorded per source. | DEC-01, DEC-02 |
+| CHK-03 | Landing zone and resource organization | Documentary | Medium | 4 | AM-1, AM-3 | D2 | Management group, subscriptions, and resource groups per environment and region; platform separated from workloads. | Evidence: approved design. | DEC-03 |
+| CHK-04 | Criticality profile (Tier 0/1/2) | Documentary | High | 4 | AM-1, PA-1 | D2 | Server classification and stricter controls for Tier 0. | Evidence: list of servers per tier and controls per tier. | DEC-04 |
+| CHK-05 | Metadata region and data residency | Automated | Medium | 4 | AM-2 | D2 | Region of each machine compared with the allowed regions (optional). | WARN if any machine is outside the allowed regions; INFO without a list. | CTL-08 |
 
 ### B · Governance and identity
 
@@ -992,7 +992,7 @@ Same list, in the same order, as `arc-posture-review.en-US.html`. Layer: 1 MCSB 
 | CHK-13 | Identity model, PIM, and access review | Documentary | High | 1 | PA-2, PA-4 | D4 | Entra groups by function, PIM/JIT for privileged roles, and periodic review. | Evidence: group matrix and PIM configuration. | REQ-03, OPS-12 |
 | CHK-14 | Onboarding secrets and credentials | Documentary | High | 1 | IM-8 | D4 | Dedicated service principal, secret with expiration stored in a vault, no secrets in scripts; managed identity when possible. | Evidence: rotation procedure and storage location. | REQ-08 |
 | CHK-15 | Key Vaults | Automated | Low | 1 | DP-8 | D4 | Public access, purge protection, and RBAC permission model. | WARN if any vault does not follow the baseline. | REQ-08 |
-| CHK-16 | Cross-subscription scenarios | Documentary | Medium | 4 | GS-4 | D3 | Private Endpoint, Private Link Scope, and ExpressRoute across subscriptions; approval of Pending connections. | Evidence: RBAC on both sides and approval flow. | REQ-06 |
+| CHK-16 | Cross-subscription scenarios | Documentary | Medium | 4 | AM-1, AM-4 | D3 | Private Endpoint, Private Link Scope, and ExpressRoute across subscriptions; approval of Pending connections. | Evidence: RBAC on both sides and approval flow. | REQ-06 |
 | CHK-53 | Cost: billed services and benefits per machine | Automated | Medium | F | — | D9 | Monthly list-price estimate (USD) per connected server: Defender for Servers P1/P2, Update Manager, Machine Configuration/Change Tracking, and Windows Server PAYG; benefits that offset part of the cost (attested Software Assurance, WS PAYG, ESU via Arc, Defender P2); variable items (Log Analytics, Sentinel). | INFO with the estimate; WARN if any Windows Server pays for Update Manager/Machine Configuration without an attested benefit (opportunity if there is Software Assurance). | REQ-09 |
 | CHK-56 | Local administrators audit | Automated | Medium | 2 | PA-1, PA-7 | D4 | Audit of the local Administrators group through Machine Configuration (built-in Administrators group membership policies) on connected Windows machines. | WARN if no connected Windows machine has the audit or if there is non-compliance; INFO with partial coverage. | CTL-04, CTL-05 |
 | CHK-60 | Local administrator password (Windows LAPS) | Documentary | High | 2 | PA-1, IM-8 | D4 | Windows LAPS (backed up to Active Directory or Microsoft Entra ID) or an equivalent solution: unique, rotated local administrator password on each server. | Evidence: Windows LAPS policy applied (GPO or Intune) and a sample of servers with a managed password. | CTL-04, CTL-05 |
@@ -1049,7 +1049,7 @@ Same list, in the same order, as `arc-posture-review.en-US.html`. Layer: 1 MCSB 
 | CHK-47 | Rollout in waves and rollback | Documentary | Medium | P | — | P | Waves with advance, pause, and rollback criteria. | Evidence: approved plan. | OPS-02 |
 | CHK-48 | Automation method per environment | Documentary | Medium | P | AM-2, PV-2 | P | Onboarding (service principal, SCCM/GPO, PowerShell/Ansible), Azure Policy, and Automation per environment. | Evidence: versioned script and method per environment. | OPS-03 |
 | CHK-49 | Individual and at-scale removal | Documentary | Medium | 3 | AM-3 | D8 | Remove extensions, azcmagent disconnect, uninstall the agent, and clean up orphaned resources via Resource Graph. | Evidence: documented procedure. | OPS-07, OPS-08 |
-| CHK-50 | Health KPIs and periodic review | Documentary | Medium | P | GS-5 | P | % Connected, heartbeat, Succeeded extensions, and policy compliance; monthly RBAC/PIM review. | Evidence: dashboard and review cadence. | OPS-11, OPS-12 |
+| CHK-50 | Health KPIs and periodic review | Documentary | Medium | P | PV-2, PA-4 | P | % Connected, heartbeat, Succeeded extensions, and policy compliance; monthly RBAC/PIM review. | Evidence: dashboard and review cadence. | OPS-11, OPS-12 |
 | CHK-58 | Insights and telemetry per machine | Automated | Medium | 3 | LT-3, LT-4 | D6 | Which data each connected machine sends through Data Collection Rules: performance, VM Insights and dependency map, events/Syslog, security events and Change Tracking. | WARN if a connected machine has neither performance data nor security events; INFO with the telemetry matrix. | OPS-04, OPS-11 |
 | CHK-59 | Map of Arc capabilities in use | Automated | Low | 3 | AM-1 | D9 | Azure Arc capabilities active in the fleet: AMA, MDE, SQL, Change Tracking/FIM, VM Insights, Key Vault, Hybrid Worker, Admin Center, SSH, Entra ID login, Custom Script, periodic patch assessment, Windows Server Management benefits, Hotpatch and ESU. | Informational: shows what is in use and what is available but unused. | REQ-09, OPS-11 |
 
@@ -1058,7 +1058,7 @@ Same list, in the same order, as `arc-posture-review.en-US.html`. Layer: 1 MCSB 
 | ID | Check | Type | Sev. | Layer | MCSB | Tree | What it checks | Criterion | References |
 |---|---|---|---|---|---|---|---|---|---|
 | CHK-51 | Legacy, end of support, and ESU | Automated | High | 3 | PV-6 | D7 | Windows Server 2008/2012/2012 R2 (2012 ESU ended on 2026-10-13) and Windows Server 2016 (end of support on 2027-01-12; ESU via Arc with agent 1.62+), with the ESU license state. | FAIL if there is 2008/2012/2012 R2 after ESU ends; WARN if there is 2016 without an assigned ESU or with an agent earlier than 1.62. | LEG-01, LEG-03 |
-| CHK-52 | Legacy exceptions and exit plan | Documentary | High | 4 | GS-5 | D7 | Exception register with owner, timeframe, and compensating controls; unsupported extensions blocked; migration to WS2019+. | Evidence: approved exception register and roadmap. | LEG-01, LEG-02, LEG-04 |
+| CHK-52 | Legacy exceptions and exit plan | Documentary | High | 4 | AM-3, PV-6 | D7 | Exception register with owner, timeframe, and compensating controls; unsupported extensions blocked; migration to WS2019+. | Evidence: approved exception register and roadmap. | LEG-01, LEG-02, LEG-04 |
 
 ## 4) Action plan by check
 
@@ -1457,17 +1457,17 @@ In the public reference documentation, there is no single Arc article specifical
 
 > **Verified by:** CHK-32 — Defender for Endpoint (Automated) · CHK-41 — Microsoft Sentinel and machine coverage (Automated) · CHK-43 — Activity Log export (Automated) · CHK-44 — Sensitive operations in the period (Automated) · CHK-54 — Threats and vulnerabilities (Defender for Cloud) (Automated)
 
-## Appendix G) Mapping of checks to MCSB v1
+## Appendix G) Mapping of checks to MCSB v2
 
-Basis for each row: [Arc-enabled servers baseline](https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-arc-enabled-servers-security-baseline), [MCSB](https://learn.microsoft.com/en-us/security/benchmark/azure/introduction), and product documentation. *In the Arc baseline?* indicates whether the control appears in the published service baseline.
+Basis for each row: [Arc-enabled servers baseline](https://learn.microsoft.com/en-us/security/benchmark/azure/baselines/azure-arc-enabled-servers-security-baseline), [MCSB](https://learn.microsoft.com/en-us/security/benchmark/azure/overview), and product documentation. *In the Arc baseline?* indicates whether the control appears in the published service baseline.
 
-| CHK | Check | Layer | MCSB v1 control | In the Arc baseline? | How to measure | Tree |
+| CHK | Check | Layer | MCSB v2 control | In the Arc baseline? | How to measure | Tree |
 |---|---|---|---|---|---|---|
 | CHK-01 | Inventory and eligibility of Arc machines | 3 · Arc requirement | AM-1 | No | Collection (Resource Graph) | D1 |
-| CHK-02 | Arc service per environment type | 4 · Customer decision | GS-2 | No | Recorded decision | D1 |
-| CHK-03 | Landing zone and resource organization | 4 · Customer decision | GS-2 | No | Recorded decision | D2 |
-| CHK-04 | Criticality profile (Tier 0/1/2) | 4 · Customer decision | GS-2, PA-1 | PA-1 | Recorded decision (Tier by tag or RG) | D2 |
-| CHK-05 | Metadata region and data residency | 4 · Customer decision | GS-3 | No | Collection × customer-defined regions | D2 |
+| CHK-02 | Arc service per environment type | 4 · Customer decision | AM-2 | No | Recorded decision | D1 |
+| CHK-03 | Landing zone and resource organization | 4 · Customer decision | AM-1, AM-3 | No | Recorded decision | D2 |
+| CHK-04 | Criticality profile (Tier 0/1/2) | 4 · Customer decision | AM-1, PA-1 | PA-1 | Recorded decision (Tier by tag or RG) | D2 |
+| CHK-05 | Metadata region and data residency | 4 · Customer decision | AM-2 | No | Collection × customer-defined regions | D2 |
 | CHK-06 | Recommended tags (best practice) | 4 · Customer decision | AM-1 | No | Collection × customer-defined tags | D2 |
 | CHK-07 | Registered resource providers | 3 · Arc requirement | — | No | Collection (providers) | D1 |
 | CHK-08 | Azure Policy and baseline assignments | 1 · MCSB | PV-2, AM-2 | AM-2 | Defender: MCSB regulatory compliance | D6 |
@@ -1478,7 +1478,7 @@ Basis for each row: [Arc-enabled servers baseline](https://learn.microsoft.com/e
 | CHK-13 | Identity model, PIM, and access review | 1 · MCSB | PA-2, PA-4 | No | Documentary evidence | D4 |
 | CHK-14 | Onboarding secrets and credentials | 1 · MCSB | IM-8 | IM-8 | Documentary evidence | D4 |
 | CHK-15 | Key Vaults | 1 · MCSB | DP-8 | No | Defender: Key Vault recommendations | D4 |
-| CHK-16 | Cross-subscription scenarios | 4 · Customer decision | GS-4 | No | Recorded decision | D3 |
+| CHK-16 | Cross-subscription scenarios | 4 · Customer decision | AM-1, AM-4 | No | Recorded decision | D3 |
 | CHK-17 | Connectivity model in use | 1 · MCSB | NS-2 | NS-2 | Collection (model in use) | D3 |
 | CHK-18 | Private Link Scope public access | 1 · MCSB | NS-2 | NS-2 | Collection (Private Link Scope) | D3 |
 | CHK-19 | Arc private DNS | 3 · Arc requirement | NS-10 | No | Collection (DNS zones) | D3 |
@@ -1512,9 +1512,9 @@ Basis for each row: [Arc-enabled servers baseline](https://learn.microsoft.com/e
 | CHK-47 | Rollout in waves and rollback | P · Program | — | No | Program evidence | P |
 | CHK-48 | Automation method per environment | P · Program | AM-2, PV-2 | No | Program evidence | P |
 | CHK-49 | Individual and at-scale removal | 3 · Arc requirement | AM-3 | No | Documented procedure | D8 |
-| CHK-50 | Health KPIs and periodic review | P · Program | GS-5 | No | Program evidence | P |
+| CHK-50 | Health KPIs and periodic review | P · Program | PV-2, PA-4 | No | Program evidence | P |
 | CHK-51 | Legacy, end of support, and ESU | 3 · Arc requirement | PV-6 | No | Collection × official ESU dates | D7 |
-| CHK-52 | Legacy exceptions and exit plan | 4 · Customer decision | GS-5 | No | Formal exception | D7 |
+| CHK-52 | Legacy exceptions and exit plan | 4 · Customer decision | AM-3, PV-6 | No | Formal exception | D7 |
 | CHK-53 | Cost: billed services and benefits per machine | F · FinOps | — | No | Collection × pricing page | D9 |
 | CHK-54 | Threats and vulnerabilities (Defender for Cloud) | 1 · MCSB | LT-1, PV-5, IR-3 | LT-1 | Defender (alerts, vulnerabilities, Secure Score) | D6 |
 | CHK-55 | Operating system security baseline | 2 · OS baseline | PV-4 | PV-4 | Collection (guest configuration and compliance) | D6 |
@@ -1526,7 +1526,7 @@ Basis for each row: [Arc-enabled servers baseline](https://learn.microsoft.com/e
 | CHK-61 | System disk encryption (BitLocker/dm-crypt) | 2 · OS baseline | DP-4 | No | Interview and evidence | D6 |
 | CHK-62 | Conditional Access and MFA for Azure administrators | 1 · MCSB | IM-6, IM-7 | No | Interview and evidence | D4 |
 
-MCSB families: **NS** Network security · **IM** Identity management · **PA** Privileged access · **DP** Data protection · **AM** Asset management · **LT** Logging and threat detection · **IR** Incident response · **PV** Posture and vulnerability management · **ES** Endpoint security · **BR** Backup and recovery · **GS** Governance and strategy.
+MCSB families: **NS** Network security · **IM** Identity management · **PA** Privileged access · **DP** Data protection · **AM** Asset management · **LT** Logging and threat detection · **IR** Incident response · **PV** Posture and vulnerability management · **ES** Endpoint security · **BR** Backup and recovery · **DS** DevOps security · **AI** Artificial intelligence security · **GS** Governance and strategy (v1 only).
 
 ## Appendix H) Official Microsoft references
 
@@ -1713,6 +1713,30 @@ MCSB families: **NS** Network security · **IM** Identity management · **PA** P
 - Azure Resource Graph — pagination and limits:  
   https://learn.microsoft.com/en-us/azure/governance/resource-graph/concepts/work-with-data
 
+### Microsoft Cloud Security Benchmark v2 (preview)
+- Overview and domains:  
+  https://learn.microsoft.com/en-us/security/benchmark/azure/overview
+- Network security · Identity management · Privileged access · Data protection · Asset management:  
+  https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-network-security · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-identity-management · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-privileged-access · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-data-protection · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-asset-management
+- Logging and threat detection · Incident response · Posture and vulnerability management · Endpoint security · Backup and recovery:  
+  https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-logging-threat-detection · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-incident-response · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-posture-vulnerability-management · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-endpoint-security · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-backup-recovery
+- DevOps security · AI security (out of scope for Arc-enabled servers):  
+  https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-devops-security · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-artificial-intelligence-security
+- Mapping to Azure Policy and to CIS Controls v8.1:  
+  https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-controls-policy-mapping · https://learn.microsoft.com/en-us/security/benchmark/azure/mcsb-v2-cis-controls-mapping
+- Azure Policy regulatory compliance controls for Arc-enabled servers:  
+  https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-controls-policy
+
+### Windows Server hardening and recovery
+- Windows Server 2025 security baseline (Machine Configuration):  
+  https://learn.microsoft.com/en-us/azure/governance/policy/samples/guest-configuration-baseline-windows-server-2025
+- Best Practices Assessment for Windows Server through Arc (requires SA or WS PAYG):  
+  https://learn.microsoft.com/en-us/windows-server/manage/azure-arc/best-practices-assessment-for-windows-server
+- Windows Recovery Environment (WinRE), technical reference:  
+  https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-recovery-environment--windows-re--technical-reference?view=windows-11
+- Context (blogs, not official documentation): auditing and enabling WinRE on Arc (preview) · Windows Server hardening tools · third-party introductory guide:  
+  https://techcommunity.microsoft.com/blog/azurearcblog/public-preview-audit-and-enable-windows-recovery-environment-winre-for-azure-arc/4462939 · https://techcommunity.microsoft.com/blog/itopstalkblog/some-tools-and-techniques-for-hardening-windows-server/4539840 · https://www.bdrshield.com/blog/beginners-guide-securing-your-servers-using-azure-arc/
+
 ### Arc capabilities for servers and OS hardening
 - Windows Server Management enabled by Azure Arc (Update Manager, Change Tracking, Machine Configuration, Admin Center, Remote Support, Best Practices Assessment, Site Recovery):  
   https://learn.microsoft.com/en-us/azure/azure-arc/servers/windows-server-management-overview
@@ -1750,41 +1774,59 @@ The primary track of this guide is: **Landing Zone + Choose Service + Plan at Sc
 
 ### Coverage inventory
 
-Totals calculated from the catalog in every version. In parentheses, what changed compared with v3.1.0.
+Totals calculated from the catalog in every version. In parentheses, what changed compared with v3.2.0.
 
 **By domain**
 
 | Domínio | Checks | Automáticas | Documentary | High | Medium | Low |
 |---|---|---|---|---|---|---|
 | A · Architecture and scope | 5 | 2 | 3 | 1 | 3 | 1 |
-| B · Governance and identity | 15 (+3) | 10 (+1) | 5 (+2) | 6 (+2) | 7 (+1) | 2 |
+| B · Governance and identity | 15 | 10 | 5 | 6 | 7 | 2 |
 | C · Connectivity and network | 4 | 3 | 1 | 2 | 2 | 0 |
-| D · Agent, extensions, and protection | 20 (+3) | 16 (+2) | 4 (+1) | 10 (+2) | 10 (+1) | 0 |
-| E · Operations, monitoring, and auditing | 16 (+2) | 11 (+2) | 5 | 3 | 10 (+1) | 3 (+1) |
+| D · Agent, extensions, and protection | 20 | 16 | 4 | 10 | 10 | 0 |
+| E · Operations, monitoring, and auditing | 16 | 11 | 5 | 3 | 10 | 3 |
 | F · Legacy | 2 | 1 | 1 | 2 | 0 | 0 |
-| **Total** | **62 (+8)** | **43 (+5)** | **19 (+3)** | **24 (+4)** | **32 (+3)** | **6 (+1)** |
+| **Total** | **62** | **43** | **19** | **24** | **32** | **6** |
 
 **By assessment layer and by decision tree**
 
 | Layer | Checks | Tree | Checks |
 |---|---|---|---|
-| 1 · MCSB | 25 (+2) | D1 · Onboarding | 3 |
-| 2 · OS baseline | 5 (+4) | D2 · Organization and criticality | 4 |
-| 3 · Arc requirement | 17 (+2) | D3 · Connectivity | 5 |
-| 4 · Customer decision | 10 | D4 · Identity and access | 11 (+3) |
+| 1 · MCSB | 25 | D1 · Onboarding | 3 |
+| 2 · OS baseline | 5 | D2 · Organization and criticality | 4 |
+| 3 · Arc requirement | 17 | D3 · Connectivity | 5 |
+| 4 · Customer decision | 10 | D4 · Identity and access | 11 |
 | P · Program | 4 | D5 · Extensions and remote access per tier | 5 |
-| F · FinOps | 1 | D6 · Protection, baseline, logs, and detection | 19 (+4) |
+| F · FinOps | 1 | D6 · Protection, baseline, logs, and detection | 19 |
 |  |  | D7 · Versions, patches, and legacy | 6 |
 |  |  | D8 · Removal and abandoned resources | 3 |
-|  |  | D9 · Cost and licensing | 2 (+1) |
+|  |  | D9 · Cost and licensing | 2 |
 |  |  | P · Program execution | 4 |
 
-**Other totals:** 9 recommended alerts · 9 decision trees · 54 documentation references in the action plan. New checks in this version: CHK-55 Operating system security baseline, CHK-56 Local administrators audit, CHK-57 Healthy antivirus and EDR, CHK-58 Insights and telemetry per machine, CHK-59 Map of Arc capabilities in use, CHK-60 Local administrator password (Windows LAPS), CHK-61 System disk encryption (BitLocker/dm-crypt), CHK-62 Conditional Access and MFA for Azure administrators.
+**By MCSB v2 domain**
+
+| Domínio MCSB v2 | Checks | Note |
+|---|---|---|
+| NS · Network security | 5 |  |
+| IM · Identity management | 6 |  |
+| PA · Privileged access | 11 |  |
+| DP · Data protection | 2 | Arc does not store customer data; server disk encryption is CHK-61. |
+| AM · Asset management | 15 |  |
+| LT · Logging and threat detection | 10 |  |
+| IR · Incident response | 3 | Covered by the recommended alerts and by Defender. |
+| PV · Posture and vulnerability management | 14 |  |
+| ES · Endpoint security | 2 |  |
+| BR · Backup and recovery | 0 | The Arc-enabled servers baseline marks backup as not supported by the service: server backup is the responsibility of the customer backup solution. |
+| DS · DevOps security | 0 | Out of scope: there is no DevOps pipeline in Arc-enabled servers. |
+| AI · Artificial intelligence security | 0 | Out of scope: there is no AI workload in Arc-enabled servers. |
+
+**Other totals:** 9 recommended alerts · 9 decision trees · 54 documentation references in the action plan. New checks in this version: none.
 
 ### History
 
 | Version | Data | Changes |
 |---|---|---|
+| v3.3.0 | 2026-10-23 | Arc-centric scope: roles, policies, Key Vaults and workspaces count only when they reach the Arc machines (the others appear as ignored); Secure Score labeled as a subscription-wide measure; controls updated to MCSB v2 (preview), with the Governance and strategy domain remapped to AM, PV and PA; coverage inventory by MCSB v2 domain; references for MCSB v2, Windows Server 2025 baselines, Best Practices Assessment and Windows Recovery Environment. |
 | v3.2.0 | 2026-10-23 | Eight new checks (CHK-55 to CHK-62): OS security baseline with compliance, local administrators audit, healthy antivirus and EDR, insights and telemetry per machine, map of Arc capabilities in use, Windows LAPS, disk encryption and Conditional Access/MFA for Azure administrators; coverage inventory per version; ERROR/PARTIAL statuses shown in English in the en-US version; references for Windows Server Management, Hotpatch, baselines, VM Insights, Change Tracking, LAPS, BitLocker and Conditional Access. |
 | v3.1.0 | 2026-10-23 | Agent security floor 1.61 (CVE-2025-49692, CVE-2025-26627, CVE-2025-55316, CVE-2026-26117) in CHK-29 and ALR-03; CVE table including service-side and SQL extension CVEs; azcmagent scheduled task, GPO deployment task and delayed-start services in the services catalog; onboarding service principal and GPO hardening; CAF hybrid references (Arc-enabled servers design areas) and Arc service selection; active state on the Expand/Collapse all buttons. |
 | v3.0.0 | 2026-10-23 | Project renamed to Arc Posture Review (repository, Invoke-ArcPostureReview.ps1 script, arc-posture-review-*.zip package, pt-BR and en-US files); status and severity colors following Advisor and Defender for Cloud, with icon, AA contrast, dark mode and high contrast; package compatibility by schema (v2.x packages are still accepted). |
