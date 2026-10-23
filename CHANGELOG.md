@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.8.1] — 2026-10-23
+
+The v3.8.0 tag was published from an earlier build of the package; 3.8.1 contains everything planned for 3.8.0.
+
+### Report
+- **Metric transparency:** new section *How the metrics are calculated* with the formula of each metric, today's numbers (index = weighted points ÷ total weight), the weights (High 3 · Medium 2 · Low 1, a kit convention) and a *Gain per control* table (current score, index before → after, gain). The index and gain are stated as a kit reference, not the official Secure Score.
+- **Plan:** the Gain column shows the index before and after the fix (e.g. 63.6 → 68.6%), with a note that gains are calculated only from the package data and do not add up.
+- **Estate indicators:** each card shows the count (n / base), the source check and a color by threshold (green ≥ 80%, yellow 50–79%, red < 50%); *How each indicator is calculated* lists the rule, the base and the source data file.
+
+### Checks
+- CHK-30: the SQL extension reference is the latest version published in Azure for the region when it is newer than the release-notes table (the detail shows the source: Azure or release notes).
+
+### Repository
+- Sample report and screenshot regenerated with this version (anonymized lab data: 7 Arc servers, 3 in a risk-prioritized sample).
+- `.nojekyll` restored (GitHub Pages serves files as-is).
+
 ## [3.8.0] — 2026-10-23
 
 ### Report and checks (from a large-estate run)

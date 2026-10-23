@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v3.8.0 — 2026-10-23.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
+**Version v3.8.1 — 2026-10-23.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 
@@ -1782,7 +1782,7 @@ The primary track of this guide is: **Landing Zone + Choose Service + Plan at Sc
 
 ### Coverage inventory
 
-Totals calculated from the catalog in every version. In parentheses, what changed compared with v3.7.0.
+Totals calculated from the catalog in every version. In parentheses, what changed compared with v3.8.0.
 
 **By domain**
 
@@ -1834,6 +1834,7 @@ Totals calculated from the catalog in every version. In parentheses, what change
 
 | Version | Data | Changes |
 |---|---|---|
+| v3.8.1 | 2026-10-23 | Metric transparency: new section How the metrics are calculated (formula, today's numbers, weights and gain per control); Gain column with the index before and after; estate indicators with the count, the source check and a color by range. CHK-30 uses the SQL extension version published in Azure when it is newer than the table. Sample report updated. |
 | v3.8.0 | 2026-10-23 | Agent and extension versions read from Azure during collection (per region) and role names read from Azure; AMA checked against the 12-month support window; DSC flagged; wider capability map; report shows sample or whole scope, Secure Score per subscription, shorter saved file; CHK-32 recognizes third-party EDR. |
 | v3.7.0 | 2026-10-23 | Machine limit with a risk-prioritized sample (disconnected, legacy OS, agent below 1.61, SQL Server, criticality tag). Privacy: the page blocks network connections (Content Security Policy), asks for confirmation before loading the package, hides e-mails in saved files, and has a button to clear data kept in the browser. |
 | v3.6.1 | 2026-10-23 | Fix: the 3.5.1 and 3.6.0 script stopped at start with an else not recognized error (log line placed between if and else). New automated check for this kind of error. |
