@@ -29,10 +29,11 @@ Security decisions start before the first server is connected (onboarding creden
 ## What you get
 
 - **Public Microsoft method:** the *sustain security posture* cycle of the [Cloud Adoption Framework — Secure](https://learn.microsoft.com/azure/cloud-adoption-framework/secure/overview), measured against the [Microsoft Cloud Security Benchmark](https://learn.microsoft.com/security/benchmark/azure/introduction) (MCSB v1, mapped to CIS Controls v8, NIST SP 800-53 and PCI-DSS).
-- **54 checks** (38 automated, 16 documentary), each with assessment layer, MCSB control and decision tree.
+- **62 checks** (43 automated, 19 documentary), each with assessment layer, MCSB control and decision tree.
 - **9 decision trees** (onboarding, organization, connectivity, identity, extensions, protection, versions and legacy, decommissioning, cost) plus program execution.
 - **Read-only collector** (`Invoke-ArcPostureReview.ps1`): Azure Resource Graph and Azure CLI read commands only, paginated, multi-subscription or management group, effective-permission pre-check (Reader is enough).
 - **Local analysis:** compliance by layer and MCSB control, Defender for Cloud Secure Score, action plan with timeframe and owner, 9 recommended alerts, agent and extension versions on the run date, cost estimate, and evidence per finding.
+- **Coverage inventory:** the guide (Appendix J) shows the totals per domain, severity, layer and decision tree, and what changed since the previous version.
 - **Agent security floor:** machines below Connected Machine agent **1.61** fail the version check (known local elevation-of-privilege CVEs: CVE-2025-49692, CVE-2025-26627, CVE-2025-55316, CVE-2026-26117), and the services catalog covers the agent scheduled tasks and extension services.
 - **Package validation:** origin, structure, manifest SHA-256 and size limits; tampered packages are rejected. The script prints the `.zip` SHA-256 so you can confirm the origin.
 - **Reports** in HTML, Markdown and JSON, in **English** and **Brazilian Portuguese**.
@@ -55,7 +56,7 @@ Security decisions start before the first server is connected (onboarding creden
 |---|---|
 | Online | https://fabiotreze.github.io/arc-posture-review/ (English) · [Português](https://fabiotreze.github.io/arc-posture-review/arc-posture-review.pt-BR.html) |
 | Offline | Download [`arc-posture-review.en-US.html`](arc-posture-review.en-US.html) or [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html) and open it in Edge or Chrome |
-| Script only | [`scripts/Invoke-ArcPostureReview.ps1`](scripts/Invoke-ArcPostureReview.ps1): all 54 checks, current subscription by default |
+| Script only | [`scripts/Invoke-ArcPostureReview.ps1`](scripts/Invoke-ArcPostureReview.ps1): all 62 checks, current subscription by default |
 | Read the guide | [docs/guide.en-US.md](docs/guide.en-US.md) · [docs/guide.pt-BR.md](docs/guide.pt-BR.md) |
 
 Flow: **Start here → Prepare collection → Run summary → Analysis → Plan and delivery**

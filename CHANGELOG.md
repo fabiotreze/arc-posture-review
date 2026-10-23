@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.2.0] — 2026-10-23
+
+### Added
+- 8 new checks (54 → 62; automated 38 → 43, documentary 16 → 19). Existing IDs are unchanged; the new ones are CHK-55 to CHK-62:
+  - CHK-55 **OS security baseline** — Azure compute security baseline (Windows/Linux) assigned and compliant per machine (Machine Configuration).
+  - CHK-56 **Local administrators audit** — Machine Configuration audit of the local Administrators group.
+  - CHK-57 **Healthy antivirus and EDR** — Defender for Cloud endpoint protection recommendations plus MDE extension presence.
+  - CHK-58 **Insights and telemetry per machine** — performance, VM Insights/dependency map, events/Syslog, security events and Change Tracking via DCRs.
+  - CHK-59 **Map of Arc capabilities in use** — extensions, periodic patch assessment, Machine Configuration, Windows Server Management benefits, Hotpatch and ESU.
+  - CHK-60 **Windows LAPS**, CHK-61 **System disk encryption (BitLocker/dm-crypt)**, CHK-62 **Conditional Access and MFA for Azure administrators** (documentary).
+- New read-only collection `gcComp` (Machine Configuration assignment compliance), covered by the existing Reader permission.
+- **Coverage inventory** in the guide (Appendix J): totals per domain, automated/documentary, severity, assessment layer and decision tree, with the change from the previous version.
+- References: Windows Server Management enabled by Azure Arc, Hotpatch, Windows/Linux security baselines, VM Insights, Change Tracking, Windows LAPS, BitLocker, Conditional Access and mandatory MFA.
+
+### Changed
+- English version shows ERROR, PARTIAL, MISSING and UNKNOWN instead of the Portuguese status codes (package codes unchanged, older packages still accepted).
+
+### Mudanças (pt-BR)
+- 8 verificações novas (54 → 62): baseline de segurança do SO, auditoria de administradores locais, antivírus e EDR, insights e telemetria, mapa de recursos do Arc, Windows LAPS, criptografia de disco e Acesso Condicional/MFA.
+- Inventário de cobertura por versão no guia (Anexo J); status em inglês na versão en-US.
+
 ## [3.1.0] — 2026-10-23
 
 ### Added
