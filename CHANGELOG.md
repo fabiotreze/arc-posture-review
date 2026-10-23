@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.7.0] — 2026-10-23
+
+### Changed
+- **Machine limit now prioritizes risk:** with `-MaxMachines N`, the sample starts with the machines most likely to hide problems, then follows resource group and name. Risk signals: Expired or Disconnected status, legacy OS (Windows Server 2008/2012, then 2016), Connected Machine agent below 1.61, SQL Server detected, and a criticality tag (`criticality`/`tier` = high, critical or Tier 0). The log and the analysis state how many sampled machines carry a risk signal and recommend a full run (or one per resource group) for the final assessment.
+
+### Mudanças (pt-BR)
+- O limite de máquinas passa a priorizar risco: desconectadas, SO legado, agente abaixo de 1.61, SQL Server e tag de criticidade entram primeiro na amostra.
+
 ## [3.6.1] — 2026-10-23
 
 ### Fixed
