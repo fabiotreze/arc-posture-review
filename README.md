@@ -33,11 +33,17 @@ Security decisions start before the first server is connected (onboarding creden
 - **63 checks** (44 automated, 19 documentary), each with assessment layer, MCSB control and decision tree.
 - **9 decision trees** (onboarding, organization, connectivity, identity, extensions, protection, versions and legacy, decommissioning, cost) plus program execution.
 - **Read-only collector** (`Invoke-ArcPostureReview.ps1`): Azure Resource Graph and Azure CLI read commands only, paginated, multi-subscription or management group, effective-permission pre-check (Reader is enough).
-- **Local analysis:** compliance by layer and MCSB control, Defender for Cloud Secure Score, action plan with timeframe and owner, 9 recommended alerts, agent and extension versions on the run date, cost estimate, and evidence per finding.
+- **Local analysis:** quick read, kit index on the Secure Score model (points by severity, share of healthy machines, same root cause counted once), compliance by layer and MCSB control, Defender for Cloud Secure Score, one-row-per-action plan with gain, timeframe and owner, 9 recommended alerts, agent and extension versions on the run date, cost estimate, and evidence per finding.
 - **Coverage inventory:** the guide (Appendix J) shows the totals per domain, severity, layer and decision tree, and what changed since the previous version.
 - **Agent security floor:** machines below Connected Machine agent **1.61** fail the version check (known local elevation-of-privilege CVEs: CVE-2025-49692, CVE-2025-26627, CVE-2025-55316, CVE-2026-26117), and the services catalog covers the agent scheduled tasks and extension services.
 - **Package validation:** origin, structure, manifest SHA-256 and size limits; tampered packages are rejected. The script prints the `.zip` SHA-256 so you can confirm the origin.
-- **Reports** in HTML, Markdown and JSON, in **English** and **Brazilian Portuguese**.
+- **Outputs**, in **English** and **Brazilian Portuguese** (the language is part of the file name):
+
+  | File | What it contains | Use it for |
+  |---|---|---|
+  | `arc-posture-review-<date>.zip` | Collected data, results and findings per check (from the script) | Evidence; load it in step 3 |
+  | `arc-posture-review-analysis-<date>.<lang>.html` | **One file:** the full analysis plus the checklist record (status, collection evidence and notes for every check, session notes) | The deliverable: share, archive or print to PDF |
+  | `arc-posture-review-report.<lang>.md` / `.json` | Same content as text and as data | Edit the text, or compare runs |
 - **Accessible UI:** status shown by icon, text and color (Advisor/Defender palette), AA contrast, dark mode, high-contrast and reduced-motion support.
 
 ## See it before you run it

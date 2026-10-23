@@ -33,11 +33,17 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
 - **63 verificações** (44 automáticas, 19 documentais), cada uma com camada, controle MCSB e árvore de decisão.
 - **9 árvores de decisão** (onboarding, organização, conectividade, identidade, extensões, proteção, versões e legado, remoção, custo) e execução do programa.
 - **Coletor somente leitura** (`Invoke-ArcPostureReview.ps1`): apenas leitura via Azure Resource Graph e Azure CLI, paginado, várias subscriptions ou management group, com verificação prévia de permissões (Reader basta).
-- **Análise local:** conformidade por camada e por controle MCSB, Secure Score do Defender for Cloud, plano de ação com prazo e responsável, 9 alertas recomendados, versões do agente e das extensões na data da execução, estimativa de custo e evidências por achado.
+- **Análise local:** leitura rápida, índice do kit no modelo do Secure Score (pontos por severidade, proporção de máquinas saudáveis, mesma causa contada uma vez), conformidade por camada e por controle MCSB, Secure Score do Defender for Cloud, plano de ação em uma linha por ação com ganho, prazo e responsável, 9 alertas recomendados, versões do agente e das extensões na data da execução, estimativa de custo e evidências por achado.
 - **Inventário de cobertura:** o guia (Anexo J) mostra os totais por domínio, severidade, camada e árvore de decisão, e o que mudou desde a versão anterior.
 - **Piso de segurança do agente:** máquinas abaixo da versão **1.61** do Connected Machine agent falham na verificação de versão (CVEs públicas de elevação de privilégio local: CVE-2025-49692, CVE-2025-26627, CVE-2025-55316, CVE-2026-26117), e o catálogo de serviços cobre as tarefas agendadas do agente e os serviços das extensões.
 - **Validação do pacote:** origem, estrutura, SHA-256 do manifest e limites de tamanho; pacote alterado é rejeitado. O script imprime o SHA-256 do `.zip` para confirmar a origem.
-- **Relatórios** em HTML, Markdown e JSON, em **português** e **inglês**.
+- **Arquivos gerados**, em **português** e **inglês** (o idioma faz parte do nome do arquivo):
+
+  | Arquivo | O que contém | Para que usar |
+  |---|---|---|
+  | `arc-posture-review-<data>.zip` | Dados coletados, resultados e itens de cada verificação (gerado pelo script) | Evidência; carregar na etapa 3 |
+  | `arc-posture-review-analysis-<data>.<idioma>.html` | **Um único arquivo:** a análise completa mais o registro do checklist (status, evidência da coleta e notas de cada verificação, notas da sessão) | A entrega: compartilhar, arquivar ou imprimir em PDF |
+  | `arc-posture-review-report.<idioma>.md` / `.json` | O mesmo conteúdo em texto e em dados | Editar o texto ou comparar execuções |
 - **Interface acessível:** status por ícone, texto e cor (paleta do Advisor/Defender), contraste AA, modo escuro, alto contraste e movimento reduzido.
 
 ## Veja antes de rodar

@@ -4,15 +4,19 @@
 
 ### Fixed
 - Script reviewed with PSScriptAnalyzer (code scanning): empty `catch` blocks now log the error in verbose mode (`-Verbose`); functions renamed to standard PowerShell verbs (`Write-Result`, `Add-PermGap`, `Get-ArcWorkspaceId`); unused variable removed; the parameters `ActivityDays`, `RequiredTags` and `AllowedRegions` are written to the log. No change to the checks or results.
+- The checklist record and the Markdown report list every check in the loaded package (not only the checks selected in this session), with the collected status.
 
 ### Changed
 - Code scanning excludes two style rules on purpose: positional parameters (the script style) and `Write-Host` (operator progress output).
 - The release automation runs only for numeric tags (`vX.Y.Z` with digits).
 - Dependabot groups action updates into one pull request per month.
+- **One saved file:** "Save analysis" now includes, at the end, the checklist record (status, collection evidence and notes for every selected check, plus session notes). "Save report (.html)" creates the same file when a package is loaded; without a package it creates only the checklist record. The old "full report" repeated the analysis and was removed. The README describes each output file.
 
 ### Mudanças (pt-BR)
 - Script revisado pelo PSScriptAnalyzer: `catch` registra o erro com `-Verbose`, funções com verbos padrão, variável sem uso removida, parâmetros no log. As verificações não mudaram.
 - Code scanning ignora duas regras de estilo intencionais; release só com tags numéricas; Dependabot agrupado.
+- O registro do checklist e o relatório .md trazem todas as verificações do pacote carregado, com o status coletado.
+- Um único arquivo salvo: a análise passa a trazer no final o registro do checklist (status, evidência e notas de cada verificação); o antigo relatório completo, que repetia a análise, foi removido.
 
 ## [3.5.0] — 2026-10-23
 

@@ -408,7 +408,7 @@
           <textarea id="notes" placeholder="Ex.: CHK-23 – cliente usa allowlist só em Tier 0; demais servidores em avaliação."></textarea>
         </div>
         <div class="actions">
-          <button class="btn primary" id="btnFullHtml" type="button">Relatório completo (.html)</button><button class="btn" id="btnMd" type="button">Baixar relatório .md</button>
+          <button class="btn primary" id="btnFullHtml" type="button" title="Com pacote de coleta carregado, gera o mesmo arquivo de Salvar análise (análise + registro do checklist). Sem pacote, gera só o registro do checklist.">Salvar relatório (.html)</button><button class="btn" id="btnMd" type="button">Baixar relatório .md</button>
           <button class="btn" id="btnJson" type="button">Baixar .json</button>
           <button class="btn" id="btnReset" type="button">Limpar status e notas</button>
         </div>
@@ -3642,13 +3642,13 @@ Write-Step 'Carregue o .zip na aba Resultado do checklist.'
     L.push("## Detalhe por verificação"); L.push("");
     var imp = {}; if (state.imported) state.imported.results.forEach(function (r) { imp[r.id] = r; });
     Object.keys(DOMAINS).forEach(function (dk) {
-      var its = ITEMS.filter(function (i) { return i.dom === dk && state.items[i.id].sel; });
+      var its = ITEMS.filter(function (i) { return i.dom === dk && (state.items[i.id].sel || imp[i.id]); });
       if (!its.length) return;
       L.push("### " + DOMAINS[dk]); L.push("");
       L.push("| ID | Verificação | Sev. | Referências | Status | Evidência da coleta | Notas |"); L.push("|---|---|---|---|---|---|---|");
       its.forEach(function (i) {
         var r = imp[i.id], s = state.items[i.id];
-        L.push("| " + i.id + " | " + i.title + " | " + i.sev + " | " + i.refs.map(function (r) { return REFLABEL[r] || r; }).join(", ") + " | " + s.status + " | " + (r ? String(r.detail).replace(/\|/g, "/") : "-") + " | " + String(s.note || "").replace(/\|/g, "/") + " |");
+        L.push("| " + i.id + " | " + i.title + " | " + i.sev + " | " + i.refs.map(function (r) { return REFLABEL[r] || r; }).join(", ") + " | " + ((i.type === "auto" && r) ? r.status : (s.status === "MANUAL" ? "TODO" : s.status)) + " | " + (r ? String(r.detail).replace(/\|/g, "/") : "-") + " | " + String(s.note || "").replace(/\|/g, "/") + " |");
       });
       L.push("");
     });
@@ -4515,6 +4515,19 @@ Write-Step 'Carregue o .zip na aba Resultado do checklist.'
     }
   }
   function stamp() { var d = new Date(), p = function (n) { return (n < 10 ? "0" : "") + n; }; return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + "-" + p(d.getHours()) + p(d.getMinutes()); }
+  function registerMd() {
+    var L = [], imp = {}; if (state.imported) state.imported.results.forEach(function (r) { imp[r.id] = r; });
+    Object.keys(DOMAINS).forEach(function (dk) {
+      var its = ITEMS.filter(function (i) { return i.dom === dk && (state.items[i.id].sel || imp[i.id]); }); if (!its.length) return;
+      L.push("### " + DOMAINS[dk]); L.push("");
+      L.push("| ID | Verificação | Sev. | Status | Evidência da coleta | Notas |"); L.push("|---|---|---|---|---|---|");
+      its.forEach(function (i) { var r = imp[i.id], s = state.items[i.id], st = (i.type === "auto" && r) ? r.status : s.status;
+        L.push("| " + i.id + " | " + cellMd(i.title) + " | " + i.sev + " | " + (st === "MANUAL" ? "TODO" : st) + " | " + (r ? cellMd(r.detail) : "-") + " | " + cellMd(s.note || "") + " |"); });
+      L.push("");
+    });
+    L.push("### Notas da sessão"); L.push(""); L.push(v("notes") || "_Sem notas._");
+    return L.join("\n");
+  }
   async function snapshotHtml(withReport) {
     await loadAllFindings();
     var imp = state.imported || {};
@@ -4525,7 +4538,7 @@ Write-Step 'Carregue o .zip na aba Resultado do checklist.'
     c.querySelectorAll("[data-target]").forEach(function (a) { a.removeAttribute("data-target"); });
     var scope = imp.scope ? (imp.scope.managementGroup ? "management group " + imp.scope.managementGroup : (imp.scope.subscriptions || []).map(function (x) { return x.name || x.subscriptionId || x; }).join(", ")) : "-";
     var head = '<header class="top"><div class="logo">A</div><div><h1>Arc Posture Review · Análise</h1><div class="sub">Escopo: ' + esc(scope) + " · coleta " + esc(imp.startedAt || "-") + " · conta " + esc(imp.account || "-") + " · checklist " + VERSION + "</div></div></header>";
-    var rep = withReport ? '<div class="card"><h2>Relatório do checklist</h2><div class="guide" style="padding:12px 16px">' + mdToHtml(buildReportMd()) + "</div></div>" : "";
+    var rep = '<div class="card"><h2>Registro do checklist</h2><p class="msg" style="padding:0 16px">Status, evidência da coleta e notas de cada verificação selecionada, inclusive as documentais. É o registro formal da avaliação.</p><div class="guide" style="padding:12px 16px">' + mdToHtml(registerMd()) + "</div></div>";
     return '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Arc Posture Review - análise</title>' + css +
       "</head><body>" + head + '<main class="wrap"><div class="card"><div class="pad">' + c.outerHTML + "</div></div>" + rep +
       '<p class="msg">Gerado em ' + esc(new Date().toLocaleString("pt-BR")) + ". Documento estático com dados do ambiente coletado: trate como confidencial.</p><p class=\"msg\">Gerado com o Arc Posture Review, projeto pessoal e independente que consolida experiência de campo e documentação pública da Microsoft com apoio de IA. Não é ferramenta oficial da Microsoft. Valide as recomendações na documentação oficial antes de aplicar. Decisões e mudanças no ambiente são de responsabilidade de quem as aprova e executa.</p></main></body></html>";
@@ -4540,7 +4553,8 @@ Write-Step 'Carregue o .zip na aba Resultado do checklist.'
   $("btnFullHtml").addEventListener("click", async function () {
     var b = this; b.disabled = true; var t = b.textContent; b.textContent = "Gerando…";
     try {
-      var html = state.imported ? await snapshotHtml(true) : '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>Azure Arc - relatório</title>' + Array.prototype.map.call(document.querySelectorAll("style"), function (x) { return x.outerHTML; }).join("") + '</head><body><main class="wrap"><div class="card"><div class="guide" style="padding:12px 16px">' + mdToHtml(buildReportMd()) + "</div></div></main></body></html>";
+      if (state.imported) { download("arc-posture-review-analysis-" + stamp() + "." + (document.documentElement.lang === "en" ? "en-US" : "pt-BR") + ".html", await snapshotHtml(true), "text/html;charset=utf-8"); toast("Análise salva"); return; }
+      var html = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>Azure Arc - relatório</title>' + Array.prototype.map.call(document.querySelectorAll("style"), function (x) { return x.outerHTML; }).join("") + '</head><body><main class="wrap"><div class="card"><div class="guide" style="padding:12px 16px">' + mdToHtml(buildReportMd()) + "</div></div></main></body></html>";
       download("arc-posture-review-report-" + stamp() + "." + (document.documentElement.lang === "en" ? "en-US" : "pt-BR") + ".html", html, "text/html;charset=utf-8"); toast("Relatório salvo");
     } catch (e) { toast("Falha ao salvar: " + (e.message || e)); }
     finally { b.disabled = false; b.textContent = t; }
