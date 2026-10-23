@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v3.5.1 — 23/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
+**Versão v3.6.0 — 23/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 
@@ -1831,7 +1831,7 @@ Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que
 
 | Versão | Data | Mudanças |
 |---|---|---|
-| v3.5.1 | 23/10/2026 | Script revisado pelo PSScriptAnalyzer: blocos catch registram o erro em modo detalhado (-Verbose), funções renomeadas para verbos padrão do PowerShell (Write-Result, Add-PermGap, Get-ArcWorkspaceId), variável sem uso removida e parâmetros registrados no log. Sem mudança nas verificações. |
+| v3.6.0 | 23/10/2026 | Limite de máquinas (MaxMachines) para ambientes grandes, com aviso de amostra no relatório; um único arquivo de análise com o registro do checklist; status da coleta aplicados ao carregar o pacote; botão para voltar à análise; resumo por severidade; script revisado pelo PSScriptAnalyzer (catch com -Verbose, verbos padrão, parâmetros no log). |
 | v3.5.0 | 23/10/2026 | Índice do kit no modelo do Secure Score do Defender for Cloud: pontos por severidade, proporção de máquinas saudáveis e verificações com a mesma causa contadas uma vez; leitura rápida com cobertura, Secure Score e maiores ganhos; plano de ação em uma linha por ação; novos indicadores (Defender for Servers, baseline conforme, patches, telemetria); FAIL de severidade alta sempre imediato. |
 | v3.4.0 | 23/10/2026 | Nova verificação CHK-63: plano do Defender for Servers lido em cada máquina Arc (FAIL sem plano, WARN se diferente da subscription); a estimativa de custo usa o plano real da máquina. |
 | v3.3.0 | 23/10/2026 | Escopo centrado no Azure Arc: papéis, policies, Key Vaults e workspaces só contam quando alcançam as máquinas Arc (os demais aparecem como ignorados); Secure Score rotulado como medida da subscription; controles atualizados para o MCSB v2 (preview), com o domínio Governança e estratégia remapeado para AM, PV e PA; inventário de cobertura por domínio do MCSB v2; referências do MCSB v2, baselines do Windows Server 2025, Best Practices Assessment e Windows Recovery Environment. |

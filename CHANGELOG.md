@@ -1,6 +1,12 @@
 # Changelog
 
-## [3.5.1] — 2026-10-23
+## [3.6.0] — 2026-10-23
+
+### Added
+- **Machine limit (`-MaxMachines`, "Machine limit" in the UI):** for large estates, evaluates only the first N machines (by resource group and name). Per-machine data and the per-machine Defender plan calls are limited to the sample; the summary, the analysis and `results.json` state "Sample: N of M machines". Subscription-level data (roles, policies, Defender recommendations) still covers the whole scope. 0 = all (default).
+- Summary by severity in the quick read (High, Medium, Low: items to address, FAIL, WARN, PASS).
+- "Back to the analysis" button after opening a check or the guide from the analysis.
+- Collected statuses are applied to the checklist when the package loads, without overwriting statuses you set; the button became "Reapply collected status".
 
 ### Fixed
 - Script reviewed with PSScriptAnalyzer (code scanning): empty `catch` blocks now log the error in verbose mode (`-Verbose`); functions renamed to standard PowerShell verbs (`Write-Result`, `Add-PermGap`, `Get-ArcWorkspaceId`); unused variable removed; the parameters `ActivityDays`, `RequiredTags` and `AllowedRegions` are written to the log. No change to the checks or results.
@@ -14,6 +20,7 @@
 
 ### Mudanças (pt-BR)
 - Script revisado pelo PSScriptAnalyzer: `catch` registra o erro com `-Verbose`, funções com verbos padrão, variável sem uso removida, parâmetros no log. As verificações não mudaram.
+- Novo limite de máquinas (MaxMachines) para ambientes grandes, com aviso de amostra; resumo por severidade; botão para voltar à análise; status da coleta aplicados ao carregar o pacote.
 - Code scanning ignora duas regras de estilo intencionais; release só com tags numéricas; Dependabot agrupado.
 - O registro do checklist e o relatório .md trazem todas as verificações do pacote carregado, com o status coletado.
 - Um único arquivo salvo: a análise passa a trazer no final o registro do checklist (status, evidência e notas de cada verificação); o antigo relatório completo, que repetia a análise, foi removido.
