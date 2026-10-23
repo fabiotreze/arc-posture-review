@@ -10,7 +10,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Check version in the script
         run: grep -q "$GITHUB_REF_NAME" scripts/Invoke-ArcPostureReview.ps1 || { echo "Tag $GITHUB_REF_NAME not found in the script"; exit 1; }
       - name: Extract release notes from CHANGELOG
