@@ -1,5 +1,6 @@
 # Arc Posture Review
 
+[![Release](https://img.shields.io/github/v/release/fabiotreze/arc-posture-review)](https://github.com/fabiotreze/arc-posture-review/releases)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 [![Docs: CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-EF9421.svg)](LICENSE-DOCS)
 
@@ -29,7 +30,7 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
 ## O que entrega
 
 - **Método público da Microsoft:** ciclo de sustentação de postura do [Cloud Adoption Framework — Secure](https://learn.microsoft.com/azure/cloud-adoption-framework/secure/overview), medido pelo [Microsoft Cloud Security Benchmark](https://learn.microsoft.com/security/benchmark/azure/introduction) (MCSB v2, com mapeamento para CIS Controls v8.1, NIST SP 800-53, PCI-DSS v4, NIST CSF 2.0 e ISO 27001).
-- **62 verificações** (43 automáticas, 19 documentais), cada uma com camada, controle MCSB e árvore de decisão.
+- **63 verificações** (44 automáticas, 19 documentais), cada uma com camada, controle MCSB e árvore de decisão.
 - **9 árvores de decisão** (onboarding, organização, conectividade, identidade, extensões, proteção, versões e legado, remoção, custo) e execução do programa.
 - **Coletor somente leitura** (`Invoke-ArcPostureReview.ps1`): apenas leitura via Azure Resource Graph e Azure CLI, paginado, várias subscriptions ou management group, com verificação prévia de permissões (Reader basta).
 - **Análise local:** conformidade por camada e por controle MCSB, Secure Score do Defender for Cloud, plano de ação com prazo e responsável, 9 alertas recomendados, versões do agente e das extensões na data da execução, estimativa de custo e evidências por achado.
@@ -56,7 +57,7 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
 |---|---|
 | Online | https://fabiotreze.github.io/arc-posture-review/arc-posture-review.pt-BR.html |
 | Offline | Baixe [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html) (ou [`.en-US.html`](arc-posture-review.en-US.html)) e abra no Edge ou Chrome |
-| Só o script | [`scripts/Invoke-ArcPostureReview.ps1`](scripts/Invoke-ArcPostureReview.ps1): as 62 verificações, subscription atual por padrão |
+| Só o script | [`scripts/Invoke-ArcPostureReview.ps1`](scripts/Invoke-ArcPostureReview.ps1): as 63 verificações, subscription atual por padrão |
 | Ler o guia | [docs/guide.pt-BR.md](docs/guide.pt-BR.md) · [docs/guide.en-US.md](docs/guide.en-US.md) |
 
 1. Abra o HTML e siga o **Comece aqui**: escolha as decisões nas árvores visuais e depois o escopo e as verificações.

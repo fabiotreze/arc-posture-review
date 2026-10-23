@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.4.0] — 2026-10-23
+
+### Added
+- **CHK-63 Defender for Servers per Arc machine:** reads the Defender for Servers plan on each `Microsoft.HybridCompute/machines` resource (resource-level Pricings API, read-only GET) and compares it with the subscription plan. FAIL if a machine has no plan (Free); WARN if the machine plan differs from the subscription (set on the machine itself); PASS if every machine inherits the subscription plan.
+- The analysis lists the plan per machine (tier, subplan, inherited or set on the machine, enabled extensions).
+- Release badge in the README.
+
+### Changed
+- The cost estimate (CHK-53) uses the actual plan of each machine when it was read.
+- The script's `az rest` allowlist accepts one more read-only call: the Defender plan of an Arc machine.
+
+### Mudanças (pt-BR)
+- Nova verificação CHK-63: plano do Defender for Servers lido em cada máquina Arc. FAIL sem plano (Free); WARN se diferente da subscription; PASS se todas herdam.
+- A estimativa de custo usa o plano real de cada máquina; selo de release no README.
+
 ## [3.3.0] — 2026-10-23
 
 ### Changed

@@ -1,5 +1,6 @@
 # Arc Posture Review
 
+[![Release](https://img.shields.io/github/v/release/fabiotreze/arc-posture-review)](https://github.com/fabiotreze/arc-posture-review/releases)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 [![Docs: CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-EF9421.svg)](LICENSE-DOCS)
 
@@ -29,7 +30,7 @@ Security decisions start before the first server is connected (onboarding creden
 ## What you get
 
 - **Public Microsoft method:** the *sustain security posture* cycle of the [Cloud Adoption Framework — Secure](https://learn.microsoft.com/azure/cloud-adoption-framework/secure/overview), measured against the [Microsoft Cloud Security Benchmark](https://learn.microsoft.com/security/benchmark/azure/introduction) (MCSB v2, mapped to CIS Controls v8.1, NIST SP 800-53, PCI-DSS v4, NIST CSF 2.0 and ISO 27001).
-- **62 checks** (43 automated, 19 documentary), each with assessment layer, MCSB control and decision tree.
+- **63 checks** (44 automated, 19 documentary), each with assessment layer, MCSB control and decision tree.
 - **9 decision trees** (onboarding, organization, connectivity, identity, extensions, protection, versions and legacy, decommissioning, cost) plus program execution.
 - **Read-only collector** (`Invoke-ArcPostureReview.ps1`): Azure Resource Graph and Azure CLI read commands only, paginated, multi-subscription or management group, effective-permission pre-check (Reader is enough).
 - **Local analysis:** compliance by layer and MCSB control, Defender for Cloud Secure Score, action plan with timeframe and owner, 9 recommended alerts, agent and extension versions on the run date, cost estimate, and evidence per finding.
@@ -56,7 +57,7 @@ Security decisions start before the first server is connected (onboarding creden
 |---|---|
 | Online | https://fabiotreze.github.io/arc-posture-review/ (English) · [Português](https://fabiotreze.github.io/arc-posture-review/arc-posture-review.pt-BR.html) |
 | Offline | Download [`arc-posture-review.en-US.html`](arc-posture-review.en-US.html) or [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html) and open it in Edge or Chrome |
-| Script only | [`scripts/Invoke-ArcPostureReview.ps1`](scripts/Invoke-ArcPostureReview.ps1): all 62 checks, current subscription by default |
+| Script only | [`scripts/Invoke-ArcPostureReview.ps1`](scripts/Invoke-ArcPostureReview.ps1): all 63 checks, current subscription by default |
 | Read the guide | [docs/guide.en-US.md](docs/guide.en-US.md) · [docs/guide.pt-BR.md](docs/guide.pt-BR.md) |
 
 Flow: **Start here → Prepare collection → Run summary → Analysis → Plan and delivery**
