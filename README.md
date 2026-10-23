@@ -46,6 +46,14 @@ Security decisions start before the first server is connected (onboarding creden
   | `arc-posture-review-report.<lang>.md` / `.json` | Same content as text and as data | Edit the text, or compare runs |
 - **Accessible UI:** status shown by icon, text and color (Advisor/Defender palette), AA contrast, dark mode, high-contrast and reduced-motion support.
 
+## Privacy and data protection (LGPD / GDPR)
+
+- **Nothing leaves the browser.** The page has no server side: the `.zip` is read and analyzed locally with JavaScript. A Content Security Policy in the page blocks every network connection (`connect-src 'none'`), and there are no external scripts, fonts or trackers. You can check it in the page source or in the browser developer tools (*Network* tab).
+- **What the browser keeps:** only the checklist choices, statuses, notes and scope fields, in the browser local storage, so you can continue later. The package itself and the collected data are not stored. Use **Clear data in this browser** (step 3) to erase them.
+- **Personal data in the package:** the collecting account e-mail, the people who operated the machines (Activity Log `caller`), and identifiers such as principal IDs and machine names. The page asks for confirmation before loading a package, and **Hide e-mails in saved files** (on by default) replaces e-mails with `a***@domain` in the saved `.html`, `.md` and `.json`.
+- **Roles:** the organization that owns the environment is the data controller. This project does not receive, store or process any collected data. GitHub Pages only serves the static page (see the [GitHub Privacy Statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement)); for restricted environments, download the `.html` and use it offline.
+- **Good practice:** collect with a least-privilege account, keep the package and reports in an access-controlled location, share them only with authorized people, and delete them at the end of the engagement.
+
 ## See it before you run it
 
 ![Start here: stages and decision trees](docs/images/start-here.en-US.png)

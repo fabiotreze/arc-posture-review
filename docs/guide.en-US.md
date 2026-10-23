@@ -1831,7 +1831,7 @@ Totals calculated from the catalog in every version. In parentheses, what change
 
 | Version | Data | Changes |
 |---|---|---|
-| v3.7.0 | 2026-10-23 | Machine limit with a risk-prioritized sample: disconnected machines, legacy OS (2008/2012/2016), agent below 1.61, SQL Server and criticality tag come first. |
+| v3.7.0 | 2026-10-23 | Machine limit with a risk-prioritized sample (disconnected, legacy OS, agent below 1.61, SQL Server, criticality tag). Privacy: the page blocks network connections (Content Security Policy), asks for confirmation before loading the package, hides e-mails in saved files, and has a button to clear data kept in the browser. |
 | v3.6.1 | 2026-10-23 | Fix: the 3.5.1 and 3.6.0 script stopped at start with an else not recognized error (log line placed between if and else). New automated check for this kind of error. |
 | v3.6.0 | 2026-10-23 | Machine limit (MaxMachines) for large estates, with a sample notice in the report; a single analysis file with the checklist record; collected statuses applied when the package loads; button to return to the analysis; summary by severity; script reviewed with PSScriptAnalyzer (catch with -Verbose, standard verbs, parameters in the log). |
 | v3.5.0 | 2026-10-23 | Kit index on the Defender for Cloud Secure Score model: points by severity, share of healthy machines, and checks with the same cause counted once; quick read with coverage, Secure Score and biggest gains; one-row-per-action plan; new indicators (Defender for Servers, compliant baseline, patches, telemetry); high-severity FAIL always immediate. |

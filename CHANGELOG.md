@@ -5,8 +5,16 @@
 ### Changed
 - **Machine limit now prioritizes risk:** with `-MaxMachines N`, the sample starts with the machines most likely to hide problems, then follows resource group and name. Risk signals: Expired or Disconnected status, legacy OS (Windows Server 2008/2012, then 2016), Connected Machine agent below 1.61, SQL Server detected, and a criticality tag (`criticality`/`tier` = high, critical or Tier 0). The log and the analysis state how many sampled machines carry a risk signal and recommend a full run (or one per resource group) for the final assessment.
 
+### Privacy (LGPD / GDPR)
+- The page blocks every network connection with a Content Security Policy (`connect-src 'none'`), sends no referrer, and saved analyses carry the same restriction.
+- Loading a package requires a confirmation that the user understands the package holds personal data and is authorized to analyze it.
+- **Hide e-mails in saved files** (on by default) replaces e-mails with `a***@domain` in saved `.html`, `.md` and `.json`.
+- **Clear data in this browser** erases the checklist choices, statuses and notes kept in local storage.
+- README: new section *Privacy and data protection*.
+
 ### Mudanças (pt-BR)
 - O limite de máquinas passa a priorizar risco: desconectadas, SO legado, agente abaixo de 1.61, SQL Server e tag de criticidade entram primeiro na amostra.
+- Privacidade (LGPD): a página bloqueia conexões de rede, pede confirmação antes de carregar o pacote, oculta e-mails nos arquivos salvos (padrão) e tem botão para limpar os dados do navegador; nova seção no README.
 
 ## [3.6.1] — 2026-10-23
 

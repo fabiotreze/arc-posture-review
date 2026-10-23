@@ -46,6 +46,14 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
   | `arc-posture-review-report.<idioma>.md` / `.json` | O mesmo conteúdo em texto e em dados | Editar o texto ou comparar execuções |
 - **Interface acessível:** status por ícone, texto e cor (paleta do Advisor/Defender), contraste AA, modo escuro, alto contraste e movimento reduzido.
 
+## Privacidade e proteção de dados (LGPD)
+
+- **Nada sai do navegador.** A página não tem servidor: o `.zip` é lido e analisado localmente, em JavaScript. Uma Content Security Policy na própria página bloqueia qualquer conexão de rede (`connect-src 'none'`), e não há scripts, fontes ou rastreadores externos. Dá para conferir no código-fonte da página ou nas ferramentas do desenvolvedor do navegador (aba *Rede*).
+- **O que fica no navegador:** só as escolhas, os status, as notas e os campos de escopo do checklist, no armazenamento local do navegador, para você continuar depois. O pacote e os dados coletados não são guardados. Use **Limpar dados deste navegador** (etapa 3) para apagar.
+- **Dados pessoais no pacote:** e-mail da conta de coleta, quem operou as máquinas (campo `caller` do Activity Log) e identificadores como IDs de principal e nomes de máquinas. A página pede confirmação antes de carregar o pacote, e **Ocultar e-mails nos arquivos salvos** (ligado por padrão) troca os e-mails por `a***@dominio` nos `.html`, `.md` e `.json` salvos.
+- **Papéis:** a organização dona do ambiente é a controladora dos dados. Este projeto não recebe, não guarda e não trata nenhum dado coletado. O GitHub Pages só entrega a página estática (veja a [Declaração de Privacidade do GitHub](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement)); em ambientes restritos, baixe o `.html` e use offline.
+- **Boas práticas:** colete com conta de menor privilégio, guarde o pacote e os relatórios em local com controle de acesso, compartilhe só com quem tem autorização e apague ao fim do trabalho.
+
 ## Veja antes de rodar
 
 ![Comece aqui: etapas e árvores de decisão](docs/images/start-here.pt-BR.png)

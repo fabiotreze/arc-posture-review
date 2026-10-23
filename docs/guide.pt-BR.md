@@ -1831,7 +1831,7 @@ Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que
 
 | Versão | Data | Mudanças |
 |---|---|---|
-| v3.7.0 | 23/10/2026 | Limite de máquinas com amostra priorizada por risco: desconectadas, SO legado (2008/2012/2016), agente abaixo de 1.61, SQL Server e tag de criticidade entram primeiro. |
+| v3.7.0 | 23/10/2026 | Limite de máquinas com amostra priorizada por risco (desconectadas, SO legado, agente abaixo de 1.61, SQL Server, tag de criticidade). Privacidade: a página bloqueia conexões de rede (Content Security Policy), pede confirmação antes de carregar o pacote, oculta e-mails nos arquivos salvos e tem botão para limpar os dados guardados no navegador. |
 | v3.6.1 | 23/10/2026 | Correção: o script das versões 3.5.1 e 3.6.0 parava no início com o erro de else não reconhecido (linha de log inserida entre if e else). Nova checagem automática para esse tipo de erro. |
 | v3.6.0 | 23/10/2026 | Limite de máquinas (MaxMachines) para ambientes grandes, com aviso de amostra no relatório; um único arquivo de análise com o registro do checklist; status da coleta aplicados ao carregar o pacote; botão para voltar à análise; resumo por severidade; script revisado pelo PSScriptAnalyzer (catch com -Verbose, verbos padrão, parâmetros no log). |
 | v3.5.0 | 23/10/2026 | Índice do kit no modelo do Secure Score do Defender for Cloud: pontos por severidade, proporção de máquinas saudáveis e verificações com a mesma causa contadas uma vez; leitura rápida com cobertura, Secure Score e maiores ganhos; plano de ação em uma linha por ação; novos indicadores (Defender for Servers, baseline conforme, patches, telemetria); FAIL de severidade alta sempre imediato. |
