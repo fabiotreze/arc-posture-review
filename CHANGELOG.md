@@ -1,5 +1,31 @@
 # Changelog
 
+## [3.8.0] — 2026-10-23
+
+### Report and checks (from a large-estate run)
+- **Sample scope per check:** when a machine limit is active, each priority shows *sample* (per-machine data) or *whole scope* (subscription-level data).
+- The sample notice depends on the script version: packages from scripts older than 3.7.0 are flagged as name-ordered samples that may not represent the estate.
+- Secure Score in the quick read shows the subscription name when there is more than one.
+- Saved analysis is much shorter: finding rows and raw collected data stay collapsed (click to expand); printing still expands everything.
+- **CHK-32 (Defender for Endpoint):** when DCR streams or extensions show a third-party EDR (for example Carbon Black, CrowdStrike, SentinelOne), the result is INFO with the product name instead of WARN, asking to confirm coverage with the customer.
+
+### Official release tables
+- **CHK-30:** the Azure Monitor Agent is now checked against the official version table (Windows 1.30–1.46, Linux 1.33–1.45): versions released more than 12 months before the run date are out of support (FAIL), like the SQL extension. The SQL extension table was re-checked against the release notes (target 1.1.3518.465).
+- **CHK-30:** a DSC extension is flagged: it is no longer available for Arc-enabled servers; migrate to Machine Configuration.
+- **CHK-59 (Arc capability map):** adds Microsoft Antimalware, Update Manager patch extensions, Network Watcher, Guest Attestation, Azure Site Recovery, SQL Server backup and partner monitoring (Datadog, Dynatrace, New Relic), as listed in the Arc extensions page.
+- Guide and action plan: Defender for Endpoint sensor versions are not in Resource Graph (check in the Defender portal; Linux versions expire after nine months); Update Manager prerequisites (WSUS/Windows Update endpoints, Python and sudo on Linux); new references.
+
+### Fewer hard-coded values
+- **Versions read from Azure during collection:** latest Connected Machine agent (*Agent Version - List*) and latest version of each extension in the machines region (*Extension Metadata - List*). CHK-30 compares each extension with the version published in its region; the fleet-newest comparison is only a fallback. CHK-29 shows the latest agent read from Azure. Saved as `data/refVersions.json` and summarized in the analysis.
+- **Role names read from Azure** (`az role definition list`), built-in and custom; the fixed built-in map is only a fallback.
+- The script allowlist accepts only these extra read-only calls (GET).
+- Fixed a build issue that mixed the Azure Monitor Agent table into the SQL extension table of the page (unpublished); new automated check compares the page and script reference tables.
+
+### Mudanças (pt-BR)
+- Relatório: cada prioridade indica se vem da amostra ou do escopo inteiro; aviso de amostra conforme a versão do script; Secure Score com o nome da subscription; arquivo salvo mais curto (itens e dados brutos recolhidos). CHK-32 vira INFO quando há indício de EDR de terceiros (ex.: Carbon Black).
+- Tabelas oficiais: AMA verificado pela janela de suporte de 12 meses (como a extensão SQL); DSC sinalizado (não existe mais no Arc); mapa de recursos com antimalware, extensões de patch, Network Watcher, Guest Attestation, Site Recovery, backup do SQL e parceiros; guia com versões do sensor do MDE e pré-requisitos do Update Manager.
+- Menos valores fixos: versões do agente e das extensões lidas do Azure na coleta (por região) e nomes de papéis lidos do Azure; as tabelas do kit ficam como reserva.
+
 ## [3.7.0] — 2026-10-23
 
 ### Changed
