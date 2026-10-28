@@ -163,7 +163,29 @@ def validate_input_contract(document: dict[str, Any]) -> None:
 class DeterministicEvaluationEngine:
     def __init__(self, project_root: str | Path):
         self.project_root = Path(project_root).resolve()
-        cp3 = self.project_root / "checkpoint3-v4" / "data"
+
+        integrated_cp3 = (
+            self.project_root
+            / "assurance"
+            / "v4"
+            / "checkpoint3"
+            / "data"
+        )
+
+        package_cp3 = (
+            self.project_root
+            / "checkpoint3-v4"
+            / "data"
+        )
+
+        if integrated_cp3.is_dir():
+            cp3 = integrated_cp3
+        elif package_cp3.is_dir():
+            cp3 = package_cp3
+        else:
+            raise EvaluationError(
+                "Checkpoint 3 data root could not be resolved"
+            )
         self.checks = read_json(cp3 / "checks.enriched.json")
         self.assessments = read_json(cp3 / "control-assessments.json")
         self.scenarios = read_json(cp3 / "security-scenarios.json")

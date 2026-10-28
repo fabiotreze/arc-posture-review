@@ -4,31 +4,62 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-CP4 = ROOT / "checkpoint4-v4"
-REPORT = CP4 / "reports" / "reviewed-lab-evaluation.json"
-sys.path.insert(0, str(CP4))
-from engine.deterministic_engine import digest, horizon_for, priority_for
+CP4_ROOT = Path(__file__).resolve().parents[1]
+
+sys.path.insert(0, str(CP4_ROOT))
+
+from engine.repository_layout import (
+    REPO_ROOT,
+    CP3_DATA,
+    REVIEWED_LAB_REPORT,
+)
+
+from engine.deterministic_engine import (
+    digest,
+    horizon_for,
+    priority_for,
+)
+
+ROOT = CP4_ROOT
+CP4 = CP4_ROOT
+REPORT = REVIEWED_LAB_REPORT
 
 
 def load(path: Path = REPORT):
-    return json.loads(path.read_text(encoding="utf-8-sig"))
+    return json.loads(
+        path.read_text(encoding="utf-8-sig")
+    )
 
 
 def cp3(name: str):
-    return json.loads((ROOT / "checkpoint3-v4" / "data" / name).read_text(encoding="utf-8-sig"))
+    return json.loads(
+        (CP3_DATA / name).read_text(
+            encoding="utf-8-sig"
+        )
+    )
 
 
-def require(condition: bool, message: str, errors: list[str]) -> None:
+def require(
+    condition: bool,
+    message: str,
+    errors: list[str],
+) -> None:
     if not condition:
         errors.append(message)
 
 
 def finish(errors: list[str], label: str) -> int:
     if errors:
-        print(f"[FAIL] {label}: {len(errors)} error(s)")
+        print(
+            f"[FAIL] {label}: "
+            f"{len(errors)} error(s)"
+        )
+
         for error in errors[:100]:
             print(" - " + error)
+
         return 1
+
     print(f"[PASS] {label}")
+
     return 0

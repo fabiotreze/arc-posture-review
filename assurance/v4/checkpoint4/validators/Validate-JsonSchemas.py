@@ -10,17 +10,33 @@ except ImportError:
     raise SystemExit(1)
 
 ROOT = Path(__file__).resolve().parents[1]
-PROJECT = ROOT.parent
-schemas = {p.name: json.loads(p.read_text(encoding="utf-8-sig")) for p in (ROOT / "schemas").glob("*.json")}
+
+import sys
+sys.path.insert(0, str(ROOT))
+
+from engine.repository_layout import (
+    REPO_ROOT,
+    REVIEWED_LAB_FIXTURE,
+    REVIEWED_LAB_REPORT,
+)
+
+PROJECT = REPO_ROOT
+
+schemas = {
+    p.name: json.loads(
+        p.read_text(encoding="utf-8-sig")
+    )
+    for p in (ROOT / "schemas").glob("*.json")
+}
 registry = Registry()
 for name, schema in schemas.items():
     registry = registry.with_resource(name, Resource.from_contents(schema))
-report = json.loads((ROOT / "reports" / "reviewed-lab-evaluation.json").read_text(encoding="utf-8-sig"))
+report = json.loads(REVIEWED_LAB_REPORT.read_text(encoding="utf-8-sig"))
 
 import sys
 sys.path.insert(0, str(ROOT))
 from engine.deterministic_engine import load_evidence
-input_document = load_evidence(PROJECT / "tests" / "fixtures" / "reviewed-lab-sanitized.zip").document
+input_document = load_evidence(REVIEWED_LAB_FIXTURE).document
 
 errors = []
 for schema_name, instance in [

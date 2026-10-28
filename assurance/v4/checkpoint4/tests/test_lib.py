@@ -6,15 +6,26 @@ from copy import deepcopy
 from dataclasses import replace
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-CP4 = ROOT / "checkpoint4-v4"
-FIXTURE = ROOT / "tests" / "fixtures" / "reviewed-lab-sanitized.zip"
+CP4 = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(CP4))
-from engine.deterministic_engine import DeterministicEvaluationEngine, LoadedEvidence, load_evidence
+
+from engine.repository_layout import (
+    REPO_ROOT,
+    REVIEWED_LAB_FIXTURE,
+)
+
+from engine.deterministic_engine import (
+    DeterministicEvaluationEngine,
+    LoadedEvidence,
+    load_evidence,
+)
+
+ROOT = REPO_ROOT
+FIXTURE = REVIEWED_LAB_FIXTURE
 
 
 def engine():
-    return DeterministicEvaluationEngine(ROOT)
+    return DeterministicEvaluationEngine(REPO_ROOT)
 
 
 def fixture():
