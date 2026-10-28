@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabiotreze.github.io/arc-posture-review/schemas/v4/evidence.schema.json",
+  "title": "APR v4 Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["evidenceId", "sourceType", "collectedAt", "coverage", "freshness", "status"],
+  "properties": {
+    "evidenceId": {
+      "type": "string",
+      "pattern": "^EVD-[A-Za-z0-9._-]+$"
+    },
+    "sourceType": {
+      "enum": [
+        "AzureResourceGraph",
+        "AzureResourceManager",
+        "MicrosoftDefenderForCloud",
+        "AzurePolicy",
+        "MicrosoftGraph",
+        "LocalCollector",
+        "ImportedArtifact",
+        "Manual"
+      ]
+    },
+    "sourceRef": {
+      "type": ["string", "null"]
+    },
+    "collectedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "coverage": {
+      "enum": ["FULL", "PARTIAL", "NONE", "ERROR"]
+    },
+    "freshness": {
+      "enum": ["CURRENT", "STALE", "UNKNOWN"]
+    },
+    "status": {
+      "enum": ["SUCCESS", "PARTIAL", "FAILED", "NOT_COLLECTED"]
+    },
+    "limitations": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "INSUFFICIENT_PERMISSION",
+          "API_UNAVAILABLE",
+          "SOURCE_NOT_ENABLED",
+          "LICENSE_UNAVAILABLE",
+          "OUT_OF_SCOPE",
+          "PARTIAL_INVENTORY",
+          "STALE_DATA",
+          "QUERY_FAILURE",
+          "MANUAL_VALIDATION_REQUIRED",
+          "NOT_COLLECTED"
+        ]
+      }
+    }
+  }
+}

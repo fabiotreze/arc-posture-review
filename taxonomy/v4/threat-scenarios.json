@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "taxonomyVersion": "4.0.0",
+  "scenarioStates": [
+    "HYPOTHESIS",
+    "POTENTIAL_RELEVANCE",
+    "PROVIDER_IDENTIFIED",
+    "VALIDATED"
+  ],
+  "stages": [
+    {
+      "id": "TS01",
+      "name": "Initial compromise"
+    },
+    {
+      "id": "TS02",
+      "name": "Identity or account expansion"
+    },
+    {
+      "id": "TS03",
+      "name": "Privilege escalation"
+    },
+    {
+      "id": "TS04",
+      "name": "Persistence or expansion"
+    },
+    {
+      "id": "TS05",
+      "name": "Containment and response"
+    }
+  ],
+  "rules": [
+    "Threat hypothesis is not an observed attack",
+    "Potential relevance is not a validated attack path",
+    "Attack paths require provider-identified or independently validated evidence"
+  ]
+}

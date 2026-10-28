@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0",
+  "taxonomyVersion": "4.0.0",
+  "tiers": [
+    {
+      "id": "T0",
+      "name": "Control Plane",
+      "privilegeWeight": 100
+    },
+    {
+      "id": "T1",
+      "name": "Workload and Server Management",
+      "privilegeWeight": 70
+    },
+    {
+      "id": "T2",
+      "name": "User Access",
+      "privilegeWeight": 35
+    },
+    {
+      "id": "GLOBAL",
+      "name": "Global Governance",
+      "privilegeWeight": null
+    },
+    {
+      "id": "UNKNOWN",
+      "name": "Not established",
+      "privilegeWeight": null
+    }
+  ],
+  "rules": {
+    "tierIsNotBusinessCriticality": true,
+    "effectiveTierRule": "Highest privileged plane reachable or controllable",
+    "inferredTierRequiresValidation": true
+  }
+}

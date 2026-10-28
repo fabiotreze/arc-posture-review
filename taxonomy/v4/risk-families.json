@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0",
+  "taxonomyVersion": "4.0.0",
+  "riskFamilies": [
+    {
+      "id": "R01",
+      "name": "Asset Visibility and Ownership"
+    },
+    {
+      "id": "R02",
+      "name": "Architecture and Governance"
+    },
+    {
+      "id": "R03",
+      "name": "Identity and Privileged Access"
+    },
+    {
+      "id": "R04",
+      "name": "Network Exposure and Lateral Movement"
+    },
+    {
+      "id": "R05",
+      "name": "Arc Agent, Extensions and Remote Execution"
+    },
+    {
+      "id": "R06",
+      "name": "Protection, Baseline and Vulnerabilities"
+    },
+    {
+      "id": "R07",
+      "name": "Telemetry, Detection and Response"
+    },
+    {
+      "id": "R08",
+      "name": "Patching and Lifecycle"
+    },
+    {
+      "id": "R09",
+      "name": "Operational and Change Risk"
+    },
+    {
+      "id": "R10",
+      "name": "Data Protection and Residency"
+    },
+    {
+      "id": "R11",
+      "name": "Licensing, Entitlement and Cost"
+    }
+  ]
+}

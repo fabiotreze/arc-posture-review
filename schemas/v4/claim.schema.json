@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabiotreze.github.io/arc-posture-review/schemas/v4/claim.schema.json",
+  "title": "APR v4 Claim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["claimId", "claimType", "confidence", "statement"],
+  "properties": {
+    "claimId": {
+      "type": "string",
+      "pattern": "^CLM-[A-Za-z0-9._-]+$"
+    },
+    "claimType": {
+      "enum": ["OBSERVED", "DERIVED", "RECOMMENDED", "HYPOTHESIS"]
+    },
+    "confidence": {
+      "enum": ["HIGH", "MEDIUM", "LOW", "UNKNOWN"]
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidenceIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^EVD-"
+      }
+    },
+    "sourceRefs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "derivationRule": {
+      "type": ["string", "null"]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "claimType": {
+            "const": "OBSERVED"
+          }
+        },
+        "required": ["claimType"]
+      },
+      "then": {
+        "required": ["evidenceIds"],
+        "properties": {
+          "evidenceIds": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "claimType": {
+            "const": "DERIVED"
+          }
+        },
+        "required": ["claimType"]
+      },
+      "then": {
+        "required": ["derivationRule"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "claimType": {
+            "const": "RECOMMENDED"
+          }
+        },
+        "required": ["claimType"]
+      },
+      "then": {
+        "required": ["sourceRefs"],
+        "properties": {
+          "sourceRefs": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}

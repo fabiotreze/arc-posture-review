@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "taxonomyVersion": "4.0.0",
+  "weights": {
+    "technicalSeverity": 0.25,
+    "tierPrivilege": 0.25,
+    "exposure": 0.15,
+    "attackPath": 0.15,
+    "businessCriticality": 0.1,
+    "blastRadius": 0.1
+  },
+  "rules": {
+    "evidenceCoverageChangesRisk": false,
+    "missingEvidenceDefault": "UNKNOWN",
+    "configuredMeansValidated": false,
+    "hypothesisMeansAttackPath": false
+  },
+  "overrides": [
+    {
+      "id": "PR-001",
+      "description": "Failed privileged-execution control affecting Tier 0",
+      "effectiveTier": "T0",
+      "privilegedExecution": true,
+      "postureStatus": "FAIL",
+      "minimumPriority": "CRITICAL"
+    },
+    {
+      "id": "PR-002",
+      "description": "Validated or provider-identified path reaching Tier 0",
+      "attackPathToTier0": true,
+      "minimumPriority": "CRITICAL"
+    },
+    {
+      "id": "PR-003",
+      "description": "Unsupported production component",
+      "supportedLifecycle": false,
+      "environment": "Production",
+      "minimumPriority": "HIGH"
+    }
+  ]
+}

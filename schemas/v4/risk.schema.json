@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabiotreze.github.io/arc-posture-review/schemas/v4/risk.schema.json",
+  "title": "APR v4 Risk",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["riskId", "riskFamily", "technicalSeverity", "inherentRisk", "residualRisk"],
+  "properties": {
+    "riskId": {
+      "type": "string",
+      "pattern": "^R[0-9]{2}(-[A-Za-z0-9._-]+)?$"
+    },
+    "riskFamily": {
+      "type": "string",
+      "pattern": "^R[0-9]{2}$"
+    },
+    "technicalSeverity": {
+      "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFORMATIONAL"]
+    },
+    "inherentRisk": {
+      "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFORMATIONAL", "NOT_EVALUATED"]
+    },
+    "residualRisk": {
+      "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFORMATIONAL", "NOT_EVALUATED"]
+    },
+    "effectiveTier": {
+      "enum": ["T0", "T1", "T2", "GLOBAL", "UNKNOWN"]
+    },
+    "attackPathStatus": {
+      "enum": ["NOT_ASSESSED", "POTENTIAL_RELEVANCE", "PROVIDER_IDENTIFIED", "VALIDATED"]
+    }
+  }
+}

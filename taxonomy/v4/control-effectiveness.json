@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0",
+  "taxonomyVersion": "4.0.0",
+  "states": [
+    "NOT_ASSESSED",
+    "CONFIGURED",
+    "OBSERVED",
+    "VALIDATED",
+    "DEGRADED",
+    "INEFFECTIVE"
+  ],
+  "rules": [
+    "CONFIGURED does not imply VALIDATED",
+    "OBSERVED does not imply end-to-end effectiveness"
+  ]
+}

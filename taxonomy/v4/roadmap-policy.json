@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "taxonomyVersion": "4.0.0",
+  "lanes": [
+    {
+      "id": "NOW",
+      "description": "Critical risk or immediate override"
+    },
+    {
+      "id": "DAYS_30",
+      "description": "High risk or prerequisite for Critical remediation"
+    },
+    {
+      "id": "DAYS_90",
+      "description": "Medium risk or maturity improvement"
+    },
+    {
+      "id": "BACKLOG",
+      "description": "Low risk"
+    },
+    {
+      "id": "DECISION_REQUIRED",
+      "description": "Architecture or governance decision required"
+    },
+    {
+      "id": "ASSURANCE_REQUIRED",
+      "description": "Evidence gap prevents reliable conclusion"
+    }
+  ],
+  "rule": "Roadmap position includes risk, dependency ordering, lifecycle deadlines and assurance requirements"
+}
