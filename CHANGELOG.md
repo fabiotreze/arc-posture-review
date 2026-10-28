@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.9.6] — 2026-10-28
+
+### CI fixture remediation
+
+- Restored the sanitized reviewed-lab fixture required by the report-quality regression checks.
+- Added a targeted `.gitignore` exception so `tests/fixtures/reviewed-lab-sanitized.zip` remains versioned while other ZIP files remain ignored.
+- Validated the corrected fixture through the reviewed-lab regression contract and the report-quality workflow.
+
 ## [3.9.5] — 2026-10-27
 
 ### Final publication-gate remediation

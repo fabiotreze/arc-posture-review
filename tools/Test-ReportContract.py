@@ -11,7 +11,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_VERSION = "3.9.5"
+EXPECTED_VERSION = "3.9.6"
 
 
 class OutlineParser(HTMLParser):
@@ -138,7 +138,7 @@ def check_sample(path: Path, required: list[str]) -> None:
     rounding_label = "displayed values are rounded" if path.name.endswith("en-US.html") else "valores exibidos arredondados"
     for marker in (guide_label, rounding_label, "print-ultrawide"):
         if marker not in text:
-            fail(f"{path.name}: v3.9.5 gate marker missing: {marker}")
+            fail(f"{path.name}: v3.9.6 gate marker missing: {marker}")
     guide_href = re.search(r'<nav class="official-guide-access"[^>]*>\s*<a href="([^"]+\.html)"', text)
     if not guide_href or not (path.parent / guide_href.group(1)).resolve().is_file():
         fail(f"{path.name}: Guide HTML target is missing or broken")
