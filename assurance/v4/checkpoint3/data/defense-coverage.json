@@ -1,0 +1,1170 @@
+[
+  {
+    "checkId": "CHK-01",
+    "scenarioIds": [
+      "AS09",
+      "AS10"
+    ],
+    "riskIds": [
+      "R09",
+      "R10"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-01 provides Detect coverage at the DEFENSE stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-02",
+    "scenarioIds": [
+      "AS02",
+      "AS09"
+    ],
+    "riskIds": [
+      "R02",
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-02 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-03",
+    "scenarioIds": [
+      "AS09"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-03 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-04",
+    "scenarioIds": [
+      "AS09"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-04 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-05",
+    "scenarioIds": [
+      "AS09"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-05 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-06",
+    "scenarioIds": [
+      "AS09"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-06 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-07",
+    "scenarioIds": [
+      "AS02",
+      "AS09"
+    ],
+    "riskIds": [
+      "R02",
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-07 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-08",
+    "scenarioIds": [
+      "AS03",
+      "AS09"
+    ],
+    "riskIds": [
+      "R03",
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-08 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-09",
+    "scenarioIds": [
+      "AS03",
+      "AS09"
+    ],
+    "riskIds": [
+      "R03",
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-09 provides Prevent, Detect coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-10",
+    "scenarioIds": [
+      "AS01",
+      "AS03"
+    ],
+    "riskIds": [
+      "R01",
+      "R03"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-10 provides Prevent coverage at the IDENTITY stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-11",
+    "scenarioIds": [
+      "AS01",
+      "AS03"
+    ],
+    "riskIds": [
+      "R01",
+      "R03"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-11 provides Prevent coverage at the IDENTITY stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-12",
+    "scenarioIds": [
+      "AS01",
+      "AS02"
+    ],
+    "riskIds": [
+      "R01",
+      "R02"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-12 provides Prevent coverage at the IDENTITY stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-13",
+    "scenarioIds": [
+      "AS01",
+      "AS03"
+    ],
+    "riskIds": [
+      "R01",
+      "R03"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": true,
+      "Recover": false
+    },
+    "rationale": "CHK-13 provides Prevent, Respond coverage at the IDENTITY stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-14",
+    "scenarioIds": [
+      "AS01",
+      "AS02"
+    ],
+    "riskIds": [
+      "R01",
+      "R02"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-14 provides Prevent coverage at the IDENTITY stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-15",
+    "scenarioIds": [
+      "AS01"
+    ],
+    "riskIds": [
+      "R01"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-15 provides Prevent coverage at the IDENTITY stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-16",
+    "scenarioIds": [
+      "AS03",
+      "AS09"
+    ],
+    "riskIds": [
+      "R03",
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-16 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-17",
+    "scenarioIds": [
+      "AS04"
+    ],
+    "riskIds": [
+      "R04"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-17 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-18",
+    "scenarioIds": [
+      "AS04"
+    ],
+    "riskIds": [
+      "R04"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-18 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-19",
+    "scenarioIds": [
+      "AS04"
+    ],
+    "riskIds": [
+      "R04"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-19 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-20",
+    "scenarioIds": [
+      "AS03",
+      "AS04"
+    ],
+    "riskIds": [
+      "R03",
+      "R04"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-20 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-21",
+    "scenarioIds": [
+      "AS04"
+    ],
+    "riskIds": [
+      "R04"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-21 provides Prevent coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-22",
+    "scenarioIds": [
+      "AS05"
+    ],
+    "riskIds": [
+      "R05"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-22 provides Prevent coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-23",
+    "scenarioIds": [
+      "AS05",
+      "AS06"
+    ],
+    "riskIds": [
+      "R05",
+      "R06"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-23 provides Prevent coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-24",
+    "scenarioIds": [
+      "AS03",
+      "AS06",
+      "AS10"
+    ],
+    "riskIds": [
+      "R03",
+      "R06",
+      "R10"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-24 provides Prevent coverage at the HOST stage.",
+    "mappingConfidence": "medium"
+  },
+  {
+    "checkId": "CHK-25",
+    "scenarioIds": [
+      "AS01"
+    ],
+    "riskIds": [
+      "R01"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-25 provides Prevent coverage at the IDENTITY stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-26",
+    "scenarioIds": [
+      "AS03",
+      "AS06"
+    ],
+    "riskIds": [
+      "R03",
+      "R06"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": true,
+      "Recover": false
+    },
+    "rationale": "CHK-26 provides Prevent, Respond coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-27",
+    "scenarioIds": [
+      "AS09"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-27 provides Prevent coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-28",
+    "scenarioIds": [
+      "AS05",
+      "AS06"
+    ],
+    "riskIds": [
+      "R05",
+      "R06"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": false,
+      "Respond": true,
+      "Recover": false
+    },
+    "rationale": "CHK-28 provides Respond coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-29",
+    "scenarioIds": [
+      "AS05",
+      "AS08"
+    ],
+    "riskIds": [
+      "R05",
+      "R08"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-29 provides Prevent, Detect coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-30",
+    "scenarioIds": [
+      "AS05",
+      "AS06"
+    ],
+    "riskIds": [
+      "R05",
+      "R06"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-30 provides Detect coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-31",
+    "scenarioIds": [
+      "AS07"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-31 provides Detect coverage at the DEFENSE stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-32",
+    "scenarioIds": [
+      "AS07"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-32 provides Detect coverage at the DEFENSE stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-33",
+    "scenarioIds": [
+      "AS07",
+      "AS08"
+    ],
+    "riskIds": [
+      "R07",
+      "R08"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-33 provides Detect coverage at the DEFENSE stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-34",
+    "scenarioIds": [
+      "AS10"
+    ],
+    "riskIds": [
+      "R10"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-34 provides Detect coverage at the DEFENSE stage.",
+    "mappingConfidence": "medium"
+  },
+  {
+    "checkId": "CHK-35",
+    "scenarioIds": [
+      "AS05"
+    ],
+    "riskIds": [
+      "R05"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-35 provides Prevent coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-36",
+    "scenarioIds": [
+      "AS05"
+    ],
+    "riskIds": [
+      "R05"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-36 provides Prevent coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-37",
+    "scenarioIds": [
+      "AS05",
+      "AS11"
+    ],
+    "riskIds": [
+      "R05",
+      "R11"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": false,
+      "Respond": true,
+      "Recover": true
+    },
+    "rationale": "CHK-37 provides Respond, Recover coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-38",
+    "scenarioIds": [
+      "AS09"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": true,
+      "Recover": false
+    },
+    "rationale": "CHK-38 provides Detect, Respond coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-39",
+    "scenarioIds": [
+      "AS07"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-39 provides Detect coverage at the DEFENSE stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-40",
+    "scenarioIds": [
+      "AS07"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-40 provides Prevent coverage at the DEFENSE stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-41",
+    "scenarioIds": [
+      "AS07"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-41 provides Detect coverage at the DEFENSE stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-42",
+    "scenarioIds": [
+      "AS08",
+      "AS11"
+    ],
+    "riskIds": [
+      "R08",
+      "R11"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-42 provides Prevent, Detect coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-43",
+    "scenarioIds": [
+      "AS03",
+      "AS07"
+    ],
+    "riskIds": [
+      "R03",
+      "R07"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-43 provides Prevent, Detect coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-44",
+    "scenarioIds": [
+      "AS03",
+      "AS06",
+      "AS07"
+    ],
+    "riskIds": [
+      "R03",
+      "R06",
+      "R07"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": false,
+      "Respond": true,
+      "Recover": false
+    },
+    "rationale": "CHK-44 provides Respond coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "medium"
+  },
+  {
+    "checkId": "CHK-45",
+    "scenarioIds": [
+      "AS07"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-45 provides Detect coverage at the DEFENSE stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-46",
+    "scenarioIds": [
+      "AS09",
+      "AS11"
+    ],
+    "riskIds": [
+      "R09",
+      "R11"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": false,
+      "Respond": false,
+      "Recover": true
+    },
+    "rationale": "CHK-46 provides Recover coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-47",
+    "scenarioIds": [
+      "AS09",
+      "AS11"
+    ],
+    "riskIds": [
+      "R09",
+      "R11"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": false,
+      "Respond": false,
+      "Recover": true
+    },
+    "rationale": "CHK-47 provides Recover coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-48",
+    "scenarioIds": [
+      "AS02",
+      "AS09"
+    ],
+    "riskIds": [
+      "R02",
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-48 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-49",
+    "scenarioIds": [
+      "AS09",
+      "AS11"
+    ],
+    "riskIds": [
+      "R09",
+      "R11"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": false,
+      "Respond": true,
+      "Recover": true
+    },
+    "rationale": "CHK-49 provides Respond, Recover coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-50",
+    "scenarioIds": [
+      "AS09",
+      "AS11"
+    ],
+    "riskIds": [
+      "R09",
+      "R11"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": true,
+      "Recover": false
+    },
+    "rationale": "CHK-50 provides Detect, Respond coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-51",
+    "scenarioIds": [
+      "AS05",
+      "AS08",
+      "AS11"
+    ],
+    "riskIds": [
+      "R05",
+      "R08",
+      "R11"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": true
+    },
+    "rationale": "CHK-51 provides Prevent, Recover coverage at the HOST stage.",
+    "mappingConfidence": "medium"
+  },
+  {
+    "checkId": "CHK-52",
+    "scenarioIds": [
+      "AS08",
+      "AS11"
+    ],
+    "riskIds": [
+      "R08",
+      "R11"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": false,
+      "Respond": false,
+      "Recover": true
+    },
+    "rationale": "CHK-52 provides Recover coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-53",
+    "scenarioIds": [
+      "AS09"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-53 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-54",
+    "scenarioIds": [
+      "AS07",
+      "AS08",
+      "AS10"
+    ],
+    "riskIds": [
+      "R07",
+      "R08",
+      "R10"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-54 provides Detect coverage at the DEFENSE stage.",
+    "mappingConfidence": "medium"
+  },
+  {
+    "checkId": "CHK-55",
+    "scenarioIds": [
+      "AS05",
+      "AS08"
+    ],
+    "riskIds": [
+      "R05",
+      "R08"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-55 provides Prevent coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-56",
+    "scenarioIds": [
+      "AS01"
+    ],
+    "riskIds": [
+      "R01"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-56 provides Prevent coverage at the IDENTITY stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-57",
+    "scenarioIds": [
+      "AS07",
+      "AS08"
+    ],
+    "riskIds": [
+      "R07",
+      "R08"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-57 provides Detect coverage at the DEFENSE stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-58",
+    "scenarioIds": [
+      "AS07",
+      "AS11"
+    ],
+    "riskIds": [
+      "R07",
+      "R11"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-58 provides Detect coverage at the DEFENSE stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-59",
+    "scenarioIds": [
+      "AS09"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-59 provides Prevent coverage at the MANAGEMENT stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-60",
+    "scenarioIds": [
+      "AS01"
+    ],
+    "riskIds": [
+      "R01"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-60 provides Prevent coverage at the IDENTITY stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-61",
+    "scenarioIds": [
+      "AS05",
+      "AS08"
+    ],
+    "riskIds": [
+      "R05",
+      "R08"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-61 provides Prevent coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-62",
+    "scenarioIds": [
+      "AS01"
+    ],
+    "riskIds": [
+      "R01"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-62 provides Prevent coverage at the IDENTITY stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-63",
+    "scenarioIds": [
+      "AS07"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "coverage": {
+      "Prevent": false,
+      "Detect": true,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-63 provides Detect coverage at the DEFENSE stage.",
+    "mappingConfidence": "high"
+  },
+  {
+    "checkId": "CHK-64",
+    "scenarioIds": [
+      "AS09",
+      "AS10"
+    ],
+    "riskIds": [
+      "R09",
+      "R10"
+    ],
+    "coverage": {
+      "Prevent": true,
+      "Detect": false,
+      "Respond": false,
+      "Recover": false
+    },
+    "rationale": "CHK-64 provides Prevent coverage at the HOST stage.",
+    "mappingConfidence": "high"
+  }
+]

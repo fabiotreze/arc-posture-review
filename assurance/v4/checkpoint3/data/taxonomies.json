@@ -1,0 +1,226 @@
+{
+  "checkpointVersion": "4.0.0",
+  "zeroTrust": {
+    "principles": [
+      {
+        "id": "verify-explicitly",
+        "name": "Verify explicitly"
+      },
+      {
+        "id": "least-privilege",
+        "name": "Use least privilege access"
+      },
+      {
+        "id": "assume-breach",
+        "name": "Assume breach"
+      }
+    ],
+    "pillars": [
+      "Identity",
+      "Endpoints",
+      "Apps",
+      "Data",
+      "Infrastructure",
+      "Network"
+    ]
+  },
+  "securityScopes": [
+    "T0",
+    "T1",
+    "T2",
+    "Global"
+  ],
+  "defenseFunctions": [
+    "Prevent",
+    "Detect",
+    "Respond",
+    "Recover"
+  ],
+  "securityModel": {
+    "name": "IDENTITY → MANAGEMENT → HOST → DEFENSE",
+    "orderedStages": [
+      "IDENTITY",
+      "MANAGEMENT",
+      "HOST",
+      "DEFENSE"
+    ],
+    "allowedTransitions": [
+      [
+        "IDENTITY",
+        "MANAGEMENT"
+      ],
+      [
+        "MANAGEMENT",
+        "HOST"
+      ],
+      [
+        "HOST",
+        "DEFENSE"
+      ]
+    ]
+  },
+  "risks": [
+    {
+      "id": "R01",
+      "name": "Compromise of privileged identity",
+      "statement": "A privileged identity is compromised or used without strong authentication, just-in-time access, review, or local administrator controls.",
+      "impact": "Unauthorized control of Arc-connected resources and administrative paths."
+    },
+    {
+      "id": "R02",
+      "name": "Unsafe onboarding identity or secret",
+      "statement": "Onboarding credentials, service principals, managed identities, or provider registration are overprivileged, exposed, stale, or incorrectly scoped.",
+      "impact": "Unauthorized enrollment, persistence, or resource creation."
+    },
+    {
+      "id": "R03",
+      "name": "Control-plane privilege escalation",
+      "statement": "RBAC, Policy, Run Command, Admin Center, or cross-subscription control-plane paths enable excessive privilege or unreviewed sensitive operations.",
+      "impact": "Privilege escalation and remote administrative execution."
+    },
+    {
+      "id": "R04",
+      "name": "Network and name-resolution boundary bypass",
+      "statement": "Public access, inbound ports, DNS, Private Link, or connectivity allowances permit an unintended management path.",
+      "impact": "Exposure or bypass of the intended network security boundary."
+    },
+    {
+      "id": "R05",
+      "name": "Agent, extension, or local-control tampering",
+      "statement": "Unsupported agents, failed extensions, unsafe agent mode, local accounts, or host policy weaknesses permit tampering or loss of trust.",
+      "impact": "Compromised host management channel and unreliable evidence."
+    },
+    {
+      "id": "R06",
+      "name": "Abuse of extensions and remote execution",
+      "statement": "Sensitive or unapproved extensions, Run Command, or extension lifecycle operations are abused for code execution.",
+      "impact": "Remote execution, persistence, and lateral movement."
+    },
+    {
+      "id": "R07",
+      "name": "Security telemetry blind spot",
+      "statement": "Defender, MDE, AMA, DCR, Sentinel, Activity Log, retention, or health coverage is missing or degraded.",
+      "impact": "Attacks are not detected, investigated, or contained in time."
+    },
+    {
+      "id": "R08",
+      "name": "Exploitation of vulnerability or legacy platform",
+      "statement": "Missing patches, unsupported versions, weak baseline, unhealthy EDR, or absent encryption leaves exploitable conditions.",
+      "impact": "Host compromise, credential theft, and data exposure."
+    },
+    {
+      "id": "R09",
+      "name": "Governance, lifecycle, or scope drift",
+      "statement": "Inventory, tiering, tags, policy, automation, rollout, review, cost, or decommission controls drift from the approved design.",
+      "impact": "Unmanaged attack surface and inconsistent control enforcement."
+    },
+    {
+      "id": "R10",
+      "name": "SQL protection, entitlement, or telemetry failure",
+      "statement": "SQL-enabled Arc resources lack protection, least privilege, accurate licensing, or reliable usage upload.",
+      "impact": "Database exposure, audit gaps, or billing and entitlement risk."
+    },
+    {
+      "id": "R11",
+      "name": "Operational resilience and recovery failure",
+      "statement": "Disconnected assets, rollback, removal, exception, health review, or recovery evidence is absent or ineffective.",
+      "impact": "Prolonged outage, orphaned access, or inability to restore a trusted state."
+    }
+  ],
+  "securityBoundaries": [
+    {
+      "id": "SB01",
+      "name": "Identity and privileged-access boundary",
+      "from": "External/User",
+      "to": "Entra and privileged identities",
+      "requiredControls": [
+        "MFA",
+        "PIM/JIT",
+        "Access review",
+        "Credential protection"
+      ]
+    },
+    {
+      "id": "SB02",
+      "name": "Azure management-plane boundary",
+      "from": "Identity",
+      "to": "ARM, RBAC, Policy and Arc control plane",
+      "requiredControls": [
+        "Least-privilege RBAC",
+        "Policy",
+        "Activity logging"
+      ]
+    },
+    {
+      "id": "SB03",
+      "name": "Connectivity and DNS boundary",
+      "from": "Management plane",
+      "to": "Private/public endpoints and name resolution",
+      "requiredControls": [
+        "Private Link decision",
+        "DNS validation",
+        "Documented allowances"
+      ]
+    },
+    {
+      "id": "SB04",
+      "name": "Host operating-system boundary",
+      "from": "Arc control plane",
+      "to": "Guest OS",
+      "requiredControls": [
+        "OS baseline",
+        "Patch",
+        "Disk encryption",
+        "Local admin control"
+      ]
+    },
+    {
+      "id": "SB05",
+      "name": "Agent and extension boundary",
+      "from": "Arc agent",
+      "to": "Extensions and remote operations",
+      "requiredControls": [
+        "Supported agent",
+        "Extension allowlist",
+        "Run Command governance"
+      ]
+    },
+    {
+      "id": "SB06",
+      "name": "Detection and response boundary",
+      "from": "Host and control plane",
+      "to": "Defender, Monitor and Sentinel",
+      "requiredControls": [
+        "MDE/Defender",
+        "AMA/DCR",
+        "Sentinel",
+        "Retention"
+      ]
+    },
+    {
+      "id": "SB07",
+      "name": "SQL and protected-data boundary",
+      "from": "Host",
+      "to": "SQL workload, telemetry and entitlement",
+      "requiredControls": [
+        "Defender for SQL",
+        "Least privilege",
+        "Usage upload",
+        "License metadata"
+      ]
+    },
+    {
+      "id": "SB08",
+      "name": "Delivery and lifecycle boundary",
+      "from": "Engineering and operations",
+      "to": "Pilot, rollout, review and decommission",
+      "requiredControls": [
+        "Pilot acceptance",
+        "Rollback",
+        "Automation",
+        "Periodic review",
+        "Safe removal"
+      ]
+    }
+  ]
+}

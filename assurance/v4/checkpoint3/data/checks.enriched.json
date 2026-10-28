@@ -1,0 +1,4260 @@
+[
+  {
+    "id": "CHK-01",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Inventory and eligibility of Arc machines",
+      "pt-BR": "Inventário e elegibilidade das máquinas Arc"
+    },
+    "domain": "A",
+    "severity": "Low",
+    "assessmentType": "auto",
+    "owner": "Platform",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Endpoints"
+      ]
+    },
+    "securityScopes": [
+      "T2"
+    ],
+    "riskIds": [
+      "R09",
+      "R10"
+    ],
+    "scenarioIds": [
+      "AS09",
+      "AS10"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB06",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "inventory",
+      "evidenceRequired": [
+        "machines",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "NOT_OBSERVED",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-01"
+      ],
+      "mcsb": [
+        "AM-1"
+      ],
+      "decisionTree": "D1",
+      "datasets": [
+        "machines"
+      ]
+    },
+    "resultCriteria": "INFO by design (inventory, not scored): counts Arc machines by connection status, OS and SQL detection; this inventory is the denominator for the other checks."
+  },
+  {
+    "id": "CHK-02",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Arc service per environment type",
+      "pt-BR": "Serviço Arc por tipo de ambiente"
+    },
+    "domain": "A",
+    "severity": "Medium",
+    "assessmentType": "manual",
+    "owner": "Architecture",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Apps"
+      ]
+    },
+    "securityScopes": [
+      "T2",
+      "Global"
+    ],
+    "riskIds": [
+      "R02",
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS02",
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "DEC-01",
+        "DEC-02"
+      ],
+      "mcsb": [
+        "AM-2"
+      ],
+      "decisionTree": "D1",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when the Arc service used for each environment type (servers, SQL Server, Kubernetes, VMware/SCVMM) is documented with an owner; WARN when only part of the environments is covered. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-03",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Landing zone and resource organization",
+      "pt-BR": "Landing zone e organização de recursos"
+    },
+    "domain": "A",
+    "severity": "Medium",
+    "assessmentType": "manual",
+    "owner": "Architecture",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "Global"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "DEC-03"
+      ],
+      "mcsb": [
+        "AM-1",
+        "AM-3"
+      ],
+      "decisionTree": "D2",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when Arc resources follow a documented landing zone (management group, subscription, resource group and naming standard); WARN when the design exists but is not applied to every Arc resource. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-04",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Criticality profile (Tier 0/1/2)",
+      "pt-BR": "Perfil de criticidade (Tier 0/1/2)"
+    },
+    "domain": "A",
+    "severity": "High",
+    "assessmentType": "manual",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T1",
+      "Global"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "DEC-04"
+      ],
+      "mcsb": [
+        "AM-1",
+        "PA-1"
+      ],
+      "decisionTree": "D2",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when every Arc machine has a documented tier (0/1/2) that drives controls; WARN when some machines have no tier; FAIL when Tier 0 assets are not identified. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-05",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Metadata region and data residency",
+      "pt-BR": "Região dos metadados e residência de dados"
+    },
+    "domain": "A",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Governance",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Data"
+      ]
+    },
+    "securityScopes": [
+      "T2",
+      "Global"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "inventory",
+      "evidenceRequired": [
+        "machines",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "NOT_OBSERVED",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-08"
+      ],
+      "mcsb": [
+        "AM-2"
+      ],
+      "decisionTree": "D2",
+      "datasets": [
+        "machines"
+      ]
+    },
+    "resultCriteria": "PARTIAL when the allowed-region/data-residency policy is not supplied (regions are only listed, so compliance cannot be concluded); WARN if any machine is outside the allowed regions; PASS when every machine is inside them."
+  },
+  {
+    "id": "CHK-06",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Recommended tags (best practice)",
+      "pt-BR": "Tags recomendadas (boa prática)"
+    },
+    "domain": "B",
+    "severity": "Low",
+    "assessmentType": "auto",
+    "owner": "Governance",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T2"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "inventory",
+      "evidenceRequired": [
+        "machines",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "NOT_OBSERVED",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-02"
+      ],
+      "mcsb": [
+        "AM-1"
+      ],
+      "decisionTree": "D2",
+      "datasets": [
+        "machines"
+      ]
+    },
+    "resultCriteria": "INFO by design (best practice, not scored): counts machines missing at least one of the tags env, owner, criticality, costCenter, dataClassification and patchWindow."
+  },
+  {
+    "id": "CHK-07",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Registered resource providers",
+      "pt-BR": "Resource providers registrados"
+    },
+    "domain": "B",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Platform",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T2"
+    ],
+    "riskIds": [
+      "R02",
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS02",
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "providers",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-05"
+      ],
+      "mcsb": [],
+      "decisionTree": "D1",
+      "datasets": [
+        "providers"
+      ]
+    },
+    "resultCriteria": "PASS when every essential and recommended resource provider is Registered in all subscriptions in scope; FAIL when an essential provider is not registered in any subscription (onboarding and extensions fail without it)."
+  },
+  {
+    "id": "CHK-08",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Azure Policy and baseline assignments",
+      "pt-BR": "Atribuições de Azure Policy e baseline"
+    },
+    "domain": "B",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Governance",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T1",
+      "Global"
+    ],
+    "riskIds": [
+      "R03",
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS03",
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "policyAssignments",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-07"
+      ],
+      "mcsb": [
+        "PV-2",
+        "AM-2"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "machines",
+        "policyAssignments"
+      ]
+    },
+    "resultCriteria": "INFO by design (inventory): lists the Azure Policy assignments that reach Arc machines and flags DoNotEnforce; the compliance outcome is scored in CHK-09."
+  },
+  {
+    "id": "CHK-09",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Policy compliance on the machines",
+      "pt-BR": "Conformidade de policy nas máquinas"
+    },
+    "domain": "B",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Governance",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Endpoints",
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R03",
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS03",
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB04",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent",
+      "Detect"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "policyStates",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-07",
+        "OPS-11"
+      ],
+      "mcsb": [
+        "PV-2",
+        "PV-4"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "policyStates"
+      ]
+    },
+    "resultCriteria": "WARN if there is noncompliance."
+  },
+  {
+    "id": "CHK-10",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Privileged roles in scope",
+      "pt-BR": "Papéis privilegiados no escopo"
+    },
+    "domain": "B",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "least-privilege"
+      ],
+      "pillars": [
+        "Identity"
+      ]
+    },
+    "securityScopes": [
+      "T0",
+      "Global"
+    ],
+    "riskIds": [
+      "R01",
+      "R03"
+    ],
+    "scenarioIds": [
+      "AS01",
+      "AS03"
+    ],
+    "securityBoundaryIds": [
+      "SB01"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "IDENTITY",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "roles",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-03",
+        "REQ-04"
+      ],
+      "mcsb": [
+        "PA-1",
+        "PA-7"
+      ],
+      "decisionTree": "D4",
+      "datasets": [
+        "machines",
+        "roles"
+      ]
+    },
+    "resultCriteria": "WARN if there is direct Owner/UAA/RBAC Admin for a user."
+  },
+  {
+    "id": "CHK-11",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Arc-specific roles",
+      "pt-BR": "Papéis específicos do Arc"
+    },
+    "domain": "B",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "least-privilege"
+      ],
+      "pillars": [
+        "Identity"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R01",
+      "R03"
+    ],
+    "scenarioIds": [
+      "AS01",
+      "AS03"
+    ],
+    "securityBoundaryIds": [
+      "SB01"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "IDENTITY",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "roles",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-04"
+      ],
+      "mcsb": [
+        "PA-7"
+      ],
+      "decisionTree": "D4",
+      "datasets": [
+        "machines",
+        "roles"
+      ]
+    },
+    "resultCriteria": "INFO by design (inventory): counts Arc-specific role assignments that reach Arc machines; privilege risk is scored in CHK-10."
+  },
+  {
+    "id": "CHK-12",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Managed identity of the machines",
+      "pt-BR": "Identidade gerenciada das máquinas"
+    },
+    "domain": "B",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "least-privilege"
+      ],
+      "pillars": [
+        "Identity",
+        "Endpoints"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R01",
+      "R02"
+    ],
+    "scenarioIds": [
+      "AS01",
+      "AS02"
+    ],
+    "securityBoundaryIds": [
+      "SB01",
+      "SB04"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "IDENTITY",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "roles",
+        "machines",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-04",
+        "REQ-08"
+      ],
+      "mcsb": [
+        "IM-3",
+        "PA-7"
+      ],
+      "decisionTree": "D4",
+      "datasets": [
+        "roles",
+        "machines"
+      ]
+    },
+    "resultCriteria": "PASS when no Arc machine managed identity holds a role assignment in scope; non-PASS when any machine identity holds one and least privilege must be reviewed."
+  },
+  {
+    "id": "CHK-13",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Identity model, PIM, and access review",
+      "pt-BR": "Modelo de identidade, PIM e revisão de acesso"
+    },
+    "domain": "B",
+    "severity": "High",
+    "assessmentType": "manual",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "least-privilege"
+      ],
+      "pillars": [
+        "Identity"
+      ]
+    },
+    "securityScopes": [
+      "T0",
+      "Global"
+    ],
+    "riskIds": [
+      "R01",
+      "R03"
+    ],
+    "scenarioIds": [
+      "AS01",
+      "AS03"
+    ],
+    "securityBoundaryIds": [
+      "SB01"
+    ],
+    "defenseFunctions": [
+      "Prevent",
+      "Respond"
+    ],
+    "securityModelStage": "IDENTITY",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-03",
+        "OPS-12"
+      ],
+      "mcsb": [
+        "PA-2",
+        "PA-4"
+      ],
+      "decisionTree": "D4",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when privileged access to the Arc scope uses groups with PIM (eligible, time-bound) and periodic access reviews are evidenced; WARN when only part is in place; FAIL when standing privileged access exists without review. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-14",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Onboarding secrets and credentials",
+      "pt-BR": "Segredos e credenciais de onboarding"
+    },
+    "domain": "B",
+    "severity": "High",
+    "assessmentType": "manual",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "least-privilege"
+      ],
+      "pillars": [
+        "Identity"
+      ]
+    },
+    "securityScopes": [
+      "T0",
+      "Global"
+    ],
+    "riskIds": [
+      "R01",
+      "R02"
+    ],
+    "scenarioIds": [
+      "AS01",
+      "AS02"
+    ],
+    "securityBoundaryIds": [
+      "SB01"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "IDENTITY",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-08"
+      ],
+      "mcsb": [
+        "IM-8"
+      ],
+      "decisionTree": "D4",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when onboarding credentials use a dedicated service principal with the Azure Connected Machine Onboarding role, stored in a vault, with expiry and rotation; FAIL when secrets are embedded in scripts or never expire. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-15",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Key Vaults",
+      "pt-BR": "Key Vaults"
+    },
+    "domain": "B",
+    "severity": "Low",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Identity"
+      ]
+    },
+    "securityScopes": [
+      "T2"
+    ],
+    "riskIds": [
+      "R01"
+    ],
+    "scenarioIds": [
+      "AS01"
+    ],
+    "securityBoundaryIds": [
+      "SB01"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "IDENTITY",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "related",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-08"
+      ],
+      "mcsb": [
+        "DP-8"
+      ],
+      "decisionTree": "D4",
+      "datasets": [
+        "machines",
+        "related"
+      ]
+    },
+    "resultCriteria": "WARN for a definite baseline gap; PARTIAL when a required property is null/absent and no PASS/WARN conclusion is possible. Null/absent is never treated as false."
+  },
+  {
+    "id": "CHK-16",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Cross-subscription scenarios",
+      "pt-BR": "Cenários cross-subscription"
+    },
+    "domain": "B",
+    "severity": "Medium",
+    "assessmentType": "manual",
+    "owner": "Network",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "Global"
+    ],
+    "riskIds": [
+      "R03",
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS03",
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-06"
+      ],
+      "mcsb": [
+        "AM-1",
+        "AM-4"
+      ],
+      "decisionTree": "D3",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when cross-subscription/cross-tenant scenarios (shared workspaces, Private Link Scopes, delegated access) are documented with owners and access boundaries; WARN when they exist but are not documented. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-17",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Connectivity model in use",
+      "pt-BR": "Modelo de conectividade em uso"
+    },
+    "domain": "C",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Network",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Network"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R04"
+    ],
+    "scenarioIds": [
+      "AS04"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB03"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "related",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "DEC-05",
+        "DEC-06",
+        "DEC-07",
+        "DEC-08"
+      ],
+      "mcsb": [
+        "NS-2"
+      ],
+      "decisionTree": "D3",
+      "datasets": [
+        "machines",
+        "related"
+      ]
+    },
+    "resultCriteria": "INFO by design (inventory): reports the connectivity model per machine (Private Link, proxy, Arc gateway or public endpoints); security decisions are scored in CHK-18, CHK-19 and CHK-20."
+  },
+  {
+    "id": "CHK-18",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Private Link Scope public access",
+      "pt-BR": "Acesso público do Private Link Scope"
+    },
+    "domain": "C",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Network",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "least-privilege"
+      ],
+      "pillars": [
+        "Network"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R04"
+    ],
+    "scenarioIds": [
+      "AS04"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB03"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "related",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "DEC-05"
+      ],
+      "mcsb": [
+        "NS-2"
+      ],
+      "decisionTree": "D3",
+      "datasets": [
+        "related"
+      ]
+    },
+    "resultCriteria": "N/A when no Azure Arc Private Link Scope exists in scope; otherwise PASS when every Private Link Scope denies public network access and FAIL when any allows it."
+  },
+  {
+    "id": "CHK-19",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Arc private DNS",
+      "pt-BR": "DNS privado do Arc"
+    },
+    "domain": "C",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Network",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Network"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R04"
+    ],
+    "scenarioIds": [
+      "AS04"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB03"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "related",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-01"
+      ],
+      "mcsb": [
+        "NS-10"
+      ],
+      "decisionTree": "D3",
+      "datasets": [
+        "related"
+      ]
+    },
+    "resultCriteria": "N/A without an Azure Arc Private Link Scope; otherwise PASS when privatelink.his.arc.azure.com and privatelink.guestconfiguration.azure.com are present in the collected scope, and WARN when either zone is missing (the zone may be hosted in a hub subscription or on-premises DNS outside the collected scope)."
+  },
+  {
+    "id": "CHK-20",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Connectivity decision and network allowances",
+      "pt-BR": "Decisão de conectividade e liberações de rede"
+    },
+    "domain": "C",
+    "severity": "High",
+    "assessmentType": "manual",
+    "owner": "Network",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Network"
+      ]
+    },
+    "securityScopes": [
+      "T0",
+      "Global"
+    ],
+    "riskIds": [
+      "R03",
+      "R04"
+    ],
+    "scenarioIds": [
+      "AS03",
+      "AS04"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB03"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "DEC-05",
+        "DEC-06",
+        "DEC-07",
+        "DEC-08",
+        "CTL-01"
+      ],
+      "mcsb": [
+        "NS-2",
+        "NS-9"
+      ],
+      "decisionTree": "D3",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when the connectivity decision (public, proxy, Arc gateway or Private Link) is documented and the required endpoints are allowed and validated (for example, azcmagent check); WARN when the decision exists without validation evidence. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-21",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Inbound ports on the agent (SSH/WAC)",
+      "pt-BR": "Portas de entrada no agente (SSH/WAC)"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure",
+        "Network"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R04"
+    ],
+    "scenarioIds": [
+      "AS04"
+    ],
+    "securityBoundaryIds": [
+      "SB03",
+      "SB04"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-03"
+      ],
+      "mcsb": [
+        "IM-1",
+        "NS-8"
+      ],
+      "decisionTree": "D5",
+      "datasets": [
+        "machines"
+      ]
+    },
+    "resultCriteria": "WARN if there are open ports."
+  },
+  {
+    "id": "CHK-22",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Agent mode",
+      "pt-BR": "Modo do agente"
+    },
+    "domain": "D",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R05"
+    ],
+    "scenarioIds": [
+      "AS05"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB05"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-02"
+      ],
+      "mcsb": [
+        "PV-3"
+      ],
+      "decisionTree": "D5",
+      "datasets": [
+        "machines"
+      ]
+    },
+    "resultCriteria": "INFO by design (inventory): reports the agent configuration mode (full/monitor) and locally disabled extensions; extension hardening is scored in CHK-23 and CHK-24."
+  },
+  {
+    "id": "CHK-23",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Extension allowlist/blocklist",
+      "pt-BR": "Allowlist/blocklist de extensões"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "least-privilege"
+      ],
+      "pillars": [
+        "Apps"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R05",
+      "R06"
+    ],
+    "scenarioIds": [
+      "AS05",
+      "AS06"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB05"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-02"
+      ],
+      "mcsb": [
+        "AM-5"
+      ],
+      "decisionTree": "D5",
+      "datasets": [
+        "machines"
+      ]
+    },
+    "resultCriteria": "FAIL when at least half of applicable machines accept any extension; WARN when a smaller subset does; PASS when every applicable machine has an allowlist or blocklist."
+  },
+  {
+    "id": "CHK-24",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Sensitive extensions",
+      "pt-BR": "Extensões sensíveis"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Apps"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R03",
+      "R06",
+      "R10"
+    ],
+    "scenarioIds": [
+      "AS03",
+      "AS06",
+      "AS10"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB05"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "extensions",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "medium",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-02",
+        "CTL-03"
+      ],
+      "mcsb": [
+        "AM-5",
+        "PA-7"
+      ],
+      "decisionTree": "D5",
+      "datasets": [
+        "extensions"
+      ]
+    },
+    "resultCriteria": "PASS when no sensitive extension (script or command execution) is installed on Arc machines; non-PASS when any is installed."
+  },
+  {
+    "id": "CHK-25",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Entra access to the OS (SSH/RDP/WAC)",
+      "pt-BR": "Acesso Entra ao SO (SSH/RDP/WAC)"
+    },
+    "domain": "D",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "least-privilege"
+      ],
+      "pillars": [
+        "Identity",
+        "Endpoints"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R01"
+    ],
+    "scenarioIds": [
+      "AS01"
+    ],
+    "securityBoundaryIds": [
+      "SB01",
+      "SB04"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "IDENTITY",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "roles",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-03",
+        "REQ-04"
+      ],
+      "mcsb": [
+        "IM-1"
+      ],
+      "decisionTree": "D4",
+      "datasets": [
+        "machines",
+        "roles"
+      ]
+    },
+    "resultCriteria": "INFO by design (inventory): counts Entra ID login/SSH/Windows Admin Center role assignments that reach Arc machines; scope and use of groups are validated with the customer."
+  },
+  {
+    "id": "CHK-26",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Run Command and Admin Center per tier",
+      "pt-BR": "Run Command e Admin Center por tier"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "manual",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Apps"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R03",
+      "R06"
+    ],
+    "scenarioIds": [
+      "AS03",
+      "AS06"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB05"
+    ],
+    "defenseFunctions": [
+      "Prevent",
+      "Respond"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-03",
+        "DEC-04"
+      ],
+      "mcsb": [
+        "PA-7"
+      ],
+      "decisionTree": "D5",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when Run Command and Windows Admin Center use is defined per tier and enforced (disabled or restricted on Tier 0 by allowlist/RBAC); FAIL when they are unrestricted on Tier 0. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-27",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Guest configuration (Machine Configuration)",
+      "pt-BR": "Guest configuration (Machine Configuration)"
+    },
+    "domain": "D",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Governance",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Endpoints"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-07"
+      ],
+      "mcsb": [
+        "PV-4"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "machines"
+      ]
+    },
+    "resultCriteria": "WARN if disabled (no policy auditing inside the OS)."
+  },
+  {
+    "id": "CHK-28",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Failed extensions",
+      "pt-BR": "Extensões com falha"
+    },
+    "domain": "D",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Apps"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R05",
+      "R06"
+    ],
+    "scenarioIds": [
+      "AS05",
+      "AS06"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB05"
+    ],
+    "defenseFunctions": [
+      "Respond"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "extensions",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-06",
+        "OPS-11"
+      ],
+      "mcsb": [],
+      "decisionTree": "D7",
+      "datasets": [
+        "extensions"
+      ]
+    },
+    "resultCriteria": "PASS when every extension on Arc machines is in Succeeded state; non-PASS when any extension is in a failed state."
+  },
+  {
+    "id": "CHK-29",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Agent version within support",
+      "pt-BR": "Versão do agente dentro do suporte"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure",
+        "Network"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R05",
+      "R08"
+    ],
+    "scenarioIds": [
+      "AS05",
+      "AS08"
+    ],
+    "securityBoundaryIds": [
+      "SB03",
+      "SB04",
+      "SB05"
+    ],
+    "defenseFunctions": [
+      "Prevent",
+      "Detect"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-05"
+      ],
+      "mcsb": [
+        "PV-6"
+      ],
+      "decisionTree": "D7",
+      "datasets": [
+        "machines"
+      ]
+    },
+    "resultCriteria": "PASS when no machine runs an agent below 1.61 (published elevation-of-privilege CVEs) or older than the 12-month support window, and none is supported but more than 6 months old; non-PASS otherwise."
+  },
+  {
+    "id": "CHK-30",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Extension versions and automatic upgrade",
+      "pt-BR": "Versões e atualização automática das extensões"
+    },
+    "domain": "D",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Apps"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R05",
+      "R06"
+    ],
+    "scenarioIds": [
+      "AS05",
+      "AS06"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB05"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "extensions",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-06",
+        "CTL-04"
+      ],
+      "mcsb": [
+        "PV-6"
+      ],
+      "decisionTree": "D7",
+      "datasets": [
+        "extensions"
+      ]
+    },
+    "resultCriteria": "FAIL if the SQL extension or the Azure Monitor Agent is out of support; WARN if any extension is behind the published version (or the newest in the estate) or without automatic upgrade."
+  },
+  {
+    "id": "CHK-31",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Defender for Servers",
+      "pt-BR": "Defender for Servers"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Endpoints",
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "scenarioIds": [
+      "AS07"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB06"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "pricing",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-06"
+      ],
+      "mcsb": [
+        "LT-1"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "pricing"
+      ]
+    },
+    "resultCriteria": "PASS when Defender for Servers (P1 or P2) is enabled in every subscription with Arc machines; non-PASS when any such subscription is on Free."
+  },
+  {
+    "id": "CHK-32",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "MDE extension deployed through Arc",
+      "pt-BR": "Extensão MDE implantada pelo Arc"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Endpoints",
+        "Apps"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "scenarioIds": [
+      "AS07"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB06"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "extensions",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-06",
+        "LAT"
+      ],
+      "mcsb": [
+        "ES-1"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "machines",
+        "extensions"
+      ]
+    },
+    "resultCriteria": "PARTIAL when any connected machine lacks the MDE extension deployed through Arc (this proves only the Arc extension gap; sensor onboarding and health require Defender portal evidence); PASS when every connected machine has it."
+  },
+  {
+    "id": "CHK-33",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Defender recommendations",
+      "pt-BR": "Recomendações do Defender"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R07",
+      "R08"
+    ],
+    "scenarioIds": [
+      "AS07",
+      "AS08"
+    ],
+    "securityBoundaryIds": [
+      "SB06"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "defender",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-06"
+      ],
+      "mcsb": [
+        "PV-5",
+        "PV-4"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "defender"
+      ]
+    },
+    "resultCriteria": "FAIL when any Arc recommendation with affected machines has High severity; WARN when recommendations exist only below High; PASS when none affects an Arc machine."
+  },
+  {
+    "id": "CHK-34",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "SQL Server: Defender for SQL and least privilege",
+      "pt-BR": "SQL Server: Defender for SQL e menor privilégio"
+    },
+    "domain": "D",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "DBA",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "least-privilege",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Endpoints",
+        "Data",
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R10"
+    ],
+    "scenarioIds": [
+      "AS10"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB06",
+      "SB07"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "pricing",
+        "extensions",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "medium",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-04",
+        "DEC-05"
+      ],
+      "mcsb": [
+        "LT-1",
+        "PA-7"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "machines",
+        "pricing",
+        "extensions"
+      ]
+    },
+    "resultCriteria": "WARN if any of these cases occur; N/A without SQL."
+  },
+  {
+    "id": "CHK-35",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Local accounts and HIMDS GPO",
+      "pt-BR": "Contas locais e GPO do HIMDS"
+    },
+    "domain": "D",
+    "severity": "Medium",
+    "assessmentType": "manual",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Endpoints"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R05"
+    ],
+    "scenarioIds": [
+      "AS05"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB05"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-05"
+      ],
+      "mcsb": [],
+      "decisionTree": "D4",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when local administrator membership is controlled and a GPO restricts access to the HIMDS identity endpoint to the authorized local groups; FAIL when unmanaged local administrators exist. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-36",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Local collection on a sample (agent and services)",
+      "pt-BR": "Coleta local em amostra (agente e serviços)"
+    },
+    "domain": "D",
+    "severity": "Medium",
+    "assessmentType": "manual",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Endpoints",
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R05"
+    ],
+    "scenarioIds": [
+      "AS05"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB05"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-05",
+        "SVC",
+        "EVD"
+      ],
+      "mcsb": [],
+      "decisionTree": "D6",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when local collection on the agreed sample (azcmagent show/check and agent services) shows a healthy agent and running services; WARN when deviations are found. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-37",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Disconnected or expired machines",
+      "pt-BR": "Máquinas desconectadas ou expiradas"
+    },
+    "domain": "E",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Endpoints"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R05",
+      "R11"
+    ],
+    "scenarioIds": [
+      "AS05",
+      "AS11"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB05",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Respond",
+      "Recover"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "machines",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-08",
+        "OPS-09",
+        "OPS-11"
+      ],
+      "mcsb": [
+        "AM-3"
+      ],
+      "decisionTree": "D8",
+      "datasets": [
+        "machines"
+      ]
+    },
+    "resultCriteria": "FAIL if there is Disconnected/Expired. Expired requires a new onboarding; a disconnected machine does not receive policies, patches, or extensions."
+  },
+  {
+    "id": "CHK-38",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Advisor recommendations",
+      "pt-BR": "Recomendações do Advisor"
+    },
+    "domain": "E",
+    "severity": "Low",
+    "assessmentType": "auto",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T2"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Detect",
+      "Respond"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "inventory",
+      "evidenceRequired": [
+        "advisor",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "NOT_OBSERVED",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-09"
+      ],
+      "mcsb": [],
+      "decisionTree": "D8",
+      "datasets": [
+        "advisor"
+      ]
+    },
+    "resultCriteria": "INFO by design (not scored): counts Azure Advisor recommendations that target Arc machines."
+  },
+  {
+    "id": "CHK-39",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Azure Monitor Agent",
+      "pt-BR": "Azure Monitor Agent"
+    },
+    "domain": "E",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "scenarioIds": [
+      "AS07"
+    ],
+    "securityBoundaryIds": [
+      "SB06"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "machines",
+        "extensions",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-04",
+        "CTL-07"
+      ],
+      "mcsb": [
+        "LT-3",
+        "LT-5"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "machines",
+        "extensions"
+      ]
+    },
+    "resultCriteria": "FAIL when no connected machine has AMA; WARN when only part of the connected estate lacks AMA; PASS when all connected machines have AMA."
+  },
+  {
+    "id": "CHK-40",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "DCR association",
+      "pt-BR": "Associação a DCR"
+    },
+    "domain": "E",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "scenarioIds": [
+      "AS07"
+    ],
+    "securityBoundaryIds": [
+      "SB06"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "machines",
+        "extensions",
+        "dcra",
+        "related",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-04",
+        "CTL-07"
+      ],
+      "mcsb": [
+        "LT-3",
+        "LT-5"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "machines",
+        "extensions",
+        "dcra",
+        "related"
+      ]
+    },
+    "resultCriteria": "PARTIAL (assessment blocked) when no connected machine has Azure Monitor Agent; WARN when a machine with AMA has no associated DCR (agent installed without collecting data); PASS when every machine with AMA has a DCR."
+  },
+  {
+    "id": "CHK-41",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Microsoft Sentinel and machine coverage",
+      "pt-BR": "Microsoft Sentinel e cobertura das máquinas"
+    },
+    "domain": "E",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Endpoints",
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "scenarioIds": [
+      "AS07"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB06"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "related",
+        "dcra",
+        "machines",
+        "diag",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-07",
+        "LAT"
+      ],
+      "mcsb": [
+        "LT-5",
+        "IR-3"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "related",
+        "dcra",
+        "machines",
+        "diag"
+      ]
+    },
+    "resultCriteria": "FAIL when Sentinel exists in the collected scope but no Arc machine sends events to it; WARN when Sentinel is not found and an external SOC dependency is unresolved; INFO with measured coverage."
+  },
+  {
+    "id": "CHK-42",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Patch assessment (Update Manager/WSUS)",
+      "pt-BR": "Avaliação de patches (Update Manager/WSUS)"
+    },
+    "domain": "E",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Endpoints"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R08",
+      "R11"
+    ],
+    "scenarioIds": [
+      "AS08",
+      "AS11"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent",
+      "Detect"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "machines",
+        "patch",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-10"
+      ],
+      "mcsb": [
+        "PV-6"
+      ],
+      "decisionTree": "D7",
+      "datasets": [
+        "machines",
+        "patch"
+      ]
+    },
+    "resultCriteria": "FAIL for pending critical/security patches or a failed patch extension; PARTIAL when assessment/authority is unknown; PASS only with one valid canonical assessment row per connected machine and no pending critical/security patches."
+  },
+  {
+    "id": "CHK-43",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Activity Log export",
+      "pt-BR": "Exportação do Activity Log"
+    },
+    "domain": "E",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Network"
+      ]
+    },
+    "securityScopes": [
+      "T0",
+      "Global"
+    ],
+    "riskIds": [
+      "R03",
+      "R07"
+    ],
+    "scenarioIds": [
+      "AS03",
+      "AS07"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB03",
+      "SB06"
+    ],
+    "defenseFunctions": [
+      "Prevent",
+      "Detect"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "diag",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "EVD",
+        "LAT"
+      ],
+      "mcsb": [
+        "LT-3",
+        "LT-5"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "diag"
+      ]
+    },
+    "resultCriteria": "PASS when the Activity Log is exported to Log Analytics in every subscription in scope; non-PASS when any subscription has no export."
+  },
+  {
+    "id": "CHK-44",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Sensitive operations in the period",
+      "pt-BR": "Operações sensíveis no período"
+    },
+    "domain": "E",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R03",
+      "R06",
+      "R07"
+    ],
+    "scenarioIds": [
+      "AS03",
+      "AS06",
+      "AS07"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB05",
+      "SB06"
+    ],
+    "defenseFunctions": [
+      "Respond"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "activity",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "medium",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-03",
+        "EVD",
+        "LAT"
+      ],
+      "mcsb": [
+        "LT-3",
+        "IR-4"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "activity"
+      ]
+    },
+    "resultCriteria": "WARN if there are Run Command operations or removals: review author and justification."
+  },
+  {
+    "id": "CHK-45",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Log Analytics retention",
+      "pt-BR": "Retenção do Log Analytics"
+    },
+    "domain": "E",
+    "severity": "Low",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Data"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "scenarioIds": [
+      "AS07"
+    ],
+    "securityBoundaryIds": [
+      "SB06"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "machines",
+        "related",
+        "dcra",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "EVD"
+      ],
+      "mcsb": [
+        "LT-6"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "machines",
+        "related",
+        "dcra"
+      ]
+    },
+    "resultCriteria": "N/A when no workspace receives Arc machine data through a DCR (coverage is resolved in CHK-39/CHK-40); otherwise PASS when every such workspace keeps at least 90 days of retention and WARN when any keeps less."
+  },
+  {
+    "id": "CHK-46",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Pilot executed and accepted",
+      "pt-BR": "Piloto executado e aceito"
+    },
+    "domain": "E",
+    "severity": "Medium",
+    "assessmentType": "manual",
+    "owner": "Project",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T2",
+      "Global"
+    ],
+    "riskIds": [
+      "R09",
+      "R11"
+    ],
+    "scenarioIds": [
+      "AS09",
+      "AS11"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Recover"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-01"
+      ],
+      "mcsb": [],
+      "decisionTree": "P",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when a pilot was executed with documented scope and success criteria and was formally accepted; WARN when executed without formal acceptance. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-47",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Rollout in waves and rollback",
+      "pt-BR": "Rollout por ondas e rollback"
+    },
+    "domain": "E",
+    "severity": "Medium",
+    "assessmentType": "manual",
+    "owner": "Project",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T2",
+      "Global"
+    ],
+    "riskIds": [
+      "R09",
+      "R11"
+    ],
+    "scenarioIds": [
+      "AS09",
+      "AS11"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Recover"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-02"
+      ],
+      "mcsb": [],
+      "decisionTree": "P",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when rollout waves with entry/exit criteria and a tested rollback procedure are documented; WARN when waves exist without a tested rollback. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-48",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Automation method per environment",
+      "pt-BR": "Método de automação por ambiente"
+    },
+    "domain": "E",
+    "severity": "Medium",
+    "assessmentType": "manual",
+    "owner": "Platform",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Apps"
+      ]
+    },
+    "securityScopes": [
+      "T2",
+      "Global"
+    ],
+    "riskIds": [
+      "R02",
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS02",
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-03"
+      ],
+      "mcsb": [
+        "AM-2",
+        "PV-2"
+      ],
+      "decisionTree": "P",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when the onboarding/configuration automation method for each environment (Azure Policy, script, ConfigMgr or IaC) is documented and repeatable; WARN when some environments rely on manual steps. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-49",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Individual and at-scale removal",
+      "pt-BR": "Remoção individual e em escala"
+    },
+    "domain": "E",
+    "severity": "Medium",
+    "assessmentType": "manual",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T2",
+      "Global"
+    ],
+    "riskIds": [
+      "R09",
+      "R11"
+    ],
+    "scenarioIds": [
+      "AS09",
+      "AS11"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Respond",
+      "Recover"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-07",
+        "OPS-08"
+      ],
+      "mcsb": [
+        "AM-3"
+      ],
+      "decisionTree": "D8",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when individual and at-scale removal procedures (agent disconnect, extension and Azure resource cleanup) are documented and tested; WARN when documented but not tested. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-50",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Health KPIs and periodic review",
+      "pt-BR": "KPIs de saúde e revisão periódica"
+    },
+    "domain": "E",
+    "severity": "Medium",
+    "assessmentType": "manual",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T2",
+      "Global"
+    ],
+    "riskIds": [
+      "R09",
+      "R11"
+    ],
+    "scenarioIds": [
+      "AS09",
+      "AS11"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Detect",
+      "Respond"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-11",
+        "OPS-12"
+      ],
+      "mcsb": [
+        "PV-2",
+        "PA-4"
+      ],
+      "decisionTree": "P",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when health KPIs (connected %, agent version, extension success, compliance) are defined with an owner and a periodic review is evidenced; WARN when KPIs exist without review evidence. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-51",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Legacy, end of support, and ESU",
+      "pt-BR": "Legado, fim de suporte e ESU"
+    },
+    "domain": "F",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Infrastructure",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure",
+        "Network"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R05",
+      "R08",
+      "R11"
+    ],
+    "scenarioIds": [
+      "AS05",
+      "AS08",
+      "AS11"
+    ],
+    "securityBoundaryIds": [
+      "SB03",
+      "SB04",
+      "SB05",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent",
+      "Recover"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "medium",
+    "sourceRefs": {
+      "requirements": [
+        "LEG-01",
+        "LEG-03"
+      ],
+      "mcsb": [
+        "PV-6"
+      ],
+      "decisionTree": "D7",
+      "datasets": [
+        "machines"
+      ]
+    },
+    "resultCriteria": "FAIL if there is 2008/2012/2012 R2 after ESU ends; WARN if there is 2016 without an assigned ESU or with an agent earlier than 1.62."
+  },
+  {
+    "id": "CHK-52",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Legacy exceptions and exit plan",
+      "pt-BR": "Exceções de legado e plano de saída"
+    },
+    "domain": "F",
+    "severity": "High",
+    "assessmentType": "manual",
+    "owner": "Infrastructure",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R08",
+      "R11"
+    ],
+    "scenarioIds": [
+      "AS08",
+      "AS11"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Recover"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "LEG-01",
+        "LEG-02",
+        "LEG-04"
+      ],
+      "mcsb": [
+        "AM-3",
+        "PV-6"
+      ],
+      "decisionTree": "D7",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when every legacy/end-of-support machine has a recorded exception (owner, compensating controls, ESU status, expiry) and an exit plan; FAIL when legacy machines have no recorded exception. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-53",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Cost: billed services and benefits per machine",
+      "pt-BR": "Custo: serviços cobrados e benefícios por máquina"
+    },
+    "domain": "B",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "FinOps",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Endpoints"
+      ]
+    },
+    "securityScopes": [
+      "T2"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB04",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "inventory",
+      "evidenceRequired": [
+        "machines",
+        "extensions",
+        "pricing",
+        "gcAssign",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "NOT_OBSERVED",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-09"
+      ],
+      "mcsb": [],
+      "decisionTree": "D9",
+      "datasets": [
+        "machines",
+        "extensions",
+        "pricing",
+        "gcAssign"
+      ]
+    },
+    "resultCriteria": "INFO by design (not scored): list-price estimate of billed Arc services and benefits per connected machine; Log Analytics cost per GB is not estimated."
+  },
+  {
+    "id": "CHK-54",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Threats and vulnerabilities (Defender for Cloud)",
+      "pt-BR": "Ameaças e vulnerabilidades (Defender for Cloud)"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R07",
+      "R08",
+      "R10"
+    ],
+    "scenarioIds": [
+      "AS07",
+      "AS08",
+      "AS10"
+    ],
+    "securityBoundaryIds": [
+      "SB06"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "machines",
+        "alerts",
+        "vulns",
+        "secscore",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "medium",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-06",
+        "LAT"
+      ],
+      "mcsb": [
+        "LT-1",
+        "PV-5",
+        "IR-3"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "machines",
+        "alerts",
+        "vulns",
+        "secscore"
+      ]
+    },
+    "resultCriteria": "FAIL if there is an active High alert; WARN if there is an active alert or a High/Critical vulnerability; PARTIAL when there are no findings but MDE coverage is not confirmed (zero findings is not evidence of no exposure); the Secure Score is informational."
+  },
+  {
+    "id": "CHK-55",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Operating system security baseline",
+      "pt-BR": "Baseline de segurança do sistema operacional"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Endpoints",
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R05",
+      "R08"
+    ],
+    "scenarioIds": [
+      "AS05",
+      "AS08"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB05"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "gcComp",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-07",
+        "CTL-06"
+      ],
+      "mcsb": [
+        "PV-4"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "machines",
+        "gcComp"
+      ]
+    },
+    "resultCriteria": "FAIL if a connected machine has no baseline assigned; WARN if a machine is non-compliant; PASS if all are assigned and compliant."
+  },
+  {
+    "id": "CHK-56",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Local administrators audit",
+      "pt-BR": "Auditoria dos administradores locais"
+    },
+    "domain": "B",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "least-privilege"
+      ],
+      "pillars": [
+        "Identity",
+        "Endpoints"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R01"
+    ],
+    "scenarioIds": [
+      "AS01"
+    ],
+    "securityBoundaryIds": [
+      "SB01",
+      "SB04"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "IDENTITY",
+    "claim": {
+      "claimType": "configuration",
+      "evidenceRequired": [
+        "machines",
+        "gcComp",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-04",
+        "CTL-05"
+      ],
+      "mcsb": [
+        "PA-1",
+        "PA-7"
+      ],
+      "decisionTree": "D4",
+      "datasets": [
+        "machines",
+        "gcComp"
+      ]
+    },
+    "resultCriteria": "FAIL when no connected Windows machine has the local-administrators audit; WARN for non-compliance when audit coverage exists; INFO when only part of the estate is covered; PASS when all applicable machines are audited and compliant."
+  },
+  {
+    "id": "CHK-57",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Healthy antivirus and EDR",
+      "pt-BR": "Antivírus e EDR saudáveis"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Endpoints"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R07",
+      "R08"
+    ],
+    "scenarioIds": [
+      "AS07",
+      "AS08"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB06"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "machines",
+        "extensions",
+        "defender",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-06"
+      ],
+      "mcsb": [
+        "ES-1",
+        "ES-2",
+        "ES-3"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "machines",
+        "extensions",
+        "defender"
+      ]
+    },
+    "resultCriteria": "PARTIAL when a connected machine lacks the MDE extension (extension absence does not prove sensor absence); otherwise FAIL if a High/Medium endpoint protection recommendation has Unhealthy machines, WARN if a lower-severity one does, and PASS when none does."
+  },
+  {
+    "id": "CHK-58",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Insights and telemetry per machine",
+      "pt-BR": "Insights e telemetria por máquina"
+    },
+    "domain": "E",
+    "severity": "Medium",
+    "assessmentType": "auto",
+    "owner": "Operations",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Endpoints",
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R07",
+      "R11"
+    ],
+    "scenarioIds": [
+      "AS07",
+      "AS11"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB06",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "machines",
+        "extensions",
+        "dcra",
+        "related",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "WARN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "OPS-04",
+        "OPS-11"
+      ],
+      "mcsb": [
+        "LT-3",
+        "LT-4"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "machines",
+        "extensions",
+        "dcra",
+        "related"
+      ]
+    },
+    "resultCriteria": "FAIL when every connected machine lacks both performance and security-event telemetry; WARN when any connected machine is blind; INFO with the telemetry matrix when coverage exists."
+  },
+  {
+    "id": "CHK-59",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Map of Arc capabilities in use",
+      "pt-BR": "Mapa de recursos do Arc em uso"
+    },
+    "domain": "E",
+    "severity": "Low",
+    "assessmentType": "auto",
+    "owner": "Platform",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T2"
+    ],
+    "riskIds": [
+      "R09"
+    ],
+    "scenarioIds": [
+      "AS09"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "MANAGEMENT",
+    "claim": {
+      "claimType": "inventory",
+      "evidenceRequired": [
+        "machines",
+        "extensions",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "NOT_OBSERVED",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-09",
+        "OPS-11"
+      ],
+      "mcsb": [
+        "AM-1"
+      ],
+      "decisionTree": "D9",
+      "datasets": [
+        "machines",
+        "extensions"
+      ]
+    },
+    "resultCriteria": "INFO by design (not scored): maps which of the 24 Arc capabilities are in use on at least one machine."
+  },
+  {
+    "id": "CHK-60",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Local administrator password (Windows LAPS)",
+      "pt-BR": "Senha do administrador local (Windows LAPS)"
+    },
+    "domain": "B",
+    "severity": "High",
+    "assessmentType": "manual",
+    "owner": "Identity",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "least-privilege"
+      ],
+      "pillars": [
+        "Identity",
+        "Endpoints"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R01"
+    ],
+    "scenarioIds": [
+      "AS01"
+    ],
+    "securityBoundaryIds": [
+      "SB01",
+      "SB04"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "IDENTITY",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-04",
+        "CTL-05"
+      ],
+      "mcsb": [
+        "PA-1",
+        "IM-8"
+      ],
+      "decisionTree": "D4",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when Windows LAPS manages the local administrator password on every Windows Arc machine (policy and backup evidence); FAIL when a shared or static local administrator password is in use. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-61",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "System disk encryption (BitLocker/dm-crypt)",
+      "pt-BR": "Criptografia do disco do sistema (BitLocker/dm-crypt)"
+    },
+    "domain": "D",
+    "severity": "Medium",
+    "assessmentType": "manual",
+    "owner": "Infrastructure",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Data"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R05",
+      "R08"
+    ],
+    "scenarioIds": [
+      "AS05",
+      "AS08"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB05"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-05"
+      ],
+      "mcsb": [
+        "DP-4"
+      ],
+      "decisionTree": "D6",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when the system disk is encrypted (BitLocker/dm-crypt) with recovery keys escrowed on every machine; WARN when only part of the machines is covered. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-62",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Conditional Access and MFA for Azure administrators",
+      "pt-BR": "Acesso Condicional e MFA para quem administra o Azure"
+    },
+    "domain": "B",
+    "severity": "High",
+    "assessmentType": "manual",
+    "owner": "Identity",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "least-privilege"
+      ],
+      "pillars": [
+        "Identity"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R01"
+    ],
+    "scenarioIds": [
+      "AS01"
+    ],
+    "securityBoundaryIds": [
+      "SB01"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "IDENTITY",
+    "claim": {
+      "claimType": "documentary",
+      "evidenceRequired": [
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "UNKNOWN",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-03",
+        "REQ-04"
+      ],
+      "mcsb": [
+        "IM-6",
+        "IM-7"
+      ],
+      "decisionTree": "D4",
+      "datasets": []
+    },
+    "resultCriteria": "PASS when Conditional Access requires MFA for every identity that administers Azure; FAIL when any administrator can manage Azure without MFA. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-63",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "Defender for Servers per Arc machine",
+      "pt-BR": "Defender for Servers por máquina Arc"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "Security",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly",
+        "assume-breach"
+      ],
+      "pillars": [
+        "Endpoints",
+        "Infrastructure"
+      ]
+    },
+    "securityScopes": [
+      "T0"
+    ],
+    "riskIds": [
+      "R07"
+    ],
+    "scenarioIds": [
+      "AS07"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB06"
+    ],
+    "defenseFunctions": [
+      "Detect"
+    ],
+    "securityModelStage": "DEFENSE",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "machines",
+        "pricing",
+        "pricingRes",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "CTL-06"
+      ],
+      "mcsb": [
+        "LT-1",
+        "ES-1"
+      ],
+      "decisionTree": "D6",
+      "datasets": [
+        "machines",
+        "pricing",
+        "pricingRes"
+      ]
+    },
+    "resultCriteria": "PASS when every Arc machine has a Defender for Servers plan equal to its subscription plan; WARN when a machine plan differs from the subscription; FAIL when any machine is on Free (no plan)."
+  },
+  {
+    "id": "CHK-64",
+    "sourceVersion": "3.9.5",
+    "checkpointVersion": "4.0.0",
+    "title": {
+      "en-US": "SQL Server: license and usage upload (billing)",
+      "pt-BR": "SQL Server: licença e envio de uso (faturamento)"
+    },
+    "domain": "D",
+    "severity": "High",
+    "assessmentType": "auto",
+    "owner": "DBA",
+    "zeroTrust": {
+      "principles": [
+        "verify-explicitly"
+      ],
+      "pillars": [
+        "Endpoints",
+        "Data"
+      ]
+    },
+    "securityScopes": [
+      "T1"
+    ],
+    "riskIds": [
+      "R09",
+      "R10"
+    ],
+    "scenarioIds": [
+      "AS09",
+      "AS10"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB07",
+      "SB08"
+    ],
+    "defenseFunctions": [
+      "Prevent"
+    ],
+    "securityModelStage": "HOST",
+    "claim": {
+      "claimType": "telemetry",
+      "evidenceRequired": [
+        "machines",
+        "extensions",
+        "related",
+        "scope",
+        "timestamp",
+        "source"
+      ],
+      "absenceMeans": "FAIL",
+      "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
+    },
+    "mappingConfidence": "high",
+    "sourceRefs": {
+      "requirements": [
+        "REQ-09",
+        "DEC-05"
+      ],
+      "mcsb": [
+        "AM-1",
+        "LT-1"
+      ],
+      "decisionTree": "D9",
+      "datasets": [
+        "machines",
+        "extensions",
+        "related"
+      ]
+    },
+    "resultCriteria": "FAIL for a conclusive technical upload/connection/extension condition even when contractual entitlement coverage is PARTIAL; WARN for license metadata mismatches; N/A without the SQL extension."
+  }
+]
