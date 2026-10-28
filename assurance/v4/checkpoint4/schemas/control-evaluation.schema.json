@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "control-evaluation.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "checkId", "evidenceId", "observationId", "claimId", "outcome", "residualRisk", "priority", "securityModelStage", "zeroTrust", "securityScopes", "riskIds", "scenarioIds", "securityBoundaryIds", "defenseFunctions", "mappingConfidence", "trace"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^CE-CHK-[0-9]{2}$"},
+    "checkId": {"$ref": "common-defs.schema.json#/$defs/checkId"},
+    "evidenceId": {"type": "string", "pattern": "^EV-CHK-[0-9]{2}$"},
+    "observationId": {"type": "string", "pattern": "^OB-CHK-[0-9]{2}$"},
+    "claimId": {"type": "string", "pattern": "^CL-CHK-[0-9]{2}$"},
+    "outcome": {"enum": ["EFFECTIVE", "INEFFECTIVE", "AT_RISK", "UNASSESSED", "INFORMATIONAL", "NOT_APPLICABLE"]},
+    "residualRisk": {"$ref": "common-defs.schema.json#/$defs/risk"},
+    "priority": {"$ref": "common-defs.schema.json#/$defs/priority"},
+    "securityModelStage": {"enum": ["IDENTITY", "MANAGEMENT", "HOST", "DEFENSE"]},
+    "zeroTrust": {
+      "type": "object",
+      "required": ["principles", "pillars"],
+      "properties": {"principles": {"type": "array", "minItems": 1}, "pillars": {"type": "array", "minItems": 1}}
+    },
+    "securityScopes": {"type": "array", "minItems": 1, "items": {"enum": ["T0", "T1", "T2", "Global"]}, "uniqueItems": true},
+    "riskIds": {"type": "array", "minItems": 1, "items": {"$ref": "common-defs.schema.json#/$defs/riskId"}, "uniqueItems": true},
+    "scenarioIds": {"type": "array", "minItems": 1, "items": {"$ref": "common-defs.schema.json#/$defs/scenarioId"}, "uniqueItems": true},
+    "securityBoundaryIds": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^SB0[1-8]$"}, "uniqueItems": true},
+    "defenseFunctions": {"type": "array", "minItems": 1, "items": {"enum": ["Prevent", "Detect", "Respond", "Recover"]}, "uniqueItems": true},
+    "mappingConfidence": {"enum": ["high", "medium"]},
+    "trace": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "string"}}
+  }
+}

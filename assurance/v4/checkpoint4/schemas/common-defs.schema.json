@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common-defs.schema.json",
+  "$defs": {
+    "checkId": {"type": "string", "pattern": "^CHK-(0[1-9]|[1-5][0-9]|6[0-4])$"},
+    "scenarioId": {"type": "string", "pattern": "^AS(0[1-9]|1[01])$"},
+    "riskId": {"type": "string", "pattern": "^R(0[1-9]|1[01])$"},
+    "priority": {"enum": ["P0", "P1", "P2", "P3"]},
+    "horizon": {"enum": ["NOW", "30d", "90d"]},
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["score", "level"],
+      "properties": {
+        "score": {"type": "integer", "minimum": 0, "maximum": 100},
+        "level": {"enum": ["MINIMAL", "LOW", "MEDIUM", "HIGH", "CRITICAL"]}
+      }
+    },
+    "stringArray": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+  }
+}
