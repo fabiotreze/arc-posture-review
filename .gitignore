@@ -9,6 +9,7 @@ arc-posture-review-report*
 evidencias-arc/
 arc-seguranca-*/
 *.zip
+!tests/fixtures/reviewed-lab-sanitized.zip
 # environment
 __pycache__/
 *.pyc
