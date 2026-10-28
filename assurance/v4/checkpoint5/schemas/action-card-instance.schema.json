@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "action-card-instance.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "templateId", "riskId", "scenarioId", "title", "priority", "priorityScore", "horizon", "owners", "triggeredControlIds", "priorityReasons", "actions", "closureEvidence", "rollback"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^ACI-R[0-9]{2}$"},
+    "templateId": {"type": "string", "pattern": "^AC-R[0-9]{2}$"},
+    "riskId": {"$ref": "common-defs.schema.json#/$defs/riskId"},
+    "scenarioId": {"$ref": "common-defs.schema.json#/$defs/scenarioId"},
+    "title": {"type": "string", "minLength": 5},
+    "priority": {"$ref": "common-defs.schema.json#/$defs/priority"},
+    "priorityScore": {"type": "integer", "minimum": 0, "maximum": 100},
+    "horizon": {"$ref": "common-defs.schema.json#/$defs/horizon"},
+    "owners": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "triggeredControlIds": {"type": "array", "minItems": 1, "items": {"$ref": "common-defs.schema.json#/$defs/checkId"}, "uniqueItems": true},
+    "priorityReasons": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "actions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "closureEvidence": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "rollback": {"type": "string", "minLength": 5}
+  }
+}
