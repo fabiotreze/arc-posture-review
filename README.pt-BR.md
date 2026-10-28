@@ -34,6 +34,8 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
 - **9 árvores de decisão** (onboarding, organização, conectividade, identidade, extensões, proteção, versões e legado, remoção, custo) e execução do programa.
 - **Coletor somente leitura** (`Invoke-ArcPostureReview.ps1`): apenas leitura via Azure Resource Graph e Azure CLI, paginado, várias subscriptions ou management group, com verificação prévia de permissões (Reader basta) e limite opcional de máquinas para ambientes grandes (amostra priorizada por risco).
 - **Análise local:** leitura rápida, índice do kit no modelo do Secure Score (pontos por severidade, proporção de máquinas saudáveis, mesma causa contada uma vez), conformidade por camada e por controle MCSB, Secure Score do Defender for Cloud, plano de ação em uma linha por ação com ganho, prazo e responsável, 9 alertas recomendados, versões do agente e das extensões na data da execução, estimativa de custo e evidências por achado.
+- **Duas camadas do relatório:** avaliação executiva conciso para decisão e apêndice de evidências separado, com contratos, critérios, rastreabilidade e links para os achados completos.
+- **PDF limpo:** `python tools/Generate-CleanPdf.py <relatorio-salvo.html>` gera e valida PDF A4 sem cabeçalhos/rodapés do navegador com URL e data.
 - **Inventário de cobertura:** o guia (Anexo J) mostra os totais por domínio, severidade, camada e árvore de decisão, e o que mudou desde a versão anterior.
 - **Piso de segurança do agente:** máquinas abaixo da versão **1.61** do Connected Machine agent falham na verificação de versão (CVEs públicas de elevação de privilégio local: CVE-2025-49692, CVE-2025-26627, CVE-2025-55316, CVE-2026-26117), e o catálogo de serviços cobre as tarefas agendadas do agente e os serviços das extensões.
 - **Validação do pacote:** origem, estrutura, SHA-256 do manifest e limites de tamanho; pacote alterado é rejeitado. O script imprime o SHA-256 do `.zip` para confirmar a origem.
@@ -45,6 +47,16 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
   | `arc-posture-review-analysis-<data>.<idioma>.html` | **Um único arquivo:** a análise completa mais o registro do checklist (status, evidência da coleta e notas de cada verificação, notas da sessão) | A entrega: compartilhar, arquivar ou imprimir em PDF |
   | `arc-posture-review-report.<idioma>.md` / `.json` | O mesmo conteúdo em texto e em dados | Editar o texto ou comparar execuções |
 - **Interface acessível:** status por ícone, texto e cor (paleta do Advisor/Defender), contraste AA, modo escuro, alto contraste e movimento reduzido.
+
+## Riscos atuais do lab e da avaliação
+
+| Risco | Controle antes de tratar o resultado como final |
+|---|---|
+| Uma execução com limite de máquinas pode ocultar achados fora da amostra | Use `MaxMachines = 0` na rodada final ou execute escopos completos por resource group. Trate a rodada limitada só como descoberta. |
+| `PARTIAL`, `ERROR` ou `TODO` pode ser confundido com estado saudável | Trate como **não avaliado**. Corrija lacunas de permissão, provider, API e documentação e colete novamente. |
+| Metadados de versão ao vivo podem ficar indisponíveis e cair para tabelas estáticas | Confirme a fonte exibida no achado e valide as release notes atuais da Microsoft na data da execução. |
+| Evidências e relatórios exportados contêm dados do ambiente e dados pessoais | Use contas autorizadas e armazenamento controlado, mantenha a máscara de e-mail ligada e nunca anexe evidências em issues públicas. |
+| Gates locais estáticos/de navegador não comprovam a coleta ao vivo no Azure nem o fluxo completo de importação/exportação | Antes da release, rode o coletor no lab autorizado e execute `Test-ReportVisual.py --package <fresh-lab.zip>`. |
 
 ## Privacidade e proteção de dados (LGPD)
 
@@ -60,7 +72,7 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
 
 ![Fluxo da coleta somente leitura e das evidências](docs/images/collection-flow.pt-BR.png)
 
-**Relatório de exemplo** (v3.8.3) de uma subscription de laboratório (7 servidores Arc, 3 avaliados em amostra priorizada por risco; SQL Server, Defender for Servers), anonimizado: subscription, conta, IDs e nomes de recursos de governança substituídos.
+**Relatório de exemplo** (v3.9.5) de uma fixture sanitizada de laboratório (7 servidores Arc; SQL Server e Defender for Servers), anonimizado: subscription, conta, IDs e nomes de recursos de governança substituídos.
 [Abrir o relatório de exemplo](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.pt-BR.html) · [English](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.en-US.html)
 
 ![Análise de exemplo](docs/images/sample-report.pt-BR.png)
@@ -72,7 +84,7 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
 | Online | https://fabiotreze.github.io/arc-posture-review/arc-posture-review.pt-BR.html |
 | Offline | Baixe [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html) (ou [`.en-US.html`](arc-posture-review.en-US.html)) e abra no Edge ou Chrome |
 | Só o script | [`scripts/Invoke-ArcPostureReview.ps1`](scripts/Invoke-ArcPostureReview.ps1): as 64 verificações, subscription atual por padrão |
-| Ler o guia | [docs/guide.pt-BR.md](docs/guide.pt-BR.md) · [docs/guide.en-US.md](docs/guide.en-US.md) |
+| **Guia canônico do projeto** | [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html) · [`arc-posture-review.en-US.html`](arc-posture-review.en-US.html) (integrado, offline; não é orientação oficial da Microsoft) |
 
 1. Abra o HTML e siga o **Comece aqui**: escolha as decisões nas árvores visuais e depois o escopo e as verificações.
 2. Baixe o script e execute no **Azure Cloud Shell (PowerShell)**: `./Invoke-ArcPostureReview.ps1` (ou `-Subscriptions <id1>,<id2>` / `-ManagementGroup <nome>`).
@@ -88,9 +100,37 @@ index.html                           versão em inglês (GitHub Pages)
 arc-posture-review.en-US.html        HTML offline, inglês
 arc-posture-review.pt-BR.html        HTML offline, português
 scripts/Invoke-ArcPostureReview.ps1  coletor somente leitura avulso (revise antes de executar)
-docs/guide.en-US.md · guide.pt-BR.md playbook com árvores de decisão (o GitHub renderiza o Mermaid)
+docs/guide.en-US.md · guide.pt-BR.md espelhos de autoria usados para manter o guia HTML integrado
 docs/examples/                       relatórios de exemplo anonimizados (en-US, pt-BR)
 docs/images/                         imagens usadas no README
+tools/Generate-CleanPdf.py           geração de PDF limpa e validada (sem cabeçalho/rodapé do navegador)
+criteria/checks.*.json               fonte canônica bilíngue dos 64 checks e dos critérios finais de resultado
+validation/v3.9.5/                   relatórios, PDFs, capturas, logs e hashes de aceite sanitizados
+```
+
+## Validar antes de publicar
+
+O layout e o comportamento do relatório salvo são contratos de release, não edições manuais. Depois de alterar o gerador ou o relatório:
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m playwright install chromium
+python tools/Sync-ReportAssets.py
+python tools/Test-CriteriaCoverage.py
+python tools/Test-ReportContract.py
+python tools/Test-LabCorrections.py
+python tools/Test-ReportVisual.py --package tests/fixtures/reviewed-lab-sanitized.zip --artifacts build/validation
+python tools/Test-LocalizationParity.py --en build/validation/e2e-en-US.html --pt build/validation/e2e-pt-BR.html
+python tools/Generate-CleanPdf.py build/validation/e2e-en-US.html --output build/validation/e2e-en-US.pdf
+python tools/Generate-CleanPdf.py build/validation/e2e-pt-BR.html --output build/validation/e2e-pt-BR.pdf
+```
+
+`Sync-ReportAssets.py` gera o catálogo/lista padrão do coletor e o array `ITEMS` de cada renderer a partir de `criteria/checks.*.json`; depois mantém alinhados o CSS responsivo compartilhado, o runtime do relatório salvo protegido por hash no CSP, o coletor embutido, o `index.html`, os dois idiomas e os dois relatórios de exemplo. `Test-CriteriaCoverage.py` exige 64 critérios bilíngues ordenados, 45 blocos automáticos `$Eval`, 19 checks manuais e os contratos explícitos de CHK-12/18/19/24/28/29/31/43. Os demais testes verificam versões, ordem das seções, integridade do CSP, links internos, um bloco de ação por prioridade, overflow no desktop/celular, cópia offline das consultas e expansão para impressão. `tools/Test-BeforePublish.ps1` executa esses gates junto com o PSScriptAnalyzer e as verificações de Git/release.
+
+Para um teste local completo de importação e exportação, use um pacote de evidências autorizado que não será commitado:
+
+```bash
+python tools/Test-ReportVisual.py --package /caminho/arc-posture-review-AAAAMMDD-HHMMSS.zip
 ```
 
 ## Contribuições

@@ -1,0 +1,2468 @@
+[
+  {
+    "id": "CHK-01",
+    "dom": "A",
+    "sev": "Low",
+    "type": "auto",
+    "ds": [
+      "machines"
+    ],
+    "title": "Inventory and eligibility of Arc machines",
+    "what": "Machines by status, operating system, region, manufacturer/model, and detected SQL Server.",
+    "crit": "Informational: baseline for the other controls.",
+    "refs": [
+      "REQ-01"
+    ],
+    "key": "GOV-01",
+    "layer": "3",
+    "mcsb": "AM-1",
+    "tree": "D1",
+    "hz": "C",
+    "owner": "Platform",
+    "steps": [
+      "Use the inventory as a baseline: status, OS, region, and detected SQL per machine.",
+      "Separate machines by environment (production, staging) and by workload before any automation."
+    ],
+    "how": "No decision: this is the basis for prioritizing the other actions.",
+    "docs": [
+      [
+        "Agent overview",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/agent-overview"
+      ],
+      [
+        "Plan at-scale deployment",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/plan-at-scale-deployment"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "INFO by design (inventory, not scored): counts Arc machines by connection status, OS and SQL detection; this inventory is the denominator for the other checks."
+  },
+  {
+    "id": "CHK-02",
+    "dom": "A",
+    "sev": "Medium",
+    "type": "manual",
+    "ds": [],
+    "title": "Arc service per environment type",
+    "what": "Source of each machine (on-premises, VMware, SCVMM, AWS/GCP, OCI) and chosen service (Arc-enabled servers, multicloud connector, Arc VMware/SCVMM).",
+    "crit": "Evidence: decision recorded per source.",
+    "refs": [
+      "DEC-01",
+      "DEC-02"
+    ],
+    "key": "DOC-DEC1",
+    "layer": "4",
+    "mcsb": "AM-2",
+    "tree": "D1",
+    "hz": "C",
+    "owner": "Architecture",
+    "steps": [
+      "Record, for each source (physical, VMware, SCVMM, AWS/GCP, OCI), the chosen onboarding method."
+    ],
+    "how": "Follow DEC-01: if VM lifecycle is needed, use Arc VMware/SCVMM; on AWS/GCP with automatic discovery, Multicloud connector; in other cases, Arc-enabled servers.",
+    "docs": [
+      [
+        "Onboarding options",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/deployment-options"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when the Arc service used for each environment type (servers, SQL Server, Kubernetes, VMware/SCVMM) is documented with an owner; WARN when only part of the environments is covered. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-03",
+    "dom": "A",
+    "sev": "Medium",
+    "type": "manual",
+    "ds": [],
+    "title": "Landing zone and resource organization",
+    "what": "Management group, subscriptions, and resource groups per environment and region; platform separated from workloads.",
+    "crit": "Evidence: approved design.",
+    "refs": [
+      "DEC-03"
+    ],
+    "key": "DOC-DEC3",
+    "layer": "4",
+    "mcsb": "AM-1, AM-3",
+    "tree": "D2",
+    "hz": "C",
+    "owner": "Architecture",
+    "steps": [
+      "Define management groups, subscriptions, and resource groups by environment and region; separate platform from workloads."
+    ],
+    "how": "Use the same structure as the Azure landing zone; a resource group per environment/region simplifies RBAC, policy, and cost.",
+    "docs": [
+      [
+        "Plan at-scale deployment",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/plan-at-scale-deployment"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when Arc resources follow a documented landing zone (management group, subscription, resource group and naming standard); WARN when the design exists but is not applied to every Arc resource. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-04",
+    "dom": "A",
+    "sev": "High",
+    "type": "manual",
+    "ds": [],
+    "title": "Criticality profile (Tier 0/1/2)",
+    "what": "Server classification and stricter controls for Tier 0.",
+    "crit": "Evidence: list of servers per tier and controls per tier.",
+    "refs": [
+      "DEC-04"
+    ],
+    "key": "DOC-DEC4",
+    "layer": "4",
+    "mcsb": "AM-1, PA-1",
+    "tree": "D2",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Classify servers into Tier 0/1/2 and record the list.",
+      "Apply stricter controls to Tier 0 (no Run Command/SSH/WAC, minimal allowlist)."
+    ],
+    "how": "Tier 0 = controls identity or security (AD, PKI, backup, management tools). When in doubt, classify in the higher tier.",
+    "docs": [
+      [
+        "Arc security overview",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-overview"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when every Arc machine has a documented tier (0/1/2) that drives controls; WARN when some machines have no tier; FAIL when Tier 0 assets are not identified. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-05",
+    "dom": "A",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines"
+    ],
+    "title": "Metadata region and data residency",
+    "what": "Region of each machine compared with the allowed regions (optional).",
+    "crit": "WARN if any machine is outside the allowed regions; INFO without a list.",
+    "refs": [
+      "CTL-08"
+    ],
+    "key": "NEW-REGION",
+    "layer": "4",
+    "mcsb": "AM-2",
+    "tree": "D2",
+    "hz": "M",
+    "owner": "Governance",
+    "steps": [
+      "Confirm the regions allowed by the customer data policy.",
+      "Move metadata to the allowed region: requires removing the machine and redoing its onboarding."
+    ],
+    "how": "Machine metadata is stored in the region of the Arc resource. Change it only if there is a regulatory or contractual requirement.",
+    "docs": [
+      [
+        "Data residency",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/data-residency"
+      ],
+      [
+        "Data, replication and disaster recovery for Arc-enabled servers",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-data-privacy"
+      ],
+      [
+        "Azure region pairs",
+        "https://learn.microsoft.com/en-us/azure/reliability/regions-paired"
+      ],
+      [
+        "Rename and migrate Arc-enabled servers across regions",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/manage-howto-migrate"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PARTIAL when the allowed-region/data-residency policy is not supplied (regions are only listed, so compliance cannot be concluded); WARN if any machine is outside the allowed regions; PASS when every machine is inside them."
+  },
+  {
+    "id": "CHK-06",
+    "dom": "B",
+    "sev": "Low",
+    "type": "auto",
+    "ds": [
+      "machines"
+    ],
+    "title": "Recommended tags (best practice)",
+    "what": "Tags of each machine compared with the recommended list (optional).",
+    "crit": "INFO when any recommended tag is missing; N/A without a list.",
+    "refs": [
+      "REQ-02"
+    ],
+    "key": "GOV-03",
+    "layer": "4",
+    "mcsb": "AM-1",
+    "tree": "D2",
+    "hz": "M",
+    "owner": "Governance",
+    "steps": [
+      "Define the tag standard (optional) and enforce it with Azure Policy (inherit from the resource group or require at creation)."
+    ],
+    "how": "Tags are a best practice, not a requirement. Prioritize those that feed cost (costCenter) and operations (owner, patchWindow).",
+    "docs": [
+      [
+        "Resource tags",
+        "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "INFO by design (best practice, not scored): counts machines missing at least one of the tags env, owner, criticality, costCenter, dataClassification and patchWindow."
+  },
+  {
+    "id": "CHK-07",
+    "dom": "B",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "providers"
+    ],
+    "title": "Registered resource providers",
+    "what": "Registration state per subscription.",
+    "crit": "FAIL if HybridCompute, GuestConfiguration, or HybridConnectivity are not registered; WARN for the recommended ones.",
+    "refs": [
+      "REQ-05"
+    ],
+    "key": "GOV-04",
+    "layer": "3",
+    "mcsb": "—",
+    "tree": "D1",
+    "hz": "I",
+    "owner": "Platform",
+    "steps": [
+      "Register the required providers in each subscription: Microsoft.HybridCompute, Microsoft.GuestConfiguration, Microsoft.HybridConnectivity (and Microsoft.AzureArcData for SQL)."
+    ],
+    "how": "Mandatory when FAIL: without the providers, onboarding and extensions fail.",
+    "docs": [
+      [
+        "Prerequisites (resource providers)",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/prerequisites"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when every essential and recommended resource provider is Registered in all subscriptions in scope; FAIL when an essential provider is not registered in any subscription (onboarding and extensions fail without it)."
+  },
+  {
+    "id": "CHK-08",
+    "dom": "B",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "policyAssignments"
+    ],
+    "title": "Azure Policy and baseline assignments",
+    "what": "Assignments in scope and enforcement mode.",
+    "crit": "WARN if no assignment relates to Arc/security; reports those in DoNotEnforce.",
+    "refs": [
+      "REQ-07"
+    ],
+    "key": "GOV-05",
+    "layer": "1",
+    "mcsb": "PV-2, AM-2",
+    "tree": "D6",
+    "hz": "C",
+    "owner": "Governance",
+    "steps": [
+      "Assign the Arc security baseline and the onboarding policies (AMA, Defender, Machine Configuration) at the management group.",
+      "Review assignments in DoNotEnforce."
+    ],
+    "how": "Start in audit mode (Audit/AuditIfNotExists) and only then enable DeployIfNotExists with a remediation task.",
+    "docs": [
+      [
+        "Arc built-in policies",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/policy-reference"
+      ],
+      [
+        "Machine Configuration",
+        "https://learn.microsoft.com/en-us/azure/governance/machine-configuration/overview"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "INFO by design (inventory): lists the Azure Policy assignments that reach Arc machines and flags DoNotEnforce; the compliance outcome is scored in CHK-09."
+  },
+  {
+    "id": "CHK-09",
+    "dom": "B",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "policyStates"
+    ],
+    "title": "Policy compliance on the machines",
+    "what": "NonCompliant states grouped by assignment and definition.",
+    "crit": "WARN if there is noncompliance.",
+    "refs": [
+      "REQ-07",
+      "OPS-11"
+    ],
+    "key": "GOV-06",
+    "layer": "1",
+    "mcsb": "PV-2, PV-4",
+    "tree": "D6",
+    "hz": "C",
+    "owner": "Governance",
+    "steps": [
+      "Open the noncompliant rules with the most machines and create a remediation task or a documented exception."
+    ],
+    "how": "Fix security ones and those affecting the most machines first; exceptions only with an owner and a timeframe.",
+    "docs": [
+      [
+        "Arc built-in policies",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/policy-reference"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "WARN if there is noncompliance."
+  },
+  {
+    "id": "CHK-10",
+    "dom": "B",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "roles"
+    ],
+    "title": "Privileged roles in scope",
+    "what": "Owner, User Access Administrator, RBAC Administrator, and Contributor by principal type.",
+    "crit": "WARN if there is direct Owner/UAA/RBAC Admin for a user.",
+    "refs": [
+      "REQ-03",
+      "REQ-04"
+    ],
+    "key": "IAM-01",
+    "layer": "1",
+    "mcsb": "PA-1, PA-7",
+    "tree": "D4",
+    "hz": "I",
+    "owner": "Security",
+    "steps": [
+      "Remove direct Owner/User Access Administrator assignments from users; use groups.",
+      "Enable PIM (just-in-time activation) for privileged roles."
+    ],
+    "how": "Permanent assignment to a user only for an emergency (break-glass) account, documented.",
+    "docs": [
+      [
+        "Privileged Identity Management",
+        "https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/pim-configure"
+      ],
+      [
+        "Identity and authorization",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-identity-authorization"
+      ]
+    ],
+    "alerts": [
+      "ALR-08"
+    ],
+    "resultCriteria": "WARN if there is direct Owner/UAA/RBAC Admin for a user."
+  },
+  {
+    "id": "CHK-11",
+    "dom": "B",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "roles"
+    ],
+    "title": "Arc-specific roles",
+    "what": "Azure Connected Machine Onboarding, Resource Administrator, and similar roles.",
+    "crit": "WARN if the onboarding role is assigned to a user.",
+    "refs": [
+      "REQ-04"
+    ],
+    "key": "IAM-02",
+    "layer": "1",
+    "mcsb": "PA-7",
+    "tree": "D4",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Assign the onboarding role to a dedicated service principal, scoped to the target resource group."
+    ],
+    "how": "Users must not keep the onboarding role after deployment.",
+    "docs": [
+      [
+        "Onboarding with a service principal",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/onboard-service-principal"
+      ],
+      [
+        "Identity and authorization",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-identity-authorization"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "INFO by design (inventory): counts Arc-specific role assignments that reach Arc machines; privilege risk is scored in CHK-10."
+  },
+  {
+    "id": "CHK-12",
+    "dom": "B",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "roles",
+      "machines"
+    ],
+    "title": "Managed identity of the machines",
+    "what": "Roles assigned to the managed identities of Arc machines.",
+    "crit": "FAIL if there is a privileged role: the local administrator of the machine inherits this access in Azure.",
+    "refs": [
+      "REQ-04",
+      "REQ-08"
+    ],
+    "key": "IAM-03",
+    "layer": "1",
+    "mcsb": "IM-3, PA-7",
+    "tree": "D4",
+    "hz": "I",
+    "owner": "Security",
+    "steps": [
+      "Remove privileged roles (Owner, Contributor, Administrator) from the managed identities of Arc machines.",
+      "Grant only the minimum role for the specific resource (for example, read access to a Key Vault)."
+    ],
+    "how": "Anyone who is a local administrator of the machine can use its identity: treat it as access by that administrator in Azure.",
+    "docs": [
+      [
+        "Identity and authorization",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-identity-authorization"
+      ]
+    ],
+    "alerts": [
+      "ALR-08"
+    ],
+    "resultCriteria": "PASS when no Arc machine managed identity holds a role assignment in scope; non-PASS when any machine identity holds one and least privilege must be reviewed."
+  },
+  {
+    "id": "CHK-13",
+    "dom": "B",
+    "sev": "High",
+    "type": "manual",
+    "ds": [],
+    "title": "Identity model, PIM, and access review",
+    "what": "Entra groups by function, PIM/JIT for privileged roles, and periodic review.",
+    "crit": "Evidence: group matrix and PIM configuration.",
+    "refs": [
+      "REQ-03",
+      "OPS-12"
+    ],
+    "key": "DOC-REQ3",
+    "layer": "1",
+    "mcsb": "PA-2, PA-4",
+    "tree": "D4",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Define Entra groups by role, PIM for privileged roles, and quarterly access reviews."
+    ],
+    "how": "Follow least privilege: Arc-specific roles before Contributor.",
+    "docs": [
+      [
+        "Privileged Identity Management",
+        "https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/pim-configure"
+      ],
+      [
+        "Identity and authorization",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-identity-authorization"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when privileged access to the Arc scope uses groups with PIM (eligible, time-bound) and periodic access reviews are evidenced; WARN when only part is in place; FAIL when standing privileged access exists without review. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-14",
+    "dom": "B",
+    "sev": "High",
+    "type": "manual",
+    "ds": [],
+    "title": "Onboarding secrets and credentials",
+    "what": "Dedicated service principal, secret with expiration stored in a vault, no secrets in scripts; managed identity when possible.",
+    "crit": "Evidence: rotation procedure and storage location.",
+    "refs": [
+      "REQ-08"
+    ],
+    "key": "DOC-REQ8",
+    "layer": "1",
+    "mcsb": "IM-8",
+    "tree": "D4",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Use a dedicated service principal for onboarding, with a short-lived secret stored in a vault.",
+      "Remove secrets from scripts and rotate them after each wave.",
+      "Service principal with Azure Connected Machine Onboarding only; for GPO deployment, restrict the shared folder and remove the GPO and the scheduled task when done."
+    ],
+    "how": "If the secret appeared in a script or repository, rotate it immediately.",
+    "docs": [
+      [
+        "Onboarding with a service principal",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/onboard-service-principal"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when onboarding credentials use a dedicated service principal with the Azure Connected Machine Onboarding role, stored in a vault, with expiry and rotation; FAIL when secrets are embedded in scripts or never expire. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-15",
+    "dom": "B",
+    "sev": "Low",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "related"
+    ],
+    "title": "Key Vaults",
+    "what": "Public access, purge protection, and RBAC permission model.",
+    "crit": "WARN for a definite baseline gap; PARTIAL when a required property is null/absent and no PASS/WARN conclusion is possible. Null/absent is never treated as false.",
+    "refs": [
+      "REQ-08"
+    ],
+    "key": "PRT-04",
+    "layer": "1",
+    "mcsb": "DP-8",
+    "tree": "D4",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Enable purge protection and the RBAC permission model; restrict public access on the vaults used by Arc."
+    ],
+    "how": "Prioritize the vaults that store onboarding secrets or server certificates.",
+    "docs": [
+      [
+        "Secure the Key Vault",
+        "https://learn.microsoft.com/en-us/azure/key-vault/general/secure-key-vault"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "WARN for a definite baseline gap; PARTIAL when a required property is null/absent and no PASS/WARN conclusion is possible. Null/absent is never treated as false."
+  },
+  {
+    "id": "CHK-16",
+    "dom": "B",
+    "sev": "Medium",
+    "type": "manual",
+    "ds": [],
+    "title": "Cross-subscription scenarios",
+    "what": "Private Endpoint, Private Link Scope, and ExpressRoute across subscriptions; approval of Pending connections.",
+    "crit": "Evidence: RBAC on both sides and approval flow.",
+    "refs": [
+      "REQ-06"
+    ],
+    "key": "DOC-REQ6",
+    "layer": "4",
+    "mcsb": "AM-1, AM-4",
+    "tree": "D3",
+    "hz": "C",
+    "owner": "Network",
+    "steps": [
+      "Map dependencies between subscriptions (Private Link Scope, DNS, workspace, DCR) and the RBAC required on both sides."
+    ],
+    "how": "Shared resources (hub, SOC) must be in the collection scope or have a defined owner.",
+    "docs": [
+      [
+        "Private Link",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/private-link-security"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when cross-subscription/cross-tenant scenarios (shared workspaces, Private Link Scopes, delegated access) are documented with owners and access boundaries; WARN when they exist but are not documented. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-17",
+    "dom": "C",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "related"
+    ],
+    "title": "Connectivity model in use",
+    "what": "Machines via Private Link, via proxy, Arc gateways, and public endpoints.",
+    "crit": "Informational: compare with the connectivity decision.",
+    "refs": [
+      "DEC-05",
+      "DEC-06",
+      "DEC-07",
+      "DEC-08"
+    ],
+    "key": "NET-01",
+    "layer": "1",
+    "mcsb": "NS-2",
+    "tree": "D3",
+    "hz": "C",
+    "owner": "Network",
+    "steps": [
+      "Compare the model in use with the connectivity decision (DEC-05 to DEC-08) and record the exceptions."
+    ],
+    "how": "Private (Private Link) when policy requires traffic without internet; Arc gateway to reduce FQDNs; explicit proxy when it is already the corporate standard.",
+    "docs": [
+      [
+        "Network requirements",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/network-requirements"
+      ],
+      [
+        "Private Link",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/private-link-security"
+      ],
+      [
+        "Arc gateway",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/arc-gateway"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "INFO by design (inventory): reports the connectivity model per machine (Private Link, proxy, Arc gateway or public endpoints); security decisions are scored in CHK-18, CHK-19 and CHK-20."
+  },
+  {
+    "id": "CHK-18",
+    "dom": "C",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "related"
+    ],
+    "title": "Private Link Scope public access",
+    "what": "publicNetworkAccess of each Azure Arc Private Link Scope.",
+    "crit": "FAIL if any scope allows public access; N/A without Private Link.",
+    "refs": [
+      "DEC-05"
+    ],
+    "key": "NET-02",
+    "layer": "1",
+    "mcsb": "NS-2",
+    "tree": "D3",
+    "hz": "I",
+    "owner": "Network",
+    "steps": [
+      "Disable public access on the Private Link Scope that should be private."
+    ],
+    "how": "If machines still depend on public access, migrate them first and then disable it.",
+    "docs": [
+      [
+        "Private Link",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/private-link-security"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "N/A when no Azure Arc Private Link Scope exists in scope; otherwise PASS when every Private Link Scope denies public network access and FAIL when any allows it."
+  },
+  {
+    "id": "CHK-19",
+    "dom": "C",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "related"
+    ],
+    "title": "Arc private DNS",
+    "what": "privatelink.his.arc.azure.com and privatelink.guestconfiguration.azure.com zones and DNS Private Resolver.",
+    "crit": "WARN if there is Private Link without the zones in scope (they may be in the hub).",
+    "refs": [
+      "CTL-01"
+    ],
+    "key": "NET-03",
+    "layer": "3",
+    "mcsb": "NS-10",
+    "tree": "D3",
+    "hz": "C",
+    "owner": "Network",
+    "steps": [
+      "Create or link the privatelink.his.arc.azure.com and privatelink.guestconfiguration.azure.com zones and the on-premises DNS forwarding."
+    ],
+    "how": "If the zones are in the hub, include the hub subscription in the collection to confirm.",
+    "docs": [
+      [
+        "Private Link",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/private-link-security"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "N/A without an Azure Arc Private Link Scope; otherwise PASS when privatelink.his.arc.azure.com and privatelink.guestconfiguration.azure.com are present in the collected scope, and WARN when either zone is missing (the zone may be hosted in a hub subscription or on-premises DNS outside the collected scope)."
+  },
+  {
+    "id": "CHK-20",
+    "dom": "C",
+    "sev": "High",
+    "type": "manual",
+    "ds": [],
+    "title": "Connectivity decision and network allowances",
+    "what": "Chosen model (private, Arc gateway, explicit proxy, or direct), FQDN/Service Tags allowlist, Entra ID and ARM allowed, no TLS inspection on the gateway.",
+    "crit": "Evidence: approved decision and firewall/proxy rules.",
+    "refs": [
+      "DEC-05",
+      "DEC-06",
+      "DEC-07",
+      "DEC-08",
+      "CTL-01"
+    ],
+    "key": "DOC-NET",
+    "layer": "4",
+    "mcsb": "NS-2, NS-9",
+    "tree": "D3",
+    "hz": "C",
+    "owner": "Network",
+    "steps": [
+      "Approve the connectivity model and the allowed endpoints (FQDNs or Service Tags), with no TLS inspection of agent traffic."
+    ],
+    "how": "Entra ID and ARM remain public even with Private Link: allow these destinations.",
+    "docs": [
+      [
+        "Network requirements",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/network-requirements"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when the connectivity decision (public, proxy, Arc gateway or Private Link) is documented and the required endpoints are allowed and validated (for example, azcmagent check); WARN when the decision exists without validation evidence. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-21",
+    "dom": "D",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "machines"
+    ],
+    "title": "Inbound ports on the agent (SSH/WAC)",
+    "what": "incomingConnectionsPorts of the agent.",
+    "crit": "WARN if there are open ports.",
+    "refs": [
+      "CTL-03"
+    ],
+    "key": "NET-04",
+    "layer": "3",
+    "mcsb": "IM-1, NS-8",
+    "tree": "D5",
+    "hz": "I",
+    "owner": "Security",
+    "steps": [
+      "Close inbound ports on the agent where SSH/WAC is not used: azcmagent config set incomingconnections.ports \"\"."
+    ],
+    "how": "Keep them open only on machines with approved use (outside Tier 0) and with access through Entra.",
+    "docs": [
+      [
+        "SSH for Arc servers",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/ssh-arc-overview"
+      ],
+      [
+        "Arc security overview",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-overview"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "WARN if there are open ports."
+  },
+  {
+    "id": "CHK-22",
+    "dom": "D",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines"
+    ],
+    "title": "Agent mode",
+    "what": "configMode (full/monitor), extensions, and guest configuration enabled.",
+    "crit": "Informational.",
+    "refs": [
+      "CTL-02"
+    ],
+    "key": "EXT-01",
+    "layer": "3",
+    "mcsb": "PV-3",
+    "tree": "D5",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Use monitor mode on machines that only need inventory and monitoring."
+    ],
+    "how": "Full mode for managed servers; monitor mode for sensitive servers where remote execution is not wanted.",
+    "docs": [
+      [
+        "Arc security overview",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-overview"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "INFO by design (inventory): reports the agent configuration mode (full/monitor) and locally disabled extensions; extension hardening is scored in CHK-23 and CHK-24."
+  },
+  {
+    "id": "CHK-23",
+    "dom": "D",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "machines"
+    ],
+    "title": "Extension allowlist/blocklist",
+    "what": "extensionsAllowList and extensionsBlockList configured on the agent.",
+    "crit": "FAIL when at least half of applicable machines accept any extension; WARN when a smaller subset does; PASS when every applicable machine has an allowlist or blocklist.",
+    "refs": [
+      "CTL-02"
+    ],
+    "key": "EXT-02",
+    "layer": "3",
+    "mcsb": "AM-5",
+    "tree": "D5",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Define the extension allowlist per profile (for example, AMA, MDE, SQL, Machine Configuration) and apply it with azcmagent or policy."
+    ],
+    "how": "Start with Tier 0 and exposed servers; on the others, at least a blocklist for CustomScript and RunCommand where they are not used.",
+    "docs": [
+      [
+        "Extension security (allowlist/blocklist)",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-extensions"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "FAIL when at least half of applicable machines accept any extension; WARN when a smaller subset does; PASS when every applicable machine has an allowlist or blocklist."
+  },
+  {
+    "id": "CHK-24",
+    "dom": "D",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "extensions"
+    ],
+    "title": "Sensitive extensions",
+    "what": "Windows Admin Center, OpenSSH, Entra login, AD join, Hybrid Worker, and Custom Script.",
+    "crit": "WARN: review the need and who can use them.",
+    "refs": [
+      "CTL-02",
+      "CTL-03"
+    ],
+    "key": "EXT-05",
+    "layer": "4",
+    "mcsb": "AM-5, PA-7",
+    "tree": "D5",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Review each sensitive extension (WAC, OpenSSH, Entra login, Hybrid Worker, Custom Script): keep it only where there is approved use."
+    ],
+    "how": "Remove if there is no owner and no use in the last 90 days.",
+    "docs": [
+      [
+        "Extension security (allowlist/blocklist)",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-extensions"
+      ],
+      [
+        "Run Command",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/run-command"
+      ]
+    ],
+    "alerts": [
+      "ALR-05"
+    ],
+    "resultCriteria": "PASS when no sensitive extension (script or command execution) is installed on Arc machines; non-PASS when any is installed."
+  },
+  {
+    "id": "CHK-25",
+    "dom": "D",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "roles"
+    ],
+    "title": "Entra access to the OS (SSH/RDP/WAC)",
+    "what": "Virtual Machine Administrator/User Login and Windows Admin Center Administrator Login.",
+    "crit": "Informational: validate scope and use of groups.",
+    "refs": [
+      "CTL-03",
+      "REQ-04"
+    ],
+    "key": "IAM-04",
+    "layer": "1",
+    "mcsb": "IM-1",
+    "tree": "D4",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Restrict Virtual Machine Administrator/User Login and WAC Administrator Login to groups and to the required scope."
+    ],
+    "how": "Administrator sign-in only through a group with PIM.",
+    "docs": [
+      [
+        "SSH for Arc servers",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/ssh-arc-overview"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "INFO by design (inventory): counts Entra ID login/SSH/Windows Admin Center role assignments that reach Arc machines; scope and use of groups are validated with the customer."
+  },
+  {
+    "id": "CHK-26",
+    "dom": "D",
+    "sev": "High",
+    "type": "manual",
+    "ds": [],
+    "title": "Run Command and Admin Center per tier",
+    "what": "Formal usage decision per tier; Tier 0 blocked by default.",
+    "crit": "Evidence: approved decision and applied control (allowlist/RBAC).",
+    "refs": [
+      "CTL-03",
+      "DEC-04"
+    ],
+    "key": "DOC-CTL3",
+    "layer": "4",
+    "mcsb": "PA-7",
+    "tree": "D5",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Decide per tier on the use of Run Command and Admin Center and enforce it through the allowlist and RBAC."
+    ],
+    "how": "Tier 0: blocked by default. Others: allowed with auditing and alerting.",
+    "docs": [
+      [
+        "Run Command",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/run-command"
+      ],
+      [
+        "Extension security (allowlist/blocklist)",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-extensions"
+      ]
+    ],
+    "alerts": [
+      "ALR-05"
+    ],
+    "resultCriteria": "PASS when Run Command and Windows Admin Center use is defined per tier and enforced (disabled or restricted on Tier 0 by allowlist/RBAC); FAIL when they are unrestricted on Tier 0. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-27",
+    "dom": "D",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines"
+    ],
+    "title": "Guest configuration (Machine Configuration)",
+    "what": "guestConfigurationEnabled on the agent.",
+    "crit": "WARN if disabled (no policy auditing inside the OS).",
+    "refs": [
+      "REQ-07"
+    ],
+    "key": "EXT-03",
+    "layer": "2",
+    "mcsb": "PV-4",
+    "tree": "D6",
+    "hz": "C",
+    "owner": "Governance",
+    "steps": [
+      "Enable guest configuration on the agent on machines that must be audited by policy."
+    ],
+    "how": "Disable only if there is a formal decision (for example, monitor mode) and another configuration control.",
+    "docs": [
+      [
+        "Machine Configuration",
+        "https://learn.microsoft.com/en-us/azure/governance/machine-configuration/overview"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "WARN if disabled (no policy auditing inside the OS)."
+  },
+  {
+    "id": "CHK-28",
+    "dom": "D",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "extensions"
+    ],
+    "title": "Failed extensions",
+    "what": "provisioningState of all extensions.",
+    "crit": "FAIL if not Succeeded.",
+    "refs": [
+      "OPS-06",
+      "OPS-11"
+    ],
+    "key": "EXT-04",
+    "layer": "3",
+    "mcsb": "—",
+    "tree": "D7",
+    "hz": "I",
+    "owner": "Operations",
+    "steps": [
+      "Group failures by cause (finding cause column).",
+      "Missing OS dependency (Python): the extension message itself (for example MDE.Linux and OS update on Linux) states that Python is missing; install the distribution python3 package and reapply the extension.",
+      "Blocked by the allowlist: decide whether the extension goes into the profile allowlist or whether the assignment should be removed (for example, a patch assessment policy or Hybrid Worker pushed to Tier 0); do not leave it permanently failed.",
+      "Other causes: fix (network, OS version, conflict), reinstall, and remove orphaned extensions."
+    ],
+    "how": "The allowlist is a security decision per tier: if the service is needed in the tier, include it; if not, remove the assignment at the source (policy or service). Prioritize MDE, AMA, SQL, and patching.",
+    "docs": [
+      [
+        "Troubleshoot extension issues",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/troubleshoot-vm-extensions"
+      ],
+      [
+        "Extension security (allowlist/blocklist)",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-extensions"
+      ]
+    ],
+    "alerts": [
+      "ALR-02"
+    ],
+    "resultCriteria": "PASS when every extension on Arc machines is in Succeeded state; non-PASS when any extension is in a failed state."
+  },
+  {
+    "id": "CHK-29",
+    "dom": "D",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "machines"
+    ],
+    "title": "Agent version within support",
+    "what": "Version of each Connected Machine agent × release date in the release notes, with the age in months on the run date; only versions released in the last 12 months are supported (table of 2026-10-22: latest 1.68, Sep/2026). Includes the 1.61 security floor (published elevation of privilege CVEs).",
+    "crit": "FAIL if any agent is out of support; WARN if supported but older than 6 months. FAIL also for versions earlier than 1.61.",
+    "refs": [
+      "OPS-05"
+    ],
+    "key": "EXT-06",
+    "layer": "3",
+    "mcsb": "PV-6",
+    "tree": "D7",
+    "hz": "I",
+    "owner": "Operations",
+    "steps": [
+      "Update the agent on machines out of support (released more than 12 months before the collection date).",
+      "Prioritize machines below 1.61: CVE-2026-26117 and earlier CVEs allow elevation to SYSTEM and use of the machine identity.",
+      "Plan updates for those older than 6 months; standardize monthly updates through Update Manager, WSUS, or the package manager."
+    ],
+    "how": "Out of support = mandatory. Between 6 and 12 months = include in the next window.",
+    "docs": [
+      [
+        "Agent release notes",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/agent-release-notes"
+      ],
+      [
+        "Manage and update the agent",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/manage-agent"
+      ]
+    ],
+    "alerts": [
+      "ALR-03"
+    ],
+    "resultCriteria": "PASS when no machine runs an agent below 1.61 (published elevation-of-privilege CVEs) or older than the 12-month support window, and none is supported but more than 6 months old; non-PASS otherwise."
+  },
+  {
+    "id": "CHK-30",
+    "dom": "D",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "extensions"
+    ],
+    "title": "Extension versions and automatic upgrade",
+    "what": "SQL extension and Azure Monitor Agent × 12-month support window (release notes; current SQL target 1.1.3518.465); other extensions × latest version published by Azure in the region (Extension Metadata; fallback: newest in the estate); enableAutomaticUpgrade.",
+    "crit": "FAIL if the SQL extension or the Azure Monitor Agent is out of support; WARN if any extension is behind the published version (or the newest in the estate) or without automatic upgrade.",
+    "refs": [
+      "OPS-06",
+      "CTL-04"
+    ],
+    "key": "EXT-07",
+    "layer": "3",
+    "mcsb": "PV-6",
+    "tree": "D7",
+    "hz": "C",
+    "owner": "Operations",
+    "steps": [
+      "Update the SQL extension and the Azure Monitor Agent outside the 12-month window (only versions released in the last year are supported).",
+      "Enable automatic extension upgrade and bring outdated extensions in line with the newest version in the fleet."
+    ],
+    "how": "Automatic upgrade is the recommended default; disable it only with a documented reason.",
+    "docs": [
+      [
+        "Automatic extension upgrade",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/manage-automatic-vm-extension-upgrade"
+      ],
+      [
+        "SQL Arc with least privilege",
+        "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/configure-least-privilege"
+      ],
+      [
+        "SQL extension release notes (Azure Arc)",
+        "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/release-notes"
+      ],
+      [
+        "Azure Monitor Agent versions",
+        "https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-extension-versions"
+      ]
+    ],
+    "alerts": [
+      "ALR-04"
+    ],
+    "resultCriteria": "FAIL if the SQL extension or the Azure Monitor Agent is out of support; WARN if any extension is behind the published version (or the newest in the estate) or without automatic upgrade."
+  },
+  {
+    "id": "CHK-31",
+    "dom": "D",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "pricing"
+    ],
+    "title": "Defender for Servers",
+    "what": "VirtualMachines plan per subscription (tier and subplan).",
+    "crit": "FAIL if Free.",
+    "refs": [
+      "CTL-06"
+    ],
+    "key": "PRT-01",
+    "layer": "1",
+    "mcsb": "LT-1",
+    "tree": "D6",
+    "hz": "I",
+    "owner": "Security",
+    "steps": [
+      "Enable Defender for Servers (Plan 1 or 2) on the subscription."
+    ],
+    "how": "Plan 2 when you need agentless vulnerability assessment, FIM, and when you would already use Update Manager/Machine Configuration (included). Plan 1 for basic endpoint protection.",
+    "docs": [
+      [
+        "Plan Defender for Servers",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers"
+      ],
+      [
+        "Azure Arc pricing",
+        "https://azure.microsoft.com/en-us/pricing/details/azure-arc/core-control-plane/"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when Defender for Servers (P1 or P2) is enabled in every subscription with Arc machines; non-PASS when any such subscription is on Free."
+  },
+  {
+    "id": "CHK-32",
+    "dom": "D",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "extensions"
+    ],
+    "title": "MDE extension deployed through Arc",
+    "what": "Connected machines without the MDE.Windows/MDE.Linux extension.",
+    "crit": "WARN if there are machines without the sensor via Arc.",
+    "refs": [
+      "CTL-06",
+      "LAT"
+    ],
+    "key": "PRT-02",
+    "layer": "1",
+    "mcsb": "ES-1",
+    "tree": "D6",
+    "hz": "I",
+    "owner": "Security",
+    "steps": [
+      "Install the Defender for Endpoint sensor (MDE.Windows/MDE.Linux) on machines without it, through Defender for Cloud."
+    ],
+    "how": "If MDE was already installed by another tool, confirm the onboarding in the Defender portal.",
+    "docs": [
+      [
+        "Integration with Defender for Endpoint",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/integration-defender-for-endpoint"
+      ],
+      [
+        "Defender for Endpoint releases (sensor per platform)",
+        "https://learn.microsoft.com/en-us/defender-endpoint/microsoft-defender-endpoint-releases"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PARTIAL when any connected machine lacks the MDE extension deployed through Arc (this proves only the Arc extension gap; sensor onboarding and health require Defender portal evidence); PASS when every connected machine has it."
+  },
+  {
+    "id": "CHK-33",
+    "dom": "D",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "defender"
+    ],
+    "title": "Defender recommendations",
+    "what": "Unhealthy assessments on Arc machines, by severity.",
+    "crit": "FAIL when any Arc recommendation with affected machines has High severity; WARN when recommendations exist only below High; PASS when none affects an Arc machine.",
+    "refs": [
+      "CTL-06"
+    ],
+    "key": "PRT-03",
+    "layer": "1",
+    "mcsb": "PV-5, PV-4",
+    "tree": "D6",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Address High recommendations first, grouping by type (SQL ones usually dominate the volume)."
+    ],
+    "how": "Remediate or exempt with justification; a recommendation without an owner becomes a formal exception.",
+    "docs": [
+      [
+        "Plan Defender for Servers",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers"
+      ],
+      [
+        "Risk prioritization in Defender for Cloud",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/risk-prioritization"
+      ],
+      [
+        "Defender for Cloud governance rules (owner and due date)",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/governance-rules"
+      ],
+      [
+        "Resource Graph queries for Defender for Cloud",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/resource-graph-samples"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "FAIL when any Arc recommendation with affected machines has High severity; WARN when recommendations exist only below High; PASS when none affects an Arc machine."
+  },
+  {
+    "id": "CHK-34",
+    "dom": "D",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "pricing",
+      "extensions"
+    ],
+    "title": "SQL Server: Defender for SQL and least privilege",
+    "what": "Machines with SQL, Defender for SQL plan, SQL extension version/automatic upgrade (least privilege starting with 1.1.2859.223), SQL on a machine associated with Private Link (the data processing service *.<region>.arcdataservices.com does not support Private Link) and SQL on an unsupported OS (earlier than Windows Server 2016).",
+    "crit": "WARN if any of these cases occur; N/A without SQL.",
+    "refs": [
+      "CTL-04",
+      "DEC-05"
+    ],
+    "key": "NEW-SQL",
+    "layer": "1",
+    "mcsb": "LT-1, PA-7",
+    "tree": "D6",
+    "hz": "C",
+    "owner": "DBA",
+    "steps": [
+      "Enable Defender for SQL in subscriptions with SQL.",
+      "Update the SQL extension to a version with least privilege and auto-upgrade.",
+      "Review SQL on machines with Private Link (the data processing service does not use Private Link) and SQL on an OS earlier than Windows Server 2016."
+    ],
+    "how": "SQL on an unsupported OS goes into the modernization plan (LEG).",
+    "docs": [
+      [
+        "Defender for SQL on servers",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-sql-usage"
+      ],
+      [
+        "SQL Arc with least privilege",
+        "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/configure-least-privilege"
+      ],
+      [
+        "Private Link",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/private-link-security"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "WARN if any of these cases occur; N/A without SQL."
+  },
+  {
+    "id": "CHK-35",
+    "dom": "D",
+    "sev": "Medium",
+    "type": "manual",
+    "ds": [],
+    "title": "Local accounts and HIMDS GPO",
+    "what": "Log on as a service right for NT SERVICE\\himds; default agent accounts preserved.",
+    "crit": "Evidence: GPO/local configuration on a sample.",
+    "refs": [
+      "CTL-05"
+    ],
+    "key": "DOC-CTL5",
+    "layer": "3",
+    "mcsb": "—",
+    "tree": "D4",
+    "hz": "M",
+    "owner": "Operations",
+    "steps": [
+      "Ensure 'Log on as a service' for NT SERVICE\\himds in the GPO and preserve the default agent accounts."
+    ],
+    "how": "Validate on a sample before changing GPOs in production.",
+    "docs": [
+      [
+        "Agent overview",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/agent-overview"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when local administrator membership is controlled and a GPO restricts access to the HIMDS identity endpoint to the authorized local groups; FAIL when unmanaged local administrators exist. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-36",
+    "dom": "D",
+    "sev": "Medium",
+    "type": "manual",
+    "ds": [],
+    "title": "Local collection on a sample (agent and services)",
+    "what": "azcmagent show, azcmagent check, azcmagent config list, and catalog Windows services on a sample per profile. Includes the agent scheduled tasks (azcmagent) and the GPO deployment task, and the service startup types.",
+    "crit": "Evidence: outputs attached to the package.",
+    "refs": [
+      "CTL-05",
+      "SVC",
+      "EVD"
+    ],
+    "key": "DOC-SVC",
+    "layer": "3",
+    "mcsb": "—",
+    "tree": "D6",
+    "hz": "M",
+    "owner": "Operations",
+    "steps": [
+      "Run azcmagent show, azcmagent check, and azcmagent config list on a sample per profile and attach the output to the package.",
+      "Record the agent scheduled tasks and services: Get-ScheduledTask -TaskName azcmagent (daily, SYSTEM) and Get-Service himds, GCArcService, ExtensionService, arcproxy with their startup type."
+    ],
+    "how": "Minimum sample: one machine per network profile and per OS.",
+    "docs": [
+      [
+        "Agent overview",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/agent-overview"
+      ],
+      [
+        "Troubleshoot agent connection issues",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/troubleshoot-agent-onboard"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when local collection on the agreed sample (azcmagent show/check and agent services) shows a healthy agent and running services; WARN when deviations are found. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-37",
+    "dom": "E",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "machines"
+    ],
+    "title": "Disconnected or expired machines",
+    "what": "Status other than Connected and days since the last change.",
+    "crit": "FAIL if there is Disconnected/Expired. Expired requires a new onboarding; a disconnected machine does not receive policies, patches, or extensions.",
+    "refs": [
+      "OPS-08",
+      "OPS-09",
+      "OPS-11"
+    ],
+    "key": "GOV-02",
+    "layer": "3",
+    "mcsb": "AM-3",
+    "tree": "D8",
+    "hz": "I",
+    "owner": "Operations",
+    "steps": [
+      "Disconnected: check the himds service, network, and proxy (azcmagent check) and reconnect.",
+      "Expired (more than 45 days without connection): redo the onboarding.",
+      "Decommissioned or migrated: remove the Arc resource to avoid leaving orphans."
+    ],
+    "how": "If the machine no longer exists, remove it. If it exists, reconnect it. Expired always requires new onboarding.",
+    "docs": [
+      [
+        "Troubleshoot agent connection issues",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/troubleshoot-agent-onboard"
+      ],
+      [
+        "Uninstall the agent and clean up resources",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/uninstall-agent"
+      ],
+      [
+        "Arc-enabled servers in disconnected scenarios",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/troubleshoot-connectivity"
+      ],
+      [
+        "Data, replication and disaster recovery for Arc-enabled servers",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-data-privacy"
+      ]
+    ],
+    "alerts": [
+      "ALR-01"
+    ],
+    "resultCriteria": "FAIL if there is Disconnected/Expired. Expired requires a new onboarding; a disconnected machine does not receive policies, patches, or extensions."
+  },
+  {
+    "id": "CHK-38",
+    "dom": "E",
+    "sev": "Low",
+    "type": "auto",
+    "ds": [
+      "advisor"
+    ],
+    "title": "Advisor recommendations",
+    "what": "Advisor recommendations for Arc machines.",
+    "crit": "Informational.",
+    "refs": [
+      "OPS-09"
+    ],
+    "key": "OPS-04",
+    "layer": "3",
+    "mcsb": "—",
+    "tree": "D8",
+    "hz": "M",
+    "owner": "Operations",
+    "steps": [
+      "Review and address Advisor recommendations for Arc resources."
+    ],
+    "how": "Follow the severity indicated by Advisor.",
+    "docs": [
+      [
+        "Azure Advisor",
+        "https://learn.microsoft.com/en-us/azure/advisor/advisor-overview"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "INFO by design (not scored): counts Azure Advisor recommendations that target Arc machines."
+  },
+  {
+    "id": "CHK-39",
+    "dom": "E",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "extensions"
+    ],
+    "title": "Azure Monitor Agent",
+    "what": "Connected machines without AMA.",
+    "crit": "FAIL when no connected machine has AMA; WARN when only part of the connected estate lacks AMA; PASS when all connected machines have AMA.",
+    "refs": [
+      "OPS-04",
+      "CTL-07"
+    ],
+    "key": "OPS-01",
+    "layer": "1",
+    "mcsb": "LT-3, LT-5",
+    "tree": "D6",
+    "hz": "C",
+    "owner": "Operations",
+    "steps": [
+      "Deploy AMA to connected machines through Azure Policy (DeployIfNotExists) or DCR."
+    ],
+    "how": "If the machine does not need logs, document it; otherwise, AMA is the standard (MMA was retired).",
+    "docs": [
+      [
+        "Azure Monitor Agent",
+        "https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-overview"
+      ]
+    ],
+    "alerts": [
+      "ALR-06"
+    ],
+    "resultCriteria": "FAIL when no connected machine has AMA; WARN when only part of the connected estate lacks AMA; PASS when all connected machines have AMA."
+  },
+  {
+    "id": "CHK-40",
+    "dom": "E",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "extensions",
+      "dcra",
+      "related"
+    ],
+    "title": "DCR association",
+    "what": "Machines with AMA and no associated Data Collection Rule; DCRs in use and destination workspaces.",
+    "crit": "WARN: agent installed without collecting data.",
+    "refs": [
+      "OPS-04",
+      "CTL-07"
+    ],
+    "key": "OPS-02",
+    "layer": "1",
+    "mcsb": "LT-3, LT-5",
+    "tree": "D6",
+    "hz": "C",
+    "owner": "Operations",
+    "steps": [
+      "Associate a DCR with machines that have AMA (security events, performance, and Syslog according to the profile)."
+    ],
+    "how": "AMA without a DCR collects nothing: define DCRs per profile before expanding.",
+    "docs": [
+      [
+        "Data collection with DCR",
+        "https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-data-collection"
+      ]
+    ],
+    "alerts": [
+      "ALR-06"
+    ],
+    "resultCriteria": "PARTIAL (assessment blocked) when no connected machine has Azure Monitor Agent; WARN when a machine with AMA has no associated DCR (agent installed without collecting data); PASS when every machine with AMA has a DCR."
+  },
+  {
+    "id": "CHK-41",
+    "dom": "E",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "related",
+      "dcra",
+      "machines",
+      "diag"
+    ],
+    "title": "Microsoft Sentinel and machine coverage",
+    "what": "Workspaces with Sentinel; DCRs that send data to them (flows), Arc machines covered by those DCRs, retention, and Activity Log export to Sentinel.",
+    "crit": "FAIL when Sentinel exists in the collected scope but no Arc machine sends events to it; WARN when Sentinel is not found and an external SOC dependency is unresolved; INFO with measured coverage.",
+    "refs": [
+      "CTL-07",
+      "LAT"
+    ],
+    "key": "NEW-SENTINEL",
+    "layer": "1",
+    "mcsb": "LT-5, IR-3",
+    "tree": "D6",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Confirm the SOC workspace with Sentinel and connect the security events of the Arc machines."
+    ],
+    "how": "If Sentinel is in another subscription, include it in the collection or record the dependency.",
+    "docs": [
+      [
+        "Microsoft Sentinel",
+        "https://learn.microsoft.com/en-us/azure/sentinel/overview"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "FAIL when Sentinel exists in the collected scope but no Arc machine sends events to it; WARN when Sentinel is not found and an external SOC dependency is unresolved; INFO with measured coverage."
+  },
+  {
+    "id": "CHK-42",
+    "dom": "E",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "patch"
+    ],
+    "title": "Patch assessment (Update Manager/WSUS)",
+    "what": "Periodic assessment (AutomaticByPlatform) and pending critical/security patches.",
+    "crit": "FAIL for pending critical/security patches or a failed patch extension; PARTIAL when assessment/authority is unknown; PASS only with one valid canonical assessment row per connected machine and no pending critical/security patches.",
+    "refs": [
+      "OPS-10"
+    ],
+    "key": "OPS-03",
+    "layer": "1",
+    "mcsb": "PV-6",
+    "tree": "D7",
+    "hz": "C",
+    "owner": "Operations",
+    "steps": [
+      "Enable periodic assessment (AutomaticByPlatform) and address pending critical and security patches.",
+      "Check the prerequisites: patch extensions install themselves on the first operation; allow the Windows Update endpoints or the configured WSUS server; on Linux, Python 2.7 or later and sudo for root."
+    ],
+    "how": "Periodic assessment is billed outside the benefits (Defender P2, attested SA, WS PAYG, ESU): consider it in REQ-09.",
+    "docs": [
+      [
+        "Azure Update Manager",
+        "https://learn.microsoft.com/en-us/azure/update-manager/overview"
+      ],
+      [
+        "Periodic patch assessment",
+        "https://learn.microsoft.com/en-us/azure/update-manager/assessment-options"
+      ],
+      [
+        "Azure Update Manager prerequisites",
+        "https://learn.microsoft.com/en-us/azure/update-manager/prerequisites"
+      ]
+    ],
+    "alerts": [
+      "ALR-07"
+    ],
+    "resultCriteria": "FAIL for pending critical/security patches or a failed patch extension; PARTIAL when assessment/authority is unknown; PASS only with one valid canonical assessment row per connected machine and no pending critical/security patches."
+  },
+  {
+    "id": "CHK-43",
+    "dom": "E",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "diag"
+    ],
+    "title": "Activity Log export",
+    "what": "Subscription diagnostic settings to Log Analytics.",
+    "crit": "FAIL if there is no export (native retention of 90 days).",
+    "refs": [
+      "EVD",
+      "LAT"
+    ],
+    "key": "LOG-01",
+    "layer": "1",
+    "mcsb": "LT-3, LT-5",
+    "tree": "D6",
+    "hz": "I",
+    "owner": "Security",
+    "steps": [
+      "Create a subscription diagnostic setting that sends the Activity Log to Log Analytics."
+    ],
+    "how": "Without export, native retention is 90 days: insufficient for investigation.",
+    "docs": [
+      [
+        "Activity Log",
+        "https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when the Activity Log is exported to Log Analytics in every subscription in scope; non-PASS when any subscription has no export."
+  },
+  {
+    "id": "CHK-44",
+    "dom": "E",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "activity"
+    ],
+    "title": "Sensitive operations in the period",
+    "what": "Run Command, extension installation/removal, machine removal, and licenses.",
+    "crit": "WARN if there are Run Command operations or removals: review author and justification.",
+    "refs": [
+      "CTL-03",
+      "EVD",
+      "LAT"
+    ],
+    "key": "LOG-02",
+    "layer": "1",
+    "mcsb": "LT-3, IR-4",
+    "tree": "D6",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Review the author and justification of sensitive operations (Run Command, extensions, removals).",
+      "Create alerts for these operations."
+    ],
+    "how": "An operation without a ticket or without a known author must be investigated.",
+    "docs": [
+      [
+        "Activity Log",
+        "https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log"
+      ],
+      [
+        "Create an Activity Log alert",
+        "https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-create-activity-log-alert-rule"
+      ]
+    ],
+    "alerts": [
+      "ALR-05"
+    ],
+    "resultCriteria": "WARN if there are Run Command operations or removals: review author and justification."
+  },
+  {
+    "id": "CHK-45",
+    "dom": "E",
+    "sev": "Low",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "related",
+      "dcra"
+    ],
+    "title": "Log Analytics retention",
+    "what": "retentionInDays of the workspaces.",
+    "crit": "WARN if less than 90 days.",
+    "refs": [
+      "EVD"
+    ],
+    "key": "LOG-03",
+    "layer": "1",
+    "mcsb": "LT-6",
+    "tree": "D6",
+    "hz": "M",
+    "owner": "Security",
+    "steps": [
+      "Set the retention of security workspaces to the defined minimum (90 days or more)."
+    ],
+    "how": "Retention per table: longer for security, shorter for performance, controlling cost.",
+    "docs": [
+      [
+        "Log Analytics retention",
+        "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/data-retention-configure"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "N/A when no workspace receives Arc machine data through a DCR (coverage is resolved in CHK-39/CHK-40); otherwise PASS when every such workspace keeps at least 90 days of retention and WARN when any keeps less."
+  },
+  {
+    "id": "CHK-46",
+    "dom": "E",
+    "sev": "Medium",
+    "type": "manual",
+    "ds": [],
+    "title": "Pilot executed and accepted",
+    "what": "Representative scope, metrics, and success criteria (30 days recommended).",
+    "crit": "Evidence: pilot report.",
+    "refs": [
+      "OPS-01"
+    ],
+    "key": "DOC-PIL",
+    "layer": "P",
+    "mcsb": "—",
+    "tree": "P",
+    "hz": "C",
+    "owner": "Project",
+    "steps": [
+      "Run a representative pilot with metrics and success criteria (30 days)."
+    ],
+    "how": "Without an accepted pilot, do not start waves.",
+    "docs": [
+      [
+        "Plan at-scale deployment",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/plan-at-scale-deployment"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when a pilot was executed with documented scope and success criteria and was formally accepted; WARN when executed without formal acceptance. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-47",
+    "dom": "E",
+    "sev": "Medium",
+    "type": "manual",
+    "ds": [],
+    "title": "Rollout in waves and rollback",
+    "what": "Waves with advance, pause, and rollback criteria.",
+    "crit": "Evidence: approved plan.",
+    "refs": [
+      "OPS-02"
+    ],
+    "key": "DOC-WAV",
+    "layer": "P",
+    "mcsb": "—",
+    "tree": "P",
+    "hz": "C",
+    "owner": "Project",
+    "steps": [
+      "Plan waves with criteria for advancing, pausing, and rollback."
+    ],
+    "how": "Proceed only when the metrics of the previous wave are within expectations.",
+    "docs": [
+      [
+        "Plan at-scale deployment",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/plan-at-scale-deployment"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when rollout waves with entry/exit criteria and a tested rollback procedure are documented; WARN when waves exist without a tested rollback. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-48",
+    "dom": "E",
+    "sev": "Medium",
+    "type": "manual",
+    "ds": [],
+    "title": "Automation method per environment",
+    "what": "Onboarding (service principal, SCCM/GPO, PowerShell/Ansible), Azure Policy, and Automation per environment.",
+    "crit": "Evidence: versioned script and method per environment.",
+    "refs": [
+      "OPS-03"
+    ],
+    "key": "DOC-AUT",
+    "layer": "P",
+    "mcsb": "AM-2, PV-2",
+    "tree": "P",
+    "hz": "C",
+    "owner": "Platform",
+    "steps": [
+      "Standardize the onboarding and automation method per environment and version the scripts."
+    ],
+    "how": "One official method per environment; avoid manual installation.",
+    "docs": [
+      [
+        "Onboarding options",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/deployment-options"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when the onboarding/configuration automation method for each environment (Azure Policy, script, ConfigMgr or IaC) is documented and repeatable; WARN when some environments rely on manual steps. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-49",
+    "dom": "E",
+    "sev": "Medium",
+    "type": "manual",
+    "ds": [],
+    "title": "Individual and at-scale removal",
+    "what": "Remove extensions, azcmagent disconnect, uninstall the agent, and clean up orphaned resources via Resource Graph.",
+    "crit": "Evidence: documented procedure.",
+    "refs": [
+      "OPS-07",
+      "OPS-08"
+    ],
+    "key": "DOC-REM",
+    "layer": "3",
+    "mcsb": "AM-3",
+    "tree": "D8",
+    "hz": "M",
+    "owner": "Operations",
+    "steps": [
+      "Document individual removal (extensions, azcmagent disconnect, uninstallation, dependency cleanup) and at-scale removal (Resource Graph + official script with -WhatIf).",
+      "On Arc VMs on Azure Local, use only azcmagent disconnect --force-local-only."
+    ],
+    "how": "Machine exists: individual removal. Does not exist or Expired: at-scale deletion after owner approval. Removing orphans avoids cost and false alerts.",
+    "docs": [
+      [
+        "Uninstall the agent and clean up resources",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/uninstall-agent"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when individual and at-scale removal procedures (agent disconnect, extension and Azure resource cleanup) are documented and tested; WARN when documented but not tested. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-50",
+    "dom": "E",
+    "sev": "Medium",
+    "type": "manual",
+    "ds": [],
+    "title": "Health KPIs and periodic review",
+    "what": "% Connected, heartbeat, Succeeded extensions, and policy compliance; monthly RBAC/PIM review.",
+    "crit": "Evidence: dashboard and review cadence.",
+    "refs": [
+      "OPS-11",
+      "OPS-12"
+    ],
+    "key": "DOC-KPI",
+    "layer": "P",
+    "mcsb": "PV-2, PA-4",
+    "tree": "P",
+    "hz": "M",
+    "owner": "Operations",
+    "steps": [
+      "Publish a dashboard with % Connected, Succeeded extensions, compliance, agent within support, and Secure Score; monthly review.",
+      "Review Service Health security advisories monthly (manual: the details require a role above Reader)."
+    ],
+    "how": "Use the recommended alerts as the basis for the indicators.",
+    "docs": [
+      [
+        "Azure Advisor",
+        "https://learn.microsoft.com/en-us/azure/advisor/advisor-overview"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when health KPIs (connected %, agent version, extension success, compliance) are defined with an owner and a periodic review is evidenced; WARN when KPIs exist without review evidence. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-51",
+    "dom": "F",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "machines"
+    ],
+    "title": "Legacy, end of support, and ESU",
+    "what": "Windows Server 2008/2012/2012 R2 (2012 ESU ended on 2026-10-13) and Windows Server 2016 (end of support on 2027-01-12; ESU via Arc with agent 1.62+), with the ESU license state.",
+    "crit": "FAIL if there is 2008/2012/2012 R2 after ESU ends; WARN if there is 2016 without an assigned ESU or with an agent earlier than 1.62.",
+    "refs": [
+      "LEG-01",
+      "LEG-03"
+    ],
+    "key": "OPS-05",
+    "layer": "3",
+    "mcsb": "PV-6",
+    "tree": "D7",
+    "hz": "I",
+    "owner": "Infrastructure",
+    "steps": [
+      "Windows Server 2012/2012 R2: isolate, monitor, and migrate (no patches since 2026-10-13).",
+      "Windows Server 2016: assign the ESU license through Arc before 2027-01-12 and update the agent to 1.62+."
+    ],
+    "how": "ESU for 2016 requires Software Assurance (or Server Subscription); without it, prioritize migration.",
+    "docs": [
+      [
+        "ESU via Azure Arc",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/prepare-extended-security-updates"
+      ],
+      [
+        "Windows Server Management (SA benefits)",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/windows-server-management-overview"
+      ]
+    ],
+    "alerts": [
+      "ALR-09"
+    ],
+    "resultCriteria": "FAIL if there is 2008/2012/2012 R2 after ESU ends; WARN if there is 2016 without an assigned ESU or with an agent earlier than 1.62."
+  },
+  {
+    "id": "CHK-52",
+    "dom": "F",
+    "sev": "High",
+    "type": "manual",
+    "ds": [],
+    "title": "Legacy exceptions and exit plan",
+    "what": "Exception register with owner, timeframe, and compensating controls; unsupported extensions blocked; migration to WS2019+.",
+    "crit": "Evidence: approved exception register and roadmap.",
+    "refs": [
+      "LEG-01",
+      "LEG-02",
+      "LEG-04"
+    ],
+    "key": "DOC-LEG",
+    "layer": "4",
+    "mcsb": "AM-3, PV-6",
+    "tree": "D7",
+    "hz": "C",
+    "owner": "Infrastructure",
+    "steps": [
+      "Record legacy exceptions with owner, timeframe, and compensating controls, and approve the migration roadmap."
+    ],
+    "how": "Every legacy machine needs an exit date.",
+    "docs": [
+      [
+        "ESU via Azure Arc",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/prepare-extended-security-updates"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when every legacy/end-of-support machine has a recorded exception (owner, compensating controls, ESU status, expiry) and an exit plan; FAIL when legacy machines have no recorded exception. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-53",
+    "dom": "B",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "extensions",
+      "pricing",
+      "gcAssign"
+    ],
+    "title": "Cost: billed services and benefits per machine",
+    "what": "Monthly list-price estimate (USD) per connected server: Defender for Servers P1/P2, Update Manager, Machine Configuration/Change Tracking, and Windows Server PAYG; benefits that offset part of the cost (attested Software Assurance, WS PAYG, ESU via Arc, Defender P2); variable items (Log Analytics, Sentinel).",
+    "crit": "INFO with the estimate; WARN if any Windows Server pays for Update Manager/Machine Configuration without an attested benefit (opportunity if there is Software Assurance).",
+    "refs": [
+      "REQ-09"
+    ],
+    "key": "NEW-COST",
+    "layer": "F",
+    "mcsb": "—",
+    "tree": "D9",
+    "hz": "C",
+    "owner": "FinOps",
+    "steps": [
+      "Attest Software Assurance on eligible Windows servers (Azure Arc › Azure Benefits - Windows Server).",
+      "Review Defender P1 × P2 and the Machine Configuration policies that include Arc servers unnecessarily.",
+      "Create a budget and alert in Cost Management by resource group or tag."
+    ],
+    "how": "Attest only with SA or a valid subscription license. If most servers use Update Manager and Machine Configuration, Defender Plan 2 may be worthwhile.",
+    "docs": [
+      [
+        "Windows Server Management (SA benefits)",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/windows-server-management-overview"
+      ],
+      [
+        "Azure Arc pricing",
+        "https://azure.microsoft.com/en-us/pricing/details/azure-arc/core-control-plane/"
+      ],
+      [
+        "Plan Defender for Servers",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "INFO by design (not scored): list-price estimate of billed Arc services and benefits per connected machine; Log Analytics cost per GB is not estimated."
+  },
+  {
+    "id": "CHK-54",
+    "dom": "D",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "alerts",
+      "vulns",
+      "secscore"
+    ],
+    "title": "Threats and vulnerabilities (Defender for Cloud)",
+    "what": "Active security alerts on Arc machines, vulnerabilities (CVE) by reach and severity, and Secure Score by subscription, with the Defender classification itself.",
+    "crit": "FAIL if there is an active High alert; WARN if there is an active alert or a High/Critical vulnerability; the Secure Score is informational.",
+    "refs": [
+      "CTL-06",
+      "LAT"
+    ],
+    "key": "NEW-THREAT",
+    "layer": "1",
+    "mcsb": "LT-1, PV-5, IR-3",
+    "tree": "D6",
+    "hz": "I",
+    "owner": "Security",
+    "steps": [
+      "Investigate and address active High alerts in Defender for Cloud/XDR (machine, process, user, and timeline).",
+      "Prioritize High/Critical vulnerabilities by the number of affected machines and remediate through Update Manager or WSUS.",
+      "Track Secure Score in the executive summary and in the monthly review."
+    ],
+    "how": "Severity is the Defender severity. An active alert without an owner is an incident; a vulnerability with no available fix requires an exception with a compensating control.",
+    "docs": [
+      [
+        "Plan Defender for Servers",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers"
+      ],
+      [
+        "Integration with Defender for Endpoint",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/integration-defender-for-endpoint"
+      ],
+      [
+        "Resource Graph queries for Defender for Cloud",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/resource-graph-samples"
+      ]
+    ],
+    "alerts": [
+      "ALR-07"
+    ],
+    "resultCriteria": "FAIL if there is an active High alert; WARN if there is an active alert or a High/Critical vulnerability; PARTIAL when there are no findings but MDE coverage is not confirmed (zero findings is not evidence of no exposure); the Secure Score is informational."
+  },
+  {
+    "id": "CHK-55",
+    "dom": "D",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "gcComp"
+    ],
+    "title": "Operating system security baseline",
+    "what": "Assignment and compliance of the Azure compute security baseline (Windows and Linux) through Machine Configuration on each connected machine.",
+    "crit": "FAIL if a connected machine has no baseline assigned; WARN if a machine is non-compliant; PASS if all are assigned and compliant.",
+    "refs": [
+      "REQ-07",
+      "CTL-06"
+    ],
+    "key": "NEW-BASELINE",
+    "layer": "2",
+    "mcsb": "PV-4",
+    "tree": "D6",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Assign the built-in Azure compute security baseline policy (Windows and Linux) at the management group or subscription of the Arc machines, first in audit mode.",
+      "Address non-compliant settings by priority (Critical and Important) and record exceptions with a justification.",
+      "For Windows Server 2025, evaluate the customizable baseline (OSConfig) before applying automatic remediation."
+    ],
+    "how": "The baseline is the cloud equivalent of the security GPO: start by auditing, compare with the current GPO and only then remediate. It does not cover LAPS or BitLocker (CHK-60 and CHK-61).",
+    "docs": [
+      [
+        "Windows security baseline (Machine Configuration)",
+        "https://learn.microsoft.com/en-us/azure/governance/policy/samples/guest-configuration-baseline-windows"
+      ],
+      [
+        "Linux security baseline (Machine Configuration)",
+        "https://learn.microsoft.com/en-us/azure/governance/policy/samples/guest-configuration-baseline-linux"
+      ],
+      [
+        "Machine Configuration",
+        "https://learn.microsoft.com/en-us/azure/governance/machine-configuration/overview"
+      ],
+      [
+        "CAF: Arc security, governance and compliance",
+        "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/hybrid/arc-enabled-servers/eslz-security-governance-and-compliance"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "FAIL if a connected machine has no baseline assigned; WARN if a machine is non-compliant; PASS if all are assigned and compliant."
+  },
+  {
+    "id": "CHK-56",
+    "dom": "B",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "gcComp"
+    ],
+    "title": "Local administrators audit",
+    "what": "Audit of the local Administrators group through Machine Configuration (built-in Administrators group membership policies) on connected Windows machines.",
+    "crit": "FAIL when no connected Windows machine has the local-administrators audit; WARN for non-compliance when audit coverage exists; INFO when only part of the estate is covered; PASS when all applicable machines are audited and compliant.",
+    "refs": [
+      "CTL-04",
+      "CTL-05"
+    ],
+    "key": "NEW-LOCALADM",
+    "layer": "2",
+    "mcsb": "PA-1, PA-7",
+    "tree": "D4",
+    "hz": "C",
+    "owner": "Security",
+    "steps": [
+      "Assign the Machine Configuration policy that audits local Administrators group members, with the approved list per profile.",
+      "Remove unapproved accounts and groups; a local administrator also controls the agent and can use the machine identity."
+    ],
+    "how": "Whoever is a local administrator controls the agent: treat it as privileged access (CTL-04).",
+    "docs": [
+      [
+        "Machine Configuration",
+        "https://learn.microsoft.com/en-us/azure/governance/machine-configuration/overview"
+      ],
+      [
+        "CAF: Arc security, governance and compliance",
+        "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/hybrid/arc-enabled-servers/eslz-security-governance-and-compliance"
+      ],
+      [
+        "Identity and authorization",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/security-identity-authorization"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "FAIL when no connected Windows machine has the local-administrators audit; WARN for non-compliance when audit coverage exists; INFO when only part of the estate is covered; PASS when all applicable machines are audited and compliant."
+  },
+  {
+    "id": "CHK-57",
+    "dom": "D",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "extensions",
+      "defender"
+    ],
+    "title": "Healthy antivirus and EDR",
+    "what": "Defender for Cloud endpoint protection recommendations (antimalware, EDR, Defender for Endpoint) and presence of the MDE extension on connected machines.",
+    "crit": "FAIL if a high or medium severity endpoint protection recommendation has Unhealthy machines; WARN if there is a low severity recommendation or a connected machine without the MDE extension.",
+    "refs": [
+      "CTL-06"
+    ],
+    "key": "NEW-EPP",
+    "layer": "1",
+    "mcsb": "ES-1, ES-2, ES-3",
+    "tree": "D6",
+    "hz": "I",
+    "owner": "Security",
+    "steps": [
+      "Address the Defender for Cloud endpoint protection recommendations (outdated antimalware, missing or failing EDR).",
+      "Install or fix Defender for Endpoint on machines without the MDE extension (or confirm onboarding done by another tool)."
+    ],
+    "how": "Healthy antivirus and EDR on every connected machine; exceptions only with a recorded compensating control.",
+    "docs": [
+      [
+        "Integration with Defender for Endpoint",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/integration-defender-for-endpoint"
+      ],
+      [
+        "Plan Defender for Servers",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers"
+      ],
+      [
+        "Defender for Endpoint releases (sensor per platform)",
+        "https://learn.microsoft.com/en-us/defender-endpoint/microsoft-defender-endpoint-releases"
+      ]
+    ],
+    "alerts": [
+      "ALR-07"
+    ],
+    "resultCriteria": "PARTIAL when a connected machine lacks the MDE extension (extension absence does not prove sensor absence); otherwise FAIL if a High/Medium endpoint protection recommendation has Unhealthy machines, WARN if a lower-severity one does, and PASS when none does."
+  },
+  {
+    "id": "CHK-58",
+    "dom": "E",
+    "sev": "Medium",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "extensions",
+      "dcra",
+      "related"
+    ],
+    "title": "Insights and telemetry per machine",
+    "what": "Which data each connected machine sends through Data Collection Rules: performance, VM Insights and dependency map, events/Syslog, security events and Change Tracking.",
+    "crit": "FAIL when every connected machine lacks both performance and security-event telemetry; WARN when any connected machine is blind; INFO with the telemetry matrix when coverage exists.",
+    "refs": [
+      "OPS-04",
+      "OPS-11"
+    ],
+    "key": "NEW-TELEMETRY",
+    "layer": "3",
+    "mcsb": "LT-3, LT-4",
+    "tree": "D6",
+    "hz": "C",
+    "owner": "Operations",
+    "steps": [
+      "Define DCRs per profile: performance and VM Insights (operations), security events (SOC/Sentinel), events or Syslog (troubleshooting) and Change Tracking (change auditing).",
+      "Associate the DCRs with machines without telemetry and validate that data arrives in the workspace."
+    ],
+    "how": "A machine without security events is invisible to the SOC; without performance data, invisible to operations. Adjust collection to the ingestion cost.",
+    "docs": [
+      [
+        "Data collection with DCR",
+        "https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-data-collection"
+      ],
+      [
+        "Azure Monitor Agent",
+        "https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-overview"
+      ],
+      [
+        "VM Insights",
+        "https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-overview"
+      ],
+      [
+        "Change Tracking e Inventory",
+        "https://learn.microsoft.com/en-us/azure/automation/change-tracking/overview-monitoring-agent"
+      ]
+    ],
+    "alerts": [
+      "ALR-06"
+    ],
+    "resultCriteria": "FAIL when every connected machine lacks both performance and security-event telemetry; WARN when any connected machine is blind; INFO with the telemetry matrix when coverage exists."
+  },
+  {
+    "id": "CHK-59",
+    "dom": "E",
+    "sev": "Low",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "extensions"
+    ],
+    "title": "Map of Arc capabilities in use",
+    "what": "Azure Arc capabilities active in the fleet: AMA, MDE, SQL, Change Tracking/FIM, VM Insights, Key Vault, Hybrid Worker, Admin Center, SSH, Entra ID login, Custom Script, periodic patch assessment, Windows Server Management benefits, Hotpatch and ESU.",
+    "crit": "Informational: shows what is in use and what is available but unused.",
+    "refs": [
+      "REQ-09",
+      "OPS-11"
+    ],
+    "key": "NEW-CAPMAP",
+    "layer": "3",
+    "mcsb": "AM-1",
+    "tree": "D9",
+    "hz": "M",
+    "owner": "Platform",
+    "steps": [
+      "Compare capabilities in use with those available: with Software Assurance or WS PAYG, Update Manager, Change Tracking, Machine Configuration, Admin Center, Remote Support, Best Practices Assessment and Site Recovery configuration have no additional cost.",
+      "Evaluate Hotpatch on Windows Server 2025 servers (fewer reboots and a shorter exposure window).",
+      "Disable extensions without an owner or without use (CHK-24)."
+    ],
+    "how": "Each active capability expands what can be done on the server: enable it with an owner, a reason and access control.",
+    "docs": [
+      [
+        "Windows Server Management (SA benefits)",
+        "https://learn.microsoft.com/en-us/azure/azure-arc/servers/windows-server-management-overview"
+      ],
+      [
+        "Hotpatch do Windows Server",
+        "https://learn.microsoft.com/en-us/windows-server/get-started/hotpatch"
+      ],
+      [
+        "Change Tracking e Inventory",
+        "https://learn.microsoft.com/en-us/azure/automation/change-tracking/overview-monitoring-agent"
+      ],
+      [
+        "VM Insights",
+        "https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-overview"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "INFO by design (not scored): maps which of the 24 Arc capabilities are in use on at least one machine."
+  },
+  {
+    "id": "CHK-60",
+    "dom": "B",
+    "sev": "High",
+    "type": "manual",
+    "ds": [],
+    "title": "Local administrator password (Windows LAPS)",
+    "what": "Windows LAPS (backed up to Active Directory or Microsoft Entra ID) or an equivalent solution: unique, rotated local administrator password on each server.",
+    "crit": "Evidence: Windows LAPS policy applied (GPO or Intune) and a sample of servers with a managed password.",
+    "refs": [
+      "CTL-04",
+      "CTL-05"
+    ],
+    "key": "DOC-LAPS",
+    "layer": "2",
+    "mcsb": "PA-1, IM-8",
+    "tree": "D4",
+    "hz": "C",
+    "owner": "Identity",
+    "steps": [
+      "Apply Windows LAPS through GPO (backup to Active Directory) or Intune, with rotation and restricted access to the password.",
+      "Disable or rename the built-in local administrator where an alternative exists."
+    ],
+    "how": "A repeated local administrator password enables lateral movement between servers and use of the machine identity in Azure.",
+    "docs": [
+      [
+        "Windows LAPS",
+        "https://learn.microsoft.com/en-us/windows-server/identity/laps/laps-overview"
+      ],
+      [
+        "CAF: Arc security, governance and compliance",
+        "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/hybrid/arc-enabled-servers/eslz-security-governance-and-compliance"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when Windows LAPS manages the local administrator password on every Windows Arc machine (policy and backup evidence); FAIL when a shared or static local administrator password is in use. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-61",
+    "dom": "D",
+    "sev": "Medium",
+    "type": "manual",
+    "ds": [],
+    "title": "System disk encryption (BitLocker/dm-crypt)",
+    "what": "Encryption of the operating system volume, which protects the Arc agent private key against offline attacks (CAF recommendation).",
+    "crit": "Evidence: BitLocker/dm-crypt active on the OS volume of Arc machines or a recorded exception.",
+    "refs": [
+      "CTL-05"
+    ],
+    "key": "DOC-DISKENC",
+    "layer": "2",
+    "mcsb": "DP-4",
+    "tree": "D6",
+    "hz": "M",
+    "owner": "Infrastructure",
+    "steps": [
+      "Enable BitLocker (Windows) or dm-crypt (Linux) on the operating system volume of Arc servers, starting with Tier 0 and physically exposed servers.",
+      "Store recovery keys in AD or Entra ID and test recovery."
+    ],
+    "how": "Without encryption, the agent private key can be copied from a disk or backup and used to impersonate the server.",
+    "docs": [
+      [
+        "BitLocker",
+        "https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/"
+      ],
+      [
+        "CAF: Arc security, governance and compliance",
+        "https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/hybrid/arc-enabled-servers/eslz-security-governance-and-compliance"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when the system disk is encrypted (BitLocker/dm-crypt) with recovery keys escrowed on every machine; WARN when only part of the machines is covered. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-62",
+    "dom": "B",
+    "sev": "High",
+    "type": "manual",
+    "ds": [],
+    "title": "Conditional Access and MFA for Azure administrators",
+    "what": "Microsoft Entra Conditional Access policies that require MFA (and, ideally, a compliant device or privileged access workstation) for the Azure portal, CLI and management APIs.",
+    "crit": "Evidence: Conditional Access policy for Azure management covering the accounts with roles in the Arc scope.",
+    "refs": [
+      "REQ-03",
+      "REQ-04"
+    ],
+    "key": "DOC-CA",
+    "layer": "1",
+    "mcsb": "IM-6, IM-7",
+    "tree": "D4",
+    "hz": "I",
+    "owner": "Identity",
+    "steps": [
+      "Require MFA through Conditional Access for the Azure management app, with no exceptions for administrative accounts.",
+      "For roles that run code on servers (Contributor, Resource Administrator), also require a compliant device or privileged access workstation and activation through PIM."
+    ],
+    "how": "Whoever manages Azure can run code on Arc servers: that person identity is part of the server attack surface.",
+    "docs": [
+      [
+        "Microsoft Entra Conditional Access",
+        "https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview"
+      ],
+      [
+        "Mandatory MFA for Azure",
+        "https://learn.microsoft.com/en-us/entra/identity/authentication/concept-mandatory-multifactor-authentication"
+      ],
+      [
+        "Privileged access rapid modernization plan",
+        "https://learn.microsoft.com/en-us/security/privileged-access-workstations/security-rapid-modernization-plan"
+      ],
+      [
+        "Privileged Identity Management",
+        "https://learn.microsoft.com/en-us/entra/id-governance/privileged-identity-management/pim-configure"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "PASS when Conditional Access requires MFA for every identity that administers Azure; FAIL when any administrator can manage Azure without MFA. TODO until the customer's documentary evidence is recorded."
+  },
+  {
+    "id": "CHK-63",
+    "dom": "D",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "pricing",
+      "pricingRes"
+    ],
+    "title": "Defender for Servers per Arc machine",
+    "what": "Defender for Servers plan read on each Arc machine (resource-level Pricings): tier, subplan, whether it inherits from the subscription, and enabled extensions.",
+    "crit": "FAIL if any machine has no Defender for Servers (Free); WARN if the machine plan differs from the subscription plan; PASS if all machines inherit the subscription plan.",
+    "refs": [
+      "CTL-06"
+    ],
+    "key": "NEW-DEFRES",
+    "layer": "1",
+    "mcsb": "LT-1, ES-1",
+    "tree": "D6",
+    "hz": "I",
+    "owner": "Security",
+    "steps": [
+      "Enable Defender for Servers on Arc machines with no plan (Free), at the subscription or on the machine itself.",
+      "Review machines whose plan differs from the subscription: confirm whether the exception is intentional (for example, P1 for cost) and record the reason; without a reason, remove the machine-level setting so it inherits the subscription plan again."
+    ],
+    "how": "A machine-level plan overrides the subscription plan: a machine can stay on P1 or Free in a P2 subscription without showing in the per-subscription view.",
+    "docs": [
+      [
+        "Defender for Servers at resource level",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/tutorial-enable-servers-plan"
+      ],
+      [
+        "Pricings - Get (Defender for Cloud REST API)",
+        "https://learn.microsoft.com/en-us/rest/api/defenderforcloud-composite/pricings/get"
+      ],
+      [
+        "Plan Defender for Servers",
+        "https://learn.microsoft.com/en-us/azure/defender-for-cloud/plan-defender-for-servers"
+      ]
+    ],
+    "alerts": [
+      "ALR-07"
+    ],
+    "resultCriteria": "PASS when every Arc machine has a Defender for Servers plan equal to its subscription plan; WARN when a machine plan differs from the subscription; FAIL when any machine is on Free (no plan)."
+  },
+  {
+    "id": "CHK-64",
+    "dom": "D",
+    "sev": "High",
+    "type": "auto",
+    "ds": [
+      "machines",
+      "extensions",
+      "related"
+    ],
+    "title": "SQL Server: license and usage upload (billing)",
+    "what": "Per machine with the SQL Server extension: LicenseType set on the extension (PAYG, Paid, LicenseOnly), use of a physical core license (pCore) and pCore licenses in scope, extension state, uploadStatus and time of the last usage upload (timestampUTC), machine status and operating system.",
+    "crit": "FAIL for a conclusive technical upload/connection/extension condition even when contractual entitlement coverage is PARTIAL; WARN for license metadata mismatches; N/A without the SQL extension.",
+    "refs": [
+      "REQ-09",
+      "DEC-05"
+    ],
+    "key": "NEW-SQLBILL",
+    "layer": "F",
+    "mcsb": "AM-1, LT-1",
+    "tree": "D9",
+    "hz": "I",
+    "owner": "DBA",
+    "steps": [
+      "First fix machines with no usage upload for more than 24 hours or with uploadStatus other than OK: allow outbound HTTPS 443 to dataprocessingservice.<region>.arcdataservices.com and telemetry.<region>.arcdataservices.com, use a proxy without authentication and confirm the Microsoft.AzureArcData provider is registered.",
+      "Reconnect SQL machines that are not Connected within 30 days: with PAYG, the subscription expires and use is no longer authorized.",
+      "Set the LicenseType of each extension (PAYG, Paid or LicenseOnly) according to the contract; with a physical core license (pCore), set UsePhysicalCoreLicense and align LicenseType with the license billingPlan.",
+      "Fix failed extensions and plan to retire Windows Server versions older than 2016, which don't meet the TLS required by the data processing service."
+    ],
+    "how": "The hourly usage upload supports PAYG billing, the reporting of Software Assurance licenses and the detection of passive AG/FCI replicas (billed at USD 0 only when detected).",
+    "docs": [
+      [
+        "Licensing and billing of SQL Server enabled by Azure Arc",
+        "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/manage-license-billing"
+      ],
+      [
+        "Connectivity to the SQL Arc data processing service and telemetry",
+        "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/troubleshoot-telemetry-endpoint"
+      ],
+      [
+        "Troubleshoot the SQL Server extension (Azure Arc)",
+        "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/troubleshoot-extension"
+      ]
+    ],
+    "alerts": [],
+    "resultCriteria": "FAIL for a conclusive technical upload/connection/extension condition even when contractual entitlement coverage is PARTIAL; WARN for license metadata mismatches; N/A without the SQL extension."
+  }
+]

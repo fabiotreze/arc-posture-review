@@ -5,7 +5,8 @@
   1. PSScriptAnalyzer with the same settings as the release gate (Error and Warning; fails on any finding).
   2. Version consistency: script ($ScriptVersion), CHANGELOG (newest section), CITATION.cff.
   3. Repository files: .nojekyll, index.html, both language pages.
-  4. Commit e-mail: GitHub noreply (avoids GH007 push rejection).
+   4. Saved-report contract, synchronized shared assets, Playwright desktop/mobile regression, and clean PDF validation.
+   5. Commit e-mail: GitHub noreply (avoids GH007 push rejection).
   Exit code 0 = ready to publish; 1 = fix the items marked FAIL.
 .EXAMPLE
   ./tools/Test-BeforePublish.ps1
@@ -44,6 +45,35 @@ try {
     foreach ($f in 'arc-posture-review.pt-BR.html', 'arc-posture-review.en-US.html') {
         Write-Check ((Get-Content $f -Raw) -match [regex]::Escape("v$sv")) ("$f shows v$sv")
     }
+
+    Write-Host 'Report contract'
+    & python ./tools/Sync-ReportAssets.py --check
+    Write-Check ($LASTEXITCODE -eq 0) 'shared report assets synchronized'
+    & python ./tools/Test-CriteriaCoverage.py
+    Write-Check ($LASTEXITCODE -eq 0) '64-check source, renderer and collector Eval coverage'
+    & python ./tools/Test-ReportContract.py
+    Write-Check ($LASTEXITCODE -eq 0) 'report contract'
+    & python ./tools/Test-LabCorrections.py
+    Write-Check ($LASTEXITCODE -eq 0) 'reviewed-lab correction contract'
+
+    Write-Host 'Browser regression'
+    & python -c 'import playwright'
+    $hasPlaywright = $LASTEXITCODE -eq 0
+    Write-Check $hasPlaywright 'Python Playwright installed (pip install -r requirements-dev.txt)'
+    if ($hasPlaywright) {
+        New-Item -ItemType Directory -Force -Path ./build/validation | Out-Null
+        & python ./tools/Test-ReportVisual.py --package ./tests/fixtures/reviewed-lab-sanitized.zip --artifacts ./build/validation
+        Write-Check ($LASTEXITCODE -eq 0) 'desktop/mobile report regression + reviewed-lab import/export'
+        & python ./tools/Test-LocalizationParity.py --en ./build/validation/e2e-en-US.html --pt ./build/validation/e2e-pt-BR.html
+        Write-Check ($LASTEXITCODE -eq 0) 'EN-US/PT-BR selective localization parity'
+    }
+
+    Write-Host 'Clean PDF'
+    New-Item -ItemType Directory -Force -Path ./build/validation | Out-Null
+    & python ./tools/Generate-CleanPdf.py ./docs/examples/sample-analysis.en-US.html --output ./build/validation/sample-analysis.en-US.pdf
+    Write-Check ($LASTEXITCODE -eq 0) 'EN-US PDF without browser header/footer'
+    & python ./tools/Generate-CleanPdf.py ./docs/examples/sample-analysis.pt-BR.html --output ./build/validation/sample-analysis.pt-BR.pdf
+    Write-Check ($LASTEXITCODE -eq 0) 'PT-BR PDF without browser header/footer'
 
     Write-Host 'Git'
     $mail = [string](git config user.email)

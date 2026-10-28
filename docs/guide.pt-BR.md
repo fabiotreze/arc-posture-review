@@ -1,12 +1,22 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v3.8.3 — 23/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
+**Versão v3.9.5 — 27/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
+
+> **Espelho de autoria:** o guia canônico desta release é o HTML integrado `arc-posture-review.pt-BR.html`. Este Markdown é mantido para edição e revisão; não é uma entrega separada.
+
+> **Semântica de resultado:** Resultado do controle e Cobertura da evidência são independentes. Um PASS/WARN/FAIL conclusivo pode ter cobertura PARTIAL quando a condição observada prova o resultado, mas uma dependência externa ou um escopo maior não foi coletado. PARTIAL como resultado significa que a evidência não permite concluir PASS, WARN ou FAIL. A cobertura afeta a confiança; não apaga uma falha comprovada.
+
+> **Riscos atuais para o lab:** execução com limite de máquinas é amostra de descoberta, não cobertura final; `PARTIAL` como resultado, `ERROR` e `TODO` significam não avaliado, não saudável; metadados de versão lidos do Azure podem cair para tabelas estáticas; e o ZIP/relatórios contêm dados sensíveis do ambiente. Para validar a release, importe e exporte um pacote novo e autorizado do lab depois que os gates locais passarem.
 
 ## 0) Comece aqui
 
 Três passos: **1.** percorra as etapas abaixo e abra a árvore de cada decisão (clique no cartão); **2.** gere e rode o script somente leitura (etapa 2 do HTML); **3.** carregue o .zip e siga o plano de ação.
+
+### Entrega em PDF limpo
+
+Salve o HTML da análise no idioma desejado e execute `python tools/Generate-CleanPdf.py <relatorio-salvo.html>`. O gerador expande as seções de evidência, remove scripts/botões interativos, aplica CSS A4 e valida que nenhum cabeçalho ou rodapé do navegador com URL/data entrou no PDF. Não use a caixa de impressão do navegador para o artefato de aceite do lab.
 
 ```mermaid
 %% svg:start
@@ -39,7 +49,7 @@ flowchart LR
   H["1 · Checklist HTML<br/>escopo e verificações"] --> S["2 · Invoke-ArcPostureReview.ps1<br/>somente leitura"]
   S --> G["3 · Azure Resource Graph + ARM<br/>consultas paginadas, sem laço por máquina"]
   G --> Z["4 · Pacote .zip<br/>summary · results · findings · manifest SHA-256"]
-  Z --> R["5 · HTML: Resultado e Relatório<br/>+ guia .md (mesmos IDs)"]
+  Z --> R["5 · HTML: avaliação executiva<br/>+ apêndice de evidências (mesmos IDs)"]
 ```
 
 ## 1) Método de avaliação
@@ -1299,7 +1309,7 @@ flowchart LR
   H["1 · Checklist HTML<br/>escopo e verificações"] --> S["2 · Invoke-ArcPostureReview.ps1<br/>somente leitura"]
   S --> G["3 · Azure Resource Graph + ARM<br/>consultas paginadas, sem laço por máquina"]
   G --> Z["4 · Pacote .zip<br/>summary · results · findings · manifest SHA-256"]
-  Z --> R["5 · HTML: Resultado e Relatório<br/>+ guia .md (mesmos IDs)"]
+  Z --> R["5 · HTML: avaliação executiva<br/>+ apêndice de evidências (mesmos IDs)"]
 ```
 
 #### Permissões da conta que executa a coleta
@@ -1863,6 +1873,12 @@ Totais calculados a partir do catálogo a cada versão. Entre parênteses, o que
 
 | Versão | Data | Mudanças |
 |---|---|---|
+| v3.9.5 | 27/10/2026 | Correção final do gate de publicação: impressão robusta em A4/Letter, acesso explícito ao Guide HTML oficial do projeto, indicação de arredondamento e conclusão da localização narrativa PT-BR sem alterar evidências brutas. |
+| v3.9.4 | 27/10/2026 | Localização narrativa seletiva final do PT-BR: toda a narrativa e os labels produzidos pelo Arc Posture Review são localizados, enquanto valores/evidências brutas do Azure, comandos, identificadores e títulos raw das recomendações do Defender permanecem inalterados. CHK-41 e CHK-64 preservam a explicação de FAIL conclusivo com cobertura PARTIAL. Os relatórios EN-US/PT-BR são regenerados da mesma execução e a paridade de localização passa por gate. |
+| v3.9.3 | 27/10/2026 | Corrige os achados da validação v3.9.2: sincronização Result × Criteria; resultados conclusivos com cobertura PARTIAL; linhas canônicas do CHK-42; semântica null/ausente do CHK-15; corpo conciso do CHK-33; separação assessment/apêndice; localização PT-BR completa; PDF limpo validado; regressão bilíngue ZIP até relatório; e contratos mais rígidos dos 64 checks, CSP e responsividade. O HTML integrado continua canônico e não há download do Guide em Markdown. |
+| v3.9.2 | 27/10/2026 | Correções da revisão de lab: taxonomia canônica PASS/WARN/FAIL/INFO/N/A/TODO/PARTIAL/ERROR; separação entre Resultado do controle e Cobertura da evidência; Cobertura da avaliação com confiança; aritmética rastreável dos controles agrupados; comportamento corrigido de CHK-05/23/32/33/39/40/41/42/54/55/56/57/58/64; links para CSV completo; e contrato de evidência por verificação. O HTML integrado continua canônico e não há download do Guide em Markdown. |
+| v3.9.1 | 27/10/2026 | O HTML integrado passa a ser o guia canônico do projeto; foram removidos o download do guia em Markdown e o payload Markdown embutido. Os riscos atuais do lab ficam explícitos, e os gates de contrato/navegador impedem o retorno do botão ou do payload. |
+| v3.9.0 | 27/10/2026 | Contrato do relatório salvo: layout responsivo no celular, cópia funcional das consultas, expansão completa na impressão, navegação estática acessível e testes automatizados de contrato/navegador. Sem mudança no checklist ou no escopo do coletor. |
 | v3.8.3 | 23/10/2026 | Nova verificação CHK-64 (licença e envio de uso do SQL Server: LicenseType, pCore, uploadStatus e último envio); CHK-37 e CHK-29 com o parque inteiro (faixas de desconexão, incluindo 30 a 44 dias, e versões do agente) mesmo com amostra; CHK-33 com risco, caminhos de ataque, idade, isenções e responsável/prazo do Defender; CHK-38 destaca as recomendações do Advisor do Arc; consulta de alertas corrigida (campos do portal, só ativos Low/Medium/High). Novo anexo de continuidade quando a região fica indisponível e referências públicas de faturamento. |
 | v3.8.2 | 23/10/2026 | Vários resource groups numa coleta (-ResourceGroup rg-a, rg-b). Subscriptions aceitam IDs separados por vírgula numa única string, e o script para com erro se alguma não for encontrada (antes seguia para a subscription padrão). Ajuste de nome de função apontado pelo PSScriptAnalyzer; verificação do PSScriptAnalyzer antes de cada release. |
 | v3.8.1 | 23/10/2026 | Transparência das métricas: nova seção Como as métricas são calculadas (fórmula, números de hoje, pesos e ganho por controle); coluna Ganho com o índice antes e depois; indicadores do parque com a conta, a verificação de origem e cor por faixa. CHK-30 usa a versão da extensão SQL publicada no Azure quando é mais nova que a tabela. Relatório de exemplo atualizado. |

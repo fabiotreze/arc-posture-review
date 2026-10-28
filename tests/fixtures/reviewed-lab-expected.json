@@ -1,0 +1,322 @@
+{
+  "CHK-01": {
+    "status": "INFO",
+    "evidenceCoverage": "FULL",
+    "severity": "Low"
+  },
+  "CHK-02": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "Medium"
+  },
+  "CHK-03": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "Medium"
+  },
+  "CHK-04": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "High"
+  },
+  "CHK-05": {
+    "status": "PARTIAL",
+    "evidenceCoverage": "PARTIAL",
+    "severity": "Medium"
+  },
+  "CHK-06": {
+    "status": "INFO",
+    "evidenceCoverage": "FULL",
+    "severity": "Low"
+  },
+  "CHK-07": {
+    "status": "PASS",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-08": {
+    "status": "INFO",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-09": {
+    "status": "WARN",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-10": {
+    "status": "WARN",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-11": {
+    "status": "INFO",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-12": {
+    "status": "PASS",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-13": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "High"
+  },
+  "CHK-14": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "High"
+  },
+  "CHK-15": {
+    "status": "WARN",
+    "evidenceCoverage": "PARTIAL",
+    "severity": "Low"
+  },
+  "CHK-16": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "Medium"
+  },
+  "CHK-17": {
+    "status": "INFO",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-18": {
+    "status": "N/A",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-19": {
+    "status": "N/A",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-20": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "High"
+  },
+  "CHK-21": {
+    "status": "WARN",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-22": {
+    "status": "INFO",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-23": {
+    "status": "FAIL",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-24": {
+    "status": "PASS",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-25": {
+    "status": "INFO",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-26": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "High"
+  },
+  "CHK-27": {
+    "status": "WARN",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-28": {
+    "status": "PASS",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-29": {
+    "status": "PASS",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-30": {
+    "status": "WARN",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-31": {
+    "status": "PASS",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-32": {
+    "status": "PARTIAL",
+    "evidenceCoverage": "PARTIAL",
+    "severity": "High"
+  },
+  "CHK-33": {
+    "status": "FAIL",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-34": {
+    "status": "WARN",
+    "evidenceCoverage": "PARTIAL",
+    "severity": "Medium"
+  },
+  "CHK-35": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "Medium"
+  },
+  "CHK-36": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "Medium"
+  },
+  "CHK-37": {
+    "status": "FAIL",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-38": {
+    "status": "INFO",
+    "evidenceCoverage": "FULL",
+    "severity": "Low"
+  },
+  "CHK-39": {
+    "status": "FAIL",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-40": {
+    "status": "PARTIAL",
+    "evidenceCoverage": "PARTIAL",
+    "severity": "Medium"
+  },
+  "CHK-41": {
+    "status": "FAIL",
+    "evidenceCoverage": "PARTIAL",
+    "severity": "High"
+  },
+  "CHK-42": {
+    "status": "PARTIAL",
+    "evidenceCoverage": "PARTIAL",
+    "severity": "Medium"
+  },
+  "CHK-43": {
+    "status": "PASS",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-44": {
+    "status": "WARN",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-45": {
+    "status": "N/A",
+    "evidenceCoverage": "NONE",
+    "severity": "Low"
+  },
+  "CHK-46": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "Medium"
+  },
+  "CHK-47": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "Medium"
+  },
+  "CHK-48": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "Medium"
+  },
+  "CHK-49": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "Medium"
+  },
+  "CHK-50": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "Medium"
+  },
+  "CHK-51": {
+    "status": "FAIL",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-52": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "High"
+  },
+  "CHK-53": {
+    "status": "INFO",
+    "evidenceCoverage": "PARTIAL",
+    "severity": "Medium"
+  },
+  "CHK-54": {
+    "status": "PARTIAL",
+    "evidenceCoverage": "PARTIAL",
+    "severity": "High"
+  },
+  "CHK-55": {
+    "status": "FAIL",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-56": {
+    "status": "FAIL",
+    "evidenceCoverage": "FULL",
+    "severity": "Medium"
+  },
+  "CHK-57": {
+    "status": "PARTIAL",
+    "evidenceCoverage": "PARTIAL",
+    "severity": "High"
+  },
+  "CHK-58": {
+    "status": "FAIL",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-59": {
+    "status": "INFO",
+    "evidenceCoverage": "FULL",
+    "severity": "Low"
+  },
+  "CHK-60": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "High"
+  },
+  "CHK-61": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "Medium"
+  },
+  "CHK-62": {
+    "status": "TODO",
+    "evidenceCoverage": "NONE",
+    "severity": "High"
+  },
+  "CHK-63": {
+    "status": "PASS",
+    "evidenceCoverage": "FULL",
+    "severity": "High"
+  },
+  "CHK-64": {
+    "status": "FAIL",
+    "evidenceCoverage": "PARTIAL",
+    "severity": "High"
+  }
+}

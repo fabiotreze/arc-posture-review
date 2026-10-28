@@ -1,5 +1,81 @@
 # Changelog
 
+## [3.9.5] — 2026-10-27
+
+### Final publication-gate remediation
+
+- Hardened print/PDF output for wide tables: landscape default, fixed table layout, wrapping, repeated headers, compact status chips and explicit wide/ultrawide classes. Validated A4 and Letter in portrait and landscape without out-of-bounds text.
+- Added explicit, clearly named access from saved PT-BR and EN-US analysis reports to the canonical integrated Guide HTML. No Guide Markdown download or embedded Markdown payload was reintroduced.
+- Clarified Kit Index arithmetic with an approximation sign and an explicit displayed-value rounding note; calculation and methodology are unchanged.
+- Completed PT-BR localization of Arc Posture Review-authored narrative while preserving raw Azure values, technical properties/states, CSV/JSON/KQL/PowerShell/CLI and evidence tables.
+- Preserved all 64 checks, result distribution, Evidence Coverage, priorities, root causes, action plan and CHK-41/CHK-64 conclusive FAIL + PARTIAL semantics.
+- Added `criteria/checks.en-US.json` and `criteria/checks.pt-BR.json` as the canonical 64-check source. The sync tool now generates both renderers and the collector catalog/default list from that source, and the final evidence matrix renders the full decision criterion for every check.
+- Added `Test-CriteriaCoverage.py` to enforce source/renderer/collector parity, all 45 automatic `$Eval` blocks, all 19 manual checks and explicit coverage for CHK-12, CHK-18, CHK-19, CHK-24, CHK-28, CHK-29, CHK-31 and CHK-43. Corrected CHK-19's final criterion to the two Arc-enabled Servers private DNS zones actually observed by the collector, without claiming the Arc-enabled Kubernetes zone or end-to-end DNS resolution.
+
+## [3.9.4] — 2026-10-27
+
+### Final PT-BR narrative localization gate
+- Localized only Arc Posture Review-authored narrative in the PT-BR renderer: check descriptions and interpretations, Criteria, risks, recommendations, What to do, How to decide, root-cause descriptions, action plan, priorities, informational explanations, documentary-control instructions, evidence-contract explanations and report labels.
+- Preserved canonical status tokens, CHK/CTL/REQ/DEC/ALR IDs, Azure product/resource names, resource and subscription identifiers, machine/resource-group names, raw Azure values, CSV/JSON, KQL, PowerShell, Azure CLI, azcmagent, API properties, extension names/types, versions, files/datasets and raw Defender recommendation titles.
+- PT-BR localization is display-only: imported `results.json` and every evidence dataset remain byte-preserved. EN-US and PT-BR reports are regenerated from the same sanitized execution.
+- Preserved the conclusive FAIL + PARTIAL Evidence Coverage explanations for CHK-41 and CHK-64 and added a localization parity gate to prevent their regression.
+
+## [3.9.3] — 2026-10-27
+
+### Lab round v3.9.2 remediation
+- Synchronized renderer criteria with collector outcomes for CHK-23, CHK-33, CHK-39, CHK-41, CHK-56 and CHK-58, including CHK-33 severity.
+- Defined Control Result and Evidence Coverage as independent axes. A conclusive PASS/WARN/FAIL can have PARTIAL coverage; PARTIAL as a result is reserved for evidence that cannot support a conclusion. CHK-41 and CHK-64 now state that distinction explicitly, and conclusive results remain in posture scoring while coverage is reported separately.
+- CHK-42 now emits one canonical evidence row per connected machine. CHK-15 preserves `true`, `false` and `missing` separately instead of coercing null/absent properties to false.
+- Reduced CHK-33 body density; recommendation-level detail remains in the complete findings CSV and evidence appendix.
+- Split generated reports into an executive assessment and an evidence appendix, completed PT-BR renderer localization, and retained the integrated language-specific HTML as the official project Guide. The Guide Markdown download remains removed.
+- Added clean PDF generation with no browser URL/date header or footer, PDF validation, bilingual ZIP → analysis → saved HTML → reopened HTML regression, stricter 64-check criteria/result contracts, CSP checks and responsive desktop/mobile gates.
+
+## [3.9.2] — 2026-10-27
+
+### Lab-review corrections
+- Standardized the generated/result taxonomy as `PASS/WARN/FAIL/INFO/N/A/TODO/PARTIAL/ERROR`; legacy `PARCIAL`/`ERRO` package values are accepted only at the import compatibility boundary and normalized before rendering.
+- Separated **Control Result** from **Evidence Coverage**. `PARTIAL` and `ERROR` are excluded from the Kit Index and counted as evidence gaps; the report now publishes **Assessment Coverage** with a confidence label.
+- Added traceable grouped-control arithmetic: decisive check, healthy count, weighted numerator, denominator/weight, score before rounding and displayed score. Corrected CHK-21's denominator from connected machines to the whole applicable estate.
+- Corrected the lab-evidenced classifications and proxy handling: CHK-05, CHK-32, CHK-40, CHK-42, CHK-54 and CHK-57 can be `PARTIAL`; CHK-23, CHK-33, CHK-39, CHK-41, CHK-55, CHK-56 and CHK-58 escalate to `FAIL` when the objective is materially not met.
+- Renamed CHK-32 to **MDE extension deployed through Arc** so the report does not claim Defender device health from extension inventory alone. CHK-42 reports pending patches as unknown when no valid assessment exists. CHK-45 now links retention applicability explicitly to CHK-39/40.
+- Fixed CHK-55 finding cardinality to count every affected machine and fixed CHK-64 stale-upload arithmetic so a disconnected SQL machine still counts when its last usage upload is older than 24 hours.
+- Clarified that CHK-43 proves Activity Log export to a destination, not ingestion by the Sentinel workspace required by CHK-41.
+- Evidence previews now state the preview boundary and embed a link to download the complete findings CSV. Every check has a rendered evidence contract covering source, collection/query, time, scope, denominator, exclusions, freshness and failure behavior.
+
+### Guide and compatibility
+- The integrated language-specific HTML remains the canonical Guide. The Guide Markdown download and embedded payload remain removed; `docs/guide.*.md` are authoring mirrors only.
+- Evidence package schema remains backward compatible with v3.8.x/v3.9.x. New result fields are additive.
+
+## [3.9.1] — 2026-10-27
+
+### Canonical guide
+- The integrated offline HTML is now the canonical project guide for each language. It is still an independent project and not official Microsoft guidance.
+- Removed the **Download guide .md** button, its event handler and the embedded Markdown payload. Markdown files under `docs/` remain authoring mirrors only.
+- Reports generated as Markdown now reference the canonical language-specific HTML guide.
+
+### Risks and validation
+- Documented the current lab risks: limited-machine samples are not final coverage; PARTIAL/ERROR/TODO means not assessed; live version metadata can fall back to static tables; evidence is sensitive; and local gates do not replace a fresh authorized lab import/export run.
+- Contract and browser tests now fail if the guide Markdown button or payload returns, or if the canonical-guide marker is missing.
+- No check, Azure query, permission requirement, result schema or status rule changed. Evidence packages remain compatible with v3.9.0.
+
+## [3.9.0] — 2026-10-27
+
+### Saved report
+- The saved HTML now keeps the reviewed 3.8.3 information architecture and visual language as an explicit report contract: quick read, compliance, fleet indicators, action plan, metrics, alerts, versions, priorities, scope views, gaps, permissions, file assessment and checklist record remain in the same order.
+- Fixed mobile horizontal overflow caused by the score grid, action-plan tables and long Azure resource/action identifiers. At 390 px, the document now stays within the viewport; wide evidence tables scroll inside their own container.
+- Query copy buttons now work in the saved offline report, including a `file://` fallback. Printing temporarily expands every `<details>` block and restores the previous state afterwards.
+- Static alert sections are exported as visibly open and no longer expose inert button semantics. Internal links remain links only when their destination exists; unavailable guide/checklist jumps become non-focusable labels.
+- Removed the duplicated *What to do / How to decide* block from every priority. Each priority now renders the action guidance exactly once.
+
+### Engineering and release quality
+- Added canonical shared assets (`tools/report-responsive.css` and `tools/report-runtime.js`) plus `tools/Sync-ReportAssets.py`; English, Portuguese, `index.html` and both sample reports fail validation when those assets drift.
+- Added a report-contract test for version parity, CSP hash integrity, required section order, copy-button/code pairing, duplicate action guidance, internal targets and bilingual parity.
+- Added Playwright regression tests at desktop and mobile widths for the application and saved reports, including CSP/console failures, horizontal overflow, query copy and print expansion.
+- The pre-publish command and GitHub workflow now run the report-contract and browser tests in addition to PSScriptAnalyzer and version checks.
+
+### Compatibility
+- No checklist, collection command, permission requirement, data schema or status rule changed. The release remains compatible with v3.8.3 evidence packages and still contains 64 checks.
+
 ## [3.8.3] — 2026-10-23
 
 ### New check

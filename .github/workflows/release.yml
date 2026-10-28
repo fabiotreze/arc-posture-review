@@ -20,6 +20,19 @@ jobs:
           $found = @(Invoke-ScriptAnalyzer -Path ./scripts -Recurse -Settings ./PSScriptAnalyzerSettings.psd1)
           $found | Format-Table Severity, RuleName, Line, Message -AutoSize -Wrap | Out-String -Width 200 | Write-Host
           if ($found.Count) { Write-Error "$($found.Count) PSScriptAnalyzer finding(s): release not created. Fix and publish a new version."; exit 1 }
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install report-test dependencies
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements-dev.txt
+          python -m playwright install --with-deps chromium
+      - name: Report contract gate
+        run: |
+          python tools/Sync-ReportAssets.py --check
+          python tools/Test-ReportContract.py
+      - name: Browser regression gate
+        run: python tools/Test-ReportVisual.py
       - name: Extract release notes from CHANGELOG
         run: |
           v="${GITHUB_REF_NAME#v}"

@@ -34,6 +34,8 @@ Security decisions start before the first server is connected (onboarding creden
 - **9 decision trees** (onboarding, organization, connectivity, identity, extensions, protection, versions and legacy, decommissioning, cost) plus program execution.
 - **Read-only collector** (`Invoke-ArcPostureReview.ps1`): Azure Resource Graph and Azure CLI read commands only, paginated, multi-subscription or management group, effective-permission pre-check (Reader is enough), and an optional machine limit for large estates (risk-prioritized sample).
 - **Local analysis:** quick read, kit index on the Secure Score model (points by severity, share of healthy machines, same root cause counted once), compliance by layer and MCSB control, Defender for Cloud Secure Score, one-row-per-action plan with gain, timeframe and owner, 9 recommended alerts, agent and extension versions on the run date, cost estimate, and evidence per finding.
+- **Two report layers:** a concise executive assessment for decisions and a separate evidence appendix with contracts, criteria, traceability and complete findings links.
+- **Clean PDF:** `python tools/Generate-CleanPdf.py <saved-report.html>` generates and validates an A4 PDF without browser URL/date headers or footers.
 - **Coverage inventory:** the guide (Appendix J) shows the totals per domain, severity, layer and decision tree, and what changed since the previous version.
 - **Agent security floor:** machines below Connected Machine agent **1.61** fail the version check (known local elevation-of-privilege CVEs: CVE-2025-49692, CVE-2025-26627, CVE-2025-55316, CVE-2026-26117), and the services catalog covers the agent scheduled tasks and extension services.
 - **Package validation:** origin, structure, manifest SHA-256 and size limits; tampered packages are rejected. The script prints the `.zip` SHA-256 so you can confirm the origin.
@@ -45,6 +47,16 @@ Security decisions start before the first server is connected (onboarding creden
   | `arc-posture-review-analysis-<date>.<lang>.html` | **One file:** the full analysis plus the checklist record (status, collection evidence and notes for every check, session notes) | The deliverable: share, archive or print to PDF |
   | `arc-posture-review-report.<lang>.md` / `.json` | Same content as text and as data | Edit the text, or compare runs |
 - **Accessible UI:** status shown by icon, text and color (Advisor/Defender palette), AA contrast, dark mode, high-contrast and reduced-motion support.
+
+## Current lab and assessment risks
+
+| Risk | Control before treating the result as final |
+|---|---|
+| A machine-limited run can hide findings outside the sample | Use `MaxMachines = 0` for the final run, or run complete scopes by resource group. Treat a limited run as discovery only. |
+| `PARTIAL`, `ERROR` or `TODO` can be mistaken for a healthy state | Treat them as **not assessed**. Resolve permissions, provider, API and documentary gaps, then recollect. |
+| Live version metadata can be unavailable and fall back to static support tables | Confirm the source shown in the finding and recheck current Microsoft release notes on the run date. |
+| Evidence and exported reports contain environment and personal data | Use authorized accounts and controlled storage, keep e-mail masking enabled, and never attach evidence to public issues. |
+| Local static/browser gates do not prove live Azure collection and import/export | Before release, run the collector in the authorized lab and execute `Test-ReportVisual.py --package <fresh-lab.zip>`. |
 
 ## Privacy and data protection (LGPD / GDPR)
 
@@ -60,7 +72,7 @@ Security decisions start before the first server is connected (onboarding creden
 
 ![Read-only collection and evidence flow](docs/images/collection-flow.en-US.png)
 
-**Sample report** (v3.8.3) from a lab subscription (7 Arc-enabled servers, 3 evaluated in a risk-prioritized sample; SQL Server, Defender for Servers), anonymized: subscription, account, IDs and governance resource names replaced.
+**Sample report** (v3.9.5) from a sanitized lab fixture (7 Arc-enabled servers; SQL Server and Defender for Servers), anonymized: subscription, account, IDs and governance resource names replaced.
 [Open the sample report](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.en-US.html) · [Português](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.pt-BR.html)
 
 ![Sample analysis](docs/images/sample-report.en-US.png)
@@ -72,7 +84,7 @@ Security decisions start before the first server is connected (onboarding creden
 | Online | https://fabiotreze.github.io/arc-posture-review/ (English) · [Português](https://fabiotreze.github.io/arc-posture-review/arc-posture-review.pt-BR.html) |
 | Offline | Download [`arc-posture-review.en-US.html`](arc-posture-review.en-US.html) or [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html) and open it in Edge or Chrome |
 | Script only | [`scripts/Invoke-ArcPostureReview.ps1`](scripts/Invoke-ArcPostureReview.ps1): all 64 checks, current subscription by default |
-| Read the guide | [docs/guide.en-US.md](docs/guide.en-US.md) · [docs/guide.pt-BR.md](docs/guide.pt-BR.md) |
+| **Canonical project guide** | [`arc-posture-review.en-US.html`](arc-posture-review.en-US.html) · [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html) (integrated, offline; not official Microsoft guidance) |
 
 Flow: **Start here → Prepare collection → Run summary → Analysis → Plan and delivery**
 
@@ -101,9 +113,37 @@ index.html                         English version (GitHub Pages)
 arc-posture-review.en-US.html      offline HTML, English
 arc-posture-review.pt-BR.html      offline HTML, Portuguese
 scripts/Invoke-ArcPostureReview.ps1  standalone read-only collector (review it before running)
-docs/guide.en-US.md · guide.pt-BR.md  playbook with decision trees (Mermaid renders on GitHub)
+docs/guide.en-US.md · guide.pt-BR.md  authoring mirrors used to maintain the integrated HTML guide
 docs/examples/                     anonymized sample reports (en-US, pt-BR)
 docs/images/                       screenshots used in the README
+tools/Generate-CleanPdf.py         clean, validated PDF generation (no browser header/footer)
+criteria/checks.*.json             canonical bilingual source for all 64 checks and final result criteria
+validation/v3.9.5/                 sanitized acceptance reports, PDFs, screenshots, logs and hashes
+```
+
+## Validate before publishing
+
+The report layout and saved-file behavior are release contracts, not manual edits. After changing the generator or report:
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m playwright install chromium
+python tools/Sync-ReportAssets.py
+python tools/Test-CriteriaCoverage.py
+python tools/Test-ReportContract.py
+python tools/Test-LabCorrections.py
+python tools/Test-ReportVisual.py --package tests/fixtures/reviewed-lab-sanitized.zip --artifacts build/validation
+python tools/Test-LocalizationParity.py --en build/validation/e2e-en-US.html --pt build/validation/e2e-pt-BR.html
+python tools/Generate-CleanPdf.py build/validation/e2e-en-US.html --output build/validation/e2e-en-US.pdf
+python tools/Generate-CleanPdf.py build/validation/e2e-pt-BR.html --output build/validation/e2e-pt-BR.pdf
+```
+
+`Sync-ReportAssets.py` generates the collector catalog/default check list and each renderer's `ITEMS` array from `criteria/checks.*.json`, then keeps the shared responsive CSS, CSP-hashed saved-report runtime, embedded collector, `index.html`, both languages and both sample reports aligned. `Test-CriteriaCoverage.py` enforces 64 ordered bilingual criteria, 45 automatic `$Eval` blocks, 19 manual checks, and the explicit CHK-12/18/19/24/28/29/31/43 contracts. The remaining tests check version parity, section order, CSP integrity, internal links, one action block per priority, desktop/mobile overflow, offline query copy and print expansion. `tools/Test-BeforePublish.ps1` runs these gates together with PSScriptAnalyzer and the Git/release checks.
+
+For a full local import/export test, use an authorized evidence package that will not be committed:
+
+```bash
+python tools/Test-ReportVisual.py --package /path/to/arc-posture-review-YYYYMMDD-HHMMSS.zip
 ```
 
 ## Feedback

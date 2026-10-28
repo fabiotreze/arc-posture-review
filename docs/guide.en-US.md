@@ -1,12 +1,22 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v3.8.3 — 2026-10-23.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
+**Version v3.9.5 — 2026-10-27.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
+
+> **Authoring mirror:** the canonical guide for this release is the integrated `arc-posture-review.en-US.html`. This Markdown is retained for editing and review; it is not a separate deliverable.
+
+> **Result semantics:** Control Result and Evidence Coverage are independent. A conclusive PASS/WARN/FAIL can have PARTIAL coverage when the observed condition proves the outcome but an external dependency or wider scope is not collected. PARTIAL as a result means the evidence cannot support PASS, WARN or FAIL. Coverage affects confidence; it does not erase a proven failure.
+
+> **Current lab risks:** a machine-limited run is a discovery sample, not final coverage; `PARTIAL` as a result, `ERROR` and `TODO` mean not assessed, not healthy; live Azure version metadata can fall back to static tables; and the evidence ZIP/reports contain sensitive environment data. For release validation, import and export a fresh authorized lab package after the local gates pass.
 
 ## 0) Start here
 
 Three steps: **1.** go through the stages below and open the tree for each decision (click the card); **2.** generate and run the read-only script (step 2 of the HTML); **3.** load the .zip and follow the action plan.
+
+### Clean PDF delivery
+
+Save the language-specific analysis HTML, then run `python tools/Generate-CleanPdf.py <saved-report.html>`. The generator expands the evidence sections, removes interactive scripts/buttons, uses A4 print CSS and validates that no browser URL/date header or footer leaked into the PDF. Do not use the browser print dialog for the lab acceptance artifact.
 
 ```mermaid
 %% svg:start
@@ -39,7 +49,7 @@ flowchart LR
   H["1 · Checklist HTML<br/>scope and checks"] --> S["2 · Invoke-ArcPostureReview.ps1<br/>read-only"]
   S --> G["3 · Azure Resource Graph + ARM<br/>paged queries, no per-machine loop"]
   G --> Z["4 · .zip package<br/>summary · results · findings · manifest SHA-256"]
-  Z --> R["5 · HTML: Results and Report<br/>+ guia .md (mesmos IDs)"]
+  Z --> R["5 · HTML: executive assessment<br/>+ evidence appendix (same IDs)"]
 ```
 
 ## 1) Assessment method
@@ -1299,7 +1309,7 @@ flowchart LR
   H["1 · Checklist HTML<br/>scope and checks"] --> S["2 · Invoke-ArcPostureReview.ps1<br/>read-only"]
   S --> G["3 · Azure Resource Graph + ARM<br/>paged queries, no per-machine loop"]
   G --> Z["4 · .zip package<br/>summary · results · findings · manifest SHA-256"]
-  Z --> R["5 · HTML: Results and Report<br/>+ guia .md (mesmos IDs)"]
+  Z --> R["5 · HTML: executive assessment<br/>+ evidence appendix (same IDs)"]
 ```
 
 #### Permissions of the account that runs the collection
@@ -1863,6 +1873,12 @@ Totals calculated from the catalog in every version. In parentheses, what change
 
 | Version | Data | Changes |
 |---|---|---|
+| v3.9.5 | 2026-10-27 | Final publication-gate remediation: robust A4/Letter print layout, explicit official project Guide HTML access, rounded-value disclosure and completion of PT-BR narrative localization without changing raw evidence. |
+| v3.9.4 | 2026-10-27 | Final selective PT-BR narrative localization: Arc Posture Review-authored prose and report labels are localized while raw Azure/evidence values, commands, identifiers and Defender recommendation titles remain unchanged. CHK-41 and CHK-64 retain their conclusive FAIL + PARTIAL coverage explanations. EN-US/PT-BR reports are regenerated from the same execution and localization parity is gated. |
+| v3.9.3 | 2026-10-27 | Remediates the v3.9.2 validation round: Result × Criteria synchronization; conclusive outcomes with PARTIAL coverage; canonical CHK-42 rows; CHK-15 null/absent semantics; concise CHK-33 body; executive/evidence separation; complete PT-BR localization; clean validated PDF; bilingual ZIP-to-report regression; and stricter 64-check/CSP/responsive contracts. The integrated HTML remains canonical and no Guide Markdown download is exposed. |
+| v3.9.2 | 2026-10-27 | Lab-review corrections: canonical PASS/WARN/FAIL/INFO/N/A/TODO/PARTIAL/ERROR taxonomy; separate Control Result and Evidence Coverage; Assessment Coverage with confidence; traceable grouped-control arithmetic; corrected CHK-05/23/32/33/39/40/41/42/54/55/56/57/58/64 behavior; complete-evidence CSV links; and per-check evidence contracts. The integrated HTML remains canonical and no Guide Markdown download is exposed. |
+| v3.9.1 | 2026-10-27 | The integrated HTML is the canonical project guide; the guide Markdown download and embedded Markdown payload were removed. Current lab risks are explicit, and contract/browser gates prevent the button or payload from returning. |
+| v3.9.0 | 2026-10-27 | Saved-report contract: responsive mobile layout, functional query copy, complete print expansion, accessible static navigation, and automated contract/browser regression tests. No checklist or collector-scope change. |
 | v3.8.3 | 2026-10-23 | New check CHK-64 (SQL Server license and usage upload: LicenseType, pCore, uploadStatus and last upload); CHK-37 and CHK-29 cover the whole estate (disconnection ranges, including 30 to 44 days, and agent versions) even with a sample; CHK-33 adds Defender risk, attack paths, age, exemptions and owner/due date; CHK-38 highlights the Arc Advisor recommendations; alert query fixed (portal fields, only active Low/Medium/High). New appendix on continuity when the region is unavailable and public billing references. |
 | v3.8.2 | 2026-10-23 | Several resource groups in one collection (-ResourceGroup rg-a, rg-b). Subscriptions accept comma-separated IDs in a single string, and the script stops with an error if any is not found (it used to fall back to the default subscription). Function name fix reported by PSScriptAnalyzer; PSScriptAnalyzer check before each release. |
 | v3.8.1 | 2026-10-23 | Metric transparency: new section How the metrics are calculated (formula, today's numbers, weights and gain per control); Gain column with the index before and after; estate indicators with the count, the source check and a color by range. CHK-30 uses the SQL extension version published in Azure when it is newer than the table. Sample report updated. |

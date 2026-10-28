@@ -1,0 +1,70 @@
+/* Responsive contract for generated/saved reports. Keep tables locally scrollable. */
+@media (max-width: 640px) {
+  .score { grid-template-columns: 1fr; justify-items: stretch; }
+  .ring { justify-self: center; }
+  .bars .b { grid-template-columns: minmax(110px, 1fr) minmax(70px, 1fr) 44px; }
+  .qrg, .sevt { grid-template-columns: 1fr; }
+  table.plan { display: block; max-width: 100%; overflow-x: auto; }
+  .vbar { grid-template-columns: 1fr; }
+  .vbar .t { min-width: 0; }
+  .ana, .fcard, details, .tw { min-width: 0; max-width: 100%; }
+  .msg, .fcard li, .act .body { overflow-wrap: anywhere; }
+}
+
+/* v3.9.5: explicit Guide HTML access in saved analysis reports. */
+.official-guide-access {
+  max-width: 1180px; margin: 10px auto 0; padding: 9px 14px;
+  border: 1px solid var(--line); border-inline-start: 4px solid var(--accent);
+  border-radius: 8px; background: var(--panel);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.official-guide-access a { color: var(--accent); font-weight: 700; text-decoration: none; }
+.official-guide-access a:hover { text-decoration: underline; }
+.official-guide-access .note { color: var(--muted); font-size: 12px; }
+
+/* v3.9.5 print/PDF contract: use landscape by default and never clip wide tables. */
+@page { size: landscape; margin: 8mm; }
+@media print {
+  html, body { width: auto !important; max-width: none !important; background: #fff !important; }
+  body { font-size: 9pt !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  main.wrap, .wrap, .card, .ana, .body, details {
+    width: auto !important; max-width: none !important; min-width: 0 !important; box-shadow: none !important;
+  }
+  .official-guide-access {
+    max-width: none !important; margin: 0 0 4mm !important; padding: 2mm 3mm !important; break-inside: avoid;
+  }
+  .tw {
+    display: block !important; width: 100% !important; max-width: 100% !important;
+    min-width: 0 !important; overflow: visible !important;
+  }
+  table.gt, table.plan {
+    width: 100% !important; max-width: 100% !important; min-width: 0 !important;
+    table-layout: fixed !important; border-collapse: collapse !important; font-size: 7pt !important;
+  }
+  table.print-wide { font-size: 6pt !important; }
+  table.print-ultrawide { font-size: 5pt !important; }
+  table.print-wide .chip, table.print-wide .pill {
+    font-size: 5.5pt !important; padding: 0.2mm 0.7mm !important; letter-spacing: 0 !important;
+  }
+  table.print-ultrawide .chip, table.print-ultrawide .pill {
+    font-size: 4.5pt !important; padding: 0.1mm 0.4mm !important; letter-spacing: 0 !important;
+  }
+  table.print-wide .chip.st::before, table.print-ultrawide .chip.st::before {
+    min-width: 0 !important; margin-inline-end: 0.3mm !important;
+  }
+  table.gt th, table.gt td, table.plan th, table.plan td {
+    width: auto !important; max-width: none !important; min-width: 0 !important;
+    padding: 1.2mm 1mm !important; line-height: 1.18 !important;
+    white-space: normal !important; overflow: visible !important;
+    overflow-wrap: anywhere !important; word-break: break-word !important; hyphens: auto;
+  }
+  table.gt th, table.plan th { position: static !important; }
+  thead { display: table-header-group; }
+  tfoot { display: table-footer-group; }
+  tr, .fcard, .actbox { break-inside: avoid; page-break-inside: avoid; }
+  a { overflow-wrap: anywhere; word-break: break-word; }
+  pre.code {
+    white-space: pre-wrap !important; overflow-wrap: anywhere !important;
+    max-height: none !important; font-size: 6.5pt !important;
+  }
+}

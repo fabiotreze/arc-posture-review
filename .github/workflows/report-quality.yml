@@ -1,0 +1,60 @@
+name: Report quality
+on:
+  pull_request:
+    paths:
+      - '**/*.html'
+      - 'tools/**'
+      - 'tests/**'
+      - 'criteria/**'
+      - 'docs/guide.*.md'
+      - 'scripts/Invoke-ArcPostureReview.ps1'
+      - 'requirements-dev.txt'
+      - '.github/workflows/report-quality.yml'
+  push:
+    branches: [main]
+    paths:
+      - '**/*.html'
+      - 'tools/**'
+      - 'tests/**'
+      - 'criteria/**'
+      - 'docs/guide.*.md'
+      - 'scripts/Invoke-ArcPostureReview.ps1'
+      - 'requirements-dev.txt'
+      - '.github/workflows/report-quality.yml'
+permissions:
+  contents: read
+jobs:
+  report-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install browser test dependencies
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements-dev.txt
+          python -m playwright install --with-deps chromium
+      - name: Check generated report assets and contract
+        run: |
+          python tools/Sync-ReportAssets.py --check
+          python tools/Test-CriteriaCoverage.py
+          python tools/Test-ReportContract.py
+          python tools/Test-LabCorrections.py
+      - name: Run desktop/mobile and reviewed-lab E2E regression
+        run: python tools/Test-ReportVisual.py --package tests/fixtures/reviewed-lab-sanitized.zip --artifacts build/validation
+      - name: Check EN-US/PT-BR localization parity
+        run: python tools/Test-LocalizationParity.py --en build/validation/e2e-en-US.html --pt build/validation/e2e-pt-BR.html
+      - name: Generate A4/Letter portrait/landscape PDF matrix
+        run: |
+          mkdir -p build/validation
+          for locale in en-US pt-BR; do
+            for format in A4 Letter; do
+              for orientation in portrait landscape; do
+                slug=$(echo "${format}-${orientation}" | tr '[:upper:]' '[:lower:]')
+                python tools/Generate-CleanPdf.py "docs/examples/sample-analysis.${locale}.html" \
+                  --format "$format" --orientation "$orientation" \
+                  --output "build/validation/sample-analysis.${locale}.${slug}.pdf"
+              done
+            done
+          done
