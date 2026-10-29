@@ -14,9 +14,16 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -r requirements-v4.txt
       - run: python -m playwright install --with-deps chromium
-      - run: python tools/Invoke-V4FinalGates.py --profile release
+      - name: Run release gate (evidence log outside the repository)
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p "$RUNNER_TEMP/v4-final-gates"
+          python tools/Invoke-V4FinalGates.py --profile release 2>&1 | tee "$RUNNER_TEMP/v4-final-gates/release-gate.log"
+          git rev-parse HEAD > "$RUNNER_TEMP/v4-final-gates/commit.txt"
+          sha256sum release/v4.0.0/release-manifest.json release/v4.0.0/SHA256SUMS > "$RUNNER_TEMP/v4-final-gates/release-files.sha256"
       - uses: actions/upload-artifact@v4
         with:
           name: v4-release-gate-evidence
-          path: build/v4-final-gates/
+          path: ${{ runner.temp }}/v4-final-gates/
           if-no-files-found: error
