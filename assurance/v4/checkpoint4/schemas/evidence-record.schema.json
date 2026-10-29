@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "evidence-record.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "checkId", "sourceStatus", "coverage", "integrity", "scope", "collectedAt", "sources", "requiredFields", "availableFields", "missingFields", "found", "detail", "contentDigest"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^EV-CHK-[0-9]{2}$"},
+    "checkId": {"$ref": "common-defs.schema.json#/$defs/checkId"},
+    "sourceStatus": {"enum": ["PASS", "WARN", "FAIL", "PARTIAL", "INFO", "N/A", "TODO", "MANUAL", "UNKNOWN", "ERROR"]},
+    "coverage": {"enum": ["FULL", "PARTIAL", "NONE", "ERROR"]},
+    "integrity": {"enum": ["VERIFIED", "NOT_PROVIDED"]},
+    "scope": {"type": "string", "minLength": 1},
+    "collectedAt": {"type": "string", "minLength": 1},
+    "sources": {"$ref": "common-defs.schema.json#/$defs/stringArray"},
+    "requiredFields": {"$ref": "common-defs.schema.json#/$defs/stringArray"},
+    "availableFields": {"$ref": "common-defs.schema.json#/$defs/stringArray"},
+    "missingFields": {"$ref": "common-defs.schema.json#/$defs/stringArray"},
+    "found": {"type": "integer", "minimum": 0},
+    "detail": {"type": "string"},
+    "contentDigest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

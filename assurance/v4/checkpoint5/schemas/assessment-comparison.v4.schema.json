@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "assessment-comparison.v4.schema.json",
+  "title": "Arc Posture Review canonical comparison",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contractName", "contractVersion", "generatedAt", "baselineRunId", "currentRunId", "summary", "controls", "scenarios", "outputDigest"],
+  "properties": {
+    "contractName": {"const": "assessment-comparison.v4"},
+    "contractVersion": {"const": "4.0.0"},
+    "generatedAt": {"type": "string", "minLength": 1},
+    "baselineRunId": {"type": "string", "pattern": "^ER-[A-F0-9]{20}$"},
+    "currentRunId": {"type": "string", "pattern": "^ER-[A-F0-9]{20}$"},
+    "summary": {
+      "type": "object", "additionalProperties": false, "required": ["IMPROVED", "REGRESSED", "UNCHANGED"],
+      "properties": {
+        "IMPROVED": {"type": "integer", "minimum": 0},
+        "REGRESSED": {"type": "integer", "minimum": 0},
+        "UNCHANGED": {"type": "integer", "minimum": 0}
+      }
+    },
+    "controls": {"type": "array", "minItems": 64, "maxItems": 64, "items": {"$ref": "comparison.schema.json#/$defs/controlDelta"}},
+    "scenarios": {"type": "array", "minItems": 11, "maxItems": 11, "items": {"$ref": "comparison.schema.json#/$defs/scenarioDelta"}},
+    "outputDigest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

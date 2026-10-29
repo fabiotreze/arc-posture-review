@@ -1,0 +1,26 @@
+{
+  "release": "v4.0.0",
+  "status": "PREPARED_BLOCKED",
+  "sourceBranch": "feature/v4-security-model",
+  "sourceCheckpointCommit": "549558a",
+  "checkpoints": [6, 7, 8, 9, 10],
+  "canonicalContract": "assessment-result.v4",
+  "legacyReport": "v3.9.6",
+  "gateEntrypoint": "tools/Invoke-V4FinalGates.py",
+  "publishable": false,
+  "blockers": [
+    {
+      "id": "KI-V4-001",
+      "dependency": "pypdf==6.19.0",
+      "dependabotAlerts": 11,
+      "targetPatch": "6.21.2",
+      "constraint": "Target patch unavailable in approved feed"
+    }
+  ],
+  "requiredBeforePublication": [
+    "Resolve or formally accept KI-V4-001",
+    "Repeat the security-review checklist",
+    "Run the release gate from a clean reviewed commit",
+    "Validate SHA256SUMS"
+  ]
+}

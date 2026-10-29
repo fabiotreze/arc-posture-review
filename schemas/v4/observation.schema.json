@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabiotreze.github.io/arc-posture-review/schemas/v4/observation.schema.json",
+  "title": "APR v4 Observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "observationId",
+    "source",
+    "collectedAt",
+    "attribute",
+    "collectionStatus",
+    "evidenceIds"
+  ],
+  "properties": {
+    "observationId": {
+      "type": "string",
+      "pattern": "^OBS-[A-Za-z0-9._-]+$"
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "collectedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "attribute": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observedValue": {},
+    "collectionStatus": {
+      "enum": ["SUCCESS", "PARTIAL", "FAILED", "NOT_COLLECTED"]
+    },
+    "evidenceIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^EVD-"
+      }
+    }
+  }
+}

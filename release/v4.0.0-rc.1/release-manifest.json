@@ -1,0 +1,11 @@
+{
+  "release": "v4.0.0-rc.1",
+  "status": "REVIEW_CANDIDATE",
+  "sourceCheckpointCommit": "549558a",
+  "checkpoints": [6, 7, 8, 9],
+  "canonicalContract": "assessment-result.v4",
+  "securityReview": "PENDING",
+  "falsePositiveReview": "REQUIRED",
+  "stableReleaseBlocked": true,
+  "blocker": "KI-V4-001"
+}

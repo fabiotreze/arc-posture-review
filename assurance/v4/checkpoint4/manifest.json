@@ -1,0 +1,20 @@
+{
+  "name": "arc-posture-review-checkpoint4-v4",
+  "version": "4.0.0",
+  "checkpoint": 4,
+  "baseCheckpoint": 3,
+  "baseCollectorVersion": "3.9.5",
+  "engineVersion": "4.0.0-checkpoint4",
+  "contracts": {
+    "checks": 64,
+    "risks": 11,
+    "securityScenarios": 11,
+    "defenseFunctions": 4,
+    "roadmapHorizons": ["NOW", "30d", "90d"]
+  },
+  "entrypoints": {
+    "evaluate": "checkpoint4-v4/scripts/Evaluate-Posture.py",
+    "allGates": "checkpoint4-v4/scripts/Invoke-AllGates.py",
+    "allGatesPowerShell": "checkpoint4-v4/scripts/Invoke-AllGates.ps1"
+  }
+}

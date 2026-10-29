@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "taxonomyVersion": "4.0.0",
+  "coverage": [
+    "FULL",
+    "PARTIAL",
+    "NONE",
+    "ERROR"
+  ],
+  "confidence": [
+    "HIGH",
+    "MEDIUM",
+    "LOW",
+    "UNKNOWN"
+  ],
+  "freshness": [
+    "CURRENT",
+    "STALE",
+    "UNKNOWN"
+  ],
+  "rule": "Evidence assurance never reduces observed risk solely because evidence is incomplete"
+}

@@ -1,0 +1,290 @@
+[
+  {
+    "id": "AC-R01",
+    "riskId": "R01",
+    "scenarioId": "AS01",
+    "title": "Contain and remediate: Compromise of privileged identity",
+    "trigger": "Any linked check is FAIL, WARN, PARTIAL, TODO, or has missing required evidence: CHK-10, CHK-11, CHK-12, CHK-13, CHK-14, CHK-15, CHK-25, CHK-56, CHK-60, CHK-62.",
+    "priority": "P0",
+    "owners": [
+      "Identity",
+      "Security"
+    ],
+    "actions": [
+      "Confirm scope and preserve timestamped evidence.",
+      "Contain the exposed boundary without destroying evidence.",
+      "Remediate the highest-severity linked checks.",
+      "Re-run collection and require claim validation before closure."
+    ],
+    "closureEvidence": [
+      "All linked P0/P1 checks are PASS or approved N/A.",
+      "No required evidence is absent.",
+      "Scenario validator confirms a blocked or monitored path.",
+      "Owner and timestamp are recorded."
+    ],
+    "rollback": "If remediation affects connectivity or management, use the approved rollback for the environment and revalidate SB01-SB08 as applicable."
+  },
+  {
+    "id": "AC-R02",
+    "riskId": "R02",
+    "scenarioId": "AS02",
+    "title": "Contain and remediate: Unsafe onboarding identity or secret",
+    "trigger": "Any linked check is FAIL, WARN, PARTIAL, TODO, or has missing required evidence: CHK-02, CHK-07, CHK-12, CHK-14, CHK-48.",
+    "priority": "P1",
+    "owners": [
+      "Architecture",
+      "Platform",
+      "Security"
+    ],
+    "actions": [
+      "Confirm scope and preserve timestamped evidence.",
+      "Contain the exposed boundary without destroying evidence.",
+      "Remediate the highest-severity linked checks.",
+      "Re-run collection and require claim validation before closure."
+    ],
+    "closureEvidence": [
+      "All linked P0/P1 checks are PASS or approved N/A.",
+      "No required evidence is absent.",
+      "Scenario validator confirms a blocked or monitored path.",
+      "Owner and timestamp are recorded."
+    ],
+    "rollback": "If remediation affects connectivity or management, use the approved rollback for the environment and revalidate SB01-SB08 as applicable."
+  },
+  {
+    "id": "AC-R03",
+    "riskId": "R03",
+    "scenarioId": "AS03",
+    "title": "Contain and remediate: Control-plane privilege escalation",
+    "trigger": "Any linked check is FAIL, WARN, PARTIAL, TODO, or has missing required evidence: CHK-08, CHK-09, CHK-10, CHK-11, CHK-13, CHK-16, CHK-20, CHK-24, CHK-26, CHK-43, CHK-44.",
+    "priority": "P0",
+    "owners": [
+      "Governance",
+      "Network",
+      "Security"
+    ],
+    "actions": [
+      "Confirm scope and preserve timestamped evidence.",
+      "Contain the exposed boundary without destroying evidence.",
+      "Remediate the highest-severity linked checks.",
+      "Re-run collection and require claim validation before closure."
+    ],
+    "closureEvidence": [
+      "All linked P0/P1 checks are PASS or approved N/A.",
+      "No required evidence is absent.",
+      "Scenario validator confirms a blocked or monitored path.",
+      "Owner and timestamp are recorded."
+    ],
+    "rollback": "If remediation affects connectivity or management, use the approved rollback for the environment and revalidate SB01-SB08 as applicable."
+  },
+  {
+    "id": "AC-R04",
+    "riskId": "R04",
+    "scenarioId": "AS04",
+    "title": "Contain and remediate: Network and name-resolution boundary bypass",
+    "trigger": "Any linked check is FAIL, WARN, PARTIAL, TODO, or has missing required evidence: CHK-17, CHK-18, CHK-19, CHK-20, CHK-21.",
+    "priority": "P1",
+    "owners": [
+      "Network",
+      "Security"
+    ],
+    "actions": [
+      "Confirm scope and preserve timestamped evidence.",
+      "Contain the exposed boundary without destroying evidence.",
+      "Remediate the highest-severity linked checks.",
+      "Re-run collection and require claim validation before closure."
+    ],
+    "closureEvidence": [
+      "All linked P0/P1 checks are PASS or approved N/A.",
+      "No required evidence is absent.",
+      "Scenario validator confirms a blocked or monitored path.",
+      "Owner and timestamp are recorded."
+    ],
+    "rollback": "If remediation affects connectivity or management, use the approved rollback for the environment and revalidate SB01-SB08 as applicable."
+  },
+  {
+    "id": "AC-R05",
+    "riskId": "R05",
+    "scenarioId": "AS05",
+    "title": "Contain and remediate: Agent, extension, or local-control tampering",
+    "trigger": "Any linked check is FAIL, WARN, PARTIAL, TODO, or has missing required evidence: CHK-22, CHK-23, CHK-28, CHK-29, CHK-30, CHK-35, CHK-36, CHK-37, CHK-51, CHK-55, CHK-61.",
+    "priority": "P1",
+    "owners": [
+      "Infrastructure",
+      "Operations",
+      "Security"
+    ],
+    "actions": [
+      "Confirm scope and preserve timestamped evidence.",
+      "Contain the exposed boundary without destroying evidence.",
+      "Remediate the highest-severity linked checks.",
+      "Re-run collection and require claim validation before closure."
+    ],
+    "closureEvidence": [
+      "All linked P0/P1 checks are PASS or approved N/A.",
+      "No required evidence is absent.",
+      "Scenario validator confirms a blocked or monitored path.",
+      "Owner and timestamp are recorded."
+    ],
+    "rollback": "If remediation affects connectivity or management, use the approved rollback for the environment and revalidate SB01-SB08 as applicable."
+  },
+  {
+    "id": "AC-R06",
+    "riskId": "R06",
+    "scenarioId": "AS06",
+    "title": "Contain and remediate: Abuse of extensions and remote execution",
+    "trigger": "Any linked check is FAIL, WARN, PARTIAL, TODO, or has missing required evidence: CHK-23, CHK-24, CHK-26, CHK-28, CHK-30, CHK-44.",
+    "priority": "P0",
+    "owners": [
+      "Operations",
+      "Security"
+    ],
+    "actions": [
+      "Confirm scope and preserve timestamped evidence.",
+      "Contain the exposed boundary without destroying evidence.",
+      "Remediate the highest-severity linked checks.",
+      "Re-run collection and require claim validation before closure."
+    ],
+    "closureEvidence": [
+      "All linked P0/P1 checks are PASS or approved N/A.",
+      "No required evidence is absent.",
+      "Scenario validator confirms a blocked or monitored path.",
+      "Owner and timestamp are recorded."
+    ],
+    "rollback": "If remediation affects connectivity or management, use the approved rollback for the environment and revalidate SB01-SB08 as applicable."
+  },
+  {
+    "id": "AC-R07",
+    "riskId": "R07",
+    "scenarioId": "AS07",
+    "title": "Contain and remediate: Security telemetry blind spot",
+    "trigger": "Any linked check is FAIL, WARN, PARTIAL, TODO, or has missing required evidence: CHK-31, CHK-32, CHK-33, CHK-39, CHK-40, CHK-41, CHK-43, CHK-44, CHK-45, CHK-54, CHK-57, CHK-58, CHK-63.",
+    "priority": "P0",
+    "owners": [
+      "Operations",
+      "Security"
+    ],
+    "actions": [
+      "Confirm scope and preserve timestamped evidence.",
+      "Contain the exposed boundary without destroying evidence.",
+      "Remediate the highest-severity linked checks.",
+      "Re-run collection and require claim validation before closure."
+    ],
+    "closureEvidence": [
+      "All linked P0/P1 checks are PASS or approved N/A.",
+      "No required evidence is absent.",
+      "Scenario validator confirms a blocked or monitored path.",
+      "Owner and timestamp are recorded."
+    ],
+    "rollback": "If remediation affects connectivity or management, use the approved rollback for the environment and revalidate SB01-SB08 as applicable."
+  },
+  {
+    "id": "AC-R08",
+    "riskId": "R08",
+    "scenarioId": "AS08",
+    "title": "Contain and remediate: Exploitation of vulnerability or legacy platform",
+    "trigger": "Any linked check is FAIL, WARN, PARTIAL, TODO, or has missing required evidence: CHK-29, CHK-33, CHK-42, CHK-51, CHK-52, CHK-54, CHK-55, CHK-57, CHK-61.",
+    "priority": "P0",
+    "owners": [
+      "Infrastructure",
+      "Operations",
+      "Security"
+    ],
+    "actions": [
+      "Confirm scope and preserve timestamped evidence.",
+      "Contain the exposed boundary without destroying evidence.",
+      "Remediate the highest-severity linked checks.",
+      "Re-run collection and require claim validation before closure."
+    ],
+    "closureEvidence": [
+      "All linked P0/P1 checks are PASS or approved N/A.",
+      "No required evidence is absent.",
+      "Scenario validator confirms a blocked or monitored path.",
+      "Owner and timestamp are recorded."
+    ],
+    "rollback": "If remediation affects connectivity or management, use the approved rollback for the environment and revalidate SB01-SB08 as applicable."
+  },
+  {
+    "id": "AC-R09",
+    "riskId": "R09",
+    "scenarioId": "AS09",
+    "title": "Contain and remediate: Governance, lifecycle, or scope drift",
+    "trigger": "Any linked check is FAIL, WARN, PARTIAL, TODO, or has missing required evidence: CHK-01, CHK-02, CHK-03, CHK-04, CHK-05, CHK-06, CHK-07, CHK-08, CHK-09, CHK-16, CHK-27, CHK-38, CHK-46, CHK-47, CHK-48, CHK-49, CHK-50, CHK-53, CHK-59, CHK-64.",
+    "priority": "P1",
+    "owners": [
+      "Architecture",
+      "DBA",
+      "FinOps",
+      "Governance",
+      "Network",
+      "Operations",
+      "Platform",
+      "Project",
+      "Security"
+    ],
+    "actions": [
+      "Confirm scope and preserve timestamped evidence.",
+      "Contain the exposed boundary without destroying evidence.",
+      "Remediate the highest-severity linked checks.",
+      "Re-run collection and require claim validation before closure."
+    ],
+    "closureEvidence": [
+      "All linked P0/P1 checks are PASS or approved N/A.",
+      "No required evidence is absent.",
+      "Scenario validator confirms a blocked or monitored path.",
+      "Owner and timestamp are recorded."
+    ],
+    "rollback": "If remediation affects connectivity or management, use the approved rollback for the environment and revalidate SB01-SB08 as applicable."
+  },
+  {
+    "id": "AC-R10",
+    "riskId": "R10",
+    "scenarioId": "AS10",
+    "title": "Contain and remediate: SQL protection, entitlement, or telemetry failure",
+    "trigger": "Any linked check is FAIL, WARN, PARTIAL, TODO, or has missing required evidence: CHK-01, CHK-24, CHK-34, CHK-54, CHK-64.",
+    "priority": "P0",
+    "owners": [
+      "DBA",
+      "Platform",
+      "Security"
+    ],
+    "actions": [
+      "Confirm scope and preserve timestamped evidence.",
+      "Contain the exposed boundary without destroying evidence.",
+      "Remediate the highest-severity linked checks.",
+      "Re-run collection and require claim validation before closure."
+    ],
+    "closureEvidence": [
+      "All linked P0/P1 checks are PASS or approved N/A.",
+      "No required evidence is absent.",
+      "Scenario validator confirms a blocked or monitored path.",
+      "Owner and timestamp are recorded."
+    ],
+    "rollback": "If remediation affects connectivity or management, use the approved rollback for the environment and revalidate SB01-SB08 as applicable."
+  },
+  {
+    "id": "AC-R11",
+    "riskId": "R11",
+    "scenarioId": "AS11",
+    "title": "Contain and remediate: Operational resilience and recovery failure",
+    "trigger": "Any linked check is FAIL, WARN, PARTIAL, TODO, or has missing required evidence: CHK-37, CHK-42, CHK-46, CHK-47, CHK-49, CHK-50, CHK-51, CHK-52, CHK-58.",
+    "priority": "P1",
+    "owners": [
+      "Infrastructure",
+      "Operations",
+      "Project"
+    ],
+    "actions": [
+      "Confirm scope and preserve timestamped evidence.",
+      "Contain the exposed boundary without destroying evidence.",
+      "Remediate the highest-severity linked checks.",
+      "Re-run collection and require claim validation before closure."
+    ],
+    "closureEvidence": [
+      "All linked P0/P1 checks are PASS or approved N/A.",
+      "No required evidence is absent.",
+      "Scenario validator confirms a blocked or monitored path.",
+      "Owner and timestamp are recorded."
+    ],
+    "rollback": "If remediation affects connectivity or management, use the approved rollback for the environment and revalidate SB01-SB08 as applicable."
+  }
+]

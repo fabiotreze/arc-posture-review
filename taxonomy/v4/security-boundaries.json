@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0",
+  "taxonomyVersion": "4.0.0",
+  "boundaries": [
+    {
+      "id": "SB01",
+      "name": "Identity to Azure Control Plane"
+    },
+    {
+      "id": "SB02",
+      "name": "Azure Control Plane to Arc Resource"
+    },
+    {
+      "id": "SB03",
+      "name": "Arc Resource to Connected Machine Agent"
+    },
+    {
+      "id": "SB04",
+      "name": "Connected Machine Agent to Local Host"
+    },
+    {
+      "id": "SB05",
+      "name": "Extension to Local Privileged Context"
+    },
+    {
+      "id": "SB06",
+      "name": "Workload to Workload"
+    },
+    {
+      "id": "SB07",
+      "name": "Tier to Higher Privileged Tier"
+    }
+  ]
+}

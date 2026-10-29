@@ -1,0 +1,194 @@
+{
+  "schemaVersion": "1.0",
+  "taxonomyVersion": "4.0.0",
+  "actionCards": [
+    {
+      "id": "AC01",
+      "name": "Inventory, tags and Arc map",
+      "riskFamilies": [
+        "R01"
+      ]
+    },
+    {
+      "id": "AC02",
+      "name": "Arc architecture and landing zone",
+      "riskFamilies": [
+        "R02"
+      ]
+    },
+    {
+      "id": "AC03",
+      "name": "Tiering and remote operations",
+      "riskFamilies": [
+        "R03",
+        "R05"
+      ]
+    },
+    {
+      "id": "AC04",
+      "name": "Region and residency",
+      "riskFamilies": [
+        "R10"
+      ]
+    },
+    {
+      "id": "AC05",
+      "name": "Providers, Policy and compliance",
+      "riskFamilies": [
+        "R02",
+        "R06"
+      ]
+    },
+    {
+      "id": "AC06",
+      "name": "RBAC, PIM, MFA and OS access",
+      "riskFamilies": [
+        "R03"
+      ]
+    },
+    {
+      "id": "AC07",
+      "name": "Secrets and Key Vault",
+      "riskFamilies": [
+        "R03",
+        "R10"
+      ]
+    },
+    {
+      "id": "AC08",
+      "name": "Local administrators and LAPS",
+      "riskFamilies": [
+        "R03"
+      ]
+    },
+    {
+      "id": "AC09",
+      "name": "Connectivity, Private Link and DNS",
+      "riskFamilies": [
+        "R04"
+      ]
+    },
+    {
+      "id": "AC10",
+      "name": "Arc local surface and extension guardrails",
+      "riskFamilies": [
+        "R05"
+      ]
+    },
+    {
+      "id": "AC11",
+      "name": "Machine Configuration, baseline and encryption",
+      "riskFamilies": [
+        "R06",
+        "R10"
+      ]
+    },
+    {
+      "id": "AC12",
+      "name": "Agent and extension lifecycle",
+      "riskFamilies": [
+        "R05",
+        "R08"
+      ]
+    },
+    {
+      "id": "AC13",
+      "name": "Defender for Servers and MDE",
+      "riskFamilies": [
+        "R06"
+      ]
+    },
+    {
+      "id": "AC14",
+      "name": "Recommendations, threats and vulnerabilities",
+      "riskFamilies": [
+        "R06"
+      ]
+    },
+    {
+      "id": "AC15",
+      "name": "SQL security and least privilege",
+      "riskFamilies": [
+        "R03",
+        "R06"
+      ]
+    },
+    {
+      "id": "AC16",
+      "name": "Local collection and assurance",
+      "riskFamilies": [
+        "R09"
+      ]
+    },
+    {
+      "id": "AC17",
+      "name": "Disconnected and expired machines",
+      "riskFamilies": [
+        "R09"
+      ]
+    },
+    {
+      "id": "AC18",
+      "name": "Advisor, cost and benefits",
+      "riskFamilies": [
+        "R11"
+      ]
+    },
+    {
+      "id": "AC19",
+      "name": "AMA, DCR, Sentinel and telemetry",
+      "riskFamilies": [
+        "R07"
+      ]
+    },
+    {
+      "id": "AC20",
+      "name": "Patch authority and update posture",
+      "riskFamilies": [
+        "R08"
+      ]
+    },
+    {
+      "id": "AC21",
+      "name": "Activity Log and sensitive operations",
+      "riskFamilies": [
+        "R07"
+      ]
+    },
+    {
+      "id": "AC22",
+      "name": "Pilot, rollout and automation",
+      "riskFamilies": [
+        "R09"
+      ]
+    },
+    {
+      "id": "AC23",
+      "name": "Removal and hygiene",
+      "riskFamilies": [
+        "R01"
+      ]
+    },
+    {
+      "id": "AC24",
+      "name": "KPI and periodic review",
+      "riskFamilies": [
+        "R07"
+      ]
+    },
+    {
+      "id": "AC25",
+      "name": "Legacy, EOS, ESU and exit plan",
+      "riskFamilies": [
+        "R08"
+      ]
+    },
+    {
+      "id": "AC26",
+      "name": "SQL licensing and usage upload",
+      "riskFamilies": [
+        "R11"
+      ]
+    }
+  ]
+}

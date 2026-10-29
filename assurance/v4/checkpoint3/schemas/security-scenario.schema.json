@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "security-scenario.schema.json",
+  "title": "Security Scenario",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "riskIds",
+    "name",
+    "hypothesis",
+    "prerequisites",
+    "securityBoundaryIds",
+    "attackPath",
+    "controlCheckIds",
+    "expectedDefenseFunctions",
+    "mappingConfidence"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "common-defs.schema.json#/$defs/scenarioId"
+    },
+    "riskIds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/riskId"
+      }
+    },
+    "name": {
+      "type": "string",
+      "minLength": 5
+    },
+    "hypothesis": {
+      "type": "string",
+      "minLength": 20
+    },
+    "prerequisites": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "securityBoundaryIds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/boundaryId"
+      }
+    },
+    "attackPath": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from",
+          "to",
+          "boundaryId",
+          "requires"
+        ],
+        "properties": {
+          "from": {
+            "$ref": "common-defs.schema.json#/$defs/stage"
+          },
+          "to": {
+            "$ref": "common-defs.schema.json#/$defs/stage"
+          },
+          "boundaryId": {
+            "$ref": "common-defs.schema.json#/$defs/boundaryId"
+          },
+          "requires": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "controlCheckIds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/checkId"
+      }
+    },
+    "expectedDefenseFunctions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/defenseFunction"
+      }
+    },
+    "mappingConfidence": {
+      "$ref": "common-defs.schema.json#/$defs/confidence"
+    }
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "assessment-result.v4.schema.json",
+  "title": "Arc Posture Review canonical assessment-result.v4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "metadata", "assurance", "traceability", "controlAssessments", "zeroTrust", "tiers",
+    "securityScenarios", "defenseCoverage", "residualRisk", "actionCards", "roadmap", "comparison", "outputDigest"
+  ],
+  "properties": {
+    "metadata": {"$ref": "#/$defs/metadata"},
+    "assurance": {"$ref": "#/$defs/assurance"},
+    "traceability": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evidence", "observations", "claims"],
+      "properties": {
+        "evidence": {"type": "array", "minItems": 64, "maxItems": 64, "items": {"$ref": "evidence-record.schema.json"}},
+        "observations": {"type": "array", "minItems": 64, "maxItems": 64, "items": {"$ref": "observation.schema.json"}},
+        "claims": {"type": "array", "minItems": 64, "maxItems": 64, "items": {"$ref": "claim-evaluation.schema.json"}}
+      }
+    },
+    "controlAssessments": {"type": "array", "minItems": 64, "maxItems": 64, "items": {"$ref": "control-evaluation.schema.json"}},
+    "zeroTrust": {"$ref": "#/$defs/zeroTrust"},
+    "tiers": {"$ref": "#/$defs/tiers"},
+    "securityScenarios": {"type": "array", "minItems": 11, "maxItems": 11, "items": {"allOf": [{"$ref": "scenario-evaluation.schema.json"}, {"required": ["hypothesis", "validationState", "attackPath"]}]}},
+    "defenseCoverage": {"$ref": "#/$defs/defenseCoverage"},
+    "residualRisk": {"$ref": "#/$defs/residualRisk"},
+    "actionCards": {"type": "array", "maxItems": 11, "items": {"$ref": "action-card-instance.schema.json"}},
+    "roadmap": {"$ref": "roadmap.schema.json"},
+    "comparison": {"$ref": "comparison.schema.json"},
+    "outputDigest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "metadata": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "contractName", "contractVersion", "checkpoint", "pipelineVersion", "engineVersion", "sourceCheckpointCommit",
+        "runId", "generatedAt", "deterministic", "source", "model", "pipeline"
+      ],
+      "properties": {
+        "contractName": {"const": "assessment-result.v4"},
+        "contractVersion": {"const": "4.0.0"},
+        "checkpoint": {"const": 5},
+        "pipelineVersion": {"const": "4.1.0-checkpoint5"},
+        "engineVersion": {"const": "4.0.0-checkpoint4"},
+        "sourceCheckpointCommit": {"const": "2d512a3"},
+        "runId": {"type": "string", "pattern": "^ER-[A-F0-9]{20}$"},
+        "generatedAt": {"type": "string", "minLength": 1},
+        "deterministic": {"const": true},
+        "source": {
+          "type": "object", "additionalProperties": false,
+          "required": ["name", "collectorVersion", "schemaVersion", "integrity", "packageDigest", "inputDigest"],
+          "properties": {
+            "name": {"type": "string", "minLength": 1},
+            "collectorVersion": {"type": "string"},
+            "schemaVersion": {"const": 3},
+            "integrity": {"enum": ["VERIFIED", "NOT_PROVIDED"]},
+            "packageDigest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+            "inputDigest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+          }
+        },
+        "model": {"type": "object"},
+        "pipeline": {"const": ["collector-schema-v3", "evaluation-engine", "assessment-result.v4"]}
+      }
+    },
+    "countMap": {
+      "type": "object", "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "assurance": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "inputIntegrity", "evidenceRecordCount", "evidenceCoverage", "claimVerdicts", "controlOutcomes",
+        "unresolvedControlIds", "falsePositiveGuardCount", "guarantees"
+      ],
+      "properties": {
+        "inputIntegrity": {"enum": ["VERIFIED", "NOT_PROVIDED"]},
+        "evidenceRecordCount": {"const": 64},
+        "evidenceCoverage": {"$ref": "#/$defs/countMap"},
+        "claimVerdicts": {"$ref": "#/$defs/countMap"},
+        "controlOutcomes": {"$ref": "#/$defs/countMap"},
+        "unresolvedControlIds": {"type": "array", "items": {"$ref": "common-defs.schema.json#/$defs/checkId"}, "uniqueItems": true},
+        "falsePositiveGuardCount": {"type": "integer", "minimum": 0},
+        "guarantees": {"type": "array", "minItems": 6, "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "axisSummary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "controlIds", "outcomeCounts", "maximumResidualRiskScore", "residualRiskScoreTotal"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "controlIds": {"type": "array", "minItems": 1, "items": {"$ref": "common-defs.schema.json#/$defs/checkId"}, "uniqueItems": true},
+        "outcomeCounts": {"$ref": "#/$defs/countMap"},
+        "maximumResidualRiskScore": {"type": "integer", "minimum": 0, "maximum": 100},
+        "residualRiskScoreTotal": {"type": "integer", "minimum": 0}
+      }
+    },
+    "zeroTrust": {
+      "type": "object", "additionalProperties": false,
+      "required": ["principles", "pillars", "controlMappings"],
+      "properties": {
+        "principles": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/axisSummary"}},
+        "pillars": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/axisSummary"}},
+        "controlMappings": {
+          "type": "array", "minItems": 64, "maxItems": 64,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["checkId", "principles", "pillars"],
+            "properties": {
+              "checkId": {"$ref": "common-defs.schema.json#/$defs/checkId"},
+              "principles": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+              "pillars": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true}
+            }
+          }
+        }
+      }
+    },
+    "tiers": {
+      "type": "object", "additionalProperties": false,
+      "required": ["order", "assessments", "controlMappings"],
+      "properties": {
+        "order": {"const": ["T0", "T1", "T2", "Global"]},
+        "assessments": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/axisSummary"}},
+        "controlMappings": {
+          "type": "array", "minItems": 64, "maxItems": 64,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["checkId", "tiers"],
+            "properties": {
+              "checkId": {"$ref": "common-defs.schema.json#/$defs/checkId"},
+              "tiers": {"type": "array", "minItems": 1, "items": {"enum": ["T0", "T1", "T2", "Global"]}, "uniqueItems": true}
+            }
+          }
+        }
+      }
+    },
+    "defenseFunctionSummary": {
+      "type": "object", "additionalProperties": false, "required": ["statusCounts", "gapScenarioIds"],
+      "properties": {
+        "statusCounts": {"$ref": "#/$defs/countMap"},
+        "gapScenarioIds": {"type": "array", "items": {"$ref": "common-defs.schema.json#/$defs/scenarioId"}, "uniqueItems": true}
+      }
+    },
+    "defenseItem": {
+      "type": "object", "additionalProperties": false, "required": ["status", "controlIds"],
+      "properties": {
+        "status": {"enum": ["EFFECTIVE", "GAP", "DEGRADED", "UNKNOWN", "NOT_COVERED"]},
+        "controlIds": {"type": "array", "items": {"$ref": "common-defs.schema.json#/$defs/checkId"}, "uniqueItems": true}
+      }
+    },
+    "defenseCoverage": {
+      "type": "object", "additionalProperties": false, "required": ["functions", "scenarios"],
+      "properties": {
+        "functions": {
+          "type": "object", "additionalProperties": false, "required": ["Prevent", "Detect", "Respond", "Recover"],
+          "properties": {
+            "Prevent": {"$ref": "#/$defs/defenseFunctionSummary"},
+            "Detect": {"$ref": "#/$defs/defenseFunctionSummary"},
+            "Respond": {"$ref": "#/$defs/defenseFunctionSummary"},
+            "Recover": {"$ref": "#/$defs/defenseFunctionSummary"}
+          }
+        },
+        "scenarios": {
+          "type": "array", "minItems": 11, "maxItems": 11,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["scenarioId", "assessment"],
+            "properties": {
+              "scenarioId": {"$ref": "common-defs.schema.json#/$defs/scenarioId"},
+              "assessment": {
+                "type": "object", "additionalProperties": false, "required": ["Prevent", "Detect", "Respond", "Recover"],
+                "properties": {
+                  "Prevent": {"$ref": "#/$defs/defenseItem"}, "Detect": {"$ref": "#/$defs/defenseItem"},
+                  "Respond": {"$ref": "#/$defs/defenseItem"}, "Recover": {"$ref": "#/$defs/defenseItem"}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "scoreSummary": {
+      "type": "object", "additionalProperties": false, "required": ["count", "maximum", "minimum", "total", "levels"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0}, "maximum": {"type": "integer", "minimum": 0, "maximum": 100},
+        "minimum": {"type": "integer", "minimum": 0, "maximum": 100}, "total": {"type": "integer", "minimum": 0},
+        "levels": {"$ref": "#/$defs/countMap"}
+      }
+    },
+    "compactControlRisk": {
+      "type": "object", "additionalProperties": false, "required": ["checkId", "outcome", "score", "level", "priority"],
+      "properties": {
+        "checkId": {"$ref": "common-defs.schema.json#/$defs/checkId"}, "outcome": {"type": "string"},
+        "score": {"type": "integer", "minimum": 0, "maximum": 100}, "level": {"type": "string"},
+        "priority": {"$ref": "common-defs.schema.json#/$defs/priority"}
+      }
+    },
+    "compactScenarioRisk": {
+      "type": "object", "additionalProperties": false, "required": ["scenarioId", "state", "score", "level", "priority"],
+      "properties": {
+        "scenarioId": {"$ref": "common-defs.schema.json#/$defs/scenarioId"}, "state": {"type": "string"},
+        "score": {"type": "integer", "minimum": 0, "maximum": 100}, "level": {"type": "string"},
+        "priority": {"$ref": "common-defs.schema.json#/$defs/priority"}
+      }
+    },
+    "residualRisk": {
+      "type": "object", "additionalProperties": false,
+      "required": ["controlSummary", "scenarioSummary", "controls", "scenarios"],
+      "properties": {
+        "controlSummary": {"$ref": "#/$defs/scoreSummary"},
+        "scenarioSummary": {"$ref": "#/$defs/scoreSummary"},
+        "controls": {"type": "array", "minItems": 64, "maxItems": 64, "items": {"$ref": "#/$defs/compactControlRisk"}},
+        "scenarios": {"type": "array", "minItems": 11, "maxItems": 11, "items": {"$ref": "#/$defs/compactScenarioRisk"}}
+      }
+    }
+  }
+}

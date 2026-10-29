@@ -1,0 +1,21 @@
+name: v4 methodology
+on:
+  pull_request:
+    paths:
+      - 'assurance/v4/**'
+      - 'docs/v4/**'
+      - 'tools/Invoke-V4FinalGates.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  methodology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-v4.txt
+      - run: python tools/Invoke-V4FinalGates.py --profile methodology

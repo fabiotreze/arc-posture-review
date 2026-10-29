@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0",
+  "taxonomyVersion": "4.0.0",
+  "technicalSeverity": [
+    {
+      "id": "CRITICAL",
+      "score": 100
+    },
+    {
+      "id": "HIGH",
+      "score": 80
+    },
+    {
+      "id": "MEDIUM",
+      "score": 55
+    },
+    {
+      "id": "LOW",
+      "score": 25
+    },
+    {
+      "id": "INFORMATIONAL",
+      "score": 0
+    }
+  ],
+  "riskBands": [
+    {
+      "id": "CRITICAL",
+      "min": 80,
+      "max": 100
+    },
+    {
+      "id": "HIGH",
+      "min": 60,
+      "max": 79
+    },
+    {
+      "id": "MEDIUM",
+      "min": 40,
+      "max": 59
+    },
+    {
+      "id": "LOW",
+      "min": 20,
+      "max": 39
+    },
+    {
+      "id": "INFORMATIONAL",
+      "min": 0,
+      "max": 19
+    },
+    {
+      "id": "NOT_EVALUATED",
+      "min": null,
+      "max": null
+    }
+  ]
+}

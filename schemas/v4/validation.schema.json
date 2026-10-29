@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabiotreze.github.io/arc-posture-review/schemas/v4/validation.schema.json",
+  "title": "APR v4 Validation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["workflowStatus", "verificationStatus"],
+  "properties": {
+    "workflowStatus": {
+      "enum": [
+        "OPEN",
+        "PLANNED",
+        "IMPLEMENTED",
+        "VERIFICATION_PENDING",
+        "VERIFIED",
+        "CLOSED",
+        "BLOCKED",
+        "RISK_ACCEPTED",
+        "EXCEPTION_GRANTED"
+      ]
+    },
+    "verificationStatus": {
+      "enum": [
+        "PENDING",
+        "VERIFIED_IMPROVEMENT",
+        "VERIFIED_REGRESSION",
+        "NO_MATERIAL_CHANGE",
+        "INCONCLUSIVE",
+        "NOT_COMPARABLE"
+      ]
+    },
+    "targetChecks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^CHK-[0-9]{2}$"
+      }
+    },
+    "dependentChecks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^CHK-[0-9]{2}$"
+      }
+    },
+    "regressionChecks": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^CHK-[0-9]{2}$"
+      }
+    }
+  }
+}

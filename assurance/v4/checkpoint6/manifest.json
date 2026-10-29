@@ -1,0 +1,13 @@
+{
+  "checkpoint": 6,
+  "version": "4.2.0",
+  "sourceCheckpoint": "5.1",
+  "sourceCheckpointCommit": "549558a",
+  "inputContract": "assessment-result.v4",
+  "renderMode": "render-only",
+  "locales": ["en-US", "pt-BR"],
+  "sections": ["Overview", "Zero Trust x Tier", "Security Scenarios", "Defense Coverage", "Risks", "Action Cards", "Roadmap", "Assets", "Checks", "Evidence", "Comparison"],
+  "scenarioPath": ["IDENTITY", "MANAGEMENT", "HOST", "DEFENSE"],
+  "scenarioValidationStates": ["HYPOTHESIS", "POTENTIAL_RELEVANCE", "PROVIDER_IDENTIFIED", "VALIDATED"],
+  "defenseFunctions": ["Prevent", "Detect", "Respond", "Recover"]
+}

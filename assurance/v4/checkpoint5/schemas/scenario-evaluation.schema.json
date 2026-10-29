@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "scenario-evaluation.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "scenarioId", "riskIds", "name", "state", "attackPathAssessment", "attackConfirmation", "residualRisk", "priority", "securityBoundaryIds", "controlIds", "triggeredControlIds", "defenseAssessment", "guardrail"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^SE-AS[0-9]{2}$"},
+    "scenarioId": {"$ref": "common-defs.schema.json#/$defs/scenarioId"},
+    "riskIds": {"type": "array", "minItems": 1, "items": {"$ref": "common-defs.schema.json#/$defs/riskId"}, "uniqueItems": true},
+    "name": {"type": "string", "minLength": 5},
+    "state": {"enum": ["OPEN", "ELEVATED", "UNRESOLVED", "MITIGATED"]},
+    "attackPathAssessment": {"enum": ["EXPOSURE_INDICATED", "WEAKNESS_INDICATED", "NOT_EVALUABLE", "NOT_INDICATED"]},
+    "attackConfirmation": {"const": "NOT_ASSERTED"},
+    "residualRisk": {"$ref": "common-defs.schema.json#/$defs/risk"},
+    "priority": {"$ref": "common-defs.schema.json#/$defs/priority"},
+    "securityBoundaryIds": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^SB0[1-8]$"}, "uniqueItems": true},
+    "controlIds": {"type": "array", "minItems": 1, "items": {"$ref": "common-defs.schema.json#/$defs/checkId"}, "uniqueItems": true},
+    "triggeredControlIds": {"type": "array", "items": {"$ref": "common-defs.schema.json#/$defs/checkId"}, "uniqueItems": true},
+    "defenseAssessment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["Prevent", "Detect", "Respond", "Recover"],
+      "properties": {
+        "Prevent": {"$ref": "#/$defs/defense"}, "Detect": {"$ref": "#/$defs/defense"},
+        "Respond": {"$ref": "#/$defs/defense"}, "Recover": {"$ref": "#/$defs/defense"}
+      }
+    },
+    "guardrail": {"type": "string", "minLength": 20},
+    "hypothesis": {"type": "string", "minLength": 20},
+    "validationState": {"enum": ["HYPOTHESIS", "POTENTIAL_RELEVANCE", "PROVIDER_IDENTIFIED", "VALIDATED"]},
+    "attackPath": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "object", "additionalProperties": false, "required": ["from", "to", "boundaryId", "requires"], "properties": {"from": {"enum": ["IDENTITY", "MANAGEMENT", "HOST"]}, "to": {"enum": ["MANAGEMENT", "HOST", "DEFENSE"]}, "boundaryId": {"type": "string", "pattern": "^SB0[1-8]$"}, "requires": {"type": "array", "items": {"type": "string"}}}}}
+  },
+  "$defs": {
+    "defense": {
+      "type": "object", "additionalProperties": false, "required": ["status", "controlIds"],
+      "properties": {
+        "status": {"enum": ["EFFECTIVE", "GAP", "DEGRADED", "UNKNOWN", "NOT_COVERED"]},
+        "controlIds": {"type": "array", "items": {"$ref": "common-defs.schema.json#/$defs/checkId"}, "uniqueItems": true}
+      }
+    }
+  }
+}

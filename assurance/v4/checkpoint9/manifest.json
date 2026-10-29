@@ -1,0 +1,7 @@
+{
+  "checkpoint": 9,
+  "candidate": "v4.0.0-rc.1",
+  "requiredDocuments": ["methodology-v4.md", "threat-model-v4.md", "security-review-checklist.md", "false-positive-review.md", "known-issues.md"],
+  "stableReleaseBlocked": true,
+  "blocker": "KI-V4-001"
+}

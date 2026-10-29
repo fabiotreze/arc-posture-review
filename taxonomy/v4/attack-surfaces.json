@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0",
+  "taxonomyVersion": "4.0.0",
+  "attackSurfaces": [
+    {
+      "id": "AS01",
+      "name": "Identity Control Plane"
+    },
+    {
+      "id": "AS02",
+      "name": "Azure Resource Management Plane"
+    },
+    {
+      "id": "AS03",
+      "name": "Azure Arc Agent"
+    },
+    {
+      "id": "AS04",
+      "name": "Arc Extensions"
+    },
+    {
+      "id": "AS05",
+      "name": "Remote Operations"
+    },
+    {
+      "id": "AS06",
+      "name": "Local OS Privilege"
+    },
+    {
+      "id": "AS07",
+      "name": "Network Connectivity"
+    },
+    {
+      "id": "AS08",
+      "name": "Monitoring and Telemetry"
+    },
+    {
+      "id": "AS09",
+      "name": "Patch and Software Supply"
+    },
+    {
+      "id": "AS10",
+      "name": "SQL Management Plane"
+    },
+    {
+      "id": "AS11",
+      "name": "Secrets and Credentials"
+    }
+  ]
+}

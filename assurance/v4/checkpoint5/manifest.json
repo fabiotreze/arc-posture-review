@@ -1,0 +1,22 @@
+{
+  "name": "arc-posture-review-checkpoint5",
+  "version": "4.1.0",
+  "checkpoint": 5,
+  "baseCheckpoint": "4.1",
+  "baseCommit": "2d512a3",
+  "contract": "assessment-result.v4",
+  "contracts": {
+    "controls": 64,
+    "securityScenarios": 11,
+    "defenseFunctions": 4,
+    "roadmapHorizons": ["NOW", "30d", "90d"],
+    "comparison": "before/after"
+  },
+  "entrypoints": {
+    "cliPowerShell": "arc-posture.ps1",
+    "pipelinePowerShell": "Invoke-AssessmentPipeline.ps1",
+    "allGatesPowerShell": "Invoke-AllGates.ps1",
+    "cliPython": "assurance/v4/checkpoint5/cli/arc_posture.py",
+    "allGatesPython": "scripts/Invoke-AllGates.py"
+  }
+}

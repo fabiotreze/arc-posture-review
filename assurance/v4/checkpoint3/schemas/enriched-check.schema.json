@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "enriched-check.schema.json",
+  "title": "Enriched Check",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "sourceVersion",
+    "checkpointVersion",
+    "title",
+    "domain",
+    "severity",
+    "assessmentType",
+    "owner",
+    "zeroTrust",
+    "securityScopes",
+    "riskIds",
+    "scenarioIds",
+    "securityBoundaryIds",
+    "defenseFunctions",
+    "securityModelStage",
+    "claim",
+    "mappingConfidence",
+    "sourceRefs",
+    "resultCriteria"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "common-defs.schema.json#/$defs/checkId"
+    },
+    "sourceVersion": {
+      "const": "3.9.5"
+    },
+    "checkpointVersion": {
+      "const": "4.0.0"
+    },
+    "title": {
+      "type": "object",
+      "required": [
+        "en-US",
+        "pt-BR"
+      ]
+    },
+    "domain": {
+      "type": "string"
+    },
+    "severity": {
+      "enum": [
+        "Low",
+        "Medium",
+        "High"
+      ]
+    },
+    "assessmentType": {
+      "enum": [
+        "auto",
+        "manual"
+      ]
+    },
+    "owner": {
+      "type": "string"
+    },
+    "zeroTrust": {
+      "type": "object",
+      "required": [
+        "principles",
+        "pillars"
+      ]
+    },
+    "securityScopes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/securityScope"
+      }
+    },
+    "riskIds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/riskId"
+      }
+    },
+    "scenarioIds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/scenarioId"
+      }
+    },
+    "securityBoundaryIds": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/boundaryId"
+      }
+    },
+    "defenseFunctions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "common-defs.schema.json#/$defs/defenseFunction"
+      }
+    },
+    "securityModelStage": {
+      "$ref": "common-defs.schema.json#/$defs/stage"
+    },
+    "claim": {
+      "$ref": "common-defs.schema.json#/$defs/claim"
+    },
+    "mappingConfidence": {
+      "$ref": "common-defs.schema.json#/$defs/confidence"
+    },
+    "sourceRefs": {
+      "type": "object"
+    },
+    "resultCriteria": {
+      "type": "string",
+      "minLength": 5
+    }
+  }
+}

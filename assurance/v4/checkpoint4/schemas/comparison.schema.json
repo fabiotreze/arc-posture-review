@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "comparison.schema.json",
+  "type": ["object", "null"],
+  "required": ["baselineRunId", "currentRunId", "summary", "controls", "scenarios"],
+  "properties": {
+    "baselineRunId": {"type": "string", "pattern": "^ER-[A-F0-9]{20}$"},
+    "currentRunId": {"type": "string", "pattern": "^ER-[A-F0-9]{20}$"},
+    "summary": {
+      "type": "object", "additionalProperties": false, "required": ["IMPROVED", "REGRESSED", "UNCHANGED"],
+      "properties": {"IMPROVED": {"type": "integer"}, "REGRESSED": {"type": "integer"}, "UNCHANGED": {"type": "integer"}}
+    },
+    "controls": {"type": "array", "minItems": 64, "maxItems": 64, "items": {"$ref": "#/$defs/controlDelta"}},
+    "scenarios": {"type": "array", "minItems": 11, "maxItems": 11, "items": {"$ref": "#/$defs/scenarioDelta"}}
+  },
+  "$defs": {
+    "change": {"enum": ["IMPROVED", "REGRESSED", "UNCHANGED"]},
+    "controlDelta": {
+      "type": "object", "additionalProperties": false,
+      "required": ["checkId", "beforeOutcome", "afterOutcome", "beforeScore", "afterScore", "delta", "change"],
+      "properties": {
+        "checkId": {"$ref": "common-defs.schema.json#/$defs/checkId"},
+        "beforeOutcome": {"type": "string"}, "afterOutcome": {"type": "string"},
+        "beforeScore": {"type": "integer"}, "afterScore": {"type": "integer"}, "delta": {"type": "integer"},
+        "change": {"$ref": "#/$defs/change"}
+      }
+    },
+    "scenarioDelta": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scenarioId", "beforeState", "afterState", "beforeScore", "afterScore", "delta", "change"],
+      "properties": {
+        "scenarioId": {"$ref": "common-defs.schema.json#/$defs/scenarioId"},
+        "beforeState": {"type": "string"}, "afterState": {"type": "string"},
+        "beforeScore": {"type": "integer"}, "afterScore": {"type": "integer"}, "delta": {"type": "integer"},
+        "change": {"$ref": "#/$defs/change"}
+      }
+    }
+  }
+}

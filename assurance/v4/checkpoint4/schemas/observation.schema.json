@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "observation.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "checkId", "evidenceId", "status", "kind", "applicability", "severity", "found", "statement", "falsePositiveGuards"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^OB-CHK-[0-9]{2}$"},
+    "checkId": {"$ref": "common-defs.schema.json#/$defs/checkId"},
+    "evidenceId": {"type": "string", "pattern": "^EV-CHK-[0-9]{2}$"},
+    "status": {"enum": ["PASS", "WARN", "FAIL", "PARTIAL", "INFO", "N/A", "TODO", "UNKNOWN", "ERROR"]},
+    "kind": {"enum": ["ADVERSE", "FAVORABLE", "INFORMATIONAL", "NOT_APPLICABLE", "UNRESOLVED"]},
+    "applicability": {"enum": ["APPLICABLE", "NOT_APPLICABLE", "UNDETERMINED"]},
+    "severity": {"enum": ["Low", "Medium", "High"]},
+    "found": {"type": "integer", "minimum": 0},
+    "statement": {"type": "string", "minLength": 1},
+    "falsePositiveGuards": {"$ref": "common-defs.schema.json#/$defs/stringArray"}
+  }
+}

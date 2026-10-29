@@ -1,0 +1,827 @@
+{
+  "schemaVersion": 4,
+  "catalogVersion": "4.0.0-draft.1",
+  "scenarios": [
+    {
+      "scenarioId": "SEC-ARC-001",
+      "version": 4,
+      "tree": "D1",
+      "name": {
+        "en-US": "Onboarding and asset eligibility",
+        "pt-BR": "Onboarding e elegibilidade dos ativos"
+      },
+      "outcome": {
+        "en-US": "Connect each supported server through the correct Arc service and preserve a complete inventory.",
+        "pt-BR": "Conectar cada servidor compatível pelo serviço Arc correto e manter um inventário completo."
+      },
+      "scope": {
+        "resourceTypes": [
+          "Microsoft.HybridCompute/machines"
+        ],
+        "tiers": [
+          "Tier0",
+          "Tier1",
+          "Tier2"
+        ],
+        "environments": [
+          "production",
+          "nonproduction",
+          "lab"
+        ]
+      },
+      "threats": [],
+      "attackPaths": [],
+      "controls": {
+        "mcsb": [
+          "AM-1",
+          "AM-2"
+        ],
+        "playbookRefs": [
+          "DEC-01",
+          "DEC-02",
+          "REQ-01",
+          "REQ-05"
+        ]
+      },
+      "checkIds": [
+        "CHK-01",
+        "CHK-02",
+        "CHK-07"
+      ],
+      "evidenceContract": {
+        "minimumCoverage": "PARTIAL",
+        "freshness": "point-in-time unless the check defines a period",
+        "integrity": "SHA-256 manifest"
+      },
+      "scoring": {
+        "method": "control-weighted",
+        "severityWeights": {
+          "High": 3,
+          "Medium": 2,
+          "Low": 1
+        },
+        "deduplicateByRootCause": true
+      },
+      "ownership": {
+        "accountableRole": "",
+        "reviewCadence": "monthly"
+      },
+      "lifecycle": {
+        "status": "draft",
+        "effectiveFrom": "2026-10-28",
+        "supersedes": []
+      },
+      "relationships": {
+        "dependsOn": [],
+        "relatedScenarioIds": []
+      }
+    },
+    {
+      "scenarioId": "SEC-ARC-002",
+      "version": 4,
+      "tree": "D2",
+      "name": {
+        "en-US": "Resource organization and criticality",
+        "pt-BR": "Organização de recursos e criticidade"
+      },
+      "outcome": {
+        "en-US": "Place resources in the approved landing-zone hierarchy and apply tier-aware controls.",
+        "pt-BR": "Posicionar recursos na hierarquia aprovada da landing zone e aplicar controles conforme o tier."
+      },
+      "scope": {
+        "resourceTypes": [
+          "Microsoft.HybridCompute/machines"
+        ],
+        "tiers": [
+          "Tier0",
+          "Tier1",
+          "Tier2"
+        ],
+        "environments": [
+          "production",
+          "nonproduction",
+          "lab"
+        ]
+      },
+      "threats": [],
+      "attackPaths": [],
+      "controls": {
+        "mcsb": [
+          "AM-1",
+          "AM-2",
+          "AM-3",
+          "PA-1"
+        ],
+        "playbookRefs": [
+          "CTL-08",
+          "DEC-03",
+          "DEC-04",
+          "REQ-02"
+        ]
+      },
+      "checkIds": [
+        "CHK-03",
+        "CHK-04",
+        "CHK-05",
+        "CHK-06"
+      ],
+      "evidenceContract": {
+        "minimumCoverage": "PARTIAL",
+        "freshness": "point-in-time unless the check defines a period",
+        "integrity": "SHA-256 manifest"
+      },
+      "scoring": {
+        "method": "control-weighted",
+        "severityWeights": {
+          "High": 3,
+          "Medium": 2,
+          "Low": 1
+        },
+        "deduplicateByRootCause": true
+      },
+      "ownership": {
+        "accountableRole": "",
+        "reviewCadence": "monthly"
+      },
+      "lifecycle": {
+        "status": "draft",
+        "effectiveFrom": "2026-10-28",
+        "supersedes": []
+      },
+      "relationships": {
+        "dependsOn": [],
+        "relatedScenarioIds": []
+      }
+    },
+    {
+      "scenarioId": "SEC-ARC-003",
+      "version": 4,
+      "tree": "D3",
+      "name": {
+        "en-US": "Connectivity and trust boundaries",
+        "pt-BR": "Conectividade e fronteiras de confiança"
+      },
+      "outcome": {
+        "en-US": "Use the approved connectivity model, DNS, proxy, Private Link, and cross-subscription dependencies.",
+        "pt-BR": "Usar o modelo aprovado de conectividade, DNS, proxy, Private Link e dependências entre assinaturas."
+      },
+      "scope": {
+        "resourceTypes": [
+          "Microsoft.HybridCompute/machines"
+        ],
+        "tiers": [
+          "Tier0",
+          "Tier1",
+          "Tier2"
+        ],
+        "environments": [
+          "production",
+          "nonproduction",
+          "lab"
+        ]
+      },
+      "threats": [],
+      "attackPaths": [],
+      "controls": {
+        "mcsb": [
+          "AM-1",
+          "AM-4",
+          "NS-10",
+          "NS-2",
+          "NS-9"
+        ],
+        "playbookRefs": [
+          "CTL-01",
+          "DEC-05",
+          "DEC-06",
+          "DEC-07",
+          "DEC-08",
+          "REQ-06"
+        ]
+      },
+      "checkIds": [
+        "CHK-16",
+        "CHK-17",
+        "CHK-18",
+        "CHK-19",
+        "CHK-20"
+      ],
+      "evidenceContract": {
+        "minimumCoverage": "PARTIAL",
+        "freshness": "point-in-time unless the check defines a period",
+        "integrity": "SHA-256 manifest"
+      },
+      "scoring": {
+        "method": "control-weighted",
+        "severityWeights": {
+          "High": 3,
+          "Medium": 2,
+          "Low": 1
+        },
+        "deduplicateByRootCause": true
+      },
+      "ownership": {
+        "accountableRole": "",
+        "reviewCadence": "monthly"
+      },
+      "lifecycle": {
+        "status": "draft",
+        "effectiveFrom": "2026-10-28",
+        "supersedes": []
+      },
+      "relationships": {
+        "dependsOn": [],
+        "relatedScenarioIds": []
+      }
+    },
+    {
+      "scenarioId": "SEC-ARC-004",
+      "version": 4,
+      "tree": "D4",
+      "name": {
+        "en-US": "Identity and privileged access",
+        "pt-BR": "Identidade e acesso privilegiado"
+      },
+      "outcome": {
+        "en-US": "Apply least privilege across Azure RBAC, machine identities, local administration, MFA, and secrets.",
+        "pt-BR": "Aplicar privilégio mínimo em RBAC, identidades de máquina, administração local, MFA e segredos."
+      },
+      "scope": {
+        "resourceTypes": [
+          "Microsoft.HybridCompute/machines"
+        ],
+        "tiers": [
+          "Tier0",
+          "Tier1",
+          "Tier2"
+        ],
+        "environments": [
+          "production",
+          "nonproduction",
+          "lab"
+        ]
+      },
+      "threats": [],
+      "attackPaths": [],
+      "controls": {
+        "mcsb": [
+          "DP-8",
+          "IM-1",
+          "IM-3",
+          "IM-6",
+          "IM-7",
+          "IM-8",
+          "PA-1",
+          "PA-2",
+          "PA-4",
+          "PA-7"
+        ],
+        "playbookRefs": [
+          "CTL-03",
+          "CTL-04",
+          "CTL-05",
+          "OPS-12",
+          "REQ-03",
+          "REQ-04",
+          "REQ-08"
+        ]
+      },
+      "checkIds": [
+        "CHK-10",
+        "CHK-11",
+        "CHK-12",
+        "CHK-13",
+        "CHK-14",
+        "CHK-15",
+        "CHK-25",
+        "CHK-35",
+        "CHK-56",
+        "CHK-60",
+        "CHK-62"
+      ],
+      "evidenceContract": {
+        "minimumCoverage": "PARTIAL",
+        "freshness": "point-in-time unless the check defines a period",
+        "integrity": "SHA-256 manifest"
+      },
+      "scoring": {
+        "method": "control-weighted",
+        "severityWeights": {
+          "High": 3,
+          "Medium": 2,
+          "Low": 1
+        },
+        "deduplicateByRootCause": true
+      },
+      "ownership": {
+        "accountableRole": "",
+        "reviewCadence": "monthly"
+      },
+      "lifecycle": {
+        "status": "draft",
+        "effectiveFrom": "2026-10-28",
+        "supersedes": []
+      },
+      "relationships": {
+        "dependsOn": [],
+        "relatedScenarioIds": []
+      }
+    },
+    {
+      "scenarioId": "SEC-ARC-005",
+      "version": 4,
+      "tree": "D5",
+      "name": {
+        "en-US": "Agent, extensions, and remote operations",
+        "pt-BR": "Agente, extensões e operações remotas"
+      },
+      "outcome": {
+        "en-US": "Constrain agent capabilities, sensitive extensions, Run Command, SSH, and Windows Admin Center by tier.",
+        "pt-BR": "Restringir capacidades do agente, extensões sensíveis, Run Command, SSH e Windows Admin Center por tier."
+      },
+      "scope": {
+        "resourceTypes": [
+          "Microsoft.HybridCompute/machines"
+        ],
+        "tiers": [
+          "Tier0",
+          "Tier1",
+          "Tier2"
+        ],
+        "environments": [
+          "production",
+          "nonproduction",
+          "lab"
+        ]
+      },
+      "threats": [],
+      "attackPaths": [],
+      "controls": {
+        "mcsb": [
+          "AM-5",
+          "IM-1",
+          "NS-8",
+          "PA-7",
+          "PV-3"
+        ],
+        "playbookRefs": [
+          "CTL-02",
+          "CTL-03",
+          "DEC-04"
+        ]
+      },
+      "checkIds": [
+        "CHK-21",
+        "CHK-22",
+        "CHK-23",
+        "CHK-24",
+        "CHK-26"
+      ],
+      "evidenceContract": {
+        "minimumCoverage": "PARTIAL",
+        "freshness": "point-in-time unless the check defines a period",
+        "integrity": "SHA-256 manifest"
+      },
+      "scoring": {
+        "method": "control-weighted",
+        "severityWeights": {
+          "High": 3,
+          "Medium": 2,
+          "Low": 1
+        },
+        "deduplicateByRootCause": true
+      },
+      "ownership": {
+        "accountableRole": "",
+        "reviewCadence": "monthly"
+      },
+      "lifecycle": {
+        "status": "draft",
+        "effectiveFrom": "2026-10-28",
+        "supersedes": []
+      },
+      "relationships": {
+        "dependsOn": [],
+        "relatedScenarioIds": []
+      }
+    },
+    {
+      "scenarioId": "SEC-ARC-006",
+      "version": 4,
+      "tree": "D6",
+      "name": {
+        "en-US": "Protection, telemetry, and detection",
+        "pt-BR": "Proteção, telemetria e detecção"
+      },
+      "outcome": {
+        "en-US": "Sustain prevention, posture, logging, Sentinel coverage, and threat detection for every in-scope machine.",
+        "pt-BR": "Sustentar prevenção, postura, logs, cobertura do Sentinel e detecção de ameaças em todas as máquinas no escopo."
+      },
+      "scope": {
+        "resourceTypes": [
+          "Microsoft.HybridCompute/machines"
+        ],
+        "tiers": [
+          "Tier0",
+          "Tier1",
+          "Tier2"
+        ],
+        "environments": [
+          "production",
+          "nonproduction",
+          "lab"
+        ]
+      },
+      "threats": [],
+      "attackPaths": [],
+      "controls": {
+        "mcsb": [
+          "AM-2",
+          "DP-4",
+          "ES-1",
+          "ES-2",
+          "ES-3",
+          "IR-3",
+          "IR-4",
+          "LT-1",
+          "LT-3",
+          "LT-4",
+          "LT-5",
+          "LT-6",
+          "PA-7",
+          "PV-2",
+          "PV-4",
+          "PV-5"
+        ],
+        "playbookRefs": [
+          "CTL-03",
+          "CTL-04",
+          "CTL-05",
+          "CTL-06",
+          "CTL-07",
+          "DEC-05",
+          "EVD",
+          "LAT",
+          "OPS-04",
+          "OPS-11",
+          "REQ-07",
+          "SVC"
+        ]
+      },
+      "checkIds": [
+        "CHK-08",
+        "CHK-09",
+        "CHK-27",
+        "CHK-31",
+        "CHK-32",
+        "CHK-33",
+        "CHK-34",
+        "CHK-36",
+        "CHK-39",
+        "CHK-40",
+        "CHK-41",
+        "CHK-43",
+        "CHK-44",
+        "CHK-45",
+        "CHK-54",
+        "CHK-55",
+        "CHK-57",
+        "CHK-58",
+        "CHK-61",
+        "CHK-63"
+      ],
+      "evidenceContract": {
+        "minimumCoverage": "PARTIAL",
+        "freshness": "point-in-time unless the check defines a period",
+        "integrity": "SHA-256 manifest"
+      },
+      "scoring": {
+        "method": "control-weighted",
+        "severityWeights": {
+          "High": 3,
+          "Medium": 2,
+          "Low": 1
+        },
+        "deduplicateByRootCause": true
+      },
+      "ownership": {
+        "accountableRole": "",
+        "reviewCadence": "monthly"
+      },
+      "lifecycle": {
+        "status": "draft",
+        "effectiveFrom": "2026-10-28",
+        "supersedes": []
+      },
+      "relationships": {
+        "dependsOn": [],
+        "relatedScenarioIds": []
+      }
+    },
+    {
+      "scenarioId": "SEC-ARC-007",
+      "version": 4,
+      "tree": "D7",
+      "name": {
+        "en-US": "Version, patch, and lifecycle security",
+        "pt-BR": "Versões, patches e segurança do ciclo de vida"
+      },
+      "outcome": {
+        "en-US": "Keep agents, extensions, operating systems, and security patches within supported baselines.",
+        "pt-BR": "Manter agentes, extensões, sistemas operacionais e patches de segurança dentro das linhas de base suportadas."
+      },
+      "scope": {
+        "resourceTypes": [
+          "Microsoft.HybridCompute/machines"
+        ],
+        "tiers": [
+          "Tier0",
+          "Tier1",
+          "Tier2"
+        ],
+        "environments": [
+          "production",
+          "nonproduction",
+          "lab"
+        ]
+      },
+      "threats": [],
+      "attackPaths": [],
+      "controls": {
+        "mcsb": [
+          "AM-3",
+          "PV-6"
+        ],
+        "playbookRefs": [
+          "CTL-04",
+          "LEG-01",
+          "LEG-02",
+          "LEG-03",
+          "LEG-04",
+          "OPS-05",
+          "OPS-06",
+          "OPS-10",
+          "OPS-11"
+        ]
+      },
+      "checkIds": [
+        "CHK-28",
+        "CHK-29",
+        "CHK-30",
+        "CHK-42",
+        "CHK-51",
+        "CHK-52"
+      ],
+      "evidenceContract": {
+        "minimumCoverage": "PARTIAL",
+        "freshness": "point-in-time unless the check defines a period",
+        "integrity": "SHA-256 manifest"
+      },
+      "scoring": {
+        "method": "control-weighted",
+        "severityWeights": {
+          "High": 3,
+          "Medium": 2,
+          "Low": 1
+        },
+        "deduplicateByRootCause": true
+      },
+      "ownership": {
+        "accountableRole": "",
+        "reviewCadence": "monthly"
+      },
+      "lifecycle": {
+        "status": "draft",
+        "effectiveFrom": "2026-10-28",
+        "supersedes": []
+      },
+      "relationships": {
+        "dependsOn": [],
+        "relatedScenarioIds": []
+      }
+    },
+    {
+      "scenarioId": "SEC-ARC-008",
+      "version": 4,
+      "tree": "D8",
+      "name": {
+        "en-US": "Resource hygiene and offboarding",
+        "pt-BR": "Higiene de recursos e desativação"
+      },
+      "outcome": {
+        "en-US": "Detect disconnected or orphaned resources and remove machines safely at individual or fleet scale.",
+        "pt-BR": "Detectar recursos desconectados ou órfãos e remover máquinas com segurança em escala individual ou de frota."
+      },
+      "scope": {
+        "resourceTypes": [
+          "Microsoft.HybridCompute/machines"
+        ],
+        "tiers": [
+          "Tier0",
+          "Tier1",
+          "Tier2"
+        ],
+        "environments": [
+          "production",
+          "nonproduction",
+          "lab"
+        ]
+      },
+      "threats": [],
+      "attackPaths": [],
+      "controls": {
+        "mcsb": [
+          "AM-3"
+        ],
+        "playbookRefs": [
+          "OPS-07",
+          "OPS-08",
+          "OPS-09",
+          "OPS-11"
+        ]
+      },
+      "checkIds": [
+        "CHK-37",
+        "CHK-38",
+        "CHK-49"
+      ],
+      "evidenceContract": {
+        "minimumCoverage": "PARTIAL",
+        "freshness": "point-in-time unless the check defines a period",
+        "integrity": "SHA-256 manifest"
+      },
+      "scoring": {
+        "method": "control-weighted",
+        "severityWeights": {
+          "High": 3,
+          "Medium": 2,
+          "Low": 1
+        },
+        "deduplicateByRootCause": true
+      },
+      "ownership": {
+        "accountableRole": "",
+        "reviewCadence": "monthly"
+      },
+      "lifecycle": {
+        "status": "draft",
+        "effectiveFrom": "2026-10-28",
+        "supersedes": []
+      },
+      "relationships": {
+        "dependsOn": [],
+        "relatedScenarioIds": []
+      }
+    },
+    {
+      "scenarioId": "SEC-ARC-009",
+      "version": 4,
+      "tree": "D9",
+      "name": {
+        "en-US": "Cost, licensing, and service entitlement",
+        "pt-BR": "Custos, licenciamento e direitos de serviço"
+      },
+      "outcome": {
+        "en-US": "Make billed capabilities, benefits, SQL licensing, and usage upload observable and governed.",
+        "pt-BR": "Tornar observáveis e governados os recursos cobrados, benefícios, licenciamento SQL e envio de uso."
+      },
+      "scope": {
+        "resourceTypes": [
+          "Microsoft.HybridCompute/machines"
+        ],
+        "tiers": [
+          "Tier0",
+          "Tier1",
+          "Tier2"
+        ],
+        "environments": [
+          "production",
+          "nonproduction",
+          "lab"
+        ]
+      },
+      "threats": [],
+      "attackPaths": [],
+      "controls": {
+        "mcsb": [
+          "AM-1",
+          "LT-1"
+        ],
+        "playbookRefs": [
+          "DEC-05",
+          "OPS-11",
+          "REQ-09"
+        ]
+      },
+      "checkIds": [
+        "CHK-53",
+        "CHK-59",
+        "CHK-64"
+      ],
+      "evidenceContract": {
+        "minimumCoverage": "PARTIAL",
+        "freshness": "point-in-time unless the check defines a period",
+        "integrity": "SHA-256 manifest"
+      },
+      "scoring": {
+        "method": "control-weighted",
+        "severityWeights": {
+          "High": 3,
+          "Medium": 2,
+          "Low": 1
+        },
+        "deduplicateByRootCause": true
+      },
+      "ownership": {
+        "accountableRole": "",
+        "reviewCadence": "monthly"
+      },
+      "lifecycle": {
+        "status": "draft",
+        "effectiveFrom": "2026-10-28",
+        "supersedes": []
+      },
+      "relationships": {
+        "dependsOn": [],
+        "relatedScenarioIds": []
+      }
+    },
+    {
+      "scenarioId": "SEC-ARC-010",
+      "version": 4,
+      "tree": "P",
+      "name": {
+        "en-US": "Security operating model",
+        "pt-BR": "Modelo operacional de segurança"
+      },
+      "outcome": {
+        "en-US": "Run pilots, rollout waves, automation, evidence review, and periodic posture governance.",
+        "pt-BR": "Executar pilotos, ondas de rollout, automação, revisão de evidências e governança periódica de postura."
+      },
+      "scope": {
+        "resourceTypes": [
+          "Microsoft.HybridCompute/machines"
+        ],
+        "tiers": [
+          "Tier0",
+          "Tier1",
+          "Tier2"
+        ],
+        "environments": [
+          "production",
+          "nonproduction",
+          "lab"
+        ]
+      },
+      "threats": [],
+      "attackPaths": [],
+      "controls": {
+        "mcsb": [
+          "AM-2",
+          "PA-4",
+          "PV-2"
+        ],
+        "playbookRefs": [
+          "OPS-01",
+          "OPS-02",
+          "OPS-03",
+          "OPS-11",
+          "OPS-12"
+        ]
+      },
+      "checkIds": [
+        "CHK-46",
+        "CHK-47",
+        "CHK-48",
+        "CHK-50"
+      ],
+      "evidenceContract": {
+        "minimumCoverage": "PARTIAL",
+        "freshness": "point-in-time unless the check defines a period",
+        "integrity": "SHA-256 manifest"
+      },
+      "scoring": {
+        "method": "control-weighted",
+        "severityWeights": {
+          "High": 3,
+          "Medium": 2,
+          "Low": 1
+        },
+        "deduplicateByRootCause": true
+      },
+      "ownership": {
+        "accountableRole": "",
+        "reviewCadence": "monthly"
+      },
+      "lifecycle": {
+        "status": "draft",
+        "effectiveFrom": "2026-10-28",
+        "supersedes": []
+      },
+      "relationships": {
+        "dependsOn": [],
+        "relatedScenarioIds": []
+      }
+    }
+  ]
+}

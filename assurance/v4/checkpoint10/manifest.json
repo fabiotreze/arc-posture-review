@@ -1,0 +1,7 @@
+{
+  "checkpoint": 10,
+  "release": "v4.0.0",
+  "status": "PREPARED_BLOCKED",
+  "requiredArtifacts": ["release-manifest.json", "RELEASE-NOTES.md", "SHA256SUMS"],
+  "blocker": "KI-V4-001"
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fabiotreze.github.io/arc-posture-review/schemas/v4/control.schema.json",
+  "title": "APR v4 Control",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["controlId", "intent", "controlType", "expectation", "evaluation"],
+  "properties": {
+    "controlId": {
+      "type": "string",
+      "pattern": "^[A-Z0-9-]+$"
+    },
+    "intent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "controlType": {
+      "enum": ["PREVENTIVE", "DETECTIVE", "RESPONSIVE", "RECOVERY", "GOVERNANCE"]
+    },
+    "expectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceType", "strength"],
+      "properties": {
+        "sourceType": {
+          "enum": [
+            "MICROSOFT_GUIDANCE",
+            "ORGANIZATION_POLICY",
+            "REGULATORY",
+            "APR_OPINION"
+          ]
+        },
+        "strength": {
+          "enum": [
+            "REQUIRED_BY_PRODUCT",
+            "RECOMMENDED",
+            "CONDITIONAL",
+            "ORGANIZATION_POLICY",
+            "REGULATORY"
+          ]
+        },
+        "sourceRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "absenceMeans"],
+      "properties": {
+        "mode": {
+          "enum": ["AUTOMATIC", "MANUAL", "HYBRID"]
+        },
+        "absenceMeans": {
+          "enum": ["FAIL", "PASS", "UNKNOWN", "NOT_APPLICABLE"]
+        },
+        "positiveEvidenceRequired": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

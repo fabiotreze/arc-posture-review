@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "collector-results-v3.schema.json",
+  "title": "Arc Posture Review collector results schema v3 input",
+  "type": "object",
+  "required": [
+    "tool",
+    "version",
+    "schemaVersion",
+    "startedAt",
+    "scope",
+    "results",
+    "resultSemantics"
+  ],
+  "properties": {
+    "tool": {
+      "const": "arc-posture-review"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "schemaVersion": {
+      "const": 3
+    },
+    "startedAt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "object"
+    },
+    "results": {
+      "type": "array",
+      "minItems": 64,
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "evidenceCoverage",
+          "detail",
+          "found",
+          "evidenceSources",
+          "evidenceScope"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "common-defs.schema.json#/$defs/checkId"
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "WARN",
+              "FAIL",
+              "PARTIAL",
+              "INFO",
+              "N/A",
+              "TODO",
+              "MANUAL",
+              "UNKNOWN",
+              "ERROR"
+            ]
+          },
+          "evidenceCoverage": {
+            "enum": [
+              "FULL",
+              "PARTIAL",
+              "NONE",
+              "ERROR"
+            ]
+          },
+          "severity": {
+            "enum": [
+              "Low",
+              "Medium",
+              "High"
+            ]
+          },
+          "detail": {
+            "type": "string"
+          },
+          "found": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "evidenceSources": {
+            "type": "string"
+          },
+          "collectedAt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidenceScope": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "resultSemantics": {
+      "type": "object"
+    }
+  }
+}

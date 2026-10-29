@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0",
+  "taxonomyVersion": "4.0.0",
+  "pillars": [
+    {
+      "id": "ID",
+      "name": "Identities"
+    },
+    {
+      "id": "EP",
+      "name": "Endpoints"
+    },
+    {
+      "id": "DT",
+      "name": "Data"
+    },
+    {
+      "id": "AP",
+      "name": "Applications"
+    },
+    {
+      "id": "IN",
+      "name": "Infrastructure"
+    },
+    {
+      "id": "NW",
+      "name": "Network"
+    },
+    {
+      "id": "SO",
+      "name": "SecOps"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "checkpoint": 7,
+  "release": "v4.0.0-rc.1",
+  "inputContract": "assessment-result.v4",
+  "features": ["before-after", "verified-improvement", "null-comparison-disclosure"],
+  "calculationLocation": "Evaluation Engine"
+}

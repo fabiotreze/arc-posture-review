@@ -1,0 +1,6 @@
+{
+  "checkpoint": 8,
+  "workflows": ["v4-pr-quality", "v4-methodology", "v4-security-regression", "v4-report-quality", "v4-release-gate"],
+  "repositoryPermissions": {"contents": "read"},
+  "mutatingReleaseActions": false
+}

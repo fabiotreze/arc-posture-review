@@ -1,0 +1,662 @@
+[
+  {
+    "id": "AS01",
+    "riskIds": [
+      "R01"
+    ],
+    "name": "Privileged identity takeover",
+    "hypothesis": "An attacker with stolen or weakly protected administrator credentials attempts to reach Arc management and hosts.",
+    "prerequisites": [
+      "validIdentity",
+      "privilegedRole",
+      "hostImpact"
+    ],
+    "securityBoundaryIds": [
+      "SB01",
+      "SB02"
+    ],
+    "attackPath": [
+      {
+        "from": "IDENTITY",
+        "to": "MANAGEMENT",
+        "boundaryId": "SB01",
+        "requires": [
+          "validIdentity"
+        ]
+      },
+      {
+        "from": "MANAGEMENT",
+        "to": "HOST",
+        "boundaryId": "SB02",
+        "requires": [
+          "privilegedRole"
+        ]
+      },
+      {
+        "from": "HOST",
+        "to": "DEFENSE",
+        "boundaryId": "SB04",
+        "requires": [
+          "hostImpact"
+        ]
+      }
+    ],
+    "controlCheckIds": [
+      "CHK-10",
+      "CHK-11",
+      "CHK-12",
+      "CHK-13",
+      "CHK-14",
+      "CHK-15",
+      "CHK-25",
+      "CHK-56",
+      "CHK-60",
+      "CHK-62"
+    ],
+    "expectedDefenseFunctions": [
+      "Prevent",
+      "Respond"
+    ],
+    "mappingConfidence": "high"
+  },
+  {
+    "id": "AS02",
+    "riskIds": [
+      "R02"
+    ],
+    "name": "Onboarding credential replay",
+    "hypothesis": "A leaked or overprivileged onboarding identity is replayed to enroll or alter managed resources.",
+    "prerequisites": [
+      "onboardingCredential",
+      "providerAccess",
+      "hostImpact"
+    ],
+    "securityBoundaryIds": [
+      "SB01",
+      "SB02"
+    ],
+    "attackPath": [
+      {
+        "from": "IDENTITY",
+        "to": "MANAGEMENT",
+        "boundaryId": "SB01",
+        "requires": [
+          "onboardingCredential"
+        ]
+      },
+      {
+        "from": "MANAGEMENT",
+        "to": "HOST",
+        "boundaryId": "SB02",
+        "requires": [
+          "providerAccess"
+        ]
+      },
+      {
+        "from": "HOST",
+        "to": "DEFENSE",
+        "boundaryId": "SB04",
+        "requires": [
+          "hostImpact"
+        ]
+      }
+    ],
+    "controlCheckIds": [
+      "CHK-02",
+      "CHK-07",
+      "CHK-12",
+      "CHK-14",
+      "CHK-48"
+    ],
+    "expectedDefenseFunctions": [
+      "Prevent"
+    ],
+    "mappingConfidence": "high"
+  },
+  {
+    "id": "AS03",
+    "riskIds": [
+      "R03"
+    ],
+    "name": "Management-plane privilege escalation",
+    "hypothesis": "A principal exploits broad RBAC or an unreviewed control-plane operation to gain administrative execution.",
+    "prerequisites": [
+      "authenticatedPrincipal",
+      "excessiveRole",
+      "hostImpact"
+    ],
+    "securityBoundaryIds": [
+      "SB01",
+      "SB02"
+    ],
+    "attackPath": [
+      {
+        "from": "IDENTITY",
+        "to": "MANAGEMENT",
+        "boundaryId": "SB01",
+        "requires": [
+          "authenticatedPrincipal"
+        ]
+      },
+      {
+        "from": "MANAGEMENT",
+        "to": "HOST",
+        "boundaryId": "SB02",
+        "requires": [
+          "excessiveRole"
+        ]
+      },
+      {
+        "from": "HOST",
+        "to": "DEFENSE",
+        "boundaryId": "SB04",
+        "requires": [
+          "hostImpact"
+        ]
+      }
+    ],
+    "controlCheckIds": [
+      "CHK-08",
+      "CHK-09",
+      "CHK-10",
+      "CHK-11",
+      "CHK-13",
+      "CHK-16",
+      "CHK-20",
+      "CHK-24",
+      "CHK-26",
+      "CHK-43",
+      "CHK-44"
+    ],
+    "expectedDefenseFunctions": [
+      "Prevent",
+      "Detect",
+      "Respond"
+    ],
+    "mappingConfidence": "high"
+  },
+  {
+    "id": "AS04",
+    "riskIds": [
+      "R04"
+    ],
+    "name": "Unintended management network path",
+    "hypothesis": "An attacker uses public access, open inbound management, or incorrect DNS to bypass the approved connectivity design.",
+    "prerequisites": [
+      "networkReachability",
+      "nameResolution",
+      "hostImpact"
+    ],
+    "securityBoundaryIds": [
+      "SB03"
+    ],
+    "attackPath": [
+      {
+        "from": "IDENTITY",
+        "to": "MANAGEMENT",
+        "boundaryId": "SB02",
+        "requires": [
+          "networkReachability"
+        ]
+      },
+      {
+        "from": "MANAGEMENT",
+        "to": "HOST",
+        "boundaryId": "SB03",
+        "requires": [
+          "nameResolution"
+        ]
+      },
+      {
+        "from": "HOST",
+        "to": "DEFENSE",
+        "boundaryId": "SB04",
+        "requires": [
+          "hostImpact"
+        ]
+      }
+    ],
+    "controlCheckIds": [
+      "CHK-17",
+      "CHK-18",
+      "CHK-19",
+      "CHK-20",
+      "CHK-21"
+    ],
+    "expectedDefenseFunctions": [
+      "Prevent"
+    ],
+    "mappingConfidence": "high"
+  },
+  {
+    "id": "AS05",
+    "riskIds": [
+      "R05"
+    ],
+    "name": "Arc agent trust degradation",
+    "hypothesis": "An attacker or failure condition exploits an unsupported agent, failed extension, unsafe mode, or weak local control.",
+    "prerequisites": [
+      "hostAccess",
+      "agentWeakness",
+      "hostImpact"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB05"
+    ],
+    "attackPath": [
+      {
+        "from": "IDENTITY",
+        "to": "MANAGEMENT",
+        "boundaryId": "SB02",
+        "requires": [
+          "hostAccess"
+        ]
+      },
+      {
+        "from": "MANAGEMENT",
+        "to": "HOST",
+        "boundaryId": "SB05",
+        "requires": [
+          "agentWeakness"
+        ]
+      },
+      {
+        "from": "HOST",
+        "to": "DEFENSE",
+        "boundaryId": "SB04",
+        "requires": [
+          "hostImpact"
+        ]
+      }
+    ],
+    "controlCheckIds": [
+      "CHK-22",
+      "CHK-23",
+      "CHK-28",
+      "CHK-29",
+      "CHK-30",
+      "CHK-35",
+      "CHK-36",
+      "CHK-37",
+      "CHK-51",
+      "CHK-55",
+      "CHK-61"
+    ],
+    "expectedDefenseFunctions": [
+      "Prevent",
+      "Detect",
+      "Respond",
+      "Recover"
+    ],
+    "mappingConfidence": "high"
+  },
+  {
+    "id": "AS06",
+    "riskIds": [
+      "R06"
+    ],
+    "name": "Extension or Run Command abuse",
+    "hypothesis": "A privileged actor deploys or invokes an unapproved extension or remote command for persistence or lateral movement.",
+    "prerequisites": [
+      "managementAccess",
+      "extensionOrRunCommand",
+      "hostImpact"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB05"
+    ],
+    "attackPath": [
+      {
+        "from": "IDENTITY",
+        "to": "MANAGEMENT",
+        "boundaryId": "SB02",
+        "requires": [
+          "managementAccess"
+        ]
+      },
+      {
+        "from": "MANAGEMENT",
+        "to": "HOST",
+        "boundaryId": "SB05",
+        "requires": [
+          "extensionOrRunCommand"
+        ]
+      },
+      {
+        "from": "HOST",
+        "to": "DEFENSE",
+        "boundaryId": "SB04",
+        "requires": [
+          "hostImpact"
+        ]
+      }
+    ],
+    "controlCheckIds": [
+      "CHK-23",
+      "CHK-24",
+      "CHK-26",
+      "CHK-28",
+      "CHK-30",
+      "CHK-44"
+    ],
+    "expectedDefenseFunctions": [
+      "Prevent",
+      "Detect",
+      "Respond"
+    ],
+    "mappingConfidence": "high"
+  },
+  {
+    "id": "AS07",
+    "riskIds": [
+      "R07"
+    ],
+    "name": "Telemetry suppression and delayed detection",
+    "hypothesis": "An attacker disables, evades, or benefits from missing Defender, MDE, Monitor, Sentinel, or Activity Log coverage.",
+    "prerequisites": [
+      "hostOrControlPlaneAccess",
+      "telemetryGap",
+      "hostImpact"
+    ],
+    "securityBoundaryIds": [
+      "SB06"
+    ],
+    "attackPath": [
+      {
+        "from": "IDENTITY",
+        "to": "MANAGEMENT",
+        "boundaryId": "SB02",
+        "requires": [
+          "hostOrControlPlaneAccess"
+        ]
+      },
+      {
+        "from": "MANAGEMENT",
+        "to": "HOST",
+        "boundaryId": "SB02",
+        "requires": [
+          "telemetryGap"
+        ]
+      },
+      {
+        "from": "HOST",
+        "to": "DEFENSE",
+        "boundaryId": "SB06",
+        "requires": [
+          "hostImpact"
+        ]
+      }
+    ],
+    "controlCheckIds": [
+      "CHK-31",
+      "CHK-32",
+      "CHK-33",
+      "CHK-39",
+      "CHK-40",
+      "CHK-41",
+      "CHK-43",
+      "CHK-44",
+      "CHK-45",
+      "CHK-54",
+      "CHK-57",
+      "CHK-58",
+      "CHK-63"
+    ],
+    "expectedDefenseFunctions": [
+      "Prevent",
+      "Detect",
+      "Respond"
+    ],
+    "mappingConfidence": "high"
+  },
+  {
+    "id": "AS08",
+    "riskIds": [
+      "R08"
+    ],
+    "name": "Exploit of vulnerable or legacy host",
+    "hypothesis": "An attacker exploits an unpatched, unsupported, weakly baselined, or unencrypted host.",
+    "prerequisites": [
+      "networkOrLocalAccess",
+      "knownWeakness",
+      "hostImpact"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB06"
+    ],
+    "attackPath": [
+      {
+        "from": "IDENTITY",
+        "to": "MANAGEMENT",
+        "boundaryId": "SB02",
+        "requires": [
+          "networkOrLocalAccess"
+        ]
+      },
+      {
+        "from": "MANAGEMENT",
+        "to": "HOST",
+        "boundaryId": "SB02",
+        "requires": [
+          "knownWeakness"
+        ]
+      },
+      {
+        "from": "HOST",
+        "to": "DEFENSE",
+        "boundaryId": "SB06",
+        "requires": [
+          "hostImpact"
+        ]
+      }
+    ],
+    "controlCheckIds": [
+      "CHK-29",
+      "CHK-33",
+      "CHK-42",
+      "CHK-51",
+      "CHK-52",
+      "CHK-54",
+      "CHK-55",
+      "CHK-57",
+      "CHK-61"
+    ],
+    "expectedDefenseFunctions": [
+      "Prevent",
+      "Detect",
+      "Recover"
+    ],
+    "mappingConfidence": "high"
+  },
+  {
+    "id": "AS09",
+    "riskIds": [
+      "R09"
+    ],
+    "name": "Governance and lifecycle drift",
+    "hypothesis": "Unmanaged scope, inconsistent policy, manual deployment, or unsafe decommission creates an exploitable gap.",
+    "prerequisites": [
+      "scopeDrift",
+      "controlDrift",
+      "hostImpact"
+    ],
+    "securityBoundaryIds": [
+      "SB02",
+      "SB08"
+    ],
+    "attackPath": [
+      {
+        "from": "IDENTITY",
+        "to": "MANAGEMENT",
+        "boundaryId": "SB02",
+        "requires": [
+          "scopeDrift"
+        ]
+      },
+      {
+        "from": "MANAGEMENT",
+        "to": "HOST",
+        "boundaryId": "SB02",
+        "requires": [
+          "controlDrift"
+        ]
+      },
+      {
+        "from": "HOST",
+        "to": "DEFENSE",
+        "boundaryId": "SB04",
+        "requires": [
+          "hostImpact"
+        ]
+      }
+    ],
+    "controlCheckIds": [
+      "CHK-01",
+      "CHK-02",
+      "CHK-03",
+      "CHK-04",
+      "CHK-05",
+      "CHK-06",
+      "CHK-07",
+      "CHK-08",
+      "CHK-09",
+      "CHK-16",
+      "CHK-27",
+      "CHK-38",
+      "CHK-46",
+      "CHK-47",
+      "CHK-48",
+      "CHK-49",
+      "CHK-50",
+      "CHK-53",
+      "CHK-59",
+      "CHK-64"
+    ],
+    "expectedDefenseFunctions": [
+      "Prevent",
+      "Detect",
+      "Respond",
+      "Recover"
+    ],
+    "mappingConfidence": "high"
+  },
+  {
+    "id": "AS10",
+    "riskIds": [
+      "R10"
+    ],
+    "name": "SQL protection or usage-telemetry gap",
+    "hypothesis": "An attacker or configuration failure affects SQL protection, privilege, telemetry, or entitlement evidence.",
+    "prerequisites": [
+      "sqlWorkload",
+      "sqlControlGap",
+      "hostImpact"
+    ],
+    "securityBoundaryIds": [
+      "SB04",
+      "SB07"
+    ],
+    "attackPath": [
+      {
+        "from": "IDENTITY",
+        "to": "MANAGEMENT",
+        "boundaryId": "SB02",
+        "requires": [
+          "sqlWorkload"
+        ]
+      },
+      {
+        "from": "MANAGEMENT",
+        "to": "HOST",
+        "boundaryId": "SB02",
+        "requires": [
+          "sqlControlGap"
+        ]
+      },
+      {
+        "from": "HOST",
+        "to": "DEFENSE",
+        "boundaryId": "SB07",
+        "requires": [
+          "hostImpact"
+        ]
+      }
+    ],
+    "controlCheckIds": [
+      "CHK-01",
+      "CHK-24",
+      "CHK-34",
+      "CHK-54",
+      "CHK-64"
+    ],
+    "expectedDefenseFunctions": [
+      "Prevent",
+      "Detect"
+    ],
+    "mappingConfidence": "high"
+  },
+  {
+    "id": "AS11",
+    "riskIds": [
+      "R11"
+    ],
+    "name": "Recovery and trusted-state failure",
+    "hypothesis": "An incident cannot be contained or recovered because rollback, health, removal, or exception evidence is missing.",
+    "prerequisites": [
+      "operationalFailure",
+      "recoveryGap",
+      "hostImpact"
+    ],
+    "securityBoundaryIds": [
+      "SB06",
+      "SB08"
+    ],
+    "attackPath": [
+      {
+        "from": "IDENTITY",
+        "to": "MANAGEMENT",
+        "boundaryId": "SB02",
+        "requires": [
+          "operationalFailure"
+        ]
+      },
+      {
+        "from": "MANAGEMENT",
+        "to": "HOST",
+        "boundaryId": "SB02",
+        "requires": [
+          "recoveryGap"
+        ]
+      },
+      {
+        "from": "HOST",
+        "to": "DEFENSE",
+        "boundaryId": "SB06",
+        "requires": [
+          "hostImpact"
+        ]
+      }
+    ],
+    "controlCheckIds": [
+      "CHK-37",
+      "CHK-42",
+      "CHK-46",
+      "CHK-47",
+      "CHK-49",
+      "CHK-50",
+      "CHK-51",
+      "CHK-52",
+      "CHK-58"
+    ],
+    "expectedDefenseFunctions": [
+      "Prevent",
+      "Detect",
+      "Respond",
+      "Recover"
+    ],
+    "mappingConfidence": "high"
+  }
+]
