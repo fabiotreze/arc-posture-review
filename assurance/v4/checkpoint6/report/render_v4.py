@@ -797,6 +797,60 @@ def main() -> int:
     sys.argv = [sys.argv[0], *rest]
     return _main_without_resources()
 
+# --- PR10-RESOURCE-COVERAGE: per-machine links for aggregate findings + inferred marker ---
+_RELATED_PORTAL = "https://portal.azure.com/#@/resource/subscriptions/"
+
+
+def _related_block(check_id, portuguese=False):
+    from html import escape as _esc
+    index = globals().get("_RESOURCE_INDEX")
+    if not isinstance(index, dict) or not check_id:
+        return ""
+    checks = index.get("checks", index)
+    rows = checks.get(check_id) if isinstance(checks, dict) else None
+    if not isinstance(rows, list):
+        return ""
+    links: dict[str, str] = {}
+    inferred = 0
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        if row.get("kind") in ("inferred", "resourceGroup-inferred"):
+            inferred += 1
+        for item in row.get("relatedResources") or []:
+            url = str((item or {}).get("portalUrl") or "")
+            if url.startswith(_RELATED_PORTAL):
+                links.setdefault(str(item.get("label") or url), url)
+    parts = []
+    if links:
+        shown = sorted(links.items())[:25]
+        anchors = ", ".join(f'<a href="{_esc(url)}" target="_blank" rel="noopener noreferrer">{_esc(label)}</a>' for label, url in shown)
+        more = len(links) - len(shown)
+        tail = (f" (+{more})" if more > 0 else "")
+        title = "Máquinas afetadas (portal Azure):" if portuguese else "Affected machines (Azure portal):"
+        parts.append(f'<p class="trace-related" data-related-machines="{len(links)}"><strong>{title}</strong> {anchors}{tail}</p>')
+    if inferred:
+        note = ("linha(s) com link inferido (assinatura única do pacote; validar no portal)" if portuguese
+                else "row(s) with inferred link (single subscription in package; verify in portal)")
+        parts.append(f'<p class="trace-related" data-inferred-rows="{inferred}">{inferred} {note}</p>')
+    return "".join(parts)
+
+
+_resource_block_v10 = _resource_block
+
+
+def _resource_block(*args, **kwargs):
+    import re as _re
+    out = _resource_block_v10(*args, **kwargs)
+    if not out or 'data-resource-index="unbound"' in out:
+        return out
+    values = list(args) + list(kwargs.values())
+    check_id = next((v for v in values if isinstance(v, str) and _re.fullmatch(r"CHK-\d+", v)), None)
+    if check_id is None:
+        check_id = next((v.get("checkId") for v in values if isinstance(v, dict) and v.get("checkId")), None)
+    portuguese = ("Recursos" in out) or ("recursos" in out)
+    return out + _related_block(check_id, portuguese)
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
