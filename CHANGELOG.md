@@ -1,5 +1,22 @@
 # Changelog
 
+## [4.0.0] — 2026-10-29
+
+### v4 assessment model and report (stable)
+
+- Canonical `assessment-result.v4` engine with Evidence → Observation → Claim → Control → Scenario traceability, 64 controls and 11 Security Scenarios, rendered as a bilingual EN-US/PT-BR render-only report with Playwright and clean PDF gates.
+- Report narrative, KPI status tiles, data-gap callout and a NOW action plan in canonical order, plus a collapsible per-check evidence trace.
+- Optional runId-bound resource index sidecar (`tools/New-ResourceIndex.py`, `resource-index.v4.json`) with Azure portal links per finding row, marked inferred links when the package has a single subscription, and per-machine links when a finding lists machine names. The canonical contract is unchanged.
+
+### Security and release
+
+- KI-V4-001 resolved: `pypdf` upgraded from 6.19.0 to 6.21.2 in `requirements-v4.txt` and `requirements-dev.txt` (11 Dependabot advisories closed).
+- v4.0.0 security review repeated and approved (29/29); signed record in `docs/v4/security-review-record-v4.0.0.md`. The release manifest is `APPROVED_FOR_PUBLICATION` and the CP10 gate requires an approved review.
+
+### Collector and legacy report
+
+- Collector, legacy report, guides, sample analyses and citation metadata are versioned as v4.0.0. Collection behaviour, the 64 checks and the legacy report contract are unchanged from v3.9.6.
+
 ## [3.9.6] — 2026-10-28
 
 ### CI fixture remediation
