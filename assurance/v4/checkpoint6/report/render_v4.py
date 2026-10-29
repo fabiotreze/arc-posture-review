@@ -584,5 +584,136 @@ def render(document, locale):
     return html_text.replace("</style>", PLAN_CSS + "</style>", 1)
 
 
+
+# --- Evidence trace per failing check (render-only, MSRC-style structure) -----
+TEXT["en-US"].update({
+    "traceTitle": "Evidence trace",
+    "traceClass": "Class / severity", "traceEnv": "Environment", "traceCollected": "collected at",
+    "traceEvidence": "Evidence sources", "traceIntegrity": "Integrity / source status", "traceDigest": "Content digest",
+    "traceDetail": "Collection detail", "traceExpected": "Expected (claim)", "traceVerdict": "Verdict / confidence",
+    "traceReasons": "Reason codes", "traceAbsence": "If evidence is absent", "traceFields": "Required fields",
+    "traceMissing": "Missing fields", "traceNone": "none",
+    "traceResources": "Per-resource list", "traceResourcesHint": "open in the collection package",
+    "traceResourcesNone": "not listed in the canonical contract",
+    "traceReproduce": "How to reproduce",
+    "traceReproduceText": "Open collection package {pkg}, read the files listed above and confirm the resources in the Azure portal. For a per-resource view with portal links, load the same package in the legacy report (step 3).",
+})
+TEXT["pt-BR"].update({
+    "traceTitle": "Rastro da evidência",
+    "traceClass": "Classe / severidade", "traceEnv": "Ambiente", "traceCollected": "coletado em",
+    "traceEvidence": "Fontes da evidência", "traceIntegrity": "Integridade / status da fonte", "traceDigest": "Digest do conteúdo",
+    "traceDetail": "Detalhe da coleta", "traceExpected": "Esperado (claim)", "traceVerdict": "Veredito / confiança",
+    "traceReasons": "Códigos de motivo", "traceAbsence": "Se a evidência estiver ausente", "traceFields": "Campos exigidos",
+    "traceMissing": "Campos ausentes", "traceNone": "nenhum",
+    "traceResources": "Lista por recurso", "traceResourcesHint": "abrir no pacote da coleta",
+    "traceResourcesNone": "não listada no contrato canônico",
+    "traceReproduce": "Como reproduzir",
+    "traceReproduceText": "Abra o pacote da coleta {pkg}, leia os arquivos listados acima e confirme os recursos no portal do Azure. Para a visão por recurso com links do portal, carregue o mesmo pacote no relatório legado (etapa 3).",
+})
+
+TRACE_CSS = r"""
+.trace{margin:4px 0 8px 2px;border:1px dashed var(--line);border-radius:8px;background:#fbfcfe}
+.trace summary{cursor:pointer;padding:6px 10px;font-size:12px;font-weight:650;color:#0f6cbd}
+.trace .inside{padding:6px 10px 10px}
+.trace dl{display:grid;grid-template-columns:minmax(120px,190px) minmax(0,1fr);gap:4px 12px;margin:0;font-size:12px}
+.trace dt{color:var(--muted)}.trace dd{margin:0;overflow-wrap:anywhere}
+.trace .mono{font-size:11px}.trace .miss{color:#b42318;font-weight:650}
+@media(max-width:900px){.trace dl{grid-template-columns:1fr}}
+"""
+
+
+def _plain_list(values: Iterable[Any]) -> str:
+    return ", ".join(esc(value) for value in values)
+
+
+def evidence_trace_html(check_id: str, evidence: dict[str, Any], observation: dict[str, Any],
+                        claim: dict[str, Any], package: Any, locale: str) -> str:
+    t = TEXT[locale]
+    sources = list(evidence.get("sources") or [])
+    findings = [source for source in sources if str(source).startswith("findings/")]
+    missing = list(evidence.get("missingFields") or [])
+    reasons = claim.get("reasonCodes") or []
+    rows = [
+        (t["traceClass"], f'{esc(observation.get("kind"))} · {esc(observation.get("severity"))}'),
+        (t["traceEnv"], f'{esc(evidence.get("scope"))} · {esc(t["traceCollected"])} <span class="mono">{esc(evidence.get("collectedAt"))}</span>'),
+        (t["traceEvidence"], f'<span class="mono">{_plain_list(sources)}</span>'),
+        (t["traceIntegrity"], f'{esc(evidence.get("integrity"))} · {esc(evidence.get("sourceStatus"))}'),
+        (t["traceDigest"], f'<span class="mono">{esc(evidence.get("contentDigest"))}</span>'),
+        (t["traceDetail"], esc(evidence.get("detail"))),
+        (t["traceExpected"], esc(claim.get("assertion"))),
+        (t["traceVerdict"], f'{esc(claim.get("verdict"))} · {esc(claim.get("confidence"))}'),
+        (t["traceReasons"], f'<span class="mono">{_plain_list(reasons) if isinstance(reasons, list) else esc(reasons)}</span>'),
+        (t["traceAbsence"], esc(claim.get("absenceMeans"))),
+        (t["traceFields"], f'<span class="mono">{_plain_list(evidence.get("requiredFields") or []) or esc(t["traceNone"])}</span>'),
+        (t["traceMissing"], (f'<span class="mono miss">{_plain_list(missing)}</span>' if missing else esc(t["traceNone"]))),
+        (t["traceResources"], (f'<span class="mono">{_plain_list(findings)}</span> ({esc(t["traceResourcesHint"])})'
+                               if findings else esc(t["traceResourcesNone"]))),
+        (t["traceReproduce"], esc(t["traceReproduceText"].format(pkg=package))),
+    ]
+    body = "".join(f"<dt>{esc(label)}</dt><dd>{value}</dd>" for label, value in rows)
+    return (f'<details class="trace" data-trace="{esc(check_id)}"><summary>{esc(t["traceTitle"])} · {esc(check_id)}</summary>'
+            f'<div class="inside"><dl>{body}</dl></div></details>')
+
+
+def action_plan_html(document: dict[str, Any], locale: str) -> str:
+    t = TEXT[locale]
+    labels = STATUS_LABELS[locale]
+    now = document["roadmap"]["NOW"]
+    cards = {row["id"]: row for row in document["actionCards"]}
+    outcomes = {row["checkId"]: row["outcome"] for row in document["controlAssessments"]}
+    observations = {row["checkId"]: row for row in document["traceability"]["observations"]}
+    claims = {row["checkId"]: row for row in document["traceability"]["claims"]}
+    evidence = {row["checkId"]: row for row in document["traceability"]["evidence"]}
+    package = document["metadata"]["source"]["name"]
+    shown = ("INEFFECTIVE", "AT_RISK")
+    playbooks = [(tuple(cards.get(row["actionCardId"], {}).get("actions", [])),
+                  tuple(cards.get(row["actionCardId"], {}).get("closureEvidence", []))) for row in now]
+    shared = bool(playbooks) and len(set(playbooks)) == 1
+
+    def howto(actions: Iterable[Any], closure: Iterable[Any]) -> str:
+        return (f'<div class="plan-howto"><h3>{esc(t["planHowTo"])}</h3>{ul(actions)}'
+                f'<h3>{esc(t["planClosure"])}</h3>{ul(closure)}</div>')
+
+    items = []
+    for row in now:
+        card = cards.get(row["actionCardId"], {})
+        failing = [cid for cid in row["controlIds"] if outcomes.get(cid) in shown]
+        others = [cid for cid in row["controlIds"] if outcomes.get(cid) not in shown]
+        checks = "".join(
+            f'<li><span class="kpi k-{esc(outcomes[cid])}" title="{esc(outcomes[cid])}">{esc(labels.get(outcomes[cid], outcomes[cid]))}</span> '
+            f'<b>{esc(cid)}</b> - {esc(observations.get(cid, {}).get("statement"))}'
+            + evidence_trace_html(cid, evidence.get(cid, {}), observations.get(cid, {}), claims.get(cid, {}), package, locale)
+            + "</li>"
+            for cid in failing
+        ) or f'<li class="muted">{esc(t["planNoFailing"])}</li>'
+        other_html = (f'<div class="plan-others muted">{esc(t["planOthers"])} {esc(", ".join(others))}</div>' if others else "")
+        items.append(
+            f'<li class="plan-item" data-plan-card="{esc(row["actionCardId"])}">'
+            f'<div class="plan-head"><span class="prio p-{esc(row["priority"])}">{esc(row["priority"])}</span> '
+            f'<strong>{esc(row["actionCardId"])} · {esc(card.get("title"))}</strong></div>'
+            f'<div class="plan-meta muted">{esc(t["planOwners"])}: {esc(", ".join(row["owners"]))} · '
+            f'{esc(t["planDue"])}: {esc(row["dueInDays"])} {esc(t["planDays"])}</div>'
+            f'<ul class="plan-checks">{checks}</ul>{other_html}'
+            + ("" if shared else howto(card.get("actions", []), card.get("closureEvidence", [])))
+            + "</li>"
+        )
+    body = (f'<ol class="plan-list">{"".join(items)}</ol>' if items else f'<p class="muted">{esc(t["planEmpty"])}</p>')
+    common = howto(playbooks[0][0], playbooks[0][1]) if shared else ""
+    return (
+        f'<section class="plan" id="action-plan" aria-label="{esc(t["planTitle"])}">'
+        f'<h2>{esc(t["planTitle"])}</h2><p class="muted">{esc(t["planIntro"])}</p>{body}{common}</section>'
+    )
+
+
+_render_without_evidence_trace = render
+
+
+def render(document, locale):
+    html_text = _render_without_evidence_trace(document, locale)
+    if "</style>" not in html_text:
+        raise ValueError("report has no style block")
+    return html_text.replace("</style>", TRACE_CSS + "</style>", 1)
+
+
 if __name__ == "__main__":
     raise SystemExit(main())
