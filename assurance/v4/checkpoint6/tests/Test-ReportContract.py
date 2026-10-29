@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 from html.parser import HTMLParser
+import html
 from pathlib import Path
 
 
@@ -89,6 +90,27 @@ def main() -> int:
     for stage in ("IDENTITY", "MANAGEMENT", "HOST", "DEFENSE"):
         if stage not in visible:
             errors.append(f"scenario path stage missing: {stage}")
+    narrative_start = visible.find('id="executive-narrative"')
+    if narrative_start < 0 or visible.count('id="executive-narrative"') != 1:
+        errors.append("executive narrative missing or duplicated")
+    else:
+        block = visible[narrative_start:visible.find("</section>", narrative_start)]
+        if html.escape(str(expected["metadata"]["runId"]), quote=True) not in block:
+            errors.append("executive narrative does not cite the canonical runId")
+        for group in ("controlOutcomes", "evidenceCoverage"):
+            for key, value in expected["assurance"][group].items():
+                if html.escape(f"{key}:{value}", quote=True) not in block:
+                    errors.append(f"executive narrative missing {group} {key}:{value}")
+        if expected["assurance"]["evidenceCoverage"].get("PARTIAL") and "narrative-partial" not in block:
+            errors.append("executive narrative does not disclose PARTIAL coverage")
+        for row in expected["roadmap"]["NOW"]:
+            if html.escape(str(row["actionCardId"]), quote=True) not in block:
+                errors.append(f"executive narrative missing NOW action {row['actionCardId']}")
+        for row in expected["securityScenarios"]:
+            if html.escape(str(row["attackConfirmation"]), quote=True) not in block:
+                errors.append(f"executive narrative missing attackConfirmation {row['attackConfirmation']}")
+        if expected["comparison"] is not None and html.escape(str(expected["comparison"]["baselineRunId"]), quote=True) not in block:
+            errors.append("executive narrative does not cite the comparison baseline")
     if errors:
         print(f"[FAIL] Checkpoint 6 report contract: {len(errors)} error(s)")
         for error in errors:

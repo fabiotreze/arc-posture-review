@@ -345,5 +345,83 @@ def render(document, locale):
     return html.replace("</style>", STATUS_COLORS_CSS + "</style>", 1)
 
 
+
+# --- Executive narrative (render-only projection of canonical fields) ---------
+TEXT["en-US"].update({
+    "narrativeTitle": "Executive narrative",
+    "narrativeRun": "Run {run} assessed {n} controls. Control outcomes:",
+    "narrativeCoverage": "Evidence coverage:",
+    "narrativePartial": "{k} control(s) have PARTIAL evidence coverage; their outcomes must not be read as fully evidenced.",
+    "narrativeNow": "Roadmap NOW ({n}):",
+    "narrativeNowEmpty": "Roadmap NOW: no action in this horizon.",
+    "narrativeScenarios": "{n} security scenarios are posture hypotheses. Attack confirmation:",
+    "narrativeNoAttack": "This report does not confirm any attack.",
+    "narrativeNoBaseline": "No baseline was supplied, so no trend is asserted.",
+    "narrativeComparison": "Compared with baseline {run}:",
+    "narrativeSource": "Every value in this narrative is read from assessment-result.v4; nothing is recalculated.",
+})
+TEXT["pt-BR"].update({
+    "narrativeTitle": "Narrativa executiva",
+    "narrativeRun": "A execução {run} avaliou {n} controles. Resultados dos controles:",
+    "narrativeCoverage": "Cobertura de evidências:",
+    "narrativePartial": "{k} controle(s) têm cobertura de evidência PARTIAL; seus resultados não devem ser lidos como totalmente evidenciados.",
+    "narrativeNow": "Roadmap NOW ({n}):",
+    "narrativeNowEmpty": "Roadmap NOW: nenhuma ação neste horizonte.",
+    "narrativeScenarios": "{n} cenários de segurança são hipóteses de postura. Confirmação de ataque:",
+    "narrativeNoAttack": "Este relatório não confirma nenhum ataque.",
+    "narrativeNoBaseline": "Nenhum baseline foi fornecido; nenhuma tendência é afirmada.",
+    "narrativeComparison": "Comparado ao baseline {run}:",
+    "narrativeSource": "Todos os valores desta narrativa vêm do assessment-result.v4; nada é recalculado.",
+})
+
+NARRATIVE_CSS = r"""
+.narrative{margin:16px 0}.narrative h2{margin:0 0 8px;font-size:18px}.narrative p{margin:6px 0}.narrative .narrative-partial{font-weight:650}
+.badge[class*=" FULL:"]{background:#175cd3;color:#fff}.badge[class*=" PARTIAL:"]{background:#5925dc;color:#fff}.badge[class*=" NONE:"]{background:#475467;color:#fff}
+.badge[class*=" IMPROVED:"]{background:#067647;color:#fff}.badge[class*=" REGRESSED:"]{background:#b42318;color:#fff}.badge[class*=" UNCHANGED:"]{background:#475467;color:#fff}
+@media print{.narrative{break-inside:avoid}}
+"""
+
+
+def narrative_html(document: dict[str, Any], locale: str) -> str:
+    t = TEXT[locale]
+    meta = document["metadata"]
+    assurance = document["assurance"]
+    now = document["roadmap"]["NOW"]
+    scenarios = document["securityScenarios"]
+    comparison = document["comparison"]
+    confirmations = list(dict.fromkeys(row["attackConfirmation"] for row in scenarios))
+    partial = assurance["evidenceCoverage"].get("PARTIAL")
+    run_text = t["narrativeRun"].format(run=meta["runId"], n=len(document["controlAssessments"]))
+    parts = [
+        f'<p>{esc(run_text)} {badges(f"{key}:{value}" for key, value in assurance["controlOutcomes"].items())}</p>',
+        f'<p>{esc(t["narrativeCoverage"])} {badges(f"{key}:{value}" for key, value in assurance["evidenceCoverage"].items())}'
+        + (f' <span class="narrative-partial">{esc(t["narrativePartial"].format(k=partial))}</span>' if partial else "")
+        + "</p>",
+        (f'<p>{esc(t["narrativeNow"].format(n=len(now)))} {badges(row["actionCardId"] for row in now)}</p>'
+         if now else f'<p>{esc(t["narrativeNowEmpty"])}</p>'),
+        f'<p>{esc(t["narrativeScenarios"].format(n=len(scenarios)))} {badges(confirmations)} {esc(t["narrativeNoAttack"])}</p>',
+        (f'<p>{esc(t["narrativeNoBaseline"])}</p>' if comparison is None else
+         f'<p>{esc(t["narrativeComparison"].format(run=comparison["baselineRunId"]))} '
+         f'{badges(f"{key}:{value}" for key, value in comparison["summary"].items())}</p>'),
+        f'<p class="muted">{esc(t["narrativeSource"])}</p>',
+    ]
+    return (
+        f'<section class="notice narrative" id="executive-narrative" aria-label="{esc(t["narrativeTitle"])}">'
+        f'<h2>{esc(t["narrativeTitle"])}</h2>{"".join(parts)}</section>'
+    )
+
+
+_render_without_narrative = render
+
+
+def render(document, locale):
+    html_text = _render_without_narrative(document, locale)
+    anchor = '<div class="toolbar">'
+    if html_text.count(anchor) != 1 or "</style>" not in html_text:
+        raise ValueError("report layout anchor for the executive narrative not found")
+    html_text = html_text.replace("</style>", NARRATIVE_CSS + "</style>", 1)
+    return html_text.replace(anchor, narrative_html(document, locale) + anchor, 1)
+
+
 if __name__ == "__main__":
     raise SystemExit(main())
