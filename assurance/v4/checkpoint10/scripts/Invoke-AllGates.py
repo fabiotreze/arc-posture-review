@@ -19,7 +19,7 @@ def main() -> int:
         print("> [cp10] " + " ".join(command), flush=True)
         if subprocess.run(command, cwd=ROOT, text=True).returncode: failures.append(" ".join(command))
     if failures: print("[FAIL] CHECKPOINT 10"); return 1
-    print("[PASS] CHECKPOINT 10 - v4.0.0 RELEASE PREPARATION (STABLE PUBLICATION BLOCKED)")
+    print("[PASS] CHECKPOINT 10 - v4.0.0 RELEASE PREPARATION (STABLE PUBLICATION APPROVED)")
     return 0
 
 

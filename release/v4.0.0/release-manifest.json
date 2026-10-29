@@ -1,14 +1,29 @@
 {
   "release": "v4.0.0",
-  "status": "PREPARED_BLOCKED",
-  "blockedReason": "Security-review checklist must be repeated after KI-V4-001 remediation",
+  "status": "APPROVED_FOR_PUBLICATION",
   "sourceBranch": "feature/v4-security-model",
   "sourceCheckpointCommit": "549558a",
   "checkpoints": [6, 7, 8, 9, 10],
   "canonicalContract": "assessment-result.v4",
   "legacyReport": "v3.9.6",
   "gateEntrypoint": "tools/Invoke-V4FinalGates.py",
-  "publishable": false,
+  "publishable": true,
+  "securityReview": {
+    "reviewer": "Fabio Rodrigues Vieira Costa",
+    "date": "2026-10-29",
+    "decision": "APPROVED",
+    "checklist": "docs/v4/security-review-checklist.md",
+    "record": "docs/v4/security-review-record-v4.0.0.md",
+    "items": 29,
+    "itemsApproved": 29,
+    "evidence": "Gate profiles pr-quality, report-quality, release, methodology and security-regression PASS on main 5432bbf; no FAIL lines; working tree preserved",
+    "notes": [
+      "S05 evidence: Checkpoint 5 semantic contract and cross-section conservation",
+      "S26: 22 fixed Dependabot alerts = 11 pypdf advisories x 2 manifests (requirements-v4.txt, requirements-dev.txt)",
+      "S24: the only push/tag/release reference is the CP8 FORBIDDEN list in Test-DevSecOpsWorkflows.py",
+      "CP6 resource index gate runs on a fixture with 0 finding rows; link behaviour is exercised by CP6 resource coverage (synthetic package)"
+    ]
+  },
   "blockers": [],
   "resolvedBlockers": [
     {
