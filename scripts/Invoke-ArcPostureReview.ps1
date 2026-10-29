@@ -10,8 +10,9 @@
 .NOTES
   Requirements: authenticated Azure CLI (az login) and Reader role in the scope
   (Reader also covers Defender for Cloud). Recommended: Azure Cloud Shell (PowerShell).
-  Optional -V4Report: after the package, clones the release tag matching this version from GitHub
-  and renders the v4 report locally next to the .zip (requires git and Python 3.10+).
+  V4 report (default; skip with -NoV4Report): after the package, clones the release tag matching this
+  version from GitHub, renders the v4 report next to the .zip and compresses it as <run>-v4.zip
+  (requires git and Python 3.10+; if missing, the collection is unaffected and the manual command is printed).
 #>
 [CmdletBinding()]
 param(
@@ -25,7 +26,8 @@ param(
   [string[]]$AllowedRegions = @(),
   [string[]]$Checks = @('CHK-01', 'CHK-02', 'CHK-03', 'CHK-04', 'CHK-05', 'CHK-06', 'CHK-07', 'CHK-08', 'CHK-09', 'CHK-10', 'CHK-11', 'CHK-12', 'CHK-13', 'CHK-14', 'CHK-15', 'CHK-16', 'CHK-17', 'CHK-18', 'CHK-19', 'CHK-20', 'CHK-21', 'CHK-22', 'CHK-23', 'CHK-24', 'CHK-25', 'CHK-26', 'CHK-27', 'CHK-28', 'CHK-29', 'CHK-30', 'CHK-31', 'CHK-32', 'CHK-33', 'CHK-34', 'CHK-35', 'CHK-36', 'CHK-37', 'CHK-38', 'CHK-39', 'CHK-40', 'CHK-41', 'CHK-42', 'CHK-43', 'CHK-44', 'CHK-45', 'CHK-46', 'CHK-47', 'CHK-48', 'CHK-49', 'CHK-50', 'CHK-51', 'CHK-52', 'CHK-53', 'CHK-54', 'CHK-55', 'CHK-56', 'CHK-57', 'CHK-58', 'CHK-59', 'CHK-60', 'CHK-61', 'CHK-62', 'CHK-63', 'CHK-64'),
   [string]$OutputRoot = './arc-posture-review',
-  [switch]$V4Report
+  [switch]$V4Report,
+  [switch]$NoV4Report
 )
 
 $ErrorActionPreference = 'Stop'
@@ -1443,7 +1445,8 @@ try {
 }
 catch { Write-Warning "Could not compress ($($_.Exception.Message)). Compress the folder $RunDir manually." }
 # V4REPORT_BEGIN
-if ($V4Report) {
+$v4Enabled = ($V4Report -or -not $NoV4Report)
+if ($v4Enabled) {
   $v4Manual = "git clone --depth 1 --branch $ScriptVersion https://github.com/fabiotreze/arc-posture-review.git ; python3 arc-posture-review/assurance/v4/checkpoint5/cli/arc_posture.py evaluate --evidence <package.zip> --output assessment.v4.json ; python3 arc-posture-review/assurance/v4/checkpoint6/report/render_v4.py --input assessment.v4.json --output report.v4.html --locale pt-BR"
   $v4Py = $null
   foreach ($v4Cand in @('python3', 'python')) {
@@ -1476,6 +1479,14 @@ if ($V4Report) {
         if ($LASTEXITCODE -ne 0) { throw ('v4 render ' + $v4Loc + ' failed') }
       }
       Write-Step ('V4 report: ' + $v4Out + ' (arc-posture-review.v4.pt-BR.html, arc-posture-review.v4.en-US.html)')
+      $v4Zip = $v4Out + '.zip'
+      try {
+        Compress-Archive -Path (Join-Path $v4Out '*') -DestinationPath $v4Zip -Force
+        $v4Hash = (Get-FileHash -Path $v4Zip -Algorithm SHA256).Hash
+        Save-Text ($v4Zip + '.sha256') ($v4Hash + '  ' + (Split-Path $v4Zip -Leaf))
+        Write-Step ('V4 report package: ' + $v4Zip + ' (SHA-256 ' + $v4Hash + ')')
+      }
+      catch { Write-Warning ('Could not compress the v4 report (' + $_.Exception.Message + '). Compress the folder ' + $v4Out + ' manually.') }
     }
     catch { Write-Warning ('V4 report not generated (' + $_.Exception.Message + '). The package .zip is unaffected. Manual: ' + $v4Manual) }
   }
@@ -1483,3 +1494,4 @@ if ($V4Report) {
 # V4REPORT_END
 Write-Step ("Completed in $Dur s. $CountTxt")
 Write-Step 'Upload the .zip on the checklist Results tab.'
+if ($v4Enabled) { Write-Step 'Download the <run>-v4.zip to open or share the v4 report (HTML pt-BR/en-US).' }
