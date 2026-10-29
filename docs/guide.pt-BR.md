@@ -10,6 +10,8 @@
 
 > **Riscos atuais para o lab:** execução com limite de máquinas é amostra de descoberta, não cobertura final; `PARTIAL` como resultado, `ERROR` e `TODO` significam não avaliado, não saudável; metadados de versão lidos do Azure podem cair para tabelas estáticas; e o ZIP/relatórios contêm dados sensíveis do ambiente. Para validar a release, importe e exporte um pacote novo e autorizado do lab depois que os gates locais passarem.
 
+> **Relatório v4 (desde a v4.0.0):** o mesmo pacote de evidências também pode gerar o `assessment-result.v4.json` canônico (Evidência → Observação → Afirmação → Controle → Cenário) e um relatório HTML bilíngue com plano de ação AGORA, rastro da evidência por verificação e links opcionais do portal Azure. Os IDs das verificações, os critérios e as árvores de decisão deste guia não mudam; veja `docs/v4/methodology-v4.md` e o README.
+
 ## 0) Comece aqui
 
 Três passos: **1.** percorra as etapas abaixo e abra a árvore de cada decisão (clique no cartão); **2.** gere e rode o script somente leitura (etapa 2 do HTML); **3.** carregue o .zip e siga o plano de ação.
