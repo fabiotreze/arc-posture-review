@@ -423,5 +423,166 @@ def render(document, locale):
     return html_text.replace(anchor, narrative_html(document, locale) + anchor, 1)
 
 
+
+# --- Execution-first top: labels, narrative v2 and action plan (render-only) ---
+STATUS_LABELS = {
+    "en-US": {
+        "INEFFECTIVE": "Failing", "AT_RISK": "At risk", "EFFECTIVE": "Effective",
+        "INFORMATIONAL": "Informational", "UNASSESSED": "Not assessed",
+        "FULL": "Full evidence", "PARTIAL": "Partial evidence", "NONE": "No evidence",
+        "IMPROVED": "Improved", "REGRESSED": "Regressed", "UNCHANGED": "Unchanged",
+    },
+    "pt-BR": {
+        "INEFFECTIVE": "Falha", "AT_RISK": "Em risco", "EFFECTIVE": "Efetivo",
+        "INFORMATIONAL": "Informativo", "UNASSESSED": "Não avaliado",
+        "FULL": "Evidência completa", "PARTIAL": "Evidência parcial", "NONE": "Sem evidência",
+        "IMPROVED": "Melhorou", "REGRESSED": "Piorou", "UNCHANGED": "Sem mudança",
+    },
+}
+TEXT["en-US"].update({
+    "narrativeRun": "Run {run} assessed {n} controls.",
+    "narrativeGap": "{u} of {n} controls could not be assessed because evidence is missing. Complete the collection before drawing conclusions.",
+    "narrativeNow": "Roadmap NOW - {n} action(s), detailed in the action plan below:",
+    "planTitle": "Action plan - NOW",
+    "planIntro": "Canonical roadmap order. Each action lists only its failing or at-risk checks with what was observed; full detail is in Action Cards.",
+    "planOwners": "Owners", "planDue": "Due", "planDays": "days",
+    "planOthers": "Other checks in this action:",
+    "planNoFailing": "No failing or at-risk check in this action; see Action Cards.",
+    "planHowTo": "How to execute each action", "planClosure": "Closure evidence",
+    "planEmpty": "No action in the NOW horizon.",
+})
+TEXT["pt-BR"].update({
+    "narrativeRun": "A execução {run} avaliou {n} controles.",
+    "narrativeGap": "{u} de {n} controles não puderam ser avaliados por falta de evidência. Complete a coleta antes de tirar conclusões.",
+    "narrativeNow": "Roadmap NOW - {n} ação(ões), detalhadas no plano de ação abaixo:",
+    "planTitle": "Plano de ação - agora (NOW)",
+    "planIntro": "Ordem do roadmap canônico. Cada ação mostra só os checks com falha ou em risco e o que foi observado; o detalhe completo está em Action Cards.",
+    "planOwners": "Responsáveis", "planDue": "Prazo", "planDays": "dias",
+    "planOthers": "Outros checks desta ação:",
+    "planNoFailing": "Nenhum check com falha ou em risco nesta ação; veja Action Cards.",
+    "planHowTo": "Como executar cada ação", "planClosure": "Evidência de encerramento",
+    "planEmpty": "Nenhuma ação no horizonte NOW.",
+})
+
+PLAN_CSS = r"""
+.kpis{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}
+.kpi{display:inline-flex;align-items:baseline;gap:6px;border-radius:8px;padding:5px 10px;font-size:13px;background:#f1f5f9;color:#1f2937;border-left:5px solid #94a3b8;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.kpi b{font-size:18px}
+.k-INEFFECTIVE,.k-REGRESSED{border-left-color:#b42318}.k-AT_RISK,.k-PARTIAL{border-left-color:#b54708}
+.k-UNASSESSED,.k-NONE,.k-UNCHANGED{border-left-color:#475467}.k-EFFECTIVE,.k-FULL,.k-IMPROVED{border-left-color:#067647}.k-INFORMATIONAL{border-left-color:#175cd3}
+.narrative-gap{background:#fff4e5;border-left:5px solid #b54708;padding:8px 10px;border-radius:6px;font-weight:650}
+.now-list{margin:4px 0 8px;padding-left:20px}
+.plan{margin:16px 0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px}
+.plan h2{margin:0 0 6px;font-size:20px}.plan-list{padding-left:22px;margin:12px 0}
+.plan-item{margin:0 0 12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.plan-head{font-size:15px}.plan-meta{font-size:12px;margin:4px 0}
+.prio{display:inline-block;border:2px solid #475467;border-radius:6px;padding:0 6px;font-weight:700;font-size:12px;margin-right:4px}
+.p-P0{border-color:#b42318;color:#b42318}.p-P1{border-color:#b54708;color:#b54708}.p-P2{border-color:#5925dc;color:#5925dc}
+.plan-checks{margin:6px 0;padding-left:18px}.plan-checks li{margin:5px 0;overflow-wrap:anywhere}
+.plan-others{font-size:12px;overflow-wrap:anywhere}
+.plan-howto{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:8px}
+.plan-howto h3{margin:0 0 6px;font-size:14px}
+@media print{.plan-item,.plan-howto{break-inside:avoid}}
+"""
+
+
+def _kpis(counts: dict[str, Any], locale: str) -> str:
+    labels = STATUS_LABELS[locale]
+    return '<span class="kpis">' + "".join(
+        f'<span class="kpi k-{esc(key)}" title="{esc(key)}:{esc(value)}"><b>{esc(value)}</b> {esc(labels.get(key, key))}</span>'
+        for key, value in counts.items()
+    ) + "</span>"
+
+
+def narrative_html(document: dict[str, Any], locale: str) -> str:
+    t = TEXT[locale]
+    meta = document["metadata"]
+    assurance = document["assurance"]
+    now = document["roadmap"]["NOW"]
+    scenarios = document["securityScenarios"]
+    comparison = document["comparison"]
+    cards = {row["id"]: row for row in document["actionCards"]}
+    confirmations = list(dict.fromkeys(row["attackConfirmation"] for row in scenarios))
+    partial = assurance["evidenceCoverage"].get("PARTIAL")
+    unassessed = assurance["controlOutcomes"].get("UNASSESSED")
+    total = len(document["controlAssessments"])
+    parts = [
+        f'<p>{esc(t["narrativeRun"].format(run=meta["runId"], n=total))}</p>{_kpis(assurance["controlOutcomes"], locale)}',
+        f'<p class="narrative-gap">{esc(t["narrativeGap"].format(u=unassessed, n=total))}</p>' if unassessed else "",
+        f'<p>{esc(t["narrativeCoverage"])}</p>{_kpis(assurance["evidenceCoverage"], locale)}'
+        + (f'<p><span class="narrative-partial">{esc(t["narrativePartial"].format(k=partial))}</span></p>' if partial else ""),
+        (f'<p>{esc(t["narrativeNow"].format(n=len(now)))}</p><ul class="now-list">'
+         + "".join(f'<li><b>{esc(row["actionCardId"])}</b> · {esc(cards.get(row["actionCardId"], {}).get("title"))}</li>' for row in now)
+         + "</ul>") if now else f'<p>{esc(t["narrativeNowEmpty"])}</p>',
+        f'<p>{esc(t["narrativeScenarios"].format(n=len(scenarios)))} {badges(confirmations)} {esc(t["narrativeNoAttack"])}</p>',
+        (f'<p>{esc(t["narrativeNoBaseline"])}</p>' if comparison is None else
+         f'<p>{esc(t["narrativeComparison"].format(run=comparison["baselineRunId"]))}</p>{_kpis(comparison["summary"], locale)}'),
+        f'<p class="muted">{esc(t["narrativeSource"])}</p>',
+    ]
+    return (
+        f'<section class="notice narrative" id="executive-narrative" aria-label="{esc(t["narrativeTitle"])}">'
+        f'<h2>{esc(t["narrativeTitle"])}</h2>{"".join(parts)}</section>'
+    )
+
+
+def action_plan_html(document: dict[str, Any], locale: str) -> str:
+    t = TEXT[locale]
+    labels = STATUS_LABELS[locale]
+    now = document["roadmap"]["NOW"]
+    cards = {row["id"]: row for row in document["actionCards"]}
+    outcomes = {row["checkId"]: row["outcome"] for row in document["controlAssessments"]}
+    statements = {row["checkId"]: row["statement"] for row in document["traceability"]["observations"]}
+    shown = ("INEFFECTIVE", "AT_RISK")
+    playbooks = [(tuple(cards.get(row["actionCardId"], {}).get("actions", [])),
+                  tuple(cards.get(row["actionCardId"], {}).get("closureEvidence", []))) for row in now]
+    shared = bool(playbooks) and len(set(playbooks)) == 1
+
+    def howto(actions: Iterable[Any], closure: Iterable[Any]) -> str:
+        return (f'<div class="plan-howto"><h3>{esc(t["planHowTo"])}</h3>{ul(actions)}'
+                f'<h3>{esc(t["planClosure"])}</h3>{ul(closure)}</div>')
+
+    items = []
+    for row in now:
+        card = cards.get(row["actionCardId"], {})
+        failing = [cid for cid in row["controlIds"] if outcomes.get(cid) in shown]
+        others = [cid for cid in row["controlIds"] if outcomes.get(cid) not in shown]
+        checks = "".join(
+            f'<li><span class="kpi k-{esc(outcomes[cid])}" title="{esc(outcomes[cid])}">{esc(labels.get(outcomes[cid], outcomes[cid]))}</span> '
+            f'<b>{esc(cid)}</b> - {esc(statements.get(cid))}</li>'
+            for cid in failing
+        ) or f'<li class="muted">{esc(t["planNoFailing"])}</li>'
+        other_html = (f'<div class="plan-others muted">{esc(t["planOthers"])} {esc(", ".join(others))}</div>' if others else "")
+        items.append(
+            f'<li class="plan-item" data-plan-card="{esc(row["actionCardId"])}">'
+            f'<div class="plan-head"><span class="prio p-{esc(row["priority"])}">{esc(row["priority"])}</span> '
+            f'<strong>{esc(row["actionCardId"])} · {esc(card.get("title"))}</strong></div>'
+            f'<div class="plan-meta muted">{esc(t["planOwners"])}: {esc(", ".join(row["owners"]))} · '
+            f'{esc(t["planDue"])}: {esc(row["dueInDays"])} {esc(t["planDays"])}</div>'
+            f'<ul class="plan-checks">{checks}</ul>{other_html}'
+            + ("" if shared else howto(card.get("actions", []), card.get("closureEvidence", [])))
+            + "</li>"
+        )
+    body = (f'<ol class="plan-list">{"".join(items)}</ol>' if items else f'<p class="muted">{esc(t["planEmpty"])}</p>')
+    common = howto(playbooks[0][0], playbooks[0][1]) if shared else ""
+    return (
+        f'<section class="plan" id="action-plan" aria-label="{esc(t["planTitle"])}">'
+        f'<h2>{esc(t["planTitle"])}</h2><p class="muted">{esc(t["planIntro"])}</p>{body}{common}</section>'
+    )
+
+
+_render_without_action_plan = render
+
+
+def render(document, locale):
+    html_text = _render_without_action_plan(document, locale)
+    start = html_text.find('id="executive-narrative"')
+    end = html_text.find("</section>", start) if start >= 0 else -1
+    if start < 0 or end < 0 or "</style>" not in html_text:
+        raise ValueError("executive narrative anchor for the action plan not found")
+    end += len("</section>")
+    html_text = html_text[:end] + action_plan_html(document, locale) + html_text[end:]
+    return html_text.replace("</style>", PLAN_CSS + "</style>", 1)
+
+
 if __name__ == "__main__":
     raise SystemExit(main())

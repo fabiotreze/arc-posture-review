@@ -111,6 +111,21 @@ def main() -> int:
                 errors.append(f"executive narrative missing attackConfirmation {row['attackConfirmation']}")
         if expected["comparison"] is not None and html.escape(str(expected["comparison"]["baselineRunId"]), quote=True) not in block:
             errors.append("executive narrative does not cite the comparison baseline")
+    plan_start = visible.find('id="action-plan"')
+    if plan_start < 0 or visible.count('id="action-plan"') != 1:
+        errors.append("action plan missing or duplicated")
+    else:
+        plan = visible[plan_start:visible.find("</section>", plan_start)]
+        positions = [plan.find('data-plan-card="' + html.escape(str(row["actionCardId"]), quote=True) + '"') for row in expected["roadmap"]["NOW"]]
+        if any(position < 0 for position in positions) or positions != sorted(positions):
+            errors.append("action plan does not follow the canonical Roadmap NOW order")
+        plan_outcomes = {row["checkId"]: row["outcome"] for row in expected["controlAssessments"]}
+        plan_statements = {row["checkId"]: row["statement"] for row in expected["traceability"]["observations"]}
+        for row in expected["roadmap"]["NOW"]:
+            for check_id in row["controlIds"]:
+                statement = plan_statements.get(check_id)
+                if plan_outcomes.get(check_id) in ("INEFFECTIVE", "AT_RISK") and statement is not None and html.escape(str(statement), quote=True) not in plan:
+                    errors.append(f"action plan missing observed statement for {check_id}")
     if errors:
         print(f"[FAIL] Checkpoint 6 report contract: {len(errors)} error(s)")
         for error in errors:
