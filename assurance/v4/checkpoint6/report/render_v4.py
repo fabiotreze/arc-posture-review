@@ -715,5 +715,88 @@ def render(document, locale):
     return html_text.replace("</style>", TRACE_CSS + "</style>", 1)
 
 
+
+# --- Optional resource index (sidecar bound by runId) -> Azure portal links ---
+_RESOURCE_INDEX: dict[str, Any] | None = None
+_RENDER_RUN_ID: Any = None
+TEXT["en-US"].update({
+    "traceLinks": "Resources (Azure portal)",
+    "traceUnbound": "Resource index ignored: its runId does not match this report.",
+    "traceBinding": "Index binding",
+    "traceFirst": "Showing the first {n} rows; the full list is in {file}.",
+    "traceNoRows": "no rows for this check in the index",
+})
+TEXT["pt-BR"].update({
+    "traceLinks": "Recursos (portal do Azure)",
+    "traceUnbound": "Índice de recursos ignorado: o runId não corresponde a este relatório.",
+    "traceBinding": "Vínculo do índice",
+    "traceFirst": "Mostrando as primeiras {n} linhas; a lista completa está em {file}.",
+    "traceNoRows": "nenhuma linha para este check no índice",
+})
+RESOURCE_CSS = r"""
+.trace .res{margin:0;padding-left:16px}.trace .res li{margin:2px 0;overflow-wrap:anywhere}
+.trace .res a{color:#0f6cbd;font-weight:650}.trace .res .attrs{font-size:11px;color:var(--muted)}
+"""
+_RESOURCE_LIMIT = 25
+
+
+def _resource_block(check_id: str, locale: str) -> str:
+    t = TEXT[locale]
+    index = _RESOURCE_INDEX
+    if index is None:
+        return ""
+    if index.get("runId") != _RENDER_RUN_ID:
+        return f'<dt>{esc(t["traceLinks"])}</dt><dd><span class="miss" data-resource-index="unbound">{esc(t["traceUnbound"])}</span></dd>'
+    rows = (index.get("checks") or {}).get(check_id)
+    if not rows:
+        return f'<dt>{esc(t["traceLinks"])}</dt><dd class="muted">{esc(t["traceNoRows"])}</dd>'
+    items = []
+    for row in rows[:_RESOURCE_LIMIT]:
+        attrs = "; ".join(f"{key}={value}" for key, value in (row.get("attributes") or {}).items() if value)
+        label = (f'<a href="{esc(row["portalUrl"])}" target="_blank" rel="noopener noreferrer">{esc(row.get("label"))}</a>'
+                 if row.get("portalUrl") else esc(row.get("label")))
+        items.append(f'<li>{label} <span class="muted">({esc(row.get("kind"))})</span><br><span class="attrs">{esc(attrs)}</span></li>')
+    more = (f'<div class="muted">{esc(t["traceFirst"].format(n=_RESOURCE_LIMIT, file=f"findings/{check_id}.csv"))}</div>'
+            if rows[_RESOURCE_LIMIT:] else "")
+    binding = f'<div class="muted">{esc(t["traceBinding"])}: {esc(index.get("binding"))} · sha256 {esc(index.get("packageSha256"))}</div>'
+    return f'<dt>{esc(t["traceLinks"])}</dt><dd data-resource-index="{esc(check_id)}"><ul class="res">{"".join(items)}</ul>{more}{binding}</dd>'
+
+
+_trace_without_resources = evidence_trace_html
+
+
+def evidence_trace_html(check_id, evidence, observation, claim, package, locale):
+    html_text = _trace_without_resources(check_id, evidence, observation, claim, package, locale)
+    block = _resource_block(check_id, locale)
+    return html_text.replace("</dl>", block + "</dl>", 1) if block else html_text
+
+
+_render_without_resources = render
+
+
+def render(document, locale):
+    global _RENDER_RUN_ID
+    _RENDER_RUN_ID = document["metadata"]["runId"]
+    html_text = _render_without_resources(document, locale)
+    return html_text.replace("</style>", RESOURCE_CSS + "</style>", 1) if _RESOURCE_INDEX is not None else html_text
+
+
+_main_without_resources = main
+
+
+def main() -> int:
+    global _RESOURCE_INDEX
+    pre = argparse.ArgumentParser(add_help=False)
+    pre.add_argument("--resources", type=Path)
+    known, rest = pre.parse_known_args()
+    if known.resources:
+        index = json.loads(known.resources.read_text(encoding="utf-8-sig"))
+        if index.get("contract") != "resource-index.v4" or not isinstance(index.get("checks"), dict):
+            raise SystemExit("invalid resource index: expected contract resource-index.v4")
+        _RESOURCE_INDEX = index
+    sys.argv = [sys.argv[0], *rest]
+    return _main_without_resources()
+
+
 if __name__ == "__main__":
     raise SystemExit(main())
