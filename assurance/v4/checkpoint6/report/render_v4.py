@@ -325,5 +325,25 @@ def main() -> int:
     return 0
 
 
+STATUS_COLORS_CSS = r"""
+.badge{border:1px solid transparent;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.badge.P0,.badge.CRITICAL,.badge.INEFFECTIVE,.badge.GAP,.badge.REGRESSED,.badge.FAIL,.badge.REFUTED,.badge[class*=" INEFFECTIVE:"],.badge[class*=" GAP:"]{background:#b42318;color:#fff}
+.badge.P1,.badge.HIGH,.badge.AT_RISK,.badge.DEGRADED,.badge.PARTIALLY_SUPPORTED,.badge.WARN,.badge.ELEVATED,.badge.WEAKNESS_INDICATED,.badge[class*=" AT_RISK:"],.badge[class*=" DEGRADED:"]{background:#b54708;color:#fff}
+.badge.P2,.badge.MEDIUM,.badge.UNKNOWN,.badge.UNASSESSED,.badge.POTENTIAL_RELEVANCE,.badge.UNRESOLVED,.badge.PARTIAL,.badge.OPEN,.badge.TODO,.badge.EXPOSURE_INDICATED,.badge.NOT_EVALUABLE,.badge[class*=" UNASSESSED:"],.badge[class*=" UNKNOWN:"]{background:#5925dc;color:#fff}
+.badge.P3,.badge.MINIMAL,.badge.LOW,.badge.EFFECTIVE,.badge.SUPPORTED,.badge.VALIDATED,.badge.IMPROVED,.badge.PASS,.badge.VERIFIED,.badge.MITIGATED,.badge.NOT_INDICATED,.badge[class*=" EFFECTIVE:"]{background:#067647;color:#fff}
+.badge.INFO,.badge.INFORMATIONAL,.badge.NOT_ASSERTED,.badge.N\/A,.badge.NOW,.badge.PROVIDER_IDENTIFIED,.badge.FULL,.badge[class*=" INFORMATIONAL:"]{background:#175cd3;color:#fff}
+.badge.HYPOTHESIS,.badge.NOT_COVERED,.badge.NONE,.badge.UNCHANGED,.badge[class*=" NOT_COVERED:"]{background:#475467;color:#fff}
+"""
+
+_render_without_status_colors = render
+
+
+def render(document, locale):
+    html = _render_without_status_colors(document, locale)
+    if "</style>" not in html:
+        raise ValueError("report has no style block")
+    return html.replace("</style>", STATUS_COLORS_CSS + "</style>", 1)
+
+
 if __name__ == "__main__":
     raise SystemExit(main())
