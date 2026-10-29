@@ -14,8 +14,8 @@ authors:
     alias: "fabiotreze"
 repository-code: "https://github.com/fabiotreze/arc-posture-review"
 url: "https://fabiotreze.github.io/arc-posture-review/"
-version: "3.9.6"
-date-released: "2026-10-27"
+version: "4.0.0"
+date-released: "2026-10-29"
 license: MIT
 keywords:
   - azure-arc
