@@ -72,10 +72,33 @@ As decisões de segurança começam antes do primeiro servidor conectado (creden
 
 ![Fluxo da coleta somente leitura e das evidências](docs/images/collection-flow.pt-BR.png)
 
-**Relatório de exemplo** (v3.9.5) de uma fixture sanitizada de laboratório (7 servidores Arc; SQL Server e Defender for Servers), anonimizado: subscription, conta, IDs e nomes de recursos de governança substituídos.
+**Relatório de exemplo** (análise no navegador) de uma fixture sanitizada de laboratório (7 servidores Arc; SQL Server e Defender for Servers), anonimizado: subscription, conta, IDs e nomes de recursos de governança substituídos.
 [Abrir o relatório de exemplo](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.pt-BR.html) · [English](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.en-US.html)
 
 ![Análise de exemplo](docs/images/sample-report.pt-BR.png)
+
+## Relatório v4 (avaliação canônica)
+
+Desde a v4.0.0, o mesmo pacote de evidências também gera uma avaliação canônica e determinística (`assessment-result.v4.json`), exibida em um relatório HTML bilíngue EN-US/PT-BR. A análise no navegador descrita acima não muda.
+
+![Relatório v4](docs/images/v4-report.pt-BR.png)
+
+- **Rastreável:** cada controle segue Evidência → Observação → Afirmação → Controle → Cenário de segurança (64 controles, 11 cenários); evidência ausente nunca vira aprovação, e caminhos de ataque nunca são afirmados como confirmados.
+- **Execução primeiro:** indicadores de status, aviso de lacunas de dados e plano de ação AGORA na ordem canônica de prioridade, com rastro da evidência recolhível para cada verificação com falha ou em risco.
+- **Links para o portal Azure (opcional):** um índice de recursos vinculado à execução (`runId` e SHA-256 do pacote) adiciona links do portal por linha de achado; links inferidos de pacote com uma única subscription são marcados como inferidos.
+- **Antes/depois:** avalie com `--baseline` para mostrar melhorias verificadas, regressões e controles inalterados.
+
+```powershell
+python assurance/v4/checkpoint5/cli/arc_posture.py evaluate --evidence arc-posture-review-<data>.zip --output assessment-result.v4.json
+pwsh tools/New-V4Report.ps1 -Assessment assessment-result.v4.json -OutputDirectory report-v4
+# opcional: links do portal Azure por linha de achado
+python tools/New-ResourceIndex.py --evidence arc-posture-review-<data>.zip --assessment assessment-result.v4.json --output resource-index.v4.json
+python assurance/v4/checkpoint6/report/render_v4.py --input assessment-result.v4.json --output report-v4/arc-posture-review.v4.pt-BR.html --locale pt-BR --resources resource-index.v4.json
+# opcional: antes/depois contra um pacote anterior
+python assurance/v4/checkpoint5/cli/arc_posture.py evaluate --evidence <depois>.zip --baseline <antes>.zip --output assessment-result.v4.json
+```
+
+Metodologia: [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) · Revisão de segurança: [docs/v4/security-review-record-v4.0.0.md](docs/v4/security-review-record-v4.0.0.md) · Manifesto, notas e checksums da release: [release/v4.0.0/](release/v4.0.0/)
 
 ## Como usar
 
@@ -105,6 +128,12 @@ docs/examples/                       relatórios de exemplo anonimizados (en-US,
 docs/images/                         imagens usadas no README
 tools/Generate-CleanPdf.py           geração de PDF limpa e validada (sem cabeçalho/rodapé do navegador)
 criteria/checks.*.json               fonte canônica bilíngue dos 64 checks e dos critérios finais de resultado
+assurance/v4/                        motor, CLI, renderer e gates da v4 (checkpoints 1-10)
+docs/v4/                             metodologia, modelo de ameaças e registro da revisão de segurança da v4
+release/v4.0.0/                      manifesto, notas e SHA256SUMS da release
+tools/New-V4Report.ps1               gera o relatório HTML v4 (EN-US e PT-BR)
+tools/New-ResourceIndex.py           links opcionais do portal Azure no relatório v4
+tools/Invoke-V4FinalGates.py         perfis de gate da v4 (pr-quality, report-quality, release, methodology, security-regression)
 validation/v3.9.5/                   relatórios, PDFs, capturas, logs e hashes de aceite sanitizados
 ```
 
@@ -126,6 +155,8 @@ python tools/Generate-CleanPdf.py build/validation/e2e-pt-BR.html --output build
 ```
 
 `Sync-ReportAssets.py` gera o catálogo/lista padrão do coletor e o array `ITEMS` de cada renderer a partir de `criteria/checks.*.json`; depois mantém alinhados o CSS responsivo compartilhado, o runtime do relatório salvo protegido por hash no CSP, o coletor embutido, o `index.html`, os dois idiomas e os dois relatórios de exemplo. `Test-CriteriaCoverage.py` exige 64 critérios bilíngues ordenados, 45 blocos automáticos `$Eval`, 19 checks manuais e os contratos explícitos de CHK-12/18/19/24/28/29/31/43. Os demais testes verificam versões, ordem das seções, integridade do CSP, links internos, um bloco de ação por prioridade, overflow no desktop/celular, cópia offline das consultas e expansão para impressão. `tools/Test-BeforePublish.ps1` executa esses gates junto com o PSScriptAnalyzer e as verificações de Git/release.
+
+**Gates da v4:** `python tools/Invoke-V4FinalGates.py --profile release` (e também `pr-quality`, `report-quality`, `methodology` e `security-regression`) roda em uma cópia isolada e não altera a árvore de trabalho. O workflow `v4 release gate` executa o perfil de release sob demanda e publica o log como evidência.
 
 Para um teste local completo de importação e exportação, use um pacote de evidências autorizado que não será commitado:
 

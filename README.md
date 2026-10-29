@@ -72,10 +72,33 @@ Security decisions start before the first server is connected (onboarding creden
 
 ![Read-only collection and evidence flow](docs/images/collection-flow.en-US.png)
 
-**Sample report** (v3.9.5) from a sanitized lab fixture (7 Arc-enabled servers; SQL Server and Defender for Servers), anonymized: subscription, account, IDs and governance resource names replaced.
+**Sample report** (browser analysis) from a sanitized lab fixture (7 Arc-enabled servers; SQL Server and Defender for Servers), anonymized: subscription, account, IDs and governance resource names replaced.
 [Open the sample report](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.en-US.html) · [Português](https://fabiotreze.github.io/arc-posture-review/docs/examples/sample-analysis.pt-BR.html)
 
 ![Sample analysis](docs/images/sample-report.en-US.png)
+
+## v4 report (canonical assessment)
+
+Since v4.0.0 the same evidence package also produces a canonical, deterministic assessment (`assessment-result.v4.json`), rendered as a bilingual EN-US/PT-BR HTML report. The browser analysis described above is unchanged.
+
+![v4 report](docs/images/v4-report.en-US.png)
+
+- **Traceable:** every control follows Evidence → Observation → Claim → Control → Security Scenario (64 controls, 11 scenarios); missing evidence never becomes a pass, and attack paths are never asserted as confirmed.
+- **Execution first:** status tiles, a data-gap callout and a NOW action plan in canonical priority order, with a collapsible evidence trace for each failing or at-risk check.
+- **Azure portal links (optional):** a resource index bound to the run (`runId` and package SHA-256) adds portal links per finding row; links inferred from a single-subscription package are marked as inferred.
+- **Before/after:** evaluate with `--baseline` to show verified improvements, regressions and unchanged controls.
+
+```powershell
+python assurance/v4/checkpoint5/cli/arc_posture.py evaluate --evidence arc-posture-review-<date>.zip --output assessment-result.v4.json
+pwsh tools/New-V4Report.ps1 -Assessment assessment-result.v4.json -OutputDirectory report-v4
+# optional: Azure portal links per finding row
+python tools/New-ResourceIndex.py --evidence arc-posture-review-<date>.zip --assessment assessment-result.v4.json --output resource-index.v4.json
+python assurance/v4/checkpoint6/report/render_v4.py --input assessment-result.v4.json --output report-v4/arc-posture-review.v4.en-US.html --locale en-US --resources resource-index.v4.json
+# optional: before/after against a previous package
+python assurance/v4/checkpoint5/cli/arc_posture.py evaluate --evidence <after>.zip --baseline <before>.zip --output assessment-result.v4.json
+```
+
+Methodology: [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) · Security review: [docs/v4/security-review-record-v4.0.0.md](docs/v4/security-review-record-v4.0.0.md) · Release manifest, notes and checksums: [release/v4.0.0/](release/v4.0.0/)
 
 ## Use
 
@@ -118,6 +141,12 @@ docs/examples/                     anonymized sample reports (en-US, pt-BR)
 docs/images/                       screenshots used in the README
 tools/Generate-CleanPdf.py         clean, validated PDF generation (no browser header/footer)
 criteria/checks.*.json             canonical bilingual source for all 64 checks and final result criteria
+assurance/v4/                      v4 engine, CLI, renderer and gates (checkpoints 1-10)
+docs/v4/                           v4 methodology, threat model and security review record
+release/v4.0.0/                    release manifest, notes and SHA256SUMS
+tools/New-V4Report.ps1             renders the v4 HTML report (EN-US and PT-BR)
+tools/New-ResourceIndex.py         optional Azure portal links for the v4 report
+tools/Invoke-V4FinalGates.py       v4 gate profiles (pr-quality, report-quality, release, methodology, security-regression)
 validation/v3.9.5/                 sanitized acceptance reports, PDFs, screenshots, logs and hashes
 ```
 
@@ -139,6 +168,8 @@ python tools/Generate-CleanPdf.py build/validation/e2e-pt-BR.html --output build
 ```
 
 `Sync-ReportAssets.py` generates the collector catalog/default check list and each renderer's `ITEMS` array from `criteria/checks.*.json`, then keeps the shared responsive CSS, CSP-hashed saved-report runtime, embedded collector, `index.html`, both languages and both sample reports aligned. `Test-CriteriaCoverage.py` enforces 64 ordered bilingual criteria, 45 automatic `$Eval` blocks, 19 manual checks, and the explicit CHK-12/18/19/24/28/29/31/43 contracts. The remaining tests check version parity, section order, CSP integrity, internal links, one action block per priority, desktop/mobile overflow, offline query copy and print expansion. `tools/Test-BeforePublish.ps1` runs these gates together with PSScriptAnalyzer and the Git/release checks.
+
+**v4 gates:** `python tools/Invoke-V4FinalGates.py --profile release` (also `pr-quality`, `report-quality`, `methodology` and `security-regression`) runs in an isolated copy and leaves the working tree unchanged. The `v4 release gate` workflow runs the release profile on demand and uploads the log as evidence.
 
 For a full local import/export test, use an authorized evidence package that will not be committed:
 

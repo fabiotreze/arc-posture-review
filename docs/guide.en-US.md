@@ -10,6 +10,8 @@
 
 > **Current lab risks:** a machine-limited run is a discovery sample, not final coverage; `PARTIAL` as a result, `ERROR` and `TODO` mean not assessed, not healthy; live Azure version metadata can fall back to static tables; and the evidence ZIP/reports contain sensitive environment data. For release validation, import and export a fresh authorized lab package after the local gates pass.
 
+> **v4 report (since v4.0.0):** the same evidence package can also produce the canonical `assessment-result.v4.json` (Evidence → Observation → Claim → Control → Scenario) and a bilingual HTML report with a NOW action plan, a per-check evidence trace and optional Azure portal links. The check IDs, criteria and decision trees in this guide are unchanged; see `docs/v4/methodology-v4.md` and the README.
+
 ## 0) Start here
 
 Three steps: **1.** go through the stages below and open the tree for each decision (click the card); **2.** generate and run the read-only script (step 2 of the HTML); **3.** load the .zip and follow the action plan.
