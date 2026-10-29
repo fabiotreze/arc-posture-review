@@ -126,6 +126,24 @@ def main() -> int:
                 statement = plan_statements.get(check_id)
                 if plan_outcomes.get(check_id) in ("INEFFECTIVE", "AT_RISK") and statement is not None and html.escape(str(statement), quote=True) not in plan:
                     errors.append(f"action plan missing observed statement for {check_id}")
+    if plan_start >= 0:
+        trace_outcomes = {row["checkId"]: row["outcome"] for row in expected["controlAssessments"]}
+        trace_evidence = {row["checkId"]: row for row in expected["traceability"]["evidence"]}
+        trace_plan = visible[plan_start:visible.find("</section>", plan_start)]
+        for row in expected["roadmap"]["NOW"]:
+            for check_id in row["controlIds"]:
+                if trace_outcomes.get(check_id) not in ("INEFFECTIVE", "AT_RISK"):
+                    continue
+                marker = 'data-trace="' + html.escape(str(check_id), quote=True) + '"'
+                trace_start = trace_plan.find(marker)
+                if trace_start < 0:
+                    errors.append(f"evidence trace missing for {check_id}")
+                    continue
+                trace = trace_plan[trace_start:trace_plan.find("</details>", trace_start)]
+                item = trace_evidence.get(check_id, {})
+                for value in [item.get("detail"), *(item.get("sources") or [])]:
+                    if value is not None and html.escape(str(value), quote=True) not in trace:
+                        errors.append(f"evidence trace for {check_id} missing canonical value {value}")
     if errors:
         print(f"[FAIL] Checkpoint 6 report contract: {len(errors)} error(s)")
         for error in errors:
