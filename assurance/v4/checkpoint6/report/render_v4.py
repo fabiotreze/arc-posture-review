@@ -964,6 +964,28 @@ def render(document, locale):
     html_text = _re.sub(chk, lambda m: (f'<a class="chk-link" href="#chk-{m.group(1)}">{m.group(0)}</a>' if m.group(1) in targets else m.group(0)), html_text)
     return html_text.replace("</style>", LINKS18_CSS + "</style>", 1)
 
+# --- PR19-PRINT: print/PDF pagination (print-only CSS, render-only) ---
+PRINT19_CSS = r"""
+@media print{
+.section,.narrative,details,.tablewrap{break-inside:auto!important}
+.section{margin:0 0 6mm}
+#overview,#zt,#scenarios,#defense,#risks,#cards,#roadmap,#checks,#evidence,#comparison{break-before:page}
+h2,h3,h4,summary{break-after:avoid}
+tr,.card,.plan-item,.plan-howto,li{break-inside:avoid}
+thead{display:table-header-group}
+.ztctl>.inside{display:none!important}.ztctl>summary{list-style:none}
+}
+"""
+
+_render_without_print19 = render
+
+
+def render(document, locale):
+    html_text = _render_without_print19(document, locale)
+    if "</style>" not in html_text:
+        raise ValueError("report style block not found for print CSS")
+    return html_text.replace("</style>", PRINT19_CSS + "</style>", 1)
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
