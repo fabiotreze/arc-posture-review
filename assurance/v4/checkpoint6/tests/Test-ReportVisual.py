@@ -29,8 +29,8 @@ def verify(browser, path: Path, artifacts: Path, prefix: str) -> None:
             raise AssertionError(f"{path.name}@{width}: browser errors: {errors[:4]}")
         if dims["scroll"] > dims["client"]:
             raise AssertionError(f"{path.name}@{width}: horizontal overflow")
-        if page.locator("section.section").count() != 11:
-            raise AssertionError(f"{path.name}: expected 11 report sections")
+        if page.locator("section.section").count() != 10:  # PR17: CP6 fixture has no baseline, so no Comparison section
+            raise AssertionError(f"{path.name}: expected 10 report sections (no baseline)")
         if page.locator("[data-scenario-id]").count() != 11:
             raise AssertionError(f"{path.name}: expected 11 scenarios")
         if page.locator("#comparison-null").count() != 1:
