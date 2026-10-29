@@ -137,6 +137,32 @@ def section(anchor: str, title: str, body: str) -> str:
     return f'<section class="section" id="{esc(anchor)}"><h2>{esc(title)}</h2>{body}</section>'
 
 
+TEXT["en-US"].update({
+    "validationTitle": "Not absolute truth.",
+    "validationBody": (
+        "This report reflects only the evidence collected, at one point in time and for one scope. "
+        "Every finding must be validated and certified by qualified people against the real environment "
+        "and official sources before any decision, remediation or customer commitment. "
+        "It is informational: not a compliance certification, an audit opinion or a guarantee of security. "
+        "Scenarios are hypotheses, and no attack is confirmed. "
+        "Parts of this tool and its text were created with AI assistance and may contain errors. "
+        "See DISCLAIMER.md in the repository."
+    ),
+})
+TEXT["pt-BR"].update({
+    "validationTitle": "Não é verdade absoluta.",
+    "validationBody": (
+        "Este relatório reflete apenas a evidência coletada, em um momento e escopo específicos. "
+        "Todo achado precisa ser validado e certificado por profissionais qualificados, no ambiente real "
+        "e em fontes oficiais, antes de qualquer decisão, correção ou compromisso com o cliente. "
+        "O conteúdo é informativo: não é certificação de conformidade, parecer de auditoria "
+        "nem garantia de segurança. Os cenários são hipóteses, e nenhum ataque é confirmado. "
+        "Partes desta ferramenta e do seu texto foram criadas com apoio de IA e podem conter erros. "
+        "Veja o DISCLAIMER.md no repositório."
+    ),
+})
+
+
 def validate_document(document: dict[str, Any]) -> None:
     _CANONICAL.validate_canonical_assessment(document)
     semantic = dict(document)
@@ -157,6 +183,10 @@ def validate_document(document: dict[str, Any]) -> None:
 def render(document: dict[str, Any], locale: str) -> str:
     validate_document(document)
     t = TEXT[locale]
+    notice_html = (
+        '<section class="notice" id="validation-notice" role="note">'
+        f'<strong>{esc(t["validationTitle"])}</strong> {esc(t["validationBody"])}</section>'
+    )
     meta = document["metadata"]
     assurance = document["assurance"]
     controls = document["controlAssessments"]
@@ -278,7 +308,7 @@ def render(document: dict[str, Any], locale: str) -> str:
     canonical_json = json.dumps(document, ensure_ascii=False, sort_keys=True).replace("</", "<\\/")
     return f'''<!doctype html>
 <html lang="{esc(locale)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="arc-report-contract" content="assessment-result.v4"><meta name="arc-report-mode" content="render-only"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'sha256-{script_digest}'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'"><title>{esc(t["title"])}</title><style>{CSS}</style></head>
-<body><div class="shell"><aside class="side"><div class="brand">{esc(t["title"])}<small>{esc(t["subtitle"])}</small></div><nav>{nav}</nav></aside><main class="main"><header class="hero"><h1>{esc(t["title"])}</h1><p>{esc(t["subtitle"])}</p><div class="meta"><span>{esc(t["source"])}: assessment-result.v4.json</span><span>{esc(meta["runId"])}</span><span>{esc(t["generated"])}: {esc(meta["generatedAt"])}</span><span>{esc(t["integrity"])}: {esc(source["integrity"])}</span></div></header><div class="toolbar"><button class="btn" id="print">{esc(t["print"])}</button><button class="btn" id="expand">{esc(t["expand"])}</button><button class="btn" id="collapse">{esc(t["collapse"])}</button></div>{sections}<footer class="footer">assessment-result.v4 · {esc(document["outputDigest"])}<br>Render-only report: risk, priority, scenario and roadmap values are supplied by the Evaluation Engine.</footer></main></div><script type="application/json" id="canonical-assessment">{canonical_json}</script><script>{JS}</script></body></html>'''
+<body><div class="shell"><aside class="side"><div class="brand">{esc(t["title"])}<small>{esc(t["subtitle"])}</small></div><nav>{nav}</nav></aside><main class="main">{notice_html}<header class="hero"><h1>{esc(t["title"])}</h1><p>{esc(t["subtitle"])}</p><div class="meta"><span>{esc(t["source"])}: assessment-result.v4.json</span><span>{esc(meta["runId"])}</span><span>{esc(t["generated"])}: {esc(meta["generatedAt"])}</span><span>{esc(t["integrity"])}: {esc(source["integrity"])}</span></div></header><div class="toolbar"><button class="btn" id="print">{esc(t["print"])}</button><button class="btn" id="expand">{esc(t["expand"])}</button><button class="btn" id="collapse">{esc(t["collapse"])}</button></div>{sections}<footer class="footer">assessment-result.v4 · {esc(document["outputDigest"])}<br>Render-only report: risk, priority, scenario and roadmap values are supplied by the Evaluation Engine.</footer></main></div><script type="application/json" id="canonical-assessment">{canonical_json}</script><script>{JS}</script></body></html>'''
 
 
 def main() -> int:

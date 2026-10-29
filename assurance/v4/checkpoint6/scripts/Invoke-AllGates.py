@@ -35,6 +35,7 @@ def main() -> int:
         ("cp6-render-en-US", [sys.executable, str(renderer), "--input", str(ASSESSMENT), "--output", str(EN), "--locale", "en-US"]),
         ("cp6-render-pt-BR", [sys.executable, str(renderer), "--input", str(ASSESSMENT), "--output", str(PT), "--locale", "pt-BR"]),
         ("cp6-render-purity", [sys.executable, str(tests / "Test-RenderPurity.py")]),
+        ("cp6-validation-notice", [sys.executable, str(tests / "Test-ValidationNotice.py")]),
         ("cp6-contract-en-US", [sys.executable, str(tests / "Test-ReportContract.py"), "--assessment", str(ASSESSMENT), "--html", str(EN)]),
         ("cp6-contract-pt-BR", [sys.executable, str(tests / "Test-ReportContract.py"), "--assessment", str(ASSESSMENT), "--html", str(PT)]),
         ("cp6-localization-parity", [sys.executable, str(tests / "Test-LocalizationParity.py"), "--en", str(EN), "--pt", str(PT)]),
