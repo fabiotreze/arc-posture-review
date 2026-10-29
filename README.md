@@ -122,6 +122,7 @@ flowchart LR
 1. Open the HTML and follow **Start here**: pick your decisions in the visual trees, then choose the scope (current subscription, list or management group) and the checks.
 2. Download the script and run it in **Azure Cloud Shell (PowerShell)**: `./Invoke-ArcPostureReview.ps1`
    - or use the standalone script: `./Invoke-ArcPostureReview.ps1 -Subscriptions <id1>,<id2>` or `-ManagementGroup <name>`.
+   - add `-V4Report` to also generate the v4 report next to the package (clones the matching release tag; requires git and Python 3.10+). If they are missing, the collection still completes and the manual command is printed.
 3. Load the generated `.zip` in the HTML and compare the SHA-256 shown with the one printed by the script.
 4. Review the analysis, apply statuses and export the report.
 

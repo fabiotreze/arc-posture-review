@@ -111,6 +111,7 @@ Metodologia: [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) · Revisão 
 
 1. Abra o HTML e siga o **Comece aqui**: escolha as decisões nas árvores visuais e depois o escopo e as verificações.
 2. Baixe o script e execute no **Azure Cloud Shell (PowerShell)**: `./Invoke-ArcPostureReview.ps1` (ou `-Subscriptions <id1>,<id2>` / `-ManagementGroup <nome>`).
+   - Acrescente `-V4Report` para gerar também o relatório v4 ao lado do pacote (clona a tag da mesma versão; requer git e Python 3.10+). Se faltarem, a coleta termina normalmente e o comando manual é exibido.
 3. Carregue o `.zip` gerado e compare o SHA-256 exibido com o impresso pelo script.
 4. Revise a análise, aplique os status e exporte o relatório.
 
