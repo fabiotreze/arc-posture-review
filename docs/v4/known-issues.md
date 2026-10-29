@@ -2,12 +2,11 @@
 
 ## KI-V4-001 — pypdf Dependabot alerts
 
-- **Status:** OPEN — STABLE RELEASE BLOCKER
-- **Affected approved dependency:** `pypdf==6.19.0`
-- **Observed security queue:** 11 Dependabot alerts
-- **Desired patch:** `6.21.2`
-- **Constraint:** `6.21.2` is unavailable in the approved package feed.
-- **Effect:** v4.0.0-rc.1 validation may continue, but stable v4.0.0 publication is blocked.
-- **Exit criteria:** the approved feed carries a remediated version and all gates pass with the updated pin, or the security owner records a time-bounded formal acceptance through the organization’s normal process.
+- **Status:** RESOLVED — remediated by upgrading the approved pin
+- **Previous approved dependency:** `pypdf==6.19.0`
+- **Current approved dependency:** `pypdf==6.21.2`
+- **Observed security queue before remediation:** 11 Dependabot alerts per requirements file (`requirements-v4.txt` and `requirements-dev.txt`)
+- **Remediation:** `6.21.2` is the highest first-patched version among those alerts. It now resolves from the approved package feed, both requirements files carry the new pin and the CP8/CP9/CP10 gates validate the resolved state.
+- **Effect:** the dependency blocker is closed. Stable v4.0.0 publication still requires the security-review checklist to be repeated and approved.
 
-No workflow or integration script in this package bypasses this blocker or suppresses the alerts.
+No workflow or integration script in this package bypasses the release gates or suppresses alerts.

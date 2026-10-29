@@ -1,6 +1,7 @@
 {
   "release": "v4.0.0",
   "status": "PREPARED_BLOCKED",
+  "blockedReason": "Security-review checklist must be repeated after KI-V4-001 remediation",
   "sourceBranch": "feature/v4-security-model",
   "sourceCheckpointCommit": "549558a",
   "checkpoints": [6, 7, 8, 9, 10],
@@ -8,17 +9,18 @@
   "legacyReport": "v3.9.6",
   "gateEntrypoint": "tools/Invoke-V4FinalGates.py",
   "publishable": false,
-  "blockers": [
+  "blockers": [],
+  "resolvedBlockers": [
     {
       "id": "KI-V4-001",
-      "dependency": "pypdf==6.19.0",
+      "status": "RESOLVED",
+      "dependency": "pypdf==6.21.2",
+      "previousDependency": "pypdf==6.19.0",
       "dependabotAlerts": 11,
-      "targetPatch": "6.21.2",
-      "constraint": "Target patch unavailable in approved feed"
+      "resolution": "Pin upgraded to the highest first-patched version; resolves from the approved feed"
     }
   ],
   "requiredBeforePublication": [
-    "Resolve or formally accept KI-V4-001",
     "Repeat the security-review checklist",
     "Run the release gate from a clean reviewed commit",
     "Validate SHA256SUMS"
