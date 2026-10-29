@@ -10,6 +10,8 @@
 .NOTES
   Requirements: authenticated Azure CLI (az login) and Reader role in the scope
   (Reader also covers Defender for Cloud). Recommended: Azure Cloud Shell (PowerShell).
+  Optional -V4Report: after the package, clones the release tag matching this version from GitHub
+  and renders the v4 report locally next to the .zip (requires git and Python 3.10+).
 #>
 [CmdletBinding()]
 param(
@@ -22,7 +24,8 @@ param(
   [string[]]$RequiredTags = @('env', 'owner', 'criticality', 'costCenter', 'dataClassification', 'patchWindow'),
   [string[]]$AllowedRegions = @(),
   [string[]]$Checks = @('CHK-01', 'CHK-02', 'CHK-03', 'CHK-04', 'CHK-05', 'CHK-06', 'CHK-07', 'CHK-08', 'CHK-09', 'CHK-10', 'CHK-11', 'CHK-12', 'CHK-13', 'CHK-14', 'CHK-15', 'CHK-16', 'CHK-17', 'CHK-18', 'CHK-19', 'CHK-20', 'CHK-21', 'CHK-22', 'CHK-23', 'CHK-24', 'CHK-25', 'CHK-26', 'CHK-27', 'CHK-28', 'CHK-29', 'CHK-30', 'CHK-31', 'CHK-32', 'CHK-33', 'CHK-34', 'CHK-35', 'CHK-36', 'CHK-37', 'CHK-38', 'CHK-39', 'CHK-40', 'CHK-41', 'CHK-42', 'CHK-43', 'CHK-44', 'CHK-45', 'CHK-46', 'CHK-47', 'CHK-48', 'CHK-49', 'CHK-50', 'CHK-51', 'CHK-52', 'CHK-53', 'CHK-54', 'CHK-55', 'CHK-56', 'CHK-57', 'CHK-58', 'CHK-59', 'CHK-60', 'CHK-61', 'CHK-62', 'CHK-63', 'CHK-64'),
-  [string]$OutputRoot = './arc-posture-review'
+  [string]$OutputRoot = './arc-posture-review',
+  [switch]$V4Report
 )
 
 $ErrorActionPreference = 'Stop'
@@ -1439,5 +1442,44 @@ try {
   try { $zh = (Get-FileHash -Path $Zip -Algorithm SHA256).Hash; Write-Step "Package SHA-256: $zh (verify in step 3 of the checklist)"; Save-Text ($Zip + '.sha256') ($zh + '  ' + (Split-Path $Zip -Leaf)) } catch { Write-Verbose $_.Exception.Message }
 }
 catch { Write-Warning "Could not compress ($($_.Exception.Message)). Compress the folder $RunDir manually." }
+# V4REPORT_BEGIN
+if ($V4Report) {
+  $v4Manual = "git clone --depth 1 --branch $ScriptVersion https://github.com/fabiotreze/arc-posture-review.git ; python3 arc-posture-review/assurance/v4/checkpoint5/cli/arc_posture.py evaluate --evidence <package.zip> --output assessment.v4.json ; python3 arc-posture-review/assurance/v4/checkpoint6/report/render_v4.py --input assessment.v4.json --output report.v4.html --locale pt-BR"
+  $v4Py = $null
+  foreach ($v4Cand in @('python3', 'python')) {
+    $v4Cmd = Get-Command $v4Cand -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+    if (-not $v4Cmd) { continue }
+    $v4Ver = (& $v4Cmd.Source -c 'import sys; print("%d.%d" % sys.version_info[:2])' 2>$null | Select-Object -First 1)
+    if ($v4Ver -match '^\d+\.\d+$' -and ([version]$v4Ver -ge [version]'3.10')) { $v4Py = $v4Cmd.Source; break }
+  }
+  $v4Git = Get-Command git -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
+  if (-not (Test-Path -LiteralPath $Zip)) { Write-Warning 'V4 report skipped: the package .zip is not available.' }
+  elseif (-not $v4Py -or -not $v4Git) { Write-Warning ('V4 report skipped: git and Python 3.10+ are required. Manual: ' + $v4Manual) }
+  else {
+    try {
+      $v4Kit = Join-Path ([System.IO.Path]::GetTempPath()) ('arc-posture-review-kit-' + $ScriptVersion)
+      if (-not (Test-Path -LiteralPath (Join-Path $v4Kit 'assurance/v4'))) {
+        Remove-Item -LiteralPath $v4Kit -Recurse -Force -ErrorAction SilentlyContinue
+        & $v4Git.Source -c advice.detachedHead=false clone --quiet --depth 1 --branch $ScriptVersion https://github.com/fabiotreze/arc-posture-review.git $v4Kit 2>$null
+        if ($LASTEXITCODE -ne 0) { throw "git clone of $ScriptVersion failed" }
+      }
+      $v4Out = $RunDir + '-v4'
+      New-Item -ItemType Directory -Path $v4Out -Force | Out-Null
+      $v4Json = Join-Path $v4Out 'assessment.v4.json'
+      $v4Idx = Join-Path $v4Out 'resource-index.v4.json'
+      & $v4Py (Join-Path $v4Kit 'assurance/v4/checkpoint5/cli/arc_posture.py') evaluate --evidence $Zip --output $v4Json
+      if ($LASTEXITCODE -ne 0) { throw 'v4 evaluate failed' }
+      & $v4Py (Join-Path $v4Kit 'tools/New-ResourceIndex.py') --evidence $Zip --assessment $v4Json --output $v4Idx
+      if ($LASTEXITCODE -ne 0) { throw 'v4 resource index failed' }
+      foreach ($v4Loc in @('pt-BR', 'en-US')) {
+        & $v4Py (Join-Path $v4Kit 'assurance/v4/checkpoint6/report/render_v4.py') --input $v4Json --output (Join-Path $v4Out ('arc-posture-review.v4.' + $v4Loc + '.html')) --locale $v4Loc --resources $v4Idx
+        if ($LASTEXITCODE -ne 0) { throw ('v4 render ' + $v4Loc + ' failed') }
+      }
+      Write-Step ('V4 report: ' + $v4Out + ' (arc-posture-review.v4.pt-BR.html, arc-posture-review.v4.en-US.html)')
+    }
+    catch { Write-Warning ('V4 report not generated (' + $_.Exception.Message + '). The package .zip is unaffected. Manual: ' + $v4Manual) }
+  }
+}
+# V4REPORT_END
 Write-Step ("Completed in $Dur s. $CountTxt")
 Write-Step 'Upload the .zip on the checklist Results tab.'
