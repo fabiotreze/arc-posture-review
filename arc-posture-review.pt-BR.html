@@ -378,6 +378,9 @@
       max-height: none !important; font-size: 6.5pt !important;
     }
   }
+
+  .portal-link { margin-left: 4px; font-size: 12px; white-space: nowrap; }
+  .v4-note { border-left: 3px solid #0f6cbd; padding-left: 8px; }
   /* REPORT_RESPONSIVE_END */
 
   .report-part-title { margin: 20px 0 0; padding: 14px 16px 4px; border-top: 3px solid var(--accent); color: var(--text); font-size: 22px; }
@@ -2791,6 +2794,7 @@ Write-Step 'Upload the .zip on the checklist Results tab.'
       '</div><p class="msg" style="padding:6px 0 0">Cálculo no modelo do Secure Score do Defender for Cloud: cada controle vale pontos pelo peso da severidade (Alta 3, Média 2, Baixa 1) e pontua pela proporção de máquinas saudáveis; verificações com a mesma causa formam um controle e contam uma vez; quando o achado não é por máquina, PASS = 100%, WARN = 50%, FAIL = 0. Resultados conclusivos PASS/WARN/FAIL entram na conta mesmo com cobertura PARTIAL; PARTIAL como resultado, INFO, N/A, TODO e ERROR ficam fora. A cobertura reduz a confiança, não apaga um desvio comprovado. – = domínio sem verificação automática avaliada. É um índice de apoio do kit: a medida oficial é o Secure Score e a conformidade MCSB do Defender for Cloud.</p></div></div>');
     h.push(quickRead(L, sc));
     h.push("<p class=\"msg result-semantics\"><b>Semântica:</b> Resultado do controle e Cobertura da evidência são eixos independentes. Um FAIL pode ser conclusivo com cobertura PARTIAL quando a condição observada prova o desvio, mas uma dependência externa ou parte do escopo não foi coletada. PARTIAL como resultado significa que não há base para concluir PASS, WARN ou FAIL.</p>");
+    h.push('<p class="msg v4-note"><b>Relatório v4:</b> esta análise no navegador mantém o formato estabelecido. Para o relatório v4 canônico (plano de ação AGORA, rastro da evidência por verificação e links do portal Azure), rode a CLI v4 sobre este pacote: veja o README, seção Relatório v4. As tabelas de achados abaixo trazem links do portal Azure quando o pacote identifica o recurso.</p>');
     h.push('<div class="ana">');
     h.push("<h2 class=\"report-part-title\">Avaliação executiva</h2><p class=\"report-part-note\">Conclusões, risco, cobertura e plano de ação para decisão.</p>");
     if (typeof uxPlanHtml === "function") h.push(uxPlanHtml());
@@ -2854,6 +2858,7 @@ Write-Step 'Upload the .zip on the checklist Results tab.'
     h.push("</div>");
     $("analysis").innerHTML = h.join("");
     setTimeout(foldAna, 0);
+    uxPortalWatch();
     document.querySelectorAll("#analysis details.pr").forEach(function (d) {
       d.addEventListener("toggle", async function () {
         if (!d.open || d.dataset.loaded || !d.dataset.file || !ZIP) return; d.dataset.loaded = "1";
@@ -3270,6 +3275,43 @@ Write-Step 'Upload the .zip on the checklist Results tab.'
     MDA.files.forEach(function (fi) { L.push(""); L.push("**" + fi.name + "** — " + fi.desc + " (" + (fi.rows ? fi.rows.length : 0) + " linha(s))"); fi.lines.forEach(function (l) { L.push("- " + cellMd(l)); }); });
     return L;
   }
+  function uxPortalLinks(root) {
+    if (!root || !root.querySelectorAll) return;
+    var M = (typeof DATA === "object" && DATA && DATA.machines) || [], byKey = {}, byName = {};
+    M.forEach(function (m) {
+      var id = m && m.id ? String(m.id) : ""; if (!/^\/subscriptions\//i.test(id)) return;
+      var n = String(m.name || "").toLowerCase(), g = String(m.resourceGroup || "").toLowerCase();
+      byKey[g + "|" + n] = id; (byName[n] = byName[n] || []).push(id);
+    });
+    var inv = {}; if (typeof HDRLABEL === "object" && HDRLABEL) Object.keys(HDRLABEL).forEach(function (k) { inv[HDRLABEL[k]] = k; });
+    root.querySelectorAll(".csv table.gt").forEach(function (t) {
+      if (t.getAttribute("data-portal")) return; t.setAttribute("data-portal", "1");
+      var keys = Array.prototype.map.call(t.querySelectorAll("thead th"), function (th) { var x = th.textContent.trim(); return inv[x] || x; });
+      var iName = keys.indexOf("name") >= 0 ? keys.indexOf("name") : keys.indexOf("machine"), iRg = keys.indexOf("resourceGroup"), iItem = keys.indexOf("item");
+      t.querySelectorAll("tbody tr").forEach(function (tr) {
+        var td = tr.children, rid = null, at = null, j, v;
+        for (j = 0; j < td.length; j++) { v = td[j].textContent.trim(); if (/^\/subscriptions\/\S+$/i.test(v)) { rid = v; at = td[j]; break; } }
+        if (!rid && iName >= 0 && iRg >= 0 && td[iName] && td[iRg]) {
+          v = td[iRg].textContent.trim().toLowerCase() + "|" + td[iName].textContent.trim().toLowerCase();
+          if (byKey[v]) { rid = byKey[v]; at = td[iName]; }
+        }
+        if (!rid && iItem >= 0 && td[iItem] && /MDE/.test(td[iItem].textContent)) {
+          var mm = /:\s*(\S+)\s*$/.exec(td[iItem].textContent.trim()), c = mm ? (byName[mm[1].toLowerCase()] || []) : [];
+          if (c.length === 1) { rid = c[0]; at = td[iItem]; }
+        }
+        if (!rid || !at) return;
+        var a = document.createElement("a");
+        a.className = "portal-link"; a.href = "https://portal.azure.com/#@/resource" + rid; a.target = "_blank"; a.rel = "noopener noreferrer"; a.title = rid; a.textContent = "\u2197 portal";
+        at.appendChild(document.createTextNode(" ")); at.appendChild(a);
+      });
+    });
+  }
+  function uxPortalWatch() {
+    var root = $("analysis"); if (!root || root.getAttribute("data-portal-watch") || typeof MutationObserver !== "function") return;
+    root.setAttribute("data-portal-watch", "1");
+    new MutationObserver(function () { uxPortalLinks(root); }).observe(root, { childList: true, subtree: true });
+    uxPortalLinks(root);
+  }
   async function loadAllFindings() {
     var ds = document.querySelectorAll("#analysis details.pr");
     for (var i = 0; i < ds.length; i++) {
@@ -3302,6 +3344,7 @@ Write-Step 'Upload the .zip on the checklist Results tab.'
     var imp = state.imported || {};
     var css = Array.prototype.map.call(document.querySelectorAll("style"), function (x) { return x.outerHTML; }).join("");
     var c = $("analysis").cloneNode(true);
+    uxPortalLinks(c);
     c.querySelectorAll("details").forEach(function (d) { d.setAttribute("open", ""); });
     c.querySelectorAll("details.items, .fcard details").forEach(function (d) { d.removeAttribute("open"); });
     c.querySelectorAll(".act .body").forEach(function (d) { d.removeAttribute("hidden"); });
