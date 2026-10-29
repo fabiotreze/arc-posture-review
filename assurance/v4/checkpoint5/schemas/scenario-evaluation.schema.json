@@ -25,7 +25,10 @@
         "Respond": {"$ref": "#/$defs/defense"}, "Recover": {"$ref": "#/$defs/defense"}
       }
     },
-    "guardrail": {"type": "string", "minLength": 20}
+    "guardrail": {"type": "string", "minLength": 20},
+    "hypothesis": {"type": "string", "minLength": 20},
+    "validationState": {"enum": ["HYPOTHESIS", "POTENTIAL_RELEVANCE", "PROVIDER_IDENTIFIED", "VALIDATED"]},
+    "attackPath": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "object", "additionalProperties": false, "required": ["from", "to", "boundaryId", "requires"], "properties": {"from": {"enum": ["IDENTITY", "MANAGEMENT", "HOST"]}, "to": {"enum": ["MANAGEMENT", "HOST", "DEFENSE"]}, "boundaryId": {"type": "string", "pattern": "^SB0[1-8]$"}, "requires": {"type": "array", "items": {"type": "string"}}}}}
   },
   "$defs": {
     "defense": {

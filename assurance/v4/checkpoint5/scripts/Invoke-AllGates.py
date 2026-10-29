@@ -32,6 +32,7 @@ def main() -> int:
         ("cp5-determinism-tests", [sys.executable, str(CP5 / "tests" / "Test-CanonicalDeterminism.py")]),
         ("cp5-before-after-tests", [sys.executable, str(CP5 / "tests" / "Test-CanonicalCompare.py")]),
         ("cp5-cli-tests", [sys.executable, str(CP5 / "tests" / "Test-CanonicalCLI.py")]),
+        ("cp5-scenario-validation-state", [sys.executable, str(CP5 / "tests" / "Test-ScenarioValidationState.py")]),
         ("cp5-python-compile", [sys.executable, "-m", "compileall", "-q", str(CP5)]),
     ]
     failures = [label for label, command in steps if not run(label, command)]

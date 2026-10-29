@@ -194,9 +194,36 @@ def validate_canonical_assessment(document: dict[str, Any]) -> None:
         raise EvaluationError("canonical assessment scenarios must be AS01..AS11 exactly once")
 
 
+_POTENTIAL = {"EXPOSURE_INDICATED", "WEAKNESS_INDICATED"}
+
+
+def _attach_scenario_catalog(scenarios):
+    """Copy hypothesis and attackPath from the CP3 catalog; derive validationState by rule."""
+    import json as _json
+    from pathlib import Path as _Path
+
+    path = _Path(REPO_ROOT) / "assurance" / "v4" / "checkpoint3" / "data" / "security-scenarios.json"
+    catalog = _json.loads(path.read_text(encoding="utf-8-sig"))
+    rows = catalog if isinstance(catalog, list) else next(v for v in catalog.values() if isinstance(v, list))
+    by_id = {row["id"]: row for row in rows}
+    enriched = []
+    for scenario in scenarios:
+        entry = by_id.get(scenario["scenarioId"])
+        if entry is None:
+            raise EvaluationError("scenario %s is missing from the CP3 catalog" % scenario["scenarioId"])
+        item = dict(scenario)
+        item["hypothesis"] = entry["hypothesis"]
+        item["attackPath"] = _json.loads(_json.dumps(entry["attackPath"]))
+        item["validationState"] = (
+            "POTENTIAL_RELEVANCE" if scenario["attackPathAssessment"] in _POTENTIAL else "HYPOTHESIS"
+        )
+        enriched.append(item)
+    return enriched
+
+
 def build_assessment(raw: dict[str, Any]) -> dict[str, Any]:
     controls = sorted(raw["controlAssessments"], key=lambda row: row["checkId"])
-    scenarios = sorted(raw["securityScenarios"], key=lambda row: row["scenarioId"])
+    scenarios = _attach_scenario_catalog(sorted(raw["securityScenarios"], key=lambda row: row["scenarioId"]))
     document: dict[str, Any] = {
         "metadata": {
             "contractName": CONTRACT_NAME,

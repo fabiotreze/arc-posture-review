@@ -23,7 +23,7 @@
     "controlAssessments": {"type": "array", "minItems": 64, "maxItems": 64, "items": {"$ref": "control-evaluation.schema.json"}},
     "zeroTrust": {"$ref": "#/$defs/zeroTrust"},
     "tiers": {"$ref": "#/$defs/tiers"},
-    "securityScenarios": {"type": "array", "minItems": 11, "maxItems": 11, "items": {"$ref": "scenario-evaluation.schema.json"}},
+    "securityScenarios": {"type": "array", "minItems": 11, "maxItems": 11, "items": {"allOf": [{"$ref": "scenario-evaluation.schema.json"}, {"required": ["hypothesis", "validationState", "attackPath"]}]}},
     "defenseCoverage": {"$ref": "#/$defs/defenseCoverage"},
     "residualRisk": {"$ref": "#/$defs/residualRisk"},
     "actionCards": {"type": "array", "maxItems": 11, "items": {"$ref": "action-card-instance.schema.json"}},

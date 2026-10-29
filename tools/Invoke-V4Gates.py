@@ -29,6 +29,9 @@ def cleanup():
 
 def git_status():
     """Return the sorted porcelain status lines."""
+    if not (ROOT / ".git").exists():
+        print("[WARN] Git metadata absent; working-tree cleanliness cannot be proven")
+        return []
     result = subprocess.run(
         ["git", "status", "--porcelain=v1", "--untracked-files=all"],
         cwd=ROOT, text=True, capture_output=True,
