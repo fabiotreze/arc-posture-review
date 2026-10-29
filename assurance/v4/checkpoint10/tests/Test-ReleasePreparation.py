@@ -12,10 +12,10 @@ RELEASE = ROOT / "release/v4.0.0"
 def main() -> int:
     errors: list[str] = []
     manifest = json.loads((RELEASE / "release-manifest.json").read_text(encoding="utf-8"))
-    if manifest.get("release") != "v4.0.0" or manifest.get("status") != "PREPARED_BLOCKED":
+    if manifest.get("release") != "v4.0.0" or manifest.get("status") != "APPROVED_FOR_PUBLICATION":
         errors.append("release manifest status drift")
-    if manifest.get("publishable") is not False:
-        errors.append("stable release must remain non-publishable")
+    if manifest.get("publishable") is not True or (manifest.get("securityReview") or {}).get("decision") != "APPROVED" or not (manifest.get("securityReview") or {}).get("reviewer") or not (manifest.get("securityReview") or {}).get("date"):
+        errors.append("stable release is publishable only with an APPROVED securityReview (reviewer and date)")
     blockers = {item.get("id"): item for item in manifest.get("blockers", [])}
     if "KI-V4-001" in blockers:
         errors.append("KI-V4-001 must not remain an open blocker after remediation")
@@ -44,7 +44,7 @@ def main() -> int:
         print(f"[FAIL] CP10 release preparation: {len(errors)} error(s)")
         for error in errors: print(" - " + error)
         return 1
-    print(f"[PASS] CP10 v4.0.0 PREPARED_BLOCKED manifest and {len(seen)} SHA-256 entries")
+    print(f"[PASS] CP10 v4.0.0 APPROVED_FOR_PUBLICATION manifest and {len(seen)} SHA-256 entries")
     return 0
 
 
