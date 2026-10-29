@@ -885,6 +885,85 @@ def render(document, locale):
         html_text = html_text.replace(overview.group(0), overview.group(0) + note.group(0), 1)
     return html_text.replace("</style>", NAV17_CSS + "</style>", 1)
 
+# --- PR18-LINKS: CHK pills link to the Checks table; compact Zero Trust x Tier view (render-only post-processing) ---
+LINKS18_CSS = r"""
+a.chk-link{text-decoration:none;color:inherit}
+a.chk-link .badge{cursor:pointer}
+a.chk-link:hover .badge,a.chk-link:focus .badge{outline:2px solid #1f6feb;outline-offset:1px}
+#checks tr[id^="chk-"]{scroll-margin-top:24px}
+#checks tr:target td{background:#fff4c2;transition:background .3s}
+.ztctl>summary{cursor:pointer;font-weight:650;color:#123b60;white-space:nowrap}
+.ztctl>.inside{margin-top:6px}
+.ztbar{display:flex;height:12px;min-width:160px;border-radius:6px;overflow:hidden;margin:0 0 6px;background:#eef2f6}
+.ztbar .seg{display:block;height:100%}
+.ztbar .seg.INEFFECTIVE{background:#d92d20}.ztbar .seg.AT_RISK{background:#dc6803}.ztbar .seg.EFFECTIVE{background:#079455}
+.ztbar .seg.INFORMATIONAL{background:#1570ef}.ztbar .seg.UNASSESSED{background:#7a5af8}.ztbar .seg.other{background:#98a2b3}
+.ztmap>summary{cursor:pointer;font-size:1.05em;font-weight:700;margin:14px 0 8px}
+@media print{.ztbar{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+"""
+LINKS18_TEXT = {
+    "en-US": {"controls": "controls", "axis": "Axis", "maxrisk": "Max risk"},
+    "pt-BR": {"controls": "controles", "axis": "Eixo", "maxrisk": "Risco máx."},
+}
+
+_render_without_links18 = render
+
+
+def render(document, locale):
+    import re as _re
+    html_text = _render_without_links18(document, locale)
+    words = LINKS18_TEXT.get(locale, LINKS18_TEXT["en-US"])
+    chk = r'<span class="badge (CHK-\d+)">\1</span>'
+
+    def section_bounds(text, sid):
+        start = text.find(f'<section class="section" id="{sid}">')
+        if start < 0:
+            raise ValueError(f"report section {sid} not found")
+        return start, text.index("</section>", start)
+
+    # 1) Zero Trust x Tier summary: controls collapsed behind a count, outcome bar above the outcome badges.
+    s, e = section_bounds(html_text, "zt")
+    zt = html_text[s:e]
+    first_table_end = zt.index("</table>")
+    summary, rest = zt[:first_table_end], zt[first_table_end:]
+
+    def controls_cell(m):
+        pills = _re.findall(chk, m.group(1))
+        if not pills:
+            return m.group(0)
+        return (f'<td><details class="ztctl"><summary>{len(pills)} {words["controls"]}</summary>'
+                f'<div class="inside"><span class="pillset">{m.group(1)}</span></div></details></td>')
+
+    summary = _re.sub(r'<td><span class="pillset">((?:<span class="badge CHK-\d+">CHK-\d+</span>)+)</span></td>', controls_cell, summary)
+
+    def outcome_cell(m):
+        parts = _re.findall(r'<span class="badge ([A-Z_]+):(\d+)">', m.group(1))
+        if not parts:
+            return m.group(0)
+        known = {"INEFFECTIVE", "AT_RISK", "EFFECTIVE", "INFORMATIONAL", "UNASSESSED"}
+        segs = "".join(f'<i class="seg {name if name in known else "other"}" style="flex:{count}" title="{name}: {count}"></i>' for name, count in parts)
+        return f'<td><div class="ztbar" role="img" aria-label="{" · ".join(f"{n}: {c}" for n, c in parts)}">{segs}</div>{m.group(1)}</td>'
+
+    summary = _re.sub(r'<td>(<span class="pillset">(?:<span class="badge [A-Z_]+:\d+">[A-Z_]+:\d+</span>)+</span>)</td>', outcome_cell, summary)
+    summary = summary.replace("<th>Axis</th>", f'<th>{words["axis"]}</th>', 1).replace("<th>Max risk</th>", f'<th>{words["maxrisk"]}</th>', 1)
+    # 64-check mapping table collapsed under its own heading
+    rest = _re.sub(r'<h3>([^<]*)</h3>(<div class="tablewrap">.*?</table></div>)',
+                   lambda m: f'<details class="ztmap"><summary>{m.group(1)}</summary><div class="inside">{m.group(2)}</div></details>',
+                   rest, count=1, flags=_re.S)
+    html_text = html_text[:s] + summary + rest + html_text[e:]
+
+    # 2) Checks table rows get stable anchors.
+    s, e = section_bounds(html_text, "checks")
+    checks = _re.sub(r'<tr><td>(CHK-\d+)</td>', r'<tr id="chk-\1"><td>\1</td>', html_text[s:e])
+    html_text = html_text[:s] + checks + html_text[e:]
+    targets = set(_re.findall(r'<tr id="chk-(CHK-\d+)">', checks))
+    if not targets:
+        raise ValueError("Checks table rows not found for CHK anchors")
+
+    # 3) Every CHK pill becomes a link to its Checks row (only when the row exists).
+    html_text = _re.sub(chk, lambda m: (f'<a class="chk-link" href="#chk-{m.group(1)}">{m.group(0)}</a>' if m.group(1) in targets else m.group(0)), html_text)
+    return html_text.replace("</style>", LINKS18_CSS + "</style>", 1)
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
