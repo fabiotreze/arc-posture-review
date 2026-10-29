@@ -1,6 +1,6 @@
 efbce99b4e6d96bbdec7a044b66fd234a4ac11f27dba8c34dc8cdf8bc6d98dc0  .github/workflows/v4-methodology.yml
 78d2deac20afce424fd40cee3edfc7f05c23c4bf1c1363acc227ddf9cbd7aebf  .github/workflows/v4-pr-quality.yml
-a309773acc246cd407b176fa1ba324b22103c944873c010c728ea8e8194a3647  .github/workflows/v4-release-gate.yml
+76d94a917ba73e5c707a673a10c9d97e418c2b571573cc421f19fb271adccf81  .github/workflows/v4-release-gate.yml
 2df8db3e14bb98be7af17c5e8d659cb8109bc0e33eaeedf79906ae57394a3cac  .github/workflows/v4-report-quality.yml
 32bf62444a45e3cdbdd477e71a1f2d1c8afa2cc9ec3040ebb116af882c9154bf  .github/workflows/v4-security-regression.yml
 e624f80fc061e3b8b7568c8524dfec6843434177e83052fe24eea8587601482b  assurance/v4/checkpoint10/README.md
