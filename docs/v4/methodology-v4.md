@@ -44,4 +44,4 @@ The same evidence, model and engine produce byte-stable canonical output. Reposi
 
 ## Known release constraint
 
-The approved dependency remains `pypdf==6.19.0`. Eleven Dependabot alerts are open; `6.21.2` is not available in the approved feed. This blocks stable v4.0.0 publication until remediated or formally accepted through the security process. See [Known issues](known-issues.md).
+KI-V4-001 is resolved: the approved dependency moved from `pypdf==6.19.0` to `pypdf==6.21.2`, which closes the eleven Dependabot alerts per requirements file. Stable v4.0.0 publication still requires the security-review checklist to be repeated and approved. See [Known issues](known-issues.md).

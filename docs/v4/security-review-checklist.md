@@ -41,9 +41,9 @@ Use this checklist for v4.0.0-rc.1 and repeat it before any stable release.
 ## Release blockers
 
 - [ ] Dependabot and dependency-review findings are reviewed.
-- [ ] The 11 alerts associated with `pypdf==6.19.0` are resolved or formally accepted.
-- [ ] `pypdf==6.21.2` is available in the approved feed before changing the pin.
-- [ ] Stable v4.0.0 remains blocked while the pypdf dependency issue is open.
+- [ ] The 11 alerts associated with `pypdf==6.19.0` are confirmed closed after the upgrade to `pypdf==6.21.2` (KI-V4-001).
+- [ ] `pypdf==6.21.2` resolves from the approved feed and all gates pass with the updated pin.
+- [ ] Stable v4.0.0 remains blocked until this security review is repeated and approved.
 - [ ] Release manifest and `SHA256SUMS` validate.
 
 Reviewer: ____________________  Date: ____________________  Decision: **PENDING / APPROVED / BLOCKED**

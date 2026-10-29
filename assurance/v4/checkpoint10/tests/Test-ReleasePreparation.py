@@ -17,9 +17,12 @@ def main() -> int:
     if manifest.get("publishable") is not False:
         errors.append("stable release must remain non-publishable")
     blockers = {item.get("id"): item for item in manifest.get("blockers", [])}
-    issue = blockers.get("KI-V4-001", {})
-    if issue.get("dependency") != "pypdf==6.19.0" or issue.get("dependabotAlerts") != 11 or issue.get("targetPatch") != "6.21.2":
-        errors.append("known dependency blocker drift")
+    if "KI-V4-001" in blockers:
+        errors.append("KI-V4-001 must not remain an open blocker after remediation")
+    resolved = {item.get("id"): item for item in manifest.get("resolvedBlockers", [])}
+    issue = resolved.get("KI-V4-001", {})
+    if issue.get("status") != "RESOLVED" or issue.get("dependency") != "pypdf==6.21.2" or issue.get("previousDependency") != "pypdf==6.19.0" or issue.get("dependabotAlerts") != 11:
+        errors.append("KI-V4-001 resolution record drift")
     sums = RELEASE / "SHA256SUMS"
     seen: set[str] = set()
     for line in sums.read_text(encoding="utf-8").splitlines():

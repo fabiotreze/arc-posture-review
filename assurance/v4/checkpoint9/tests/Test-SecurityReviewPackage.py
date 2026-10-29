@@ -16,7 +16,7 @@ def main() -> int:
         "threat-model-v4.md": ["Trust boundaries", "Missing-evidence optimism", "Attack overclaim", "Dependency exposure"],
         "security-review-checklist.md": ["False-positive review", "comparison: null", "Dependabot", "Stable v4.0.0 remains blocked"],
         "false-positive-review.md": ["Missing evidence", "Verified Improvement", "NOT_ASSERTED"],
-        "known-issues.md": ["pypdf==6.19.0", "11 Dependabot alerts", "6.21.2", "STABLE RELEASE BLOCKER"],
+        "known-issues.md": ["KI-V4-001", "RESOLVED", "pypdf==6.19.0", "pypdf==6.21.2", "11 Dependabot alerts"],
     }
     for name, markers in required.items():
         path = DOCS / name

@@ -48,8 +48,8 @@ def main() -> int:
             if action not in ALLOWED_ACTIONS:
                 errors.append(f"{name}: unapproved action {action}")
     requirements = (ROOT / "requirements-v4.txt").read_text(encoding="utf-8")
-    if "pypdf==6.19.0" not in requirements:
-        errors.append("requirements-v4.txt must preserve approved pypdf==6.19.0")
+    if "pypdf==6.21.2" not in requirements:
+        errors.append("requirements-v4.txt must preserve approved pypdf==6.21.2 (KI-V4-001 remediation)")
     if errors:
         print(f"[FAIL] CP8 DevSecOps workflows: {len(errors)} error(s)")
         for error in errors: print(" - " + error)
