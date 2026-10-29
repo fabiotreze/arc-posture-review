@@ -67,6 +67,8 @@ def main() -> int:
     if embedded != expected:
         errors.append("embedded canonical contract is not byte-semantic equivalent to input")
     required = {"overview", "zt", "scenarios", "defense", "risks", "cards", "roadmap", "assets", "checks", "evidence", "comparison"}
+    if expected["comparison"] is None:
+        required = required - {"comparison"}  # PR17: Comparison section only when a baseline exists; disclosure stays (#comparison-null)
     if not required <= parsed.ids:
         errors.append(f"missing sections: {sorted(required - parsed.ids)}")
     if set(parsed.hrefs) != required:

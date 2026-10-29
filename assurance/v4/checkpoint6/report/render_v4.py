@@ -851,6 +851,40 @@ def _resource_block(*args, **kwargs):
     portuguese = ("Recursos" in out) or ("recursos" in out)
     return out + _related_block(check_id, portuguese)
 
+# --- PR17-NAVIGATION: toolbar in the sidebar; Comparison only when a baseline exists (render-only) ---
+TEXT["en-US"]["noBaseline"] = "No baseline was supplied: single collection, so there is no before/after comparison. Run the evaluation with --baseline <previous package> to compare."
+TEXT["pt-BR"]["noBaseline"] = "Nenhum baseline foi fornecido: coleta única, portanto sem comparação antes/depois. Rode a avaliação com --baseline <pacote anterior> para comparar."
+NAV17_CSS = r"""
+.side .toolbar{display:grid;gap:6px;margin:18px 0 0;padding:0;background:none;border:0;box-shadow:none;position:static}
+.side .toolbar .btn{width:100%;text-align:left;background:#173b5c;color:#fff;border:1px solid #2b5378;border-radius:7px;padding:8px 10px;cursor:pointer}
+.side .toolbar .btn:hover{background:#1f4d78}
+#comparison-null{margin:0 0 12px}
+@media(max-width:900px){.side .toolbar{display:flex;flex-wrap:wrap}.side .toolbar .btn{width:auto}}
+"""
+
+_render_without_nav17 = render
+
+
+def render(document, locale):
+    import re as _re
+    html_text = _render_without_nav17(document, locale)
+    anchor = '<div class="toolbar">'
+    if html_text.count(anchor) != 1 or html_text.count("</nav></aside>") != 1 or "</style>" not in html_text:
+        raise ValueError("report layout anchors for the sidebar toolbar not found")
+    start = html_text.index(anchor)
+    toolbar = html_text[start:html_text.index("</div>", start) + len("</div>")]
+    html_text = html_text.replace(toolbar, "", 1).replace("</nav></aside>", "</nav>" + toolbar + "</aside>", 1)
+    if document["comparison"] is None:
+        section = _re.search(r'<section class="section" id="comparison">.*?</section>', html_text, _re.S)
+        note = _re.search(r'<p class="notice" id="comparison-null">.*?</p>', section.group(0), _re.S) if section else None
+        overview = _re.search(r'<section class="section" id="overview"><h2>[^<]*</h2>', html_text)
+        if not (section and note and overview):
+            raise ValueError("report layout anchors for the null comparison not found")
+        html_text = html_text.replace(section.group(0), "", 1)
+        html_text = _re.sub(r'<a href="#comparison">[^<]*</a>', "", html_text, count=1)
+        html_text = html_text.replace(overview.group(0), overview.group(0) + note.group(0), 1)
+    return html_text.replace("</style>", NAV17_CSS + "</style>", 1)
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
