@@ -1,0 +1,22 @@
+name: v4 release gate
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements-v4.txt
+      - run: python -m playwright install --with-deps chromium
+      - run: python tools/Invoke-V4FinalGates.py --profile release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v4-release-gate-evidence
+          path: build/v4-final-gates/
+          if-no-files-found: error
