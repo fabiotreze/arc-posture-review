@@ -326,7 +326,7 @@ class DeterministicEvaluationEngine:
             available.append("source")
         member_set = set(loaded.members)
         for field in required:
-            if f"data/{field}.json" in member_set or any(ref.endswith(f"/{field}.json") for ref in sources):
+            if f"data/{field}.json" in member_set or any(ref.endswith(f"/{field}.json") and ref in member_set for ref in sources):
                 available.append(field)
         available = stable_unique(available)
         missing = sorted(set(required) - set(available))
