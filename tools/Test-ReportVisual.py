@@ -73,7 +73,7 @@ def test_app(browser, path: Path, artifacts: Path | None, prefix: str) -> None:
             raise AssertionError(f"{path.name}: wizard does not expose five steps")
         if page.locator("#btnGuideMd, #mdSource").count() != 0:
             raise AssertionError(f"{path.name}: retired Markdown guide surface is visible or embedded")
-        if "v4.0.4" not in page.locator("#verBadge").inner_text():
+        if "v4.0.5" not in page.locator("#verBadge").inner_text():
             raise AssertionError(f"{path.name}: runtime version badge mismatch")
         if artifacts:
             page.screenshot(path=str(artifacts / f"{prefix}-{width}.png"), full_page=False)

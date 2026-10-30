@@ -18,3 +18,7 @@ See `docs/v4/security-review-addendum-v4.0.3.md`: SHA256SUMS statement correctio
 ## v4.0.4 review notes
 
 CHK-32 and CHK-39 returned PASS against an empty connected-machine target when the Arc inventory had machines but none was Connected (v4.0.3 and earlier). Fixed in v4.0.4: both return N/A; see `docs/v4/security-review-record-v4.0.4.md`.
+
+## v4.0.5 review notes
+
+Up to v4.0.4 the guide markers embedded in the HTML files did not follow the collector version (EN-US showed v4.0.1, PT-BR v3.9.5) because no gate compared them. Fixed in v4.0.5 with `tools/Test-GuideVersion.py`; see `docs/v4/security-review-record-v4.0.5.md`.

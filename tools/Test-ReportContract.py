@@ -11,7 +11,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_VERSION = "4.0.4"
+EXPECTED_VERSION = "4.0.5"
 
 
 class OutlineParser(HTMLParser):

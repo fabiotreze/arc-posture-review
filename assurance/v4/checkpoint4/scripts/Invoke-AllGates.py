@@ -161,6 +161,13 @@ def main() -> int:
             ],
         ),
         (
+            "guide-version",
+            [
+                py,
+                str(REPO_ROOT / "tools" / "Test-GuideVersion.py"),
+            ],
+        ),
+        (
             "generate-sample",
             [
                 py,
