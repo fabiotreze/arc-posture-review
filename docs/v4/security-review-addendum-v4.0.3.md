@@ -31,4 +31,4 @@ Lab subscription with 7 Azure Arc machines, collector v4.0.2, read-only. Environ
 Reviewer: Fabio Rodrigues Vieira Costa
 Date: 2026-10-30
 
-**Decision:** PENDING
+**Decision:** APPROVED
