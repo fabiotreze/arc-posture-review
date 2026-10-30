@@ -1,6 +1,6 @@
 {
   "checkpoint": 10,
-  "release": "v4.0.4",
+  "release": "v4.0.5",
   "status": "APPROVED_FOR_PUBLICATION",
   "requiredArtifacts": [
     "release-manifest.json",

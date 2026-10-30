@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.0.5] - 2026-10-30
+
+### Fixed
+- The version markers of the guide embedded in `index.html`, `arc-posture-review.en-US.html` and `arc-posture-review.pt-BR.html` ("Canonical project guide for ..." and the "Version ..." line) showed v4.0.1 (EN-US) and v3.9.5 (PT-BR) while the collector was v4.0.4. They now match the collector version.
+
+### Added
+- Test `tools/Test-GuideVersion.py` (registered in checkpoint 4): the guide markers in the three HTML files and in `docs/guide.*.md` must equal `$ScriptVersion`.
+
 ## [4.0.4] - 2026-10-30
 
 ### Fixed
