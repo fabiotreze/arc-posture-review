@@ -66,7 +66,7 @@ def check_fixture() -> None:
 
 def check_collector() -> None:
     script = (ROOT / "scripts/Invoke-ArcPostureReview.ps1").read_text(encoding="utf-8")
-    need("$ScriptVersion = 'v4.0.3'" in script, "collector version")
+    need("$ScriptVersion = 'v4.0.4'" in script, "collector version")
     need('"title":"MDE extension deployed through Arc"' in script, "CHK-32 title must describe the Arc extension proxy")
     need('"id":"CHK-33"' in script and '"title":"Defender recommendations","sev":"High"' in script, "CHK-33 severity")
     need("'ERRO'" not in script and "'PARCIAL'" not in script, "collector must emit canonical ERROR/PARTIAL statuses")

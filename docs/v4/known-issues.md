@@ -14,3 +14,7 @@ No workflow or integration script in this package bypasses the release gates or 
 ## v4.0.3 review notes
 
 See `docs/v4/security-review-addendum-v4.0.3.md`: SHA256SUMS statement correction, fixture-only coverage artefact, evidence availability hardening (F1), and items deferred to v4.1.0 (F2, F3, F4, F5, F6).
+
+## v4.0.4 review notes
+
+CHK-32 and CHK-39 returned PASS against an empty connected-machine target when the Arc inventory had machines but none was Connected (v4.0.3 and earlier). Fixed in v4.0.4: both return N/A; see `docs/v4/security-review-record-v4.0.4.md`.

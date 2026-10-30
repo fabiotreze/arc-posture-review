@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.0.4] - 2026-10-30
+
+### Fixed
+- CHK-32 (MDE extension through Arc) and CHK-39 (Azure Monitor Agent) no longer return PASS when the Arc inventory has machines but none is Connected; they return N/A and point to CHK-37. Collector and embedded HTML copies updated together.
+
+### Added
+- Negative test `tools/Test-ZeroConnectedEstate.py`.
+
 ## [4.0.3] - 2026-10-30
 
 ### Fixed
