@@ -10,3 +10,7 @@
 - **Effect:** the dependency blocker is closed. The v4.0.0 security review was repeated and approved on 2026-10-29 and v4.0.0 is published.
 
 No workflow or integration script in this package bypasses the release gates or suppresses alerts.
+
+## v4.0.3 review notes
+
+See `docs/v4/security-review-addendum-v4.0.3.md`: SHA256SUMS statement correction, fixture-only coverage artefact, evidence availability hardening (F1), and items deferred to v4.1.0 (F2, F3, F4, F5, F6).
