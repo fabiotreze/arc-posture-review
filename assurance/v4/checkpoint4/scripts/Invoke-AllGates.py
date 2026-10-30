@@ -147,6 +147,20 @@ def main() -> int:
             ],
         ),
         (
+            "zero-target-regression",
+            [
+                py,
+                str(REPO_ROOT / "tools" / "Test-ZeroTargetControls.py"),
+            ],
+        ),
+        (
+            "zero-connected-estate",
+            [
+                py,
+                str(REPO_ROOT / "tools" / "Test-ZeroConnectedEstate.py"),
+            ],
+        ),
+        (
             "generate-sample",
             [
                 py,
