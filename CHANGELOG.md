@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.0.2] - 2026-10-30
+
+### Fixed
+
+- Prevent machine-dependent controls from returning PASS when the successfully collected Azure Arc machine inventory contains zero machines.
+- CHK-12, CHK-21, CHK-23, CHK-24, CHK-27, CHK-28, CHK-32, CHK-37, CHK-39 and CHK-51 now return INFO with FULL evidence coverage and found=0 for an empty Azure Arc machine inventory.
+- Add a regression gate that prohibits vacuous PASS results for the zero-target scenario.
+- Keep the embedded EN-US and PT-BR collectors synchronized with the standalone collector.
+
 ## [4.0.1] — 2026-10-29
 
 ### Release hygiene (no change to results)
