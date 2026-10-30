@@ -46,7 +46,7 @@ No change to:
 
 ## Publication status
 
-**Status:** PENDING_SECURITY_REVIEW
+**Status:** APPROVED_FOR_PUBLICATION — security review approved by Fabio Rodrigues Vieira Costa on 2026-10-30 (34/34). Tagging and publishing remain a separate, manual step.
 
 Publication remains blocked until the v4.0.2 security review is completed and
 approved.

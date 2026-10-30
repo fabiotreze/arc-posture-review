@@ -1,7 +1,7 @@
 {
   "release": "v4.0.2",
-  "status": "PENDING_SECURITY_REVIEW",
-  "publishable": false,
+  "status": "APPROVED_FOR_PUBLICATION",
+  "publishable": true,
   "previousRelease": "v4.0.1",
   "baseCommit": "b8d23d8",
   "sourceBranch": "fix/v4.0.2-zero-target",
@@ -11,19 +11,15 @@
   "gateEntrypoint": "tools/Invoke-V4FinalGates.py",
   "scope": "Patch: prevent machine-dependent controls from returning PASS when the successfully collected Azure Arc inventory contains zero machines. No change to the 64-control catalog, scoring or assessment-result.v4.",
   "securityReview": {
-    "reviewer": null,
-    "date": null,
-    "decision": "PENDING",
+    "reviewer": "Fabio Rodrigues Vieira Costa",
+    "date": "2026-10-30",
+    "decision": "APPROVED",
     "checklist": "docs/v4/security-review-checklist.md",
-    "record": "docs/v4/security-review-record-v4.0.2.md"
+    "record": "docs/v4/security-review-record-v4.0.2.md",
+    "items": 34,
+    "itemsApproved": 34
   },
-  "blockers": [
-    {
-      "id": "REL-V402-REVIEW",
-      "status": "OPEN",
-      "description": "Complete and approve the v4.0.2 zero-target security review"
-    }
-  ],
+  "blockers": [],
   "resolvedBlockers": [
     {
       "id": "KI-V4-001",
