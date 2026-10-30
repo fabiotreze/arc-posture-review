@@ -1,7 +1,7 @@
 {
   "checkpoint": 10,
   "release": "v4.0.1",
-  "status": "PENDING_SECURITY_REVIEW",
+  "status": "APPROVED_FOR_PUBLICATION",
   "requiredArtifacts": [
     "release-manifest.json",
     "RELEASE-NOTES.md",

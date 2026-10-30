@@ -22,4 +22,4 @@ Patch release on top of v4.0.0 (base `d9ae34f`). Collection behaviour, the 64 ch
 
 ## Publication status
 
-**Status:** PENDING_SECURITY_REVIEW — `publishable: false`. Tagging and publishing remain a separate, manual step.
+**Status:** APPROVED_FOR_PUBLICATION — security review approved by Fabio Rodrigues Vieira Costa on 2026-10-30 (29/29). Tagging and publishing remain a separate, manual step.

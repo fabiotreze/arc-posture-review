@@ -1,7 +1,7 @@
 {
   "release": "v4.0.1",
-  "status": "PENDING_SECURITY_REVIEW",
-  "publishable": false,
+  "status": "APPROVED_FOR_PUBLICATION",
+  "publishable": true,
   "previousRelease": "v4.0.0",
   "baseCommit": "d9ae34f",
   "sourceBranch": "release/v4.0.1",
@@ -11,19 +11,15 @@
   "gateEntrypoint": "tools/Invoke-V4FinalGates.py",
   "scope": "Patch: release hygiene and version alignment. No change to collection, the 64 checks, statuses, scoring or the assessment-result.v4 contract.",
   "securityReview": {
-    "reviewer": null,
-    "date": null,
-    "decision": "PENDING",
+    "reviewer": "Fabio Rodrigues Vieira Costa",
+    "date": "2026-10-30",
+    "decision": "APPROVED",
     "checklist": "docs/v4/security-review-checklist.md",
-    "record": "docs/v4/security-review-record-v4.0.1.md"
+    "record": "docs/v4/security-review-record-v4.0.1.md",
+    "items": 29,
+    "itemsApproved": 29
   },
-  "blockers": [
-    {
-      "id": "REL-V401-REVIEW",
-      "status": "OPEN",
-      "description": "Repeat and approve the security-review checklist for v4.0.1"
-    }
-  ],
+  "blockers": [],
   "resolvedBlockers": [
     {
       "id": "KI-V4-001",
