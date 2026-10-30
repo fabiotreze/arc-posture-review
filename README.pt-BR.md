@@ -16,15 +16,16 @@ Avaliação somente leitura da postura de segurança de **servidores habilitados
 
 ```powershell
 Invoke-WebRequest https://github.com/fabiotreze/arc-posture-review/releases/latest/download/Invoke-ArcPostureReview.ps1 -OutFile Invoke-ArcPostureReview.ps1
-./Invoke-ArcPostureReview.ps1 -V4Report
+./Invoke-ArcPostureReview.ps1
 ```
 
 | Saída | Conteúdo |
 |---|---|
 | `arc-posture-review/arc-posture-review-<data>.zip` | Pacote de evidências (resultados, achados, SHA-256 do manifest). O script imprime o SHA-256 do pacote. |
 | `arc-posture-review/arc-posture-review-<data>-v4/` | `arc-posture-review.v4.pt-BR.html`, `arc-posture-review.v4.en-US.html`, `assessment.v4.json`, `resource-index.v4.json` |
+| `arc-posture-review/arc-posture-review-<data>-v4.zip` | A pasta do relatório v4 compactada (+ `.sha256`): **baixe só este arquivo** do Cloud Shell. |
 
-Escopo: `-Subscriptions <id1>,<id2>` ou `-ManagementGroup <nome>` (padrão: subscription atual). O `-V4Report` precisa de git e Python 3.10+; o Cloud Shell já tem os dois. Se faltarem, a coleta termina normalmente e os comandos manuais são exibidos.
+Escopo: `-Subscriptions <id1>,<id2>` ou `-ManagementGroup <nome>` (padrão: subscription atual). O relatório v4 é gerado por padrão (para pular, use `-NoV4Report`) e precisa de git e Python 3.10+; o Cloud Shell já tem os dois. Se faltarem, a coleta termina normalmente e os comandos manuais são exibidos.
 
 ## O que o relatório mostra
 
@@ -65,7 +66,7 @@ Depois gere o HTML como acima. As duas entradas precisam ser pacotes do coletor 
 
 ```powershell
 az login
-./scripts/Invoke-ArcPostureReview.ps1 -V4Report
+./scripts/Invoke-ArcPostureReview.ps1
 ```
 
 Revise o script antes de executar. O acesso ao Azure é somente leitura (Azure Resource Graph e comandos de leitura do Azure CLI).
@@ -114,7 +115,7 @@ Perfis: `pr-quality`, `report-quality`, `release`, `methodology`, `security-regr
 <summary><b>Mapa do repositório</b></summary>
 
 ```
-scripts/Invoke-ArcPostureReview.ps1   coletor somente leitura (-V4Report gera o relatório v4)
+scripts/Invoke-ArcPostureReview.ps1   coletor somente leitura (gera e compacta o relatório v4 por padrão)
 assurance/v4/                         motor, CLI, renderer e gates da v4 (checkpoints)
 tools/New-ResourceIndex.py            links do portal Azure no relatório v4
 tools/Invoke-V4FinalGates.py          perfis de gate da v4
