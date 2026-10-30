@@ -11,6 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - name: v4 publication approval gate (approved manifest + SHA256SUMS)
+        shell: bash
+        run: |
+          case "$GITHUB_REF_NAME" in
+            v[4-9].*)
+              d="release/$GITHUB_REF_NAME"
+              test -f "$d/release-manifest.json" || { echo "Missing $d/release-manifest.json"; exit 1; }
+              jq -e --arg r "$GITHUB_REF_NAME" '.release == $r and .publishable == true and .status == "APPROVED_FOR_PUBLICATION" and .securityReview.decision == "APPROVED" and ((.blockers // []) | length) == 0' "$d/release-manifest.json" > /dev/null || { echo "$GITHUB_REF_NAME is not approved for publication"; exit 1; }
+              sha256sum -c "$d/SHA256SUMS"
+              ;;
+          esac
       - name: Check version in the script
         run: grep -q "$GITHUB_REF_NAME" scripts/Invoke-ArcPostureReview.ps1 || { echo "Tag $GITHUB_REF_NAME not found in the script"; exit 1; }
       - name: PSScriptAnalyzer gate (no Error/Warning findings)

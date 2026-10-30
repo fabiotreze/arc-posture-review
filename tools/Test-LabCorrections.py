@@ -66,7 +66,7 @@ def check_fixture() -> None:
 
 def check_collector() -> None:
     script = (ROOT / "scripts/Invoke-ArcPostureReview.ps1").read_text(encoding="utf-8")
-    need("$ScriptVersion = 'v4.0.0'" in script, "collector version")
+    need("$ScriptVersion = 'v4.0.1'" in script, "collector version")
     need('"title":"MDE extension deployed through Arc"' in script, "CHK-32 title must describe the Arc extension proxy")
     need('"id":"CHK-33"' in script and '"title":"Defender recommendations","sev":"High"' in script, "CHK-33 severity")
     need("'ERRO'" not in script and "'PARCIAL'" not in script, "collector must emit canonical ERROR/PARTIAL statuses")
@@ -111,7 +111,7 @@ def check_apps() -> None:
         need("full-evidence" in text, f"{name}: complete CSV evidence link")
         need(not re.search(r"\.st-ERRO(?!R)|\.st-PARCIAL", text), f"{name}: legacy CSS taxonomy")
         need("btnGuideMd" not in text and 'id="mdSource"' not in text, f"{name}: retired Guide Markdown surface")
-        need("Canonical project guide for v4.0.0" in text or "Guia canônico do projeto para a v4.0.0" in text, f"{name}: canonical HTML guide marker")
+        need("Canonical project guide for v4.0.1" in text or "Guia canônico do projeto para a v4.0.1" in text, f"{name}: canonical HTML guide marker")
         need("Executive assessment" in text or "Avaliação executiva" in text, f"{name}: executive assessment boundary")
         need("Evidence appendix" in text or "Apêndice de evidências" in text, f"{name}: evidence appendix boundary")
         need("Control Result and Evidence Coverage are independent" in text or "Resultado do controle e Cobertura da evidência são eixos independentes" in text, f"{name}: result semantics")

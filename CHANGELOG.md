@@ -1,5 +1,24 @@
 # Changelog
 
+## [4.0.1] — 2026-10-29
+
+### Release hygiene (no change to results)
+
+- Collector, integrated guides, citation metadata and test markers versioned as v4.0.1. Collection behaviour, the 64 checks, statuses, scoring and the `assessment-result.v4` contract (4.0.0) are unchanged.
+- Sample analyses (`docs/examples/sample-analysis.*.html`) re-stamped as checklist v4.0.1; content unchanged.
+- The published collector asset now includes the v4 report (on by default; `-NoV4Report` to skip); the v4.0.0 asset did not.
+- CP10 now reads the target release from its manifest, accepts `PENDING_SECURITY_REVIEW` only with `publishable: false`, and requires an APPROVED review (reviewer and date) and no open blockers before `publishable: true`. The stale `KI-V4-001` blocker field was removed from the CP10 manifest.
+- The Release workflow refuses to publish a v4+ tag unless `release/<tag>/release-manifest.json` is approved and `SHA256SUMS` validates. The v4 release-gate workflow no longer hardcodes `release/v4.0.0`.
+- Added `tools/Prepare-Release.py` (checksums and evidence-gated approval). `release/v4.0.0` remains unchanged as the published record.
+
+### Planned for v4.1.0
+
+- CHK-42, CHK-55, CHK-57, CHK-63: no PASS on inconclusive evidence (assessment age limit, pending baseline, sensor health, per-machine plan read failures), with negative tests
+- CHK-31, CHK-39, CHK-43, CHK-45: separate organisational policy from Microsoft requirement (approved destinations, per-table retention)
+- CHK-02: Arc-enabled SCVMM lifecycle instead of a generic recommendation for new projects
+- Sources: pin the MCSB version per mapping and replace the deprecated CAF Arc reference
+- Report: per-claim scope/denominator, evidence time, direct vs proxy source, missing permissions, pagination limit and rule version; explicit criteria for 'Verified Improvement'; SHA-256 binding of the resource index
+
 ## [4.0.0] — 2026-10-29
 
 ### v4 assessment model and report (stable)

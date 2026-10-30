@@ -1,6 +1,6 @@
 # Arc Posture Review v4 methodology
 
-**Candidate:** v4.0.0-rc.1  
+**Release:** v4.0.1 (methodology unchanged since v4.0.0-rc.1)\
 **Canonical result:** `assessment-result.v4.json`  
 **Evidence layer:** exactly `CHK-01` through `CHK-64`
 
@@ -44,4 +44,4 @@ The same evidence, model and engine produce byte-stable canonical output. Reposi
 
 ## Known release constraint
 
-KI-V4-001 is resolved: the approved dependency moved from `pypdf==6.19.0` to `pypdf==6.21.2`, which closes the eleven Dependabot alerts per requirements file. Stable v4.0.0 publication still requires the security-review checklist to be repeated and approved. See [Known issues](known-issues.md).
+KI-V4-001 is resolved: the approved dependency moved from `pypdf==6.19.0` to `pypdf==6.21.2`, which closes the eleven Dependabot alerts per requirements file. The v4.0.0 security review was repeated and approved on 2026-10-29 and v4.0.0 is published. See [Known issues](known-issues.md).

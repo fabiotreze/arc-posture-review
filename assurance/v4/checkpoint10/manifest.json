@@ -1,7 +1,10 @@
 {
   "checkpoint": 10,
-  "release": "v4.0.0",
-  "status": "APPROVED_FOR_PUBLICATION",
-  "requiredArtifacts": ["release-manifest.json", "RELEASE-NOTES.md", "SHA256SUMS"],
-  "blocker": "KI-V4-001"
+  "release": "v4.0.1",
+  "status": "PENDING_SECURITY_REVIEW",
+  "requiredArtifacts": [
+    "release-manifest.json",
+    "RELEASE-NOTES.md",
+    "SHA256SUMS"
+  ]
 }

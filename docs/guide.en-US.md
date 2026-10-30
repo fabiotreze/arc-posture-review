@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v4.0.0 — 2026-10-29.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
+**Version v4.0.1 — 2026-10-29.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 
