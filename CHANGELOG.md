@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.0.3] - 2026-10-30
+
+### Fixed
+- Evidence availability now requires the dataset to be a member of the evidence package; a declared source alone no longer counts as available evidence. Defense in depth: the collector already marks missing datasets as ERROR.
+
+### Added
+- Negative test `tools/Test-EvidenceAvailability.py`.
+- Security review addendum `docs/v4/security-review-addendum-v4.0.3.md`: corrects the SHA256SUMS statement of the v4.0.1/v4.0.2 records and records a real-environment validation.
+
 ## [4.0.2] - 2026-10-30
 
 ### Fixed
