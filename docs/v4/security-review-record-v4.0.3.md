@@ -53,7 +53,7 @@ Use this checklist for the v4.0.3 evidence-availability patch before publication
 - Pull request CI (methodology, pr-quality, report-quality, security-regression, analyze, PSScriptAnalyzer): PASS.
 - Real-environment validation and record corrections: `docs/v4/security-review-addendum-v4.0.3.md`.
 
-Reviewer: Fabio Rodrigues Vieira Costa Date: 2026-10-30 Decision: PENDING
+Reviewer: Fabio Rodrigues Vieira Costa Date: 2026-10-30 Decision: APPROVED
 
 
 ## Zero-target hotfix validation
