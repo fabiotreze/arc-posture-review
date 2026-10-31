@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   Arc Posture Review - security assessment for Azure Arc (READ-ONLY) - v4.0.3
 .DESCRIPTION
@@ -11,6 +11,20 @@
   Requirements: authenticated Azure CLI (az login) and Reader role in the scope
   (Reader also covers Defender for Cloud). Recommended: Azure Cloud Shell (PowerShell).
 #>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSUseShouldProcessForStateChangingFunctions',
+    '',
+    Scope='Function',
+    Target='Set-EvidenceTarget',
+    Justification='Updates only the in-memory evidence target for the current assessment.'
+)]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+    'PSUseApprovedVerbs',
+    '',
+    Scope='Function',
+    Target='Finalize-EvidenceTarget',
+    Justification='Name retained for the validated evidence-target contract.'
+)]
 [CmdletBinding()]
 param(
   [string[]]$Subscriptions = @(),
