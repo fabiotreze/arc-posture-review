@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v4.0.5 — 2026-10-30.** Guide and checklist aligned 1:1: the same IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) appear in the guide and in the checklist, and each item points to the other.
+**Version v4.1.0 — 2026-10-30.** Focused correction: an existing Arc estate with zero Connected machines returns N/A for CHK-32 and CHK-39, never a vacuous PASS. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 
@@ -9,8 +9,6 @@
 > **Result semantics:** Control Result and Evidence Coverage are independent. A conclusive PASS/WARN/FAIL can have PARTIAL coverage when the observed condition proves the outcome but an external dependency or wider scope is not collected. PARTIAL as a result means the evidence cannot support PASS, WARN or FAIL. Coverage affects confidence; it does not erase a proven failure.
 
 > **Current lab risks:** a machine-limited run is a discovery sample, not final coverage; `PARTIAL` as a result, `ERROR` and `TODO` mean not assessed, not healthy; live Azure version metadata can fall back to static tables; and the evidence ZIP/reports contain sensitive environment data. For release validation, import and export a fresh authorized lab package after the local gates pass.
-
-> **v4 report (since v4.0.0):** the same evidence package can also produce the canonical `assessment-result.v4.json` (Evidence → Observation → Claim → Control → Scenario) and a bilingual HTML report with a NOW action plan, a per-check evidence trace and optional Azure portal links. The check IDs, criteria and decision trees in this guide are unchanged; see `docs/v4/methodology-v4.md` and the README.
 
 ## 0) Start here
 

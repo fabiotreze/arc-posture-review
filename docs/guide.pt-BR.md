@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v4.0.5 — 30/10/2026.** Guia e checklist alinhados 1:1: os mesmos IDs (CHK, D1–D9, DEC/REQ/CTL/OPS/LEG, ALR) aparecem no guia e no checklist, e cada item aponta para o outro.
+**Versão v4.1.0 — 30/10/2026.** Correção focada: um inventário Arc existente com zero máquinas Connected retorna N/A nas CHK-32 e CHK-39, nunca PASS vacuamente verdadeiro. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 
@@ -9,8 +9,6 @@
 > **Semântica de resultado:** Resultado do controle e Cobertura da evidência são independentes. Um PASS/WARN/FAIL conclusivo pode ter cobertura PARTIAL quando a condição observada prova o resultado, mas uma dependência externa ou um escopo maior não foi coletado. PARTIAL como resultado significa que a evidência não permite concluir PASS, WARN ou FAIL. A cobertura afeta a confiança; não apaga uma falha comprovada.
 
 > **Riscos atuais para o lab:** execução com limite de máquinas é amostra de descoberta, não cobertura final; `PARTIAL` como resultado, `ERROR` e `TODO` significam não avaliado, não saudável; metadados de versão lidos do Azure podem cair para tabelas estáticas; e o ZIP/relatórios contêm dados sensíveis do ambiente. Para validar a release, importe e exporte um pacote novo e autorizado do lab depois que os gates locais passarem.
-
-> **Relatório v4 (desde a v4.0.0):** o mesmo pacote de evidências também pode gerar o `assessment-result.v4.json` canônico (Evidência → Observação → Afirmação → Controle → Cenário) e um relatório HTML bilíngue com plano de ação AGORA, rastro da evidência por verificação e links opcionais do portal Azure. Os IDs das verificações, os critérios e as árvores de decisão deste guia não mudam; veja `docs/v4/methodology-v4.md` e o README.
 
 ## 0) Comece aqui
 

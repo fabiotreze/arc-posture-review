@@ -1541,7 +1541,7 @@
     ],
     "title": "Patch assessment (Update Manager/WSUS)",
     "what": "Periodic assessment (AutomaticByPlatform) and pending critical/security patches.",
-    "crit": "FAIL for pending critical/security patches or a failed patch extension; PARTIAL when assessment/authority is unknown; PASS only with one valid canonical assessment row per connected machine and no pending critical/security patches.",
+    "crit": "FAIL for a failed patch extension or explicit pending critical/security patches; PARTIAL when the assessment row is missing, duplicated, unsuccessful, unparseable, untimestamped, or the patch authority is undocumented; PASS only with exactly one successful, timestamped assessment row with parseable non-negative counts per connected machine and no pending critical/security patches.",
     "refs": [
       "OPS-10"
     ],
@@ -1573,7 +1573,7 @@
     "alerts": [
       "ALR-07"
     ],
-    "resultCriteria": "FAIL for pending critical/security patches or a failed patch extension; PARTIAL when assessment/authority is unknown; PASS only with one valid canonical assessment row per connected machine and no pending critical/security patches."
+    "resultCriteria": "FAIL for a failed patch extension or explicit pending critical/security patches (with PARTIAL evidence coverage when the same row is not trustworthy); PARTIAL when assessment integrity or authority is unknown; PASS only with exactly one successful, timestamped assessment row with parseable non-negative counts per connected machine and no pending critical/security patches."
   },
   {
     "id": "CHK-43",
@@ -2025,7 +2025,7 @@
     ],
     "title": "Operating system security baseline",
     "what": "Assignment and compliance of the Azure compute security baseline (Windows and Linux) through Machine Configuration on each connected machine.",
-    "crit": "FAIL if a connected machine has no baseline assigned; WARN if a machine is non-compliant; PASS if all are assigned and compliant.",
+    "crit": "FAIL when the complete Machine Configuration query returns no recognized OS security baseline assignment or returns NonCompliant; PARTIAL for pending, missing, conflicting, generic-name, or untimestamped compliance evidence; PASS only when every connected machine has a recognized baseline assignment that is Compliant and timestamped.",
     "refs": [
       "REQ-07",
       "CTL-06"
@@ -2061,7 +2061,7 @@
       ]
     ],
     "alerts": [],
-    "resultCriteria": "FAIL if a connected machine has no baseline assigned; WARN if a machine is non-compliant; PASS if all are assigned and compliant."
+    "resultCriteria": "FAIL when the complete Machine Configuration query returns no recognized OS security baseline assignment or explicit NonCompliant evidence; PARTIAL for pending, missing, conflicting, generic-name, or untimestamped compliance evidence; PASS only when every connected machine has a recognized baseline assignment that is Compliant and timestamped."
   },
   {
     "id": "CHK-56",
@@ -2119,7 +2119,7 @@
     ],
     "title": "Healthy antivirus and EDR",
     "what": "Defender for Cloud endpoint protection recommendations (antimalware, EDR, Defender for Endpoint) and presence of the MDE extension on connected machines.",
-    "crit": "FAIL if a high or medium severity endpoint protection recommendation has Unhealthy machines; WARN if there is a low severity recommendation or a connected machine without the MDE extension.",
+    "crit": "FAIL when a High/Medium/Critical endpoint-protection recommendation has Unhealthy machines, even if MDE extension evidence is incomplete; WARN for a lower-severity recommendation; PARTIAL when the only signal is a missing or non-Succeeded MDE extension because extension inventory does not prove sensor onboarding or health; PASS only when no matching Unhealthy recommendation exists and every connected machine has a Succeeded MDE extension.",
     "refs": [
       "CTL-06"
     ],
@@ -2151,7 +2151,7 @@
     "alerts": [
       "ALR-07"
     ],
-    "resultCriteria": "PARTIAL when a connected machine lacks the MDE extension (extension absence does not prove sensor absence); otherwise FAIL if a High/Medium endpoint protection recommendation has Unhealthy machines, WARN if a lower-severity one does, and PASS when none does."
+    "resultCriteria": "FAIL for High/Medium/Critical Unhealthy endpoint-protection recommendations and WARN for lower severity; retain PARTIAL evidence coverage when MDE extension evidence is simultaneously incomplete; PARTIAL when a missing/non-Succeeded MDE extension is the only signal; PASS only with no matching Unhealthy recommendation and a Succeeded MDE extension on every connected machine."
   },
   {
     "id": "CHK-58",
@@ -2384,7 +2384,7 @@
     ],
     "title": "Defender for Servers per Arc machine",
     "what": "Defender for Servers plan read on each Arc machine (resource-level Pricings): tier, subplan, whether it inherits from the subscription, and enabled extensions.",
-    "crit": "FAIL if any machine has no Defender for Servers (Free); WARN if the machine plan differs from the subscription plan; PASS if all machines inherit the subscription plan.",
+    "crit": "FAIL when any Arc machine has an explicitly read effective Free plan; WARN when an explicitly read resource plan differs from or overrides the subscription plan; PARTIAL when any effective resource-level plan or subscription comparison cannot be read; PASS only when every effective resource plan is read and consistent with the subscription plan.",
     "refs": [
       "CTL-06"
     ],
@@ -2416,7 +2416,7 @@
     "alerts": [
       "ALR-07"
     ],
-    "resultCriteria": "PASS when every Arc machine has a Defender for Servers plan equal to its subscription plan; WARN when a machine plan differs from the subscription; FAIL when any machine is on Free (no plan)."
+    "resultCriteria": "FAIL for an explicitly read effective Free plan and WARN for an explicit difference/override; retain PARTIAL evidence coverage when another machine is unread; PARTIAL when unread evidence is the only condition; PASS only when every effective resource plan and subscription comparison is conclusively read and consistent."
   },
   {
     "id": "CHK-64",

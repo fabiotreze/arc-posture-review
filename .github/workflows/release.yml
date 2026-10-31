@@ -49,7 +49,15 @@ jobs:
           v="${GITHUB_REF_NAME#v}"
           awk -v v="$v" 'index($0, "## [" v "]") == 1 {f=1; next} /^## \[/ {if (f) exit} f' CHANGELOG.md > notes.md
           test -s notes.md || { echo "No CHANGELOG section for $v"; exit 1; }
-      - name: Create release
+      - name: Create or update release (idempotent)
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md scripts/Invoke-ArcPostureReview.ps1
+        run: |
+          set -euo pipefail
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "Release $GITHUB_REF_NAME already exists; updating notes and replacing the asset."
+            gh release edit "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md
+            gh release upload "$GITHUB_REF_NAME" scripts/Invoke-ArcPostureReview.ps1 --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md scripts/Invoke-ArcPostureReview.ps1
+          fi

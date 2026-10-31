@@ -32,7 +32,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 trap { Write-Host ('ERROR on line {0}: {1}' -f $_.InvocationInfo.ScriptLineNumber, $_.Exception.Message) -ForegroundColor Red; break }
-$ScriptVersion = 'v4.0.5'
+$ScriptVersion = 'v4.1.0'
 $Catalog = @'
 [{"id":"CHK-01","domain":"A · Architecture and scope","title":"Inventory and eligibility of Arc machines","sev":"Low","type":"auto","ds":["machines"],"refs":["REQ-01"]},{"id":"CHK-02","domain":"A · Architecture and scope","title":"Arc service per environment type","sev":"Medium","type":"manual","ds":[],"refs":["DEC-01","DEC-02"]},{"id":"CHK-03","domain":"A · Architecture and scope","title":"Landing zone and resource organization","sev":"Medium","type":"manual","ds":[],"refs":["DEC-03"]},{"id":"CHK-04","domain":"A · Architecture and scope","title":"Criticality profile (Tier 0/1/2)","sev":"High","type":"manual","ds":[],"refs":["DEC-04"]},{"id":"CHK-05","domain":"A · Architecture and scope","title":"Metadata region and data residency","sev":"Medium","type":"auto","ds":["machines"],"refs":["CTL-08"]},{"id":"CHK-06","domain":"B · Governance and identity","title":"Recommended tags (best practice)","sev":"Low","type":"auto","ds":["machines"],"refs":["REQ-02"]},{"id":"CHK-07","domain":"B · Governance and identity","title":"Registered resource providers","sev":"Medium","type":"auto","ds":["providers"],"refs":["REQ-05"]},{"id":"CHK-08","domain":"B · Governance and identity","title":"Azure Policy and baseline assignments","sev":"Medium","type":"auto","ds":["machines","policyAssignments"],"refs":["REQ-07"]},{"id":"CHK-09","domain":"B · Governance and identity","title":"Policy compliance on the machines","sev":"Medium","type":"auto","ds":["policyStates"],"refs":["REQ-07","OPS-11"]},{"id":"CHK-10","domain":"B · Governance and identity","title":"Privileged roles in scope","sev":"High","type":"auto","ds":["machines","roles"],"refs":["REQ-03","REQ-04"]},{"id":"CHK-11","domain":"B · Governance and identity","title":"Arc-specific roles","sev":"Medium","type":"auto","ds":["machines","roles"],"refs":["REQ-04"]},{"id":"CHK-12","domain":"B · Governance and identity","title":"Managed identity of the machines","sev":"High","type":"auto","ds":["roles","machines"],"refs":["REQ-04","REQ-08"]},{"id":"CHK-13","domain":"B · Governance and identity","title":"Identity model, PIM, and access review","sev":"High","type":"manual","ds":[],"refs":["REQ-03","OPS-12"]},{"id":"CHK-14","domain":"B · Governance and identity","title":"Onboarding secrets and credentials","sev":"High","type":"manual","ds":[],"refs":["REQ-08"]},{"id":"CHK-15","domain":"B · Governance and identity","title":"Key Vaults","sev":"Low","type":"auto","ds":["machines","related"],"refs":["REQ-08"]},{"id":"CHK-16","domain":"B · Governance and identity","title":"Cross-subscription scenarios","sev":"Medium","type":"manual","ds":[],"refs":["REQ-06"]},{"id":"CHK-17","domain":"C · Connectivity and network","title":"Connectivity model in use","sev":"Medium","type":"auto","ds":["machines","related"],"refs":["DEC-05","DEC-06","DEC-07","DEC-08"]},{"id":"CHK-18","domain":"C · Connectivity and network","title":"Private Link Scope public access","sev":"High","type":"auto","ds":["related"],"refs":["DEC-05"]},{"id":"CHK-19","domain":"C · Connectivity and network","title":"Arc private DNS","sev":"Medium","type":"auto","ds":["related"],"refs":["CTL-01"]},{"id":"CHK-20","domain":"C · Connectivity and network","title":"Connectivity decision and network allowances","sev":"High","type":"manual","ds":[],"refs":["DEC-05","DEC-06","DEC-07","DEC-08","CTL-01"]},{"id":"CHK-21","domain":"D · Agent, extensions, and protection","title":"Inbound ports on the agent (SSH/WAC)","sev":"High","type":"auto","ds":["machines"],"refs":["CTL-03"]},{"id":"CHK-22","domain":"D · Agent, extensions, and protection","title":"Agent mode","sev":"Medium","type":"auto","ds":["machines"],"refs":["CTL-02"]},{"id":"CHK-23","domain":"D · Agent, extensions, and protection","title":"Extension allowlist/blocklist","sev":"High","type":"auto","ds":["machines"],"refs":["CTL-02"]},{"id":"CHK-24","domain":"D · Agent, extensions, and protection","title":"Sensitive extensions","sev":"High","type":"auto","ds":["extensions"],"refs":["CTL-02","CTL-03"]},{"id":"CHK-25","domain":"D · Agent, extensions, and protection","title":"Entra access to the OS (SSH/RDP/WAC)","sev":"Medium","type":"auto","ds":["machines","roles"],"refs":["CTL-03","REQ-04"]},{"id":"CHK-26","domain":"D · Agent, extensions, and protection","title":"Run Command and Admin Center per tier","sev":"High","type":"manual","ds":[],"refs":["CTL-03","DEC-04"]},{"id":"CHK-27","domain":"D · Agent, extensions, and protection","title":"Guest configuration (Machine Configuration)","sev":"Medium","type":"auto","ds":["machines"],"refs":["REQ-07"]},{"id":"CHK-28","domain":"D · Agent, extensions, and protection","title":"Failed extensions","sev":"Medium","type":"auto","ds":["extensions"],"refs":["OPS-06","OPS-11"]},{"id":"CHK-29","domain":"D · Agent, extensions, and protection","title":"Agent version within support","sev":"High","type":"auto","ds":["machines"],"refs":["OPS-05"]},{"id":"CHK-30","domain":"D · Agent, extensions, and protection","title":"Extension versions and automatic upgrade","sev":"Medium","type":"auto","ds":["extensions"],"refs":["OPS-06","CTL-04"]},{"id":"CHK-31","domain":"D · Agent, extensions, and protection","title":"Defender for Servers","sev":"High","type":"auto","ds":["pricing"],"refs":["CTL-06"]},{"id":"CHK-32","domain":"D · Agent, extensions, and protection","title":"MDE extension deployed through Arc","sev":"High","type":"auto","ds":["machines","extensions"],"refs":["CTL-06","LAT"]},{"id":"CHK-33","domain":"D · Agent, extensions, and protection","title":"Defender recommendations","sev":"High","type":"auto","ds":["defender"],"refs":["CTL-06"]},{"id":"CHK-34","domain":"D · Agent, extensions, and protection","title":"SQL Server: Defender for SQL and least privilege","sev":"Medium","type":"auto","ds":["machines","pricing","extensions"],"refs":["CTL-04","DEC-05"]},{"id":"CHK-35","domain":"D · Agent, extensions, and protection","title":"Local accounts and HIMDS GPO","sev":"Medium","type":"manual","ds":[],"refs":["CTL-05"]},{"id":"CHK-36","domain":"D · Agent, extensions, and protection","title":"Local collection on a sample (agent and services)","sev":"Medium","type":"manual","ds":[],"refs":["CTL-05","SVC","EVD"]},{"id":"CHK-37","domain":"E · Operations, monitoring, and auditing","title":"Disconnected or expired machines","sev":"High","type":"auto","ds":["machines"],"refs":["OPS-08","OPS-09","OPS-11"]},{"id":"CHK-38","domain":"E · Operations, monitoring, and auditing","title":"Advisor recommendations","sev":"Low","type":"auto","ds":["advisor"],"refs":["OPS-09"]},{"id":"CHK-39","domain":"E · Operations, monitoring, and auditing","title":"Azure Monitor Agent","sev":"Medium","type":"auto","ds":["machines","extensions"],"refs":["OPS-04","CTL-07"]},{"id":"CHK-40","domain":"E · Operations, monitoring, and auditing","title":"DCR association","sev":"Medium","type":"auto","ds":["machines","extensions","dcra","related"],"refs":["OPS-04","CTL-07"]},{"id":"CHK-41","domain":"E · Operations, monitoring, and auditing","title":"Microsoft Sentinel and machine coverage","sev":"Medium","type":"auto","ds":["related","dcra","machines","diag"],"refs":["CTL-07","LAT"]},{"id":"CHK-42","domain":"E · Operations, monitoring, and auditing","title":"Patch assessment (Update Manager/WSUS)","sev":"Medium","type":"auto","ds":["machines","patch"],"refs":["OPS-10"]},{"id":"CHK-43","domain":"E · Operations, monitoring, and auditing","title":"Activity Log export","sev":"High","type":"auto","ds":["diag"],"refs":["EVD","LAT"]},{"id":"CHK-44","domain":"E · Operations, monitoring, and auditing","title":"Sensitive operations in the period","sev":"High","type":"auto","ds":["activity"],"refs":["CTL-03","EVD","LAT"]},{"id":"CHK-45","domain":"E · Operations, monitoring, and auditing","title":"Log Analytics retention","sev":"Low","type":"auto","ds":["machines","related","dcra"],"refs":["EVD"]},{"id":"CHK-46","domain":"E · Operations, monitoring, and auditing","title":"Pilot executed and accepted","sev":"Medium","type":"manual","ds":[],"refs":["OPS-01"]},{"id":"CHK-47","domain":"E · Operations, monitoring, and auditing","title":"Rollout in waves and rollback","sev":"Medium","type":"manual","ds":[],"refs":["OPS-02"]},{"id":"CHK-48","domain":"E · Operations, monitoring, and auditing","title":"Automation method per environment","sev":"Medium","type":"manual","ds":[],"refs":["OPS-03"]},{"id":"CHK-49","domain":"E · Operations, monitoring, and auditing","title":"Individual and at-scale removal","sev":"Medium","type":"manual","ds":[],"refs":["OPS-07","OPS-08"]},{"id":"CHK-50","domain":"E · Operations, monitoring, and auditing","title":"Health KPIs and periodic review","sev":"Medium","type":"manual","ds":[],"refs":["OPS-11","OPS-12"]},{"id":"CHK-51","domain":"F · Legacy","title":"Legacy, end of support, and ESU","sev":"High","type":"auto","ds":["machines"],"refs":["LEG-01","LEG-03"]},{"id":"CHK-52","domain":"F · Legacy","title":"Legacy exceptions and exit plan","sev":"High","type":"manual","ds":[],"refs":["LEG-01","LEG-02","LEG-04"]},{"id":"CHK-53","domain":"B · Governance and identity","title":"Cost: billed services and benefits per machine","sev":"Medium","type":"auto","ds":["machines","extensions","pricing","gcAssign"],"refs":["REQ-09"]},{"id":"CHK-54","domain":"D · Agent, extensions, and protection","title":"Threats and vulnerabilities (Defender for Cloud)","sev":"High","type":"auto","ds":["machines","alerts","vulns","secscore"],"refs":["CTL-06","LAT"]},{"id":"CHK-55","domain":"D · Agent, extensions, and protection","title":"Operating system security baseline","sev":"High","type":"auto","ds":["machines","gcComp"],"refs":["REQ-07","CTL-06"]},{"id":"CHK-56","domain":"B · Governance and identity","title":"Local administrators audit","sev":"Medium","type":"auto","ds":["machines","gcComp"],"refs":["CTL-04","CTL-05"]},{"id":"CHK-57","domain":"D · Agent, extensions, and protection","title":"Healthy antivirus and EDR","sev":"High","type":"auto","ds":["machines","extensions","defender"],"refs":["CTL-06"]},{"id":"CHK-58","domain":"E · Operations, monitoring, and auditing","title":"Insights and telemetry per machine","sev":"Medium","type":"auto","ds":["machines","extensions","dcra","related"],"refs":["OPS-04","OPS-11"]},{"id":"CHK-59","domain":"E · Operations, monitoring, and auditing","title":"Map of Arc capabilities in use","sev":"Low","type":"auto","ds":["machines","extensions"],"refs":["REQ-09","OPS-11"]},{"id":"CHK-60","domain":"B · Governance and identity","title":"Local administrator password (Windows LAPS)","sev":"High","type":"manual","ds":[],"refs":["CTL-04","CTL-05"]},{"id":"CHK-61","domain":"D · Agent, extensions, and protection","title":"System disk encryption (BitLocker/dm-crypt)","sev":"Medium","type":"manual","ds":[],"refs":["CTL-05"]},{"id":"CHK-62","domain":"B · Governance and identity","title":"Conditional Access and MFA for Azure administrators","sev":"High","type":"manual","ds":[],"refs":["REQ-03","REQ-04"]},{"id":"CHK-63","domain":"D · Agent, extensions, and protection","title":"Defender for Servers per Arc machine","sev":"High","type":"auto","ds":["machines","pricing","pricingRes"],"refs":["CTL-06"]},{"id":"CHK-64","domain":"D · Agent, extensions, and protection","title":"SQL Server: license and usage upload (billing)","sev":"High","type":"auto","ds":["machines","extensions","related"],"refs":["REQ-09","DEC-05"]}]
 '@ | ConvertFrom-Json
@@ -893,20 +893,25 @@ $Eval['CHK-63'] = {
       $p = $ix[(Get-MachineKey $x.resourceGroup $x.name)]
       $s = @($ps | Where-Object { $_.subscriptionId -eq $x.subscriptionId }) | Select-Object -First 1
       $sPl = 'Not read'; if ($s) { $sPl = & $lbl $s.pricingTier $s.subPlan }
-      $mPl = 'Not read'; $inh = ''; $ext = ''
-      if ($p -and -not $p.error) { $mPl = & $lbl $p.tier $p.subPlan; $inh = $p.inherited; $ext = $p.extensions }
+      $mPl = 'Not read'; $inh = ''; $ext = ''; $readError = ''
+      if ($p -and -not $p.error -and $p.tier) { $mPl = & $lbl $p.tier $p.subPlan; $inh = [string]$p.inherited; $ext = [string]$p.extensions }
+      elseif ($p -and $p.error) { $readError = [string]$p.error }
+      else { $readError = 'resource-level Defender plan was not returned' }
       $dif = ($mPl -ne 'Not read' -and $sPl -ne 'Not read' -and ($mPl -ne $sPl -or $inh -eq 'False'))
-      [pscustomobject]@{ name = $x.name; resourceGroup = $x.resourceGroup; status = $x.status; subscriptionPlan = $sPl; machinePlan = $mPl; inherited = $inh; differs = $dif; extensions = $ext } })
-  $dif = @($rows | Where-Object { $_.differs })
-  $nr = @($rows | Where-Object { $_.machinePlan -eq 'Not read' }).Count
+      $result = 'PASS'; $reason = 'effective resource plan read and consistent with subscription'
+      if ($mPl -eq 'Free') { $result = 'FAIL'; $reason = 'effective resource plan is Free' }
+      elseif ($dif) { $result = 'WARN'; $reason = 'resource plan differs from subscription or is explicitly overridden' }
+      elseif ($mPl -eq 'Not read' -or $sPl -eq 'Not read') { $result = 'UNKNOWN'; $reason = 'effective resource/subscription plan comparison is incomplete' }
+      [pscustomobject]@{ name = $x.name; resourceGroup = $x.resourceGroup; status = $x.status; subscriptionPlan = $sPl; machinePlan = $mPl; inherited = $inh; differs = $dif; extensions = $ext; result = $result; reason = $reason; readError = $readError } })
+  $free = @($rows | Where-Object { $_.result -eq 'FAIL' })
+  $dif = @($rows | Where-Object { $_.result -eq 'WARN' })
+  $notRead = @($rows | Where-Object { $_.result -eq 'UNKNOWN' })
   $byPl = (@($rows | Group-Object machinePlan | Sort-Object Count -Descending | ForEach-Object { $_.Name + ': ' + $_.Count }) -join ', ')
-  $det = "Defender for Servers plan per Arc machine: {0}. Different from the subscription (set on the machine itself): {1} of {2}. Not read: {3}." -f $byPl, $dif.Count, $rows.Count, $nr
-  $free = @($rows | Where-Object { $_.machinePlan -eq 'Free' })
-  $det += " Without Defender for Servers (Free): {0}." -f $free.Count
-  $rest = @($rows | Where-Object { $_.machinePlan -ne 'Free' -and -not $_.differs })
-  if ($free.Count) { Write-Result 'FAIL' $free.Count $det @($free + @($dif | Where-Object { $_.machinePlan -ne 'Free' }) + $rest) }
-  elseif ($dif.Count) { Write-Result 'WARN' $dif.Count $det @($dif + $rest) }
-  else { Write-Result 'PASS' 0 $det $rows }
+  $det = "Defender for Servers effective plan per Arc machine: {0}. Free: {1}; different/overridden: {2}; not conclusively read: {3} of {4}. An unread resource plan is unknown evidence, never PASS and never inferred from the subscription plan." -f $byPl, $free.Count, $dif.Count, $notRead.Count, $rows.Count
+  if ($free.Count) { Write-Result 'FAIL' $free.Count $det $rows $(if ($notRead.Count) { 'PARTIAL' } else { 'FULL' }); return }
+  if ($dif.Count) { Write-Result 'WARN' $dif.Count $det $rows $(if ($notRead.Count) { 'PARTIAL' } else { 'FULL' }); return }
+  if ($notRead.Count) { Write-Result 'PARTIAL' $notRead.Count $det $rows; return }
+  Write-Result 'PASS' 0 $det $rows
 }
 $Eval['CHK-32'] = {
   $k = Get-ExtIndex '^MDE\.(Windows|Linux)$'; $all = @(Get-ArcMachine); $m = @(Get-ArcConnected)
@@ -1011,19 +1016,27 @@ $Eval['CHK-41'] = {
 $Eval['CHK-55'] = {
   $m = @(Get-ArcConnected)
   if (-not $m.Count) { Write-Result 'N/A' 0 'No connected machines in scope.'; return }
-  $gc = @($DS['gcComp'] | Where-Object { ([string]$_.name) -match 'Baseline' })
-  $ix = @{}; foreach ($g in $gc) { $ix[(Get-MachineKey $g.resourceGroup $g.machine)] = $g }
+  # Deliberately bounded names: a generic assignment containing "baseline" is not sufficient evidence.
+  $baselinePattern = '^(Azure(Windows|Linux|Compute).*(Security)?Baseline|Microsoft.*SecurityBaseline)$'
+  $gc = @($DS['gcComp'] | Where-Object { ([string]$_.name) -match $baselinePattern })
+  $byMachine = @{}; foreach ($g in $gc) { $k = Get-MachineKey $g.resourceGroup $g.machine; if (-not $byMachine.ContainsKey($k)) { $byMachine[$k] = @() }; $byMachine[$k] += @($g) }
   $rows = @(foreach ($x in $m) {
-      $g = $ix[(Get-MachineKey $x.resourceGroup $x.name)]
-      $bn = ''; $st = 'No baseline'
-      if ($g) { $bn = [string]$g.name; $st = [string]$g.complianceStatus; if (-not $st) { $st = 'Pending' } }
-      [pscustomobject]@{ name = $x.name; resourceGroup = $x.resourceGroup; osType = $x.osType; baseline = $bn; compliance = $st } })
-  $none = @($rows | Where-Object { $_.compliance -eq 'No baseline' })
-  $nc = @($rows | Where-Object { $_.compliance -eq 'NonCompliant' })
-  $ok = @($rows | Where-Object { $_.compliance -eq 'Compliant' }).Count
-  $det = "OS security baseline (Azure compute security baseline): {0} of {1} connected machine(s) with a baseline assigned; compliant: {2}; non-compliant: {3}; no baseline: {4}." -f ($rows.Count - $none.Count), $rows.Count, $ok, $nc.Count, $none.Count
-  if ($none.Count -or $nc.Count) { Write-Result 'FAIL' ($none.Count + $nc.Count) $det @($none + $nc) }
-  else { Write-Result 'PASS' 0 $det }
+      $items = @($byMachine[(Get-MachineKey $x.resourceGroup $x.name)])
+      $baseline = (@($items | ForEach-Object { [string]$_.name } | Where-Object { $_ } | Sort-Object -Unique) -join '; ')
+      $states = @($items | ForEach-Object { [string]$_.complianceStatus } | Where-Object { $_ })
+      $times = @($items | ForEach-Object { [string]$_.lastChecked } | Where-Object { $_ })
+      $validTimestamp = $false
+      foreach ($value in $times) { $stamp = [datetimeoffset]::MinValue; if ([datetimeoffset]::TryParse($value, [ref]$stamp)) { $validTimestamp = $true; break } }
+      $result = 'PASS'; $reason = 'baseline assignment is compliant and timestamped'
+      if (-not $items.Count) { $result = 'FAIL'; $reason = 'no recognized OS security baseline assignment was returned by the complete Machine Configuration query' }
+      elseif ($states -contains 'NonCompliant') { $result = 'FAIL'; $reason = 'baseline assignment is explicitly NonCompliant' }
+      elseif ($states.Count -ne $items.Count -or @($states | Where-Object { $_ -ne 'Compliant' }).Count -or -not $validTimestamp) { $result = 'UNKNOWN'; $reason = 'baseline compliance is pending, missing, conflicting, or not timestamped' }
+      [pscustomobject]@{ name = $x.name; resourceGroup = $x.resourceGroup; osType = $x.osType; baseline = $baseline; compliance = ($states -join '; '); lastChecked = ($times -join '; '); validTimestamp = $validTimestamp; result = $result; reason = $reason } })
+  $fail = @($rows | Where-Object { $_.result -eq 'FAIL' }); $unknown = @($rows | Where-Object { $_.result -eq 'UNKNOWN' }); $ok = @($rows | Where-Object { $_.result -eq 'PASS' }).Count
+  $det = "OS security baseline evidence: {0} connected machine(s); compliant and timestamped: {1}; explicit failure/no recognized assignment: {2}; pending/missing/conflicting timestamped evidence: {3}. Unknown evidence is never promoted to PASS." -f $rows.Count, $ok, $fail.Count, $unknown.Count
+  if ($fail.Count) { Write-Result 'FAIL' $fail.Count $det $rows $(if ($unknown.Count) { 'PARTIAL' } else { 'FULL' }); return }
+  if ($unknown.Count) { Write-Result 'PARTIAL' $unknown.Count $det $rows; return }
+  Write-Result 'PASS' 0 $det $rows
 }
 $Eval['CHK-56'] = {
   $m = @(Get-ArcConnected | Where-Object { [string]$_.osType -eq 'windows' })
@@ -1046,17 +1059,18 @@ $Eval['CHK-56'] = {
 $Eval['CHK-57'] = {
   $m = @(Get-ArcConnected)
   if (-not $m.Count) { Write-Result 'N/A' 0 'No connected machines in scope.'; return }
-  $pat = 'endpoint protection|antimalware|anti-malware|\bantivirus\b|\bEDR\b|Defender for Endpoint|endpoint detection|Defender Antivirus'
+  $pat = 'endpoint protection|antimalware|anti-malware|antivirus|EDR|Defender for Endpoint|endpoint detection|Defender Antivirus'
   $d = @($DS['defender'] | Where-Object { ([string]$_.assessment) -match $pat -and [int]$_.machines -gt 0 })
   $dHi = @($d | Where-Object { $_.severity -in @('High', 'Medium', 'Critical') })
   $k = Get-ExtIndex '^MDE\.(Windows|Linux)$'
-  $noMde = @($m | Where-Object { -not $k.ContainsKey((Get-MachineKey $_.resourceGroup $_.name)) })
-  $rows = @($d | Select-Object @{ n = 'item'; e = { $_.assessment } }, severity, machines) + @($noMde | Select-Object @{ n = 'item'; e = { 'No MDE extension: ' + $_.name } }, @{ n = 'severity'; e = { '' } }, @{ n = 'machines'; e = { 1 } })
-  $det = "Endpoint protection recommendations with Unhealthy machines in Defender for Cloud: {0}. Connected machines without the MDE extension: {1} of {2}." -f $d.Count, $noMde.Count, $m.Count
-  if ($noMde.Count) { Write-Result 'PARTIAL' ($d.Count + $noMde.Count) ($det + ' MDE extension absence does not prove sensor absence; correlate device health in the Defender portal.') $rows }
-  elseif ($dHi.Count) { Write-Result 'FAIL' $dHi.Count $det $rows }
-  elseif ($d.Count) { Write-Result 'WARN' $d.Count $det $rows }
-  else { Write-Result 'PASS' 0 $det }
+  $mdeGap = @($m | Where-Object { $key = Get-MachineKey $_.resourceGroup $_.name; -not $k.ContainsKey($key) -or [string]$k[$key] -ne 'Succeeded' })
+  $rows = @($d | Select-Object @{ n = 'item'; e = { $_.assessment } }, severity, machines) + @($mdeGap | Select-Object @{ n = 'item'; e = { 'MDE extension missing or not Succeeded: ' + $_.name } }, @{ n = 'severity'; e = { '' } }, @{ n = 'machines'; e = { 1 } })
+  $det = "Endpoint protection recommendations with Unhealthy machines in Defender for Cloud: {0}; High/Medium/Critical: {1}. Connected machines without a Succeeded MDE extension: {2} of {3}. Extension inventory is only a proxy for sensor onboarding/health." -f $d.Count, $dHi.Count, $mdeGap.Count, $m.Count
+  # Conclusive negative Defender evidence takes precedence over a simultaneous coverage gap.
+  if ($dHi.Count) { Write-Result 'FAIL' $dHi.Count $det $rows $(if ($mdeGap.Count) { 'PARTIAL' } else { 'FULL' }); return }
+  if ($d.Count) { Write-Result 'WARN' $d.Count $det $rows $(if ($mdeGap.Count) { 'PARTIAL' } else { 'FULL' }); return }
+  if ($mdeGap.Count) { Write-Result 'PARTIAL' $mdeGap.Count ($det + ' MDE extension absence or failure does not prove sensor absence; correlate device health in the Defender portal.') $rows; return }
+  Write-Result 'PASS' 0 $det $rows
 }
 $Eval['CHK-58'] = {
   $m = @(Get-ArcConnected)
@@ -1149,22 +1163,30 @@ $Eval['CHK-40'] = {
 $Eval['CHK-42'] = {
   $m = @(Get-ArcConnected)
   if (-not $m.Count) { Write-Result 'N/A' 0 'No connected machines in scope.'; return }
-  $assessed = @{}; foreach ($x in @($DS['patch'])) { $assessed[(Get-MachineKey $x.resourceGroup $x.machine)] = $x }
+  $assessed = @{}; $duplicates = @{}
+  foreach ($x in @($DS['patch'])) { $key = Get-MachineKey $x.resourceGroup $x.machine; if ($assessed.ContainsKey($key)) { $duplicates[$key] = $true } else { $assessed[$key] = $x } }
   $pf = @{}; foreach ($x in @($DS['extensions'] | Where-Object { $_.extType -match '^(WindowsPatchExtension|LinuxPatchExtension|WindowsOsUpdateExtension|LinuxOsUpdateExtension)$' })) { $pf[(Get-MachineKey $x.resourceGroup $x.machine)] = $x }
   $rows = @(foreach ($x in $m) {
       $kk = Get-MachineKey $x.resourceGroup $x.name; $mode = [string]$x.patchAssessment; if ([string]$x.osType -eq 'linux') { $mode = [string]$x.linuxPatchAssessment }
-      $a = $assessed[$kk]; $e = $pf[$kk]; $crit = 0; $sec = 0; $last = ''; $valid = $false
-      if ($a) { $crit = [int]$a.critical; $sec = [int]$a.security; $last = [string]$a.lastAssessment; $valid = $true }
+      $a = $assessed[$kk]; $e = $pf[$kk]; $crit = 0; $sec = 0; $last = ''; $assessmentStatus = ''; $validCounts = $false; $validTimestamp = $false
+      if ($a) {
+        $last = [string]$a.lastAssessment; $assessmentStatus = [string]$a.status
+        $criticalValue = 0; $securityValue = 0
+        $validCounts = ($null -ne $a.critical -and $null -ne $a.security -and [int]::TryParse([string]$a.critical, [ref]$criticalValue) -and [int]::TryParse([string]$a.security, [ref]$securityValue) -and $criticalValue -ge 0 -and $securityValue -ge 0)
+        if ($validCounts) { $crit = $criticalValue; $sec = $securityValue }
+        $stamp = [datetimeoffset]::MinValue; $validTimestamp = (-not [string]::IsNullOrWhiteSpace($last) -and [datetimeoffset]::TryParse($last, [ref]$stamp))
+      }
+      $validAssessment = ($a -and -not $duplicates.ContainsKey($kk) -and $validCounts -and $validTimestamp -and $assessmentStatus -in @('Succeeded', 'Completed'))
       $extState = if ($e) { [string]$e.state } else { 'not observed' }; $reasons = @(); $result = 'PASS'
       if ($e -and $e.state -ne 'Succeeded') { $result = 'FAIL'; $reasons += ('patch extension ' + $e.extType + ' is ' + $e.state) }
-      if (($crit + $sec) -gt 0) { $result = 'FAIL'; $reasons += ('pending critical/security patches: ' + ($crit + $sec)) }
-      if (-not $valid) { if ($result -ne 'FAIL') { $result = 'UNKNOWN' }; $reasons += 'no valid assessment in the package' }
+      if ($validCounts -and ($crit + $sec) -gt 0) { $result = 'FAIL'; $reasons += ('pending critical/security patches: ' + ($crit + $sec)) }
+      if (-not $validAssessment) { if ($result -ne 'FAIL') { $result = 'UNKNOWN' }; $reasons += 'assessment row is missing, duplicated, unsuccessful, unparseable, or not timestamped' }
       if ($mode -ne 'AutomaticByPlatform') { if ($result -ne 'FAIL') { $result = 'UNKNOWN' }; $reasons += 'AutomaticByPlatform not enabled; external authority not documented' }
-      [pscustomobject]@{ name = $x.name; resourceGroup = $x.resourceGroup; osType = $x.osType; assessmentMode = $(if ($mode) { $mode } else { '(empty)' }); authority = $(if ($mode -eq 'AutomaticByPlatform') { 'Azure Update Manager' } else { 'external/not documented' }); validAssessment = $valid; lastAssessment = $last; criticalPending = $crit; securityPending = $sec; patchExtensionState = $extState; result = $result; reason = ($reasons -join '; ') }
+      [pscustomobject]@{ name = $x.name; resourceGroup = $x.resourceGroup; osType = $x.osType; assessmentMode = $(if ($mode) { $mode } else { '(empty)' }); authority = $(if ($mode -eq 'AutomaticByPlatform') { 'Azure Update Manager' } else { 'external/not documented' }); validAssessment = $validAssessment; duplicateAssessment = $duplicates.ContainsKey($kk); assessmentStatus = $assessmentStatus; lastAssessment = $last; validTimestamp = $validTimestamp; criticalPending = $crit; securityPending = $sec; patchExtensionState = $extState; result = $result; reason = ($reasons -join '; ') }
     })
   $fail = @($rows | Where-Object { $_.result -eq 'FAIL' }); $unknown = @($rows | Where-Object { $_.result -eq 'UNKNOWN' })
-  $det = ("Patch authority and freshness: {0} connected machine(s), {1} failed, {2} unknown, {3} passed. Evidence is canonical: exactly one row per machine. A zero pending count is evidence only with a valid assessment; document WSUS/SCCM or another approved external authority." -f $rows.Count, $fail.Count, $unknown.Count, ($rows.Count - $fail.Count - $unknown.Count))
-  if ($fail.Count) { Write-Result 'FAIL' $fail.Count $det $rows $(if ($unknown.Count) { 'PARTIAL' } else { 'FULL' }); return }
+  $det = ("Patch authority/evidence integrity: {0} connected machine(s), {1} failed, {2} unknown, {3} passed. PASS requires exactly one successful, timestamped assessment row with parseable non-negative counts per machine plus documented AutomaticByPlatform authority." -f $rows.Count, $fail.Count, $unknown.Count, ($rows.Count - $fail.Count - $unknown.Count))
+  if ($fail.Count) { Write-Result 'FAIL' $fail.Count $det $rows $(if ($unknown.Count -or @($fail | Where-Object { -not $_.validAssessment }).Count) { 'PARTIAL' } else { 'FULL' }); return }
   if ($unknown.Count) { Write-Result 'PARTIAL' $unknown.Count $det $rows; return }
   Write-Result 'PASS' 0 $det $rows
 }

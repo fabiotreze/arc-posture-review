@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression contract for v3.9.2 validation findings remediated in v3.9.5."""
+"""Regression contract for reviewed-lab findings retained through v4.1.0."""
 from __future__ import annotations
 
 import hashlib
@@ -66,7 +66,7 @@ def check_fixture() -> None:
 
 def check_collector() -> None:
     script = (ROOT / "scripts/Invoke-ArcPostureReview.ps1").read_text(encoding="utf-8")
-    need("$ScriptVersion = 'v4.0.5'" in script, "collector version")
+    need("$ScriptVersion = 'v4.1.0'" in script, "collector version")
     need('"title":"MDE extension deployed through Arc"' in script, "CHK-32 title must describe the Arc extension proxy")
     need('"id":"CHK-33"' in script and '"title":"Defender recommendations","sev":"High"' in script, "CHK-33 severity")
     need("'ERRO'" not in script and "'PARCIAL'" not in script, "collector must emit canonical ERROR/PARTIAL statuses")
@@ -80,13 +80,14 @@ def check_collector() -> None:
         "CHK-39": ["$rows.Count -eq $m.Count", "Write-Result 'FAIL'"],
         "CHK-40": ["Assessment blocked", "Write-Result 'PARTIAL'"],
         "CHK-41": ["Write-Result 'FAIL'", "conclusive failure for the observed workspace", "Evidence Coverage is PARTIAL"],
-        "CHK-42": ["exactly one row per machine", "validAssessment", "external/not documented", "Write-Result 'PARTIAL'"],
+        "CHK-42": ["$duplicates", "validTimestamp", "exactly one successful, timestamped assessment row", "Write-Result 'PARTIAL'"],
         "CHK-45": ["resolve CHK-39 (AMA) and CHK-40 (DCR association)"],
         "CHK-54": ["Zero findings without confirmed coverage", "Write-Result 'PARTIAL'"],
-        "CHK-55": ["($none.Count + $nc.Count)", "Write-Result 'FAIL'"],
+        "CHK-55": ["$baselinePattern", "validTimestamp", "Write-Result 'FAIL'", "Write-Result 'PARTIAL'"],
         "CHK-56": ["$none.Count -eq $m.Count", "Write-Result 'FAIL'"],
-        "CHK-57": ["MDE extension absence does not prove sensor absence", "Write-Result 'PARTIAL'"],
+        "CHK-57": ["Conclusive negative Defender evidence takes precedence", "[string]$k[$key] -ne 'Succeeded'", "Write-Result 'PARTIAL'"],
         "CHK-58": ["$blind.Count -eq $rows.Count", "Write-Result 'FAIL'"],
+        "CHK-63": ["unread resource plan is unknown evidence", "$notRead", "Write-Result 'PARTIAL'"],
     }
     for check_id, markers in checks.items():
         body = eval_block(script, check_id)
@@ -111,7 +112,7 @@ def check_apps() -> None:
         need("full-evidence" in text, f"{name}: complete CSV evidence link")
         need(not re.search(r"\.st-ERRO(?!R)|\.st-PARCIAL", text), f"{name}: legacy CSS taxonomy")
         need("btnGuideMd" not in text and 'id="mdSource"' not in text, f"{name}: retired Guide Markdown surface")
-        need(re.search(r"(Canonical project guide for|Guia can.nico do projeto para a) v4\.0\.\d+", text), f"{name}: canonical HTML guide marker")
+        need("Canonical project guide for v4.1.0" in text or "Guia canônico do projeto para a v4.1.0" in text, f"{name}: canonical HTML guide marker")
         need("Executive assessment" in text or "Avaliação executiva" in text, f"{name}: executive assessment boundary")
         need("Evidence appendix" in text or "Apêndice de evidências" in text, f"{name}: evidence appendix boundary")
         need("Control Result and Evidence Coverage are independent" in text or "Resultado do controle e Cobertura da evidência são eixos independentes" in text, f"{name}: result semantics")
