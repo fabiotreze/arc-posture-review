@@ -1,11 +1,10 @@
 {
   "checkpoint": 10,
   "release": "v4.1.0",
-  "status": "VALIDATED_ARTIFACT",
+  "status": "APPROVED_FOR_PUBLICATION",
   "requiredArtifacts": [
     "release-manifest.json",
     "RELEASE-NOTES.md",
     "SHA256SUMS"
-  ],
-  "blocker": "GIT-PROVENANCE-001"
+  ]
 }

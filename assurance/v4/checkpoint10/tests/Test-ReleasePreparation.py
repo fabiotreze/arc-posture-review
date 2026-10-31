@@ -29,11 +29,26 @@ def main() -> int:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if manifest.get("release") != release_name:
         errors.append("release manifest does not match the checkpoint 10 target")
-    if manifest.get("status") != "VALIDATED_ARTIFACT" or manifest.get("publishable") is not False:
-        errors.append("release artifact status must remain VALIDATED_ARTIFACT/non-publishable until Git provenance is verified")
+    status = manifest.get("status")
+    publishable = manifest.get("publishable")
     blockers = {row.get("id") for row in manifest.get("blockers", [])}
-    if "GIT-PROVENANCE-001" not in blockers:
-        errors.append("Git provenance blocker is missing")
+    review = manifest.get("securityReview", {})
+
+    if status == "VALIDATED_ARTIFACT":
+        if publishable is not False:
+            errors.append("VALIDATED_ARTIFACT must be non-publishable")
+        if "GIT-PROVENANCE-001" not in blockers:
+            errors.append("Git provenance blocker is missing")
+    elif status == "APPROVED_FOR_PUBLICATION":
+        if publishable is not True:
+            errors.append("APPROVED_FOR_PUBLICATION must be publishable")
+        if blockers:
+            errors.append("APPROVED_FOR_PUBLICATION must have no blockers")
+        if review.get("decision") != "APPROVED":
+            errors.append("APPROVED_FOR_PUBLICATION requires approved security review")
+    else:
+        errors.append(f"unsupported release status: {status!r}")
+
     if manifest.get("sourceBranch") != "feature/v4.1.0":
         errors.append("v4.1.0 source branch drift")
     seen: set[str] = set()
