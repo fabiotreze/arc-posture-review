@@ -25,5 +25,22 @@
     "idempotent GitHub Release create-or-update workflow",
     "bilingual report and localization parity"
   ],
-  "scope": "Evidence-hardening test candidate only; no environment data or customer reports included."
+  "scope": "Evidence-hardening test candidate only; no environment data or customer reports included.",
+  "checksumTargets": [
+    "assurance/v4/checkpoint4/engine/deterministic_engine.py",
+    "assurance/v4/checkpoint5/engine/canonical_v4.py",
+    "assurance/v4/checkpoint6/report/render_v4.py",
+    "docs/v4.1.0-evidence-hardening.md",
+    "docs/v4/query-evidence-matrix.md",
+    "docs/v4/security-review-record-v4.1.0.md",
+    "scripts/Invoke-ArcPostureReview.ps1",
+    "tests/fixtures/evidence-hardening-negative.v4.1.0.json",
+    "tests/fixtures/reviewed-lab-sanitized.zip",
+    "tests/fixtures/zero-connected-estate.v4.0.3.json",
+    "tools/Invoke-V4FinalGates.py",
+    "tools/Test-EvidenceHardening.py",
+    "tools/Test-GuideVersion.py",
+    "tools/Test-ZeroConnectedEstate.py",
+    "tools/Test-ZeroTarget.py"
+  ]
 }

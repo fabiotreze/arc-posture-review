@@ -1,0 +1,32 @@
+{
+  "name": "existing Arc estate with no connected target",
+  "inventory": {
+    "machines": [
+      {"name": "arc-01", "status": "Disconnected"},
+      {"name": "arc-02", "status": "Disconnected"},
+      {"name": "arc-03", "status": "Disconnected"},
+      {"name": "arc-04", "status": "Disconnected"},
+      {"name": "arc-05", "status": "Disconnected"},
+      {"name": "arc-06", "status": "Disconnected"},
+      {"name": "arc-07", "status": "Disconnected"}
+    ]
+  },
+  "expected": {
+    "CHK-32": {
+      "status": "N/A",
+      "applicableCount": 0,
+      "evaluatedCount": 0,
+      "detailContains": ["7 machine(s)", "none are Connected", "CHK-37"]
+    },
+    "CHK-39": {
+      "status": "N/A",
+      "applicableCount": 0,
+      "evaluatedCount": 0,
+      "detailContains": ["7 machine(s)", "none are Connected", "CHK-37"]
+    },
+    "CHK-40": {
+      "status": "PARTIAL",
+      "unchanged": true
+    }
+  }
+}
