@@ -42,5 +42,14 @@
     "tools/Test-GuideVersion.py",
     "tools/Test-ZeroConnectedEstate.py",
     "tools/Test-ZeroTarget.py"
-  ]
+  ],
+  "securityReview": {
+    "reviewer": "",
+    "date": "",
+    "decision": "PENDING",
+    "checklist": "docs/v4/security-review-checklist.md",
+    "record": "docs/v4/security-review-record-v4.1.0.md",
+    "items": 29,
+    "itemsApproved": 0
+  }
 }
