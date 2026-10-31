@@ -1,82 +1,45 @@
 # Changelog
 
-## [4.0.5] - 2026-10-30
+## [4.1.0] — 2026-10-30
 
-### Fixed
-- The version markers of the guide embedded in `index.html`, `arc-posture-review.en-US.html` and `arc-posture-review.pt-BR.html` ("Canonical project guide for ..." and the "Version ..." line) showed v4.0.1 (EN-US) and v3.9.5 (PT-BR) while the collector was v4.0.4. They now match the collector version.
+### Evidence hardening and release idempotency
 
-### Added
-- Test `tools/Test-GuideVersion.py` (registered in checkpoint 4): the guide markers in the three HTML files and in `docs/guide.*.md` must equal `$ScriptVersion`.
+- Hardened CHK-42 so PASS requires exactly one successful, timestamped, parseable assessment row per connected machine; duplicate, malformed, unsuccessful, or undocumented-authority evidence cannot become PASS.
+- Hardened CHK-55 with bounded baseline names, timestamped compliance, explicit Pending/unknown handling, and independent failure/coverage semantics.
+- Hardened CHK-57 so conclusive Defender recommendations take precedence over MDE extension proxy gaps, while a missing or failed extension alone remains PARTIAL.
+- Hardened CHK-63 so unread resource-level plans are PARTIAL rather than PASS or inferred Free; explicit Free/difference results retain PARTIAL coverage when another machine is unread.
+- Added 10 synthetic negative regressions and preserved exactly 64 checks, 11 scenarios, collector schema v3, and assessment contract `assessment-result.v4` version `4.0.0`.
+- Made the GitHub Release workflow idempotent: existing releases are edited and assets are uploaded with `--clobber`; absent releases are created.
+- No collected environment data or customer reports are included.
 
-## [4.0.4] - 2026-10-30
+## [4.0.5] — 2026-10-30
 
-### Fixed
-- CHK-32 (MDE extension through Arc) and CHK-39 (Azure Monitor Agent) no longer return PASS when the Arc inventory has machines but none is Connected; they return N/A and point to CHK-37. Collector and embedded HTML copies updated together.
+### Embedded guide version consistency
 
-### Added
-- Negative test `tools/Test-ZeroConnectedEstate.py`.
+- Aligned the canonical-guide and visible version markers in `index.html`, `arc-posture-review.en-US.html`, and `arc-posture-review.pt-BR.html` with collector v4.0.5.
+- Added `tools/Test-GuideVersion.py` and registered it in the checkpoint 4 gate to prevent stale guide-version markers.
+- Registered the new gate with the checkpoint 4 runner's native `sys.executable` command format, avoiding undefined helper variables during gate execution.
+- Made release checksum verification line-ending-stable by hashing LF-normalized content, so the packaged artifact validates identically after Windows CRLF and archive LF materialization.
+- No collection, scoring, canonical-contract, or report-rendering logic changed.
 
-## [4.0.3] - 2026-10-30
+## [4.0.4] — 2026-10-30
 
-### Fixed
-- Evidence availability now requires the dataset to be a member of the evidence package; a declared source alone no longer counts as available evidence. Defense in depth: the collector already marks missing datasets as ERROR.
+### Existing Arc inventory with zero Connected machines
 
-### Added
-- Negative test `tools/Test-EvidenceAvailability.py`.
-- Security review addendum `docs/v4/security-review-addendum-v4.0.3.md`: corrects the SHA256SUMS statement of the v4.0.1/v4.0.2 records and records a real-environment validation.
+- Corrected CHK-32 and CHK-39 so an estate with Arc resources but no Connected machines returns `N/A` with an explicit CHK-37 connectivity dependency instead of PASS over an empty target.
+- Defined both evidence targets as `connected.Count`; no other `Get-ArcConnected` consumer or CHK-40 behavior changed.
+- Added the executable `Test-ZeroConnectedEstate.py` regression and a seven-machine/all-Disconnected fixture. The gate requires CHK-32 = N/A, CHK-39 = N/A and CHK-40 = PARTIAL.
 
-## [4.0.2] - 2026-10-30
+## [4.0.2] — 2026-10-30
 
-### Fixed
+### End-to-end evidence and report hardening
 
-- Prevent machine-dependent controls from returning PASS when the successfully collected Azure Arc machine inventory contains zero machines.
-- CHK-12, CHK-21, CHK-23, CHK-24, CHK-27, CHK-28, CHK-32, CHK-37, CHK-39 and CHK-51 now return INFO with FULL evidence coverage and found=0 for an empty Azure Arc machine inventory.
-- Add a regression gate that prohibits vacuous PASS results for the zero-target scenario.
-- Keep the embedded EN-US and PT-BR collectors synchronized with the standalone collector.
-
-## [4.0.1] — 2026-10-29
-
-### Release hygiene (no change to results)
-
-- Collector, integrated guides, citation metadata and test markers versioned as v4.0.1. Collection behaviour, the 64 checks, statuses, scoring and the `assessment-result.v4` contract (4.0.0) are unchanged.
-- Sample analyses (`docs/examples/sample-analysis.*.html`) re-stamped as checklist v4.0.1; content unchanged.
-- The published collector asset now includes the v4 report (on by default; `-NoV4Report` to skip); the v4.0.0 asset did not.
-- CP10 now reads the target release from its manifest, accepts `PENDING_SECURITY_REVIEW` only with `publishable: false`, and requires an APPROVED review (reviewer and date) and no open blockers before `publishable: true`. The stale `KI-V4-001` blocker field was removed from the CP10 manifest.
-- The Release workflow refuses to publish a v4+ tag unless `release/<tag>/release-manifest.json` is approved and `SHA256SUMS` validates. The v4 release-gate workflow no longer hardcodes `release/v4.0.0`.
-- Added `tools/Prepare-Release.py` (checksums and evidence-gated approval). `release/v4.0.0` remains unchanged as the published record.
-
-### Planned for v4.1.0
-
-- CHK-42, CHK-55, CHK-57, CHK-63: no PASS on inconclusive evidence (assessment age limit, pending baseline, sensor health, per-machine plan read failures), with negative tests
-- CHK-31, CHK-39, CHK-43, CHK-45: separate organisational policy from Microsoft requirement (approved destinations, per-table retention)
-- CHK-02: Arc-enabled SCVMM lifecycle instead of a generic recommendation for new projects
-- Sources: pin the MCSB version per mapping and replace the deprecated CAF Arc reference
-- Report: per-claim scope/denominator, evidence time, direct vs proxy source, missing permissions, pagination limit and rule version; explicit criteria for 'Verified Improvement'; SHA-256 binding of the resource index
-
-## [4.0.0] — 2026-10-29
-
-### v4 assessment model and report (stable)
-
-- Canonical `assessment-result.v4` engine with Evidence → Observation → Claim → Control → Scenario traceability, 64 controls and 11 Security Scenarios, rendered as a bilingual EN-US/PT-BR render-only report with Playwright and clean PDF gates.
-- Report narrative, KPI status tiles, data-gap callout and a NOW action plan in canonical order, plus a collapsible per-check evidence trace.
-- Optional runId-bound resource index sidecar (`tools/New-ResourceIndex.py`, `resource-index.v4.json`) with Azure portal links per finding row, marked inferred links when the package has a single subscription, and per-machine links when a finding lists machine names. The canonical contract is unchanged.
-
-### Security and release
-
-- KI-V4-001 resolved: `pypdf` upgraded from 6.19.0 to 6.21.2 in `requirements-v4.txt` and `requirements-dev.txt` (11 Dependabot advisories closed).
-- v4.0.0 security review repeated and approved (29/29); signed record in `docs/v4/security-review-record-v4.0.0.md`. The release manifest is `APPROVED_FOR_PUBLICATION` and the CP10 gate requires an approved review.
-
-### Collector and legacy report
-
-- Collector, legacy report, guides, sample analyses and citation metadata are versioned as v4.0.0. Collection behaviour, the 64 checks and the legacy report contract are unchanged from v3.9.6.
-
-## [3.9.6] — 2026-10-28
-
-### CI fixture remediation
-
-- Restored the sanitized reviewed-lab fixture required by the report-quality regression checks.
-- Added a targeted `.gitignore` exception so `tests/fixtures/reviewed-lab-sanitized.zip` remains versioned while other ZIP files remain ignored.
-- Validated the corrected fixture through the reviewed-lab regression contract and the report-quality workflow.
+- Added an immutable per-dataset query ledger (`data/query-evidence.json`) with normalized statement/command SHA-256, official source, row/page counts, attempted/successful/failed scopes, and collection timestamp. The package manifest continues to hash every evidence file.
+- Made per-subscription collection fail closed when every scope call fails and reject Resource Graph results that still expose a skip token at the 500-page safety limit.
+- Added explicit `applicableCount`, `evaluatedCount`, `healthyCount`, and `targetBasis` to every automatic result. A zero-target result is `N/A`, never `PASS`; the deterministic engine independently rejects any explicit zero-target PASS.
+- Corrected CHK-12 so missing `identity.principalId` cannot become a clean managed-identity RBAC result.
+- Extended the canonical evidence contract and bilingual HTML with target integrity, query evidence, source status, coverage, cross-linked check/evidence rows, and a compact healthy/evaluated visual.
+- Added the official-source query matrix and regression gates for zero-target, pagination, query evidence, schema, traceability, localization, and report rendering.
 
 ## [3.9.5] — 2026-10-27
 

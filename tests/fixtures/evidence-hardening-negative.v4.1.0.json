@@ -1,0 +1,17 @@
+{
+  "fixture": "synthetic-evidence-hardening-negative-v4.1.0",
+  "containsEnvironmentData": false,
+  "containsCustomerReport": false,
+  "cases": [
+    {"id":"CHK42-MISSING-TIMESTAMP","checkId":"CHK-42","input":{"assessmentRows":1,"successful":true,"timestamped":false,"countsValid":true,"pending":0,"authority":"AutomaticByPlatform","extensionState":"Succeeded"},"expected":{"status":"PARTIAL","coverage":"PARTIAL"}},
+    {"id":"CHK42-NEGATIVE-WITH-GAP","checkId":"CHK-42","input":{"assessmentRows":1,"successful":true,"timestamped":false,"countsValid":true,"pending":2,"authority":"AutomaticByPlatform","extensionState":"Succeeded"},"expected":{"status":"FAIL","coverage":"PARTIAL"}},
+    {"id":"CHK42-DUPLICATE","checkId":"CHK-42","input":{"assessmentRows":2,"successful":true,"timestamped":true,"countsValid":true,"pending":0,"authority":"AutomaticByPlatform","extensionState":"Succeeded"},"expected":{"status":"PARTIAL","coverage":"PARTIAL"}},
+    {"id":"CHK55-PENDING","checkId":"CHK-55","input":{"recognized":true,"compliance":"Pending","timestamped":false},"expected":{"status":"PARTIAL","coverage":"PARTIAL"}},
+    {"id":"CHK55-NONCOMPLIANT-WITH-GAP","checkId":"CHK-55","input":{"recognized":true,"compliance":"NonCompliant","timestamped":false},"expected":{"status":"FAIL","coverage":"PARTIAL"}},
+    {"id":"CHK57-NEGATIVE-PRECEDENCE","checkId":"CHK-57","input":{"highOrMediumUnhealthy":1,"lowerUnhealthy":0,"mdeSucceeded":false},"expected":{"status":"FAIL","coverage":"PARTIAL"}},
+    {"id":"CHK57-FAILED-PROXY-ONLY","checkId":"CHK-57","input":{"highOrMediumUnhealthy":0,"lowerUnhealthy":0,"mdeSucceeded":false},"expected":{"status":"PARTIAL","coverage":"PARTIAL"}},
+    {"id":"CHK63-UNREAD","checkId":"CHK-63","input":{"free":0,"different":0,"unread":1},"expected":{"status":"PARTIAL","coverage":"PARTIAL"}},
+    {"id":"CHK63-FREE-WITH-UNREAD","checkId":"CHK-63","input":{"free":1,"different":0,"unread":1},"expected":{"status":"FAIL","coverage":"PARTIAL"}},
+    {"id":"CHK63-DIFFERENT-WITH-UNREAD","checkId":"CHK-63","input":{"free":0,"different":1,"unread":1},"expected":{"status":"WARN","coverage":"PARTIAL"}}
+  ]
+}

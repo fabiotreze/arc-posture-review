@@ -1541,7 +1541,7 @@
     ],
     "title": "Avaliação de patches (Update Manager/WSUS)",
     "what": "Avaliação periódica (AutomaticByPlatform) e patches críticos/segurança pendentes.",
-    "crit": "FAIL para patches críticos/de segurança pendentes ou extensão de patch com falha; PARTIAL quando avaliação/autoridade for desconhecida; PASS somente com uma linha canônica de avaliação válida por máquina conectada e sem patches críticos/de segurança pendentes.",
+    "crit": "FAIL para extensão de patch com falha ou patches críticos/de segurança explicitamente pendentes; PARTIAL quando a linha de avaliação estiver ausente, duplicada, sem sucesso, não interpretável, sem timestamp ou com autoridade de patch não documentada; PASS somente com exatamente uma linha de avaliação bem-sucedida, datada e com contagens não negativas interpretáveis por máquina conectada, sem patches críticos/de segurança pendentes.",
     "refs": [
       "OPS-10"
     ],
@@ -1573,7 +1573,7 @@
     "alerts": [
       "ALR-07"
     ],
-    "resultCriteria": "FAIL para patches críticos/de segurança pendentes ou extensão de patch com falha; PARTIAL quando avaliação/autoridade for desconhecida; PASS somente com uma linha canônica de avaliação válida por máquina conectada e sem patches críticos/de segurança pendentes."
+    "resultCriteria": "FAIL para extensão de patch com falha ou patches críticos/de segurança explicitamente pendentes (com cobertura PARTIAL quando a mesma linha não for confiável); PARTIAL quando a integridade da avaliação ou a autoridade for desconhecida; PASS somente com exatamente uma linha de avaliação bem-sucedida, datada e com contagens não negativas interpretáveis por máquina conectada, sem patches críticos/de segurança pendentes."
   },
   {
     "id": "CHK-43",
@@ -2025,7 +2025,7 @@
     ],
     "title": "Baseline de segurança do sistema operacional",
     "what": "Atribuição e conformidade do Azure compute security baseline (Windows e Linux) por Machine Configuration em cada máquina conectada.",
-    "crit": "FAIL se houver máquina conectada sem baseline atribuído; WARN se houver máquina não conforme; PASS se todas estiverem atribuídas e conformes.",
+    "crit": "FAIL quando a consulta completa do Machine Configuration não retornar uma atribuição reconhecida de baseline de segurança do SO ou retornar NonCompliant; PARTIAL para evidência pendente, ausente, conflitante, com nome genérico ou sem timestamp; PASS somente quando cada máquina conectada tiver baseline reconhecido, Compliant e datado.",
     "refs": [
       "REQ-07",
       "CTL-06"
@@ -2061,7 +2061,7 @@
       ]
     ],
     "alerts": [],
-    "resultCriteria": "FAIL se houver máquina conectada sem baseline atribuído; WARN se houver máquina não conforme; PASS se todas estiverem atribuídas e conformes."
+    "resultCriteria": "FAIL quando a consulta completa do Machine Configuration não retornar uma atribuição reconhecida de baseline de segurança do SO ou houver evidência explícita NonCompliant; PARTIAL para evidência pendente, ausente, conflitante, com nome genérico ou sem timestamp; PASS somente quando cada máquina conectada tiver baseline reconhecido, Compliant e datado."
   },
   {
     "id": "CHK-56",
@@ -2119,7 +2119,7 @@
     ],
     "title": "Antivírus e EDR saudáveis",
     "what": "Recomendações do Defender for Cloud sobre proteção de endpoint (antimalware, EDR, Defender for Endpoint) e presença da extensão MDE nas máquinas conectadas.",
-    "crit": "FAIL se houver recomendação de proteção de endpoint de severidade alta ou média com máquinas Unhealthy; WARN se houver recomendação de severidade baixa ou máquina conectada sem a extensão MDE.",
+    "crit": "FAIL quando recomendação de proteção de endpoint High/Medium/Critical tiver máquinas Unhealthy, mesmo com evidência incompleta da extensão MDE; WARN para recomendação de severidade inferior; PARTIAL quando o único sinal for extensão MDE ausente ou diferente de Succeeded, pois o inventário da extensão não comprova onboarding nem saúde do sensor; PASS somente sem recomendação Unhealthy correspondente e com extensão MDE Succeeded em todas as máquinas conectadas.",
     "refs": [
       "CTL-06"
     ],
@@ -2151,7 +2151,7 @@
     "alerts": [
       "ALR-07"
     ],
-    "resultCriteria": "PARTIAL quando uma máquina conectada não tiver a extensão MDE (a ausência da extensão não prova ausência do sensor); caso contrário, FAIL se uma recomendação de proteção de endpoint High/Medium tiver máquinas Unhealthy, WARN se uma de severidade menor tiver, e PASS quando nenhuma tiver."
+    "resultCriteria": "FAIL para recomendações High/Medium/Critical de proteção de endpoint com máquinas Unhealthy e WARN para severidade inferior; manter cobertura PARTIAL quando a evidência da extensão MDE também estiver incompleta; PARTIAL quando extensão MDE ausente/diferente de Succeeded for o único sinal; PASS somente sem recomendação Unhealthy correspondente e com extensão MDE Succeeded em todas as máquinas conectadas."
   },
   {
     "id": "CHK-58",
@@ -2384,7 +2384,7 @@
     ],
     "title": "Defender for Servers por máquina Arc",
     "what": "Plano do Defender for Servers lido em cada máquina Arc (Pricings no nível de recurso): tier, subplano, se herda da subscription e extensões ativas.",
-    "crit": "FAIL se houver máquina sem Defender for Servers (Free); WARN se o plano da máquina for diferente do plano da subscription; PASS se todas herdam o plano da subscription.",
+    "crit": "FAIL quando alguma máquina Arc tiver plano efetivo Free lido explicitamente; WARN quando o plano do recurso lido explicitamente divergir ou sobrescrever o plano da subscription; PARTIAL quando o plano efetivo do recurso ou a comparação com a subscription não puder ser lida; PASS somente quando todos os planos efetivos forem lidos e consistentes com a subscription.",
     "refs": [
       "CTL-06"
     ],
@@ -2416,7 +2416,7 @@
     "alerts": [
       "ALR-07"
     ],
-    "resultCriteria": "PASS quando toda máquina Arc tiver plano do Defender for Servers igual ao da sua subscription; WARN quando o plano da máquina divergir da subscription; FAIL quando alguma máquina estiver em Free (sem plano)."
+    "resultCriteria": "FAIL para plano efetivo Free lido explicitamente e WARN para divergência/sobrescrita explícita; manter cobertura PARTIAL quando outra máquina não puder ser lida; PARTIAL quando evidência não lida for a única condição; PASS somente quando todo plano efetivo e sua comparação com a subscription forem lidos conclusivamente e forem consistentes."
   },
   {
     "id": "CHK-64",

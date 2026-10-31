@@ -2747,7 +2747,7 @@
         "timestamp",
         "source"
       ],
-      "absenceMeans": "WARN",
+      "absenceMeans": "UNKNOWN",
       "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
     },
     "mappingConfidence": "high",
@@ -2764,7 +2764,7 @@
         "patch"
       ]
     },
-    "resultCriteria": "FAIL for pending critical/security patches or a failed patch extension; PARTIAL when assessment/authority is unknown; PASS only with one valid canonical assessment row per connected machine and no pending critical/security patches."
+    "resultCriteria": "FAIL for a failed patch extension or explicit pending critical/security patches (with PARTIAL evidence coverage when the same row is not trustworthy); PARTIAL when assessment integrity or authority is unknown; PASS only with exactly one successful, timestamped assessment row with parseable non-negative counts per connected machine and no pending critical/security patches."
   },
   {
     "id": "CHK-43",
@@ -3642,7 +3642,7 @@
         "gcComp"
       ]
     },
-    "resultCriteria": "FAIL if a connected machine has no baseline assigned; WARN if a machine is non-compliant; PASS if all are assigned and compliant."
+    "resultCriteria": "FAIL when the complete Machine Configuration query returns no recognized OS security baseline assignment or explicit NonCompliant evidence; PARTIAL for pending, missing, conflicting, generic-name, or untimestamped compliance evidence; PASS only when every connected machine has a recognized baseline assignment that is Compliant and timestamped."
   },
   {
     "id": "CHK-56",
@@ -3763,7 +3763,7 @@
         "timestamp",
         "source"
       ],
-      "absenceMeans": "FAIL",
+      "absenceMeans": "UNKNOWN",
       "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
     },
     "mappingConfidence": "high",
@@ -3783,7 +3783,7 @@
         "defender"
       ]
     },
-    "resultCriteria": "PARTIAL when a connected machine lacks the MDE extension (extension absence does not prove sensor absence); otherwise FAIL if a High/Medium endpoint protection recommendation has Unhealthy machines, WARN if a lower-severity one does, and PASS when none does."
+    "resultCriteria": "FAIL for High/Medium/Critical Unhealthy endpoint-protection recommendations and WARN for lower severity; retain PARTIAL evidence coverage when MDE extension evidence is simultaneously incomplete; PARTIAL when a missing/non-Succeeded MDE extension is the only signal; PASS only with no matching Unhealthy recommendation and a Succeeded MDE extension on every connected machine."
   },
   {
     "id": "CHK-58",
@@ -4163,7 +4163,7 @@
         "timestamp",
         "source"
       ],
-      "absenceMeans": "FAIL",
+      "absenceMeans": "UNKNOWN",
       "evaluationRule": "Evidence must be scoped, timestamped, attributable to a source, and must satisfy resultCriteria; absence is never interpreted as PASS."
     },
     "mappingConfidence": "high",
@@ -4182,7 +4182,7 @@
         "pricingRes"
       ]
     },
-    "resultCriteria": "PASS when every Arc machine has a Defender for Servers plan equal to its subscription plan; WARN when a machine plan differs from the subscription; FAIL when any machine is on Free (no plan)."
+    "resultCriteria": "FAIL for an explicitly read effective Free plan and WARN for an explicit difference/override; retain PARTIAL evidence coverage when another machine is unread; PARTIAL when unread evidence is the only condition; PASS only when every effective resource plan and subscription comparison is conclusively read and consistent."
   },
   {
     "id": "CHK-64",

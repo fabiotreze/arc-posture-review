@@ -1,0 +1,46 @@
+{
+  "release": "v4.1.0",
+  "status": "VALIDATED_ARTIFACT",
+  "sourceBranch": "feature/v4.1.0",
+  "parentRelease": "v4.0.5",
+  "canonicalContract": "assessment-result.v4",
+  "contractVersion": "4.0.0",
+  "collectorVersion": "v4.1.0",
+  "gateEntrypoint": "tools/Invoke-V4FinalGates.py",
+  "publishable": false,
+  "blockers": [
+    {
+      "id": "GIT-PROVENANCE-001",
+      "condition": "Verify this candidate against the authorized repository history and remote branch before publication."
+    },
+    {
+      "id": "INDEPENDENT-TEST-001",
+      "condition": "Complete independent package testing and review before publication."
+    }
+  ],
+  "validatedCapabilities": [
+    "64-check and 11-scenario canonical assessment",
+    "assessment-result.v4 contract version 4.0.0",
+    "negative evidence regressions for CHK-42, CHK-55, CHK-57 and CHK-63",
+    "idempotent GitHub Release create-or-update workflow",
+    "bilingual report and localization parity"
+  ],
+  "scope": "Evidence-hardening test candidate only; no environment data or customer reports included.",
+  "checksumTargets": [
+    "assurance/v4/checkpoint4/engine/deterministic_engine.py",
+    "assurance/v4/checkpoint5/engine/canonical_v4.py",
+    "assurance/v4/checkpoint6/report/render_v4.py",
+    "docs/v4.1.0-evidence-hardening.md",
+    "docs/v4/query-evidence-matrix.md",
+    "docs/v4/security-review-record-v4.1.0.md",
+    "scripts/Invoke-ArcPostureReview.ps1",
+    "tests/fixtures/evidence-hardening-negative.v4.1.0.json",
+    "tests/fixtures/reviewed-lab-sanitized.zip",
+    "tests/fixtures/zero-connected-estate.v4.0.3.json",
+    "tools/Invoke-V4FinalGates.py",
+    "tools/Test-EvidenceHardening.py",
+    "tools/Test-GuideVersion.py",
+    "tools/Test-ZeroConnectedEstate.py",
+    "tools/Test-ZeroTarget.py"
+  ]
+}
