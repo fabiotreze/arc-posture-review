@@ -5,7 +5,7 @@
 485435bf066ecf7bafd16c2349108fda18ed231edd0910e707df6c8766088020  assurance/v4/checkpoint6/report/render_v4.py
 441f7685287e4834416721fec1a4f2510d68e1a81cd2323d6b1f85ece18d32a6  docs/v4.1.0-evidence-hardening.md
 aebf4dcd9d984738e72b1e6ffa698bcded59e4f6bedd98dd7d80309c1d672de0  docs/v4/query-evidence-matrix.md
-400fccfea7fc265b9d6856d7cbbb4363197f96a36ed4114cc67b27c3f55555b6  docs/v4/security-review-record-v4.1.0.md
+b9fdeadf3271f7cd1665ed23c58d2bb8167578e2f235559a9cdd97d74bd525bf  docs/v4/security-review-record-v4.1.0.md
 a5308e094d07d9b563448322377d42b75650c66278837d0e8ed389471e03c30b  scripts/Invoke-ArcPostureReview.ps1
 491aa8edf1e55d8f0eb20fd9d1f6f0ccd27f7096bc522c31614798cdea8828fc  tests/fixtures/evidence-hardening-negative.v4.1.0.json
 551ff1e25673236b67143f00fec1d74344f9e5461ff2a9ef0aa2a755a7ed138c  tests/fixtures/reviewed-lab-sanitized.zip
