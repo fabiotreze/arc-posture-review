@@ -23,6 +23,6 @@ jobs:
           excludeRule: '"PSAvoidUsingPositionalParameters", "PSAvoidUsingWriteHost"'
           output: results.sarif
       - name: Upload results to code scanning
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results.sarif
