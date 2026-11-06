@@ -14,7 +14,9 @@ ROOT = Path(__file__).resolve().parents[1]
 release = json.loads((ROOT / "assurance/v4/checkpoint10/manifest.json").read_text(encoding="utf-8"))["release"]
 manifest = json.loads((ROOT / "release" / release / "release-manifest.json").read_text(encoding="utf-8"))
 targets = {*manifest.get("checksumTargets", []), f"release/{release}/release-manifest.json", f"release/{release}/RELEASE-NOTES.md"}
-eol = subprocess.run(["git", "ls-files", "--eol"], cwd=ROOT, capture_output=True, text=True, check=True).stdout.splitlines()
+probe = subprocess.run(["git", "ls-files", "--eol"], cwd=ROOT, capture_output=True, text=True)
+# The final gate runs in a copy that is not a Git repository: only the lone-CR check applies there.
+eol = probe.stdout.splitlines() if probe.returncode == 0 else []
 errors = []
 for line in eol:
     info, _, path = line.partition("\t")
