@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v4.1.1 — 2026-11-06.** Posture-versus-evidence wording: a missing configuration is reported as an improvement opportunity and missing evidence as a collection task; only observed conditions are verified gaps. An implicit scope (no `-Subscriptions`) is now disclosed. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
+**Version v4.1.2 — 2026-11-06.** One package: the collector now adds the canonical v4 report (Zero Trust × Tier, scenarios, action plan) to the same `.zip`, and the app opens and saves it. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 
@@ -12,7 +12,7 @@
 
 ## 0) Start here
 
-Three steps: **1.** go through the stages below and open the tree for each decision (click the card); **2.** generate and run the read-only script (step 2 of the HTML); **3.** load the .zip and follow the action plan.
+Three steps: **1.** go through the stages below and open the tree for each decision (click the card); **2.** generate and run the read-only script (step 2 of the HTML): it produces **one .zip** that already carries the canonical v4 report (Zero Trust × Tier, scenarios, action plan); **3.** load the .zip in step 3, follow the action plan, open the v4 report with *Open v4 report (Zero Trust)* and deliver with *Save analysis (.html)*.
 
 ### Clean PDF delivery
 

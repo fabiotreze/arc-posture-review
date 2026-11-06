@@ -43,7 +43,13 @@ jobs:
           python tools/Sync-ReportAssets.py --check
           python tools/Test-ReportContract.py
       - name: Browser regression gate
-        run: python tools/Test-ReportVisual.py
+        run: |
+          python tools/Test-ReportVisual.py
+          python tools/Test-AppV4Report.py
+      - name: Build the runtime kit (SHA-256 must equal the value pinned in the collector)
+        run: |
+          python tools/Build-Kit.py --check
+          python tools/Build-Kit.py --output arc-posture-kit.zip
       - name: Extract release notes from CHANGELOG
         run: |
           v="${GITHUB_REF_NAME#v}"
@@ -55,9 +61,9 @@ jobs:
         run: |
           set -euo pipefail
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            echo "Release $GITHUB_REF_NAME already exists; updating notes and replacing the asset."
+            echo "Release $GITHUB_REF_NAME already exists; updating notes and replacing the assets."
             gh release edit "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md
-            gh release upload "$GITHUB_REF_NAME" scripts/Invoke-ArcPostureReview.ps1 --clobber
+            gh release upload "$GITHUB_REF_NAME" scripts/Invoke-ArcPostureReview.ps1 arc-posture-kit.zip --clobber
           else
-            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md scripts/Invoke-ArcPostureReview.ps1
+            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md scripts/Invoke-ArcPostureReview.ps1 arc-posture-kit.zip
           fi

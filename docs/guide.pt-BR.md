@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v4.1.1 — 06/11/2026.** Linguagem de postura versus evidência: configuração ausente é tratada como oportunidade de melhoria e evidência ausente como tarefa de coleta; somente condições observadas são lacunas verificadas. O escopo implícito (sem `-Subscriptions`) agora é sinalizado. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
+**Versão v4.1.2 — 06/11/2026.** Um único pacote: o coletor agora inclui o relatório canônico v4 (Zero Trust × Tier, cenários, plano de ação) no mesmo `.zip`, e o app o abre e salva. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 
@@ -12,7 +12,7 @@
 
 ## 0) Comece aqui
 
-Três passos: **1.** percorra as etapas abaixo e abra a árvore de cada decisão (clique no cartão); **2.** gere e rode o script somente leitura (etapa 2 do HTML); **3.** carregue o .zip e siga o plano de ação.
+Três passos: **1.** percorra as etapas abaixo e abra a árvore de cada decisão (clique no cartão); **2.** gere e rode o script somente leitura (etapa 2 do HTML): ele produz **um único .zip** que já traz o relatório canônico v4 (Zero Trust × Tier, cenários, plano de ação); **3.** carregue o .zip na etapa 3, siga o plano de ação, abra o relatório v4 em *Abrir relatório v4 (Zero Trust)* e entregue com *Salvar análise (.html)*.
 
 ### Entrega em PDF limpo
 

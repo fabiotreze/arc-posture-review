@@ -41,6 +41,7 @@ def main() -> int:
         ("cp6-contract-pt-BR", [sys.executable, str(tests / "Test-ReportContract.py"), "--assessment", str(ASSESSMENT), "--html", str(PT)]),
         ("cp6-localization-parity", [sys.executable, str(tests / "Test-LocalizationParity.py"), "--en", str(EN), "--pt", str(PT)]),
         ("cp6-playwright-and-pdf", [sys.executable, str(tests / "Test-ReportVisual.py"), "--en", str(EN), "--pt", str(PT), "--artifacts", str(ARTIFACTS)]),
+        ("cp6-app-v4-report", [sys.executable, str(ROOT / "tools" / "Test-AppV4Report.py")]),
         ("cp6-resource-index", [sys.executable, str(tests / "Test-ResourceIndex.py")]),
         ("cp6-resource-coverage", [sys.executable, str(tests / "Test-ResourceCoverage.py")]),
         ("cp6-python-compile", [sys.executable, "-m", "compileall", "-q", str(CP6)]),

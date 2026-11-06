@@ -38,7 +38,7 @@ def main() -> int:
     failures = [label for label, command in steps if not run(label, command)]
     status = {
         "checkpoint": 5,
-        "version": "4.1.1",
+        "version": "4.1.2",
         "contract": "assessment-result.v4",
         "status": "PASS" if not failures else "FAIL",
         "failures": failures,
