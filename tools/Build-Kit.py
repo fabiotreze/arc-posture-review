@@ -54,6 +54,7 @@ def build() -> bytes:
             payload = b"" if name in PLACEHOLDERS else (ROOT / name).read_bytes().replace(b"\r\n", b"\n")
             info = zipfile.ZipInfo(name, FIXED_TIME)
             info.compress_type = zipfile.ZIP_STORED
+            info.create_system = 3  # the header records the build platform; pin it so Windows and Linux produce identical bytes
             info.external_attr = 0o644 << 16
             kit.writestr(info, payload)
     return buffer.getvalue()
