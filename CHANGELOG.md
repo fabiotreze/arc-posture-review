@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.1.2] — 2026-11-06
+
+### One package
+
+- The collector adds the canonical v4 report (Zero Trust × Tier, scenarios, action plan; EN-US and PT-BR) to the same `.zip` under `report/` after writing the evidence. Without Python 3.10+, with no network or with a kit hash mismatch it warns and finishes with the evidence package; `-NoV4Report` skips the step and `-KitUrl` points to another kit URL or local file.
+- Runtime kit: from the clone when the script runs inside one, otherwise `arc-posture-kit.zip` published next to the script. It is built deterministically by `tools/Build-Kit.py`, pinned by SHA-256 in the collector (`$KitSha256`) and refused on mismatch; the release workflow rebuilds it, fails on drift and uploads it.
+- The app shows *Open v4 report (Zero Trust)* and *Save v4 report (.html)* when the loaded `.zip` has `report/`, and no longer flags `report/` as outside the manifest.
+- README, guide (Markdown and embedded HTML) and in-app notes describe the single-package flow; the threat model covers the runtime kit.
+- Added `tools/Build-Kit.py`, `tools/Test-V4ReportStep.py` and `tools/Test-AppV4Report.py`, registered in the checkpoint 4 and 6 gates and the release workflow; documented in `docs/v4.1.2-single-package.md`.
+- No collected environment data or customer reports are included.
+
 ## [4.1.1] — 2026-11-06
 
 ### Documentation corrected

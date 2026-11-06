@@ -31,6 +31,8 @@ def main() -> int:
         ("zero-target-query-evidence", [sys.executable, "tools/Test-ZeroTarget.py"]),
         ("zero-connected-estate", [sys.executable, "tools/Test-ZeroConnectedEstate.py"]),
         ("posture-wording", [sys.executable, "tools/Test-PostureWording.py"]),
+        ("kit-pin", [sys.executable, "tools/Build-Kit.py", "--check"]),
+        ("v4-report-step", [sys.executable, "tools/Test-V4ReportStep.py"]),
         ("guide-version", [sys.executable, "tools/Test-GuideVersion.py"]),
         ("generate-sample", [sys.executable, "assurance/v4/checkpoint4/scripts/Evaluate-Posture.py", "--evidence", str(FIXTURE), "--output", str(SAMPLE)]),
         ("cp4-json-schemas", [sys.executable, "assurance/v4/checkpoint4/validators/Validate-JsonSchemas.py"]),

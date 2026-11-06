@@ -27,20 +27,22 @@ Invoke-WebRequest https://github.com/fabiotreze/arc-posture-review/releases/late
 
 | Output (in `arc-posture-review/`) | Content |
 |---|---|
-| `arc-posture-review-<date>.zip` | The evidence package (results, findings, manifest SHA-256). **Download this file** from Cloud Shell. |
+| `arc-posture-review-<date>.zip` | **One package:** the evidence (results, findings, manifest SHA-256) and, in `report/`, the canonical v4 report (Zero Trust × Tier, scenarios, action plan) in EN-US and PT-BR. **Download this file** from Cloud Shell. |
 | `arc-posture-review-<date>.zip.sha256` | Its SHA-256, to verify the download. |
+
+The report step needs Python 3.10+ (Cloud Shell has it). The collector downloads a small, stdlib-only kit published with the same release and runs it only if its SHA-256 equals the value pinned in the script; nothing is written to Azure. If Python or the download is unavailable, the run still completes with the evidence package and a warning. Use `-NoV4Report` to skip the report step.
 
 ### 2 · Open the analysis
 
-Open the app at <https://fabiotreze.github.io/arc-posture-review/> (or the `index.html` from this repository), go to step 3 and load the `.zip`. Step 4 shows the analysis: kit index, domains, priorities, evidence and the action plan.
+Open the app at <https://fabiotreze.github.io/arc-posture-review/> (or the `index.html` from this repository), go to step 3 and load the `.zip`. Step 4 shows the analysis: kit index, domains, priorities, evidence and the action plan. **Open v4 report (Zero Trust)** opens the canonical v4 report that came in the same `.zip`.
 
 ### 3 · Deliver
 
-In step 4, **Save analysis (.html)** or **Print / PDF** (use `python tools/Generate-CleanPdf.py <saved.html>` for a clean PDF). Check *Hide e-mails in saved files* before sharing.
+In step 4, **Save analysis (.html)**, **Save v4 report (.html)** or **Print / PDF** (use `python tools/Generate-CleanPdf.py <saved.html>` for a clean PDF). Check *Hide e-mails in saved files* before sharing.
 
-### Optional · Canonical v4 report (Zero Trust × Tier, scenarios, action cards)
+### Only if the `.zip` has no `report/` · Generate the canonical v4 report yourself
 
-The canonical v4 report is **not** produced by the collector; it is generated from the same `.zip` with Python 3.10+ in a clone of this repository:
+When the collector could not run the report step (no Python 3.10+ in the shell), generate it from the same `.zip` in a clone of this repository:
 
 ```powershell
 git clone https://github.com/fabiotreze/arc-posture-review.git; cd arc-posture-review

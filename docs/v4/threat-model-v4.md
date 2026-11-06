@@ -46,9 +46,12 @@ This model covers the read-only collector package, evidence ZIP, deterministic E
 | Secret disclosure | Tenant data in fixture or CI artifact | Sanitized fixture and content review |
 | Workflow privilege expansion | Write token used by quality gate | `permissions: contents: read` and workflow validator |
 | Dependency exposure | Vulnerable PDF parser version | Pinned approved version, Dependabot tracking and stable-release blocker |
+| Runtime code substitution (v4.1.2) | The collector downloads the report kit and a tampered kit is executed | The kit is built deterministically (`tools/Build-Kit.py`), its SHA-256 is pinned inside the collector and refused on mismatch, the release workflow rebuilds it and fails on drift, and the kit is stdlib-only Python that makes no network or process call and writes only the output files it is given |
 
 ## Abuse cases
 
+- A contributor changes the kit without updating the pinned SHA-256: rejected by `tools/Build-Kit.py --check` (checkpoint 4 gate and release workflow).
+- A kit served from another location or altered in transit: refused by the collector (`tools/Test-V4ReportStep.py` covers the mismatch).
 - A contributor changes JavaScript to derive a lower score: rejected by render-purity and report-contract gates.
 - A scenario skips MANAGEMENT: rejected by scenario transition tests.
 - A check disappears from Evidence: rejected by exact 64-CHK cardinality gates.

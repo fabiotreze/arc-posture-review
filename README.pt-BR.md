@@ -27,20 +27,22 @@ Invoke-WebRequest https://github.com/fabiotreze/arc-posture-review/releases/late
 
 | Saída (em `arc-posture-review/`) | Conteúdo |
 |---|---|
-| `arc-posture-review-<data>.zip` | O pacote de evidências (resultados, achados, SHA-256 do manifest). **Baixe este arquivo** do Cloud Shell. |
+| `arc-posture-review-<data>.zip` | **Um único pacote:** as evidências (resultados, achados, SHA-256 do manifest) e, em `report/`, o relatório canônico v4 (Zero Trust × Tier, cenários, plano de ação) em PT-BR e EN-US. **Baixe este arquivo** do Cloud Shell. |
 | `arc-posture-review-<data>.zip.sha256` | O SHA-256 dele, para conferir o download. |
+
+A etapa do relatório precisa de Python 3.10+ (o Cloud Shell já tem). O coletor baixa um kit pequeno, só com a biblioteca padrão, publicado na mesma release, e só o executa se o SHA-256 dele for igual ao valor fixado no script; nada é escrito no Azure. Se o Python ou o download não estiverem disponíveis, a execução termina normalmente com o pacote de evidências e um aviso. Use `-NoV4Report` para pular essa etapa.
 
 ### 2 · Abrir a análise
 
-Abra o app em <https://fabiotreze.github.io/arc-posture-review/> (ou o `index.html` deste repositório), vá ao passo 3 e carregue o `.zip`. O passo 4 mostra a análise: índice do kit, domínios, prioridades, evidências e plano de ação.
+Abra o app em <https://fabiotreze.github.io/arc-posture-review/> (ou o `index.html` deste repositório), vá ao passo 3 e carregue o `.zip`. O passo 4 mostra a análise: índice do kit, domínios, prioridades, evidências e plano de ação. **Abrir relatório v4 (Zero Trust)** abre o relatório canônico v4 que veio no mesmo `.zip`.
 
 ### 3 · Entregar
 
-No passo 4, use **Salvar análise (.html)** ou **Imprimir / PDF** (para um PDF limpo, `python tools/Generate-CleanPdf.py <salvo.html>`). Marque *Ocultar e-mails nos arquivos salvos* antes de compartilhar.
+No passo 4, use **Salvar análise (.html)**, **Salvar relatório v4 (.html)** ou **Imprimir / PDF** (para um PDF limpo, `python tools/Generate-CleanPdf.py <salvo.html>`). Marque *Ocultar e-mails nos arquivos salvos* antes de compartilhar.
 
-### Opcional · Relatório canônico v4 (Zero Trust × Tier, cenários, action cards)
+### Só se o `.zip` não tiver `report/` · Gerar o relatório canônico v4 manualmente
 
-O relatório canônico v4 **não** é gerado pelo coletor; ele sai do mesmo `.zip`, com Python 3.10+ em um clone deste repositório:
+Quando o coletor não conseguiu executar a etapa do relatório (sem Python 3.10+ no shell), gere-o a partir do mesmo `.zip`, em um clone deste repositório:
 
 ```powershell
 git clone https://github.com/fabiotreze/arc-posture-review.git; cd arc-posture-review
