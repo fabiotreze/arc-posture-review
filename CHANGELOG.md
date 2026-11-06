@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.2.2] — 2026-11-06
+
+### pt-BR truncated sentence
+
+- The executive summary table cuts each observation at 230 characters; the CHK-21 sentence in that truncated form stayed in English in the Portuguese report. A rule for it was added and `tools/Test-PtBrContent.py` covers it.
+
 ## [4.2.1] — 2026-11-06
 
 ### pt-BR rule table fix
