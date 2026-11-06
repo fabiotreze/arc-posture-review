@@ -1611,7 +1611,7 @@ Add-Prop $man 'tool' { 'arc-posture-review' }
 Add-Prop $man 'schemaVersion' { 3 }
 Add-Prop $man 'files' { , $manFiles.ToArray() }
 try { Save-Text (Join-Path $RunDir 'manifest.json') (ConvertTo-Json -InputObject $man -Depth 5) } catch { Write-Warning ('Failed to write manifest.json (line {0}): {1}' -f $_.InvocationInfo.ScriptLineNumber, $_.Exception.Message) }
-
+
 # ===================== Canonical v4 report (optional; the evidence package above is already complete) =====================
 function Get-PythonCommand {
   foreach ($n in @('python3', 'python')) {

@@ -32,6 +32,7 @@ def main() -> int:
         ("zero-connected-estate", [sys.executable, "tools/Test-ZeroConnectedEstate.py"]),
         ("posture-wording", [sys.executable, "tools/Test-PostureWording.py"]),
         ("kit-pin", [sys.executable, "tools/Build-Kit.py", "--check"]),
+        ("line-endings", [sys.executable, "tools/Test-LineEndings.py"]),
         ("v4-report-step", [sys.executable, "tools/Test-V4ReportStep.py"]),
         ("guide-version", [sys.executable, "tools/Test-GuideVersion.py"]),
         ("generate-sample", [sys.executable, "assurance/v4/checkpoint4/scripts/Evaluate-Posture.py", "--evidence", str(FIXTURE), "--output", str(SAMPLE)]),
