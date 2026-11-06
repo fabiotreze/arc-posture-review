@@ -33,8 +33,14 @@ SEVERITY_SCORE = {"High": 70, "Medium": 45, "Low": 20}
 SCOPE_BONUS = {"T0": 15, "T1": 10, "Global": 8, "T2": 4}
 PRIORITY_RANK = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
 DEFENSE_FUNCTIONS = ("Prevent", "Detect", "Respond", "Recover")
-BASIS_TITLE_PREFIX = {"IMPROVEMENT": "Improve posture:", "EVIDENCE_COLLECTION": "Complete evidence:"}
+BASIS_TITLE_PREFIX = {"VERIFIED_GAP": "Remediate:", "IMPROVEMENT": "Improve posture:", "EVIDENCE_COLLECTION": "Complete evidence:"}
 BASIS_ACTIONS = {
+    "VERIFIED_GAP": [
+        "Confirm the verified gap in the listed checks and the machines or scope it affects.",
+        "Remediate the highest-severity listed checks first, through change control.",
+        "Re-run the collection and confirm the listed checks reach PASS.",
+        "Record the owner, the date and any accepted-risk decision.",
+    ],
     "IMPROVEMENT": [
         "Review the listed checks and decide which hardening steps to adopt.",
         "Prioritize by the residual risk of each check and the criticality tier of the machines.",
@@ -48,6 +54,11 @@ BASIS_ACTIONS = {
     ],
 }
 BASIS_CLOSURE = {
+    "VERIFIED_GAP": [
+        "Each listed check is PASS, or an accepted-risk decision is recorded.",
+        "The evidence behind each listed check is complete (Evidence Coverage FULL).",
+        "Owner and timestamp are recorded.",
+    ],
     "IMPROVEMENT": [
         "Each listed check is PASS, or an accepted-risk decision is recorded.",
         "Owner and timestamp are recorded.",
@@ -596,10 +607,9 @@ class DeterministicEvaluationEngine:
             ]
             basis = {"OPEN": "VERIFIED_GAP", "ELEVATED": "IMPROVEMENT"}.get(scenario["state"], "EVIDENCE_COLLECTION")
             title, actions, closure = template["title"], template["actions"], template["closureEvidence"]
-            if basis != "VERIFIED_GAP":
-                # Containment wording is reserved for verified gaps; other cards describe posture work or evidence work.
-                title = title.replace("Contain and remediate:", BASIS_TITLE_PREFIX[basis], 1)
-                actions, closure = BASIS_ACTIONS[basis], BASIS_CLOSURE[basis]
+            # Templates use incident-response wording ("contain", "preserve evidence"); a posture assessment never asserts an incident.
+            title = title.replace("Contain and remediate:", BASIS_TITLE_PREFIX[basis], 1)
+            actions, closure = BASIS_ACTIONS[basis], BASIS_CLOSURE[basis]
             rows.append({
                 "id": "ACI-" + template["riskId"],
                 "templateId": template["id"],

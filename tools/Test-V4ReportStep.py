@@ -13,11 +13,11 @@ param([string]$Path, [string]$Case, [string]$RunDir, [string]$KitRoot, [string]$
 $ErrorActionPreference = 'Stop'
 $tokens = $null; $errs = $null
 $ast = [System.Management.Automation.Language.Parser]::ParseFile($Path, [ref]$tokens, [ref]$errs)
-$wanted = 'Get-PythonCommand', 'Test-PythonVersion', 'Invoke-Python', 'Resolve-KitRoot', 'Invoke-V4Report'
+$wanted = 'Get-PythonCommand', 'Test-PythonVersion', 'Invoke-Python', 'Resolve-KitRoot', 'Invoke-V4Report', 'Save-Text'
 $funcs = $ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $wanted -contains $n.Name }, $true)
 if ($funcs.Count -ne $wanted.Count) { Write-Output ('MISSING_FUNCTIONS ' + $funcs.Count); exit 2 }
 foreach ($f in $funcs) { . ([scriptblock]::Create($f.Extent.Text)) }
-$KitSha256 = '0' * 64; $ScriptVersion = 'vTEST'; $KitUrl = ''
+$Utf8 = New-Object System.Text.UTF8Encoding $false; $KitSha256 = '0' * 64; $ScriptVersion = 'vTEST'; $KitUrl = ''
 try {
   if ($Case -eq 'repo') {
     Invoke-V4Report $RunDir $KitRoot ''
@@ -54,7 +54,7 @@ try:
         z.extractall(tmp / "run")
     run_dir = next(p.parent for p in (tmp / "run").rglob("results.json"))
     got = run("repo", RunDir=run_dir, KitRoot=ROOT)
-    expected = "OK arc-posture-review.v4.en-US.html,arc-posture-review.v4.pt-BR.html,assessment.v4.json"
+    expected = "OK arc-posture-review.v4.en-US.html,arc-posture-review.v4.pt-BR.html,assessment.v4.json,report.log"
     if got != expected:
         errors.append(f"report step returned {got!r}")
     else:

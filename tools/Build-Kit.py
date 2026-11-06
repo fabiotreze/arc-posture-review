@@ -40,6 +40,8 @@ KIT_FILES = [
     "assurance/v4/checkpoint5/engine/canonical_v4.py",
     "assurance/v4/checkpoint6/report/render_v4.py",
     "criteria/v4/check-catalog.v4.json",
+    "criteria/v4/pt-br-detail-rules.json",
+    "criteria/checks.pt-BR.json",
     "tools/New-ResourceIndex.py",
 ]
 # The engine locates its root by the presence of this directory.
