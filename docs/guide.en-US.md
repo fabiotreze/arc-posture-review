@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v4.1.2 — 2026-11-06.** One package: the collector now adds the canonical v4 report (Zero Trust × Tier, scenarios, action plan) to the same `.zip`, and the app opens and saves it. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
+**Version v4.1.3 — 2026-11-06.** Redesigned app: a verdict at the top of the Analysis (verified gaps, improvement opportunities, not verified) with the actions to do first, a Start here page and search in the guide, and the subscription list as the default scope. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 

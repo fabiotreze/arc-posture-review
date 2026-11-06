@@ -34,7 +34,7 @@ A etapa do relatório precisa de Python 3.10+ (o Cloud Shell já tem). O coletor
 
 ### 2 · Abrir a análise
 
-Abra o app em <https://fabiotreze.github.io/arc-posture-review/> (ou o `index.html` deste repositório), vá ao passo 3 e carregue o `.zip`. O passo 4 mostra a análise: índice do kit, domínios, prioridades, evidências e plano de ação. **Abrir relatório v4 (Zero Trust)** abre o relatório canônico v4 que veio no mesmo `.zip`.
+Abra o app em <https://fabiotreze.github.io/arc-posture-review/> (ou o `index.html` deste repositório), vá ao passo 3 e carregue o `.zip`. O passo 4 mostra a análise. Ela abre com um **veredito** (lacunas verificadas, oportunidades de melhoria e o que ainda não foi verificado, mais as três ações a fazer primeiro), seguido de índice do kit, domínios, prioridades, evidências e plano de ação. **Abrir relatório v4 (Zero Trust)** abre o relatório canônico v4 que veio no mesmo `.zip`.
 
 ### 3 · Entregar
 

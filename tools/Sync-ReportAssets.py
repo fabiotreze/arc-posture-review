@@ -28,6 +28,8 @@ CSS_BEGIN = "  /* REPORT_RESPONSIVE_BEGIN */"
 CSS_END = "  /* REPORT_RESPONSIVE_END */"
 RUNTIME_BEGIN = "  // REPORT_RUNTIME_BEGIN"
 RUNTIME_END = "  // REPORT_RUNTIME_END"
+UX_BEGIN = "  // REPORT_UX_BEGIN"
+UX_END = "  // REPORT_UX_END"
 
 
 def replace_block(text: str, begin: str, end: str, replacement: str, before: str) -> str:
@@ -108,8 +110,10 @@ def update_collector(text: str, items: list[dict]) -> str:
     return text
 
 
-def update_app(text: str, css: str, runtime: str, digest: str, collector: str, items: list[dict]) -> str:
+def update_app(text: str, css: str, runtime: str, digest: str, collector: str, items: list[dict], ux: str) -> str:
     text = replace_json_var(text, "ITEMS", items)
+    ux_block = UX_BEGIN + "\n" + "\n".join("  " + line if line else "" for line in ux.rstrip().splitlines()) + "\n" + UX_END
+    text = replace_block(text, UX_BEGIN, UX_END, ux_block, "  function renderAnalysis() {")
     collector_tag = '<script type="text/plain" id="psTemplate">' + collector.rstrip() + "\n</script>"
     text, count = re.subn(r'<script type="text/plain" id="psTemplate">.*?</script>', lambda _match: collector_tag, text, count=1, flags=re.DOTALL)
     if count != 1:
@@ -157,6 +161,7 @@ def main() -> int:
     validate_criteria(criteria["en-US"], criteria["pt-BR"])
     css = (ROOT / "tools/report-responsive.css").read_text(encoding="utf-8")
     runtime = (ROOT / "tools/report-runtime.js").read_text(encoding="utf-8").rstrip() + "\n"
+    ux = (ROOT / "tools/report-ux.js").read_text(encoding="utf-8")
     collector_path = ROOT / "scripts/Invoke-ArcPostureReview.ps1"
     collector_old = collector_path.read_text(encoding="utf-8")
     collector = update_collector(collector_old, criteria["en-US"])
@@ -171,7 +176,7 @@ def main() -> int:
     for path in APP_PAGES:
         old = path.read_text(encoding="utf-8")
         locale = "en-US" if path.name.endswith("en-US.html") else "pt-BR"
-        new = update_app(old, css, runtime, digest, collector, criteria[locale])
+        new = update_app(old, css, runtime, digest, collector, criteria[locale], ux)
         if new != old:
             changed.append(path)
             if not args.check:

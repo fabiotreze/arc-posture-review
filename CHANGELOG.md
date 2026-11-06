@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.1.3] — 2026-11-06
+
+### App redesign
+
+- The Analysis opens with a verdict: verified gaps, improvement opportunities and not verified as three numbers, a status bar and the three actions to do first (linked to the detail). Wording keeps the posture vocabulary: an improvement opportunity does not mean an insecure practice, and not verified is a collection task.
+- The Guide opens on Start here (Collect, Open, Deliver) with a search box over the guide sections.
+- The collection wizard defaults to the subscription list; the current-subscription mode stays available and warns that it only queries the `az login` default subscription.
+- Refreshed theme for the app and saved analysis (light/dark, print, mobile).
+- Collector logic, the 64 checks, the 11 scenarios and the `assessment-result.v4` contract are unchanged. See `docs/v4.1.3-app-redesign.md`.
+
 ## [4.1.2] — 2026-11-06
 
 ### One package
