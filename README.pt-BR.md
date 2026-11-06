@@ -12,6 +12,8 @@ Avaliação somente leitura da postura de segurança de **servidores habilitados
 
 ![Relatório v4](docs/images/v4-report.pt-BR.png)
 
+*Exemplo gerado a partir da fixture sanitizada de teste (dados sintéticos, não é um ambiente real).*
+
 ## Comece aqui — 3 passos
 
 **Coletar → Abrir → Entregar.** Tudo é somente leitura.

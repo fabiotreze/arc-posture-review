@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability (private)
+    url: https://github.com/fabiotreze/arc-posture-review/security/advisories/new
+    about: Vulnerabilities in this repository (script, HTML, report) must not be reported in a public issue.
+  - name: Microsoft Security Response Center
+    url: https://msrc.microsoft.com/create-report
+    about: Vulnerabilities in Microsoft products or services.

@@ -12,6 +12,8 @@ Read-only security posture review for **Azure Arc-enabled servers** and **SQL Se
 
 ![v4 report](docs/images/v4-report.en-US.png)
 
+*Example rendered from the sanitized test fixture (synthetic data, not a real environment).*
+
 ## Start here — 3 steps
 
 **Collect → Open → Deliver.** Everything is read-only.

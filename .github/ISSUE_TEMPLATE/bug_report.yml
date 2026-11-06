@@ -1,0 +1,39 @@
+name: Bug or incorrect result
+description: The collector, the engine, the report or the app behaves wrongly, or a result does not match the real environment.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Do not attach or paste collected data** (the `.zip`, `results.json`, `findings/*.csv`, reports or screenshots with real names, IDs or e-mails). Use fake names or the sanitized fixture. Security vulnerabilities: use *Report a vulnerability* in the Security tab instead.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Printed by the collector, also in the `VERSION` file (for example v4.1.5).
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where is the problem?
+      options: [Collector (PowerShell), Engine (assessment), Report v4, Browser app, Documentation, Not sure]
+    validations:
+      required: true
+  - type: input
+    id: check
+    attributes:
+      label: Check or scenario (if any)
+      placeholder: CHK-23
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected and what you got
+      description: Say what is true in the environment (without identifying data) and what the tool reported.
+    validations:
+      required: true
+  - type: textarea
+    id: reference
+    attributes:
+      label: Official Microsoft documentation (if it applies)
+      description: Link that supports the expected behaviour.
