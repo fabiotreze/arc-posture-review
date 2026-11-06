@@ -10,9 +10,14 @@
  },
  "rules": [
   [
-   "(\\d+) machine\\(s\\) with inbound ports configured on the agent: (\\d+) with SSH\\/RDP\\/Windows Admin Center, (\\d+) with ports this check does not classify \\(see unclassifiedPorts\\)\\. Confirm the purpose of each port, the need and RBAC; an open port is a posture item, not evidence of exposure\\.",
+   "(\\d+) machine\\(s\\) with inbound ports configured on the agent: (\\d+) with SSH \\(22\\) or Windows Admin Center \\(6516\\), (\\d+) with ports this check does not classify \\(see unclassifiedPorts\\); (\\d+) with port 6516 allowed but no AdminCenter extension\\. The list defines which local ports the Azure Arc connectivity channel may reach, it is not evidence of exposure: confirm the purpose of each port, the need and RBAC\\.",
    "g",
-   "$1 máquina(s) com portas de entrada configuradas no agente: $2 com SSH/RDP/Windows Admin Center, $3 com portas que esta verificação não classifica (veja unclassifiedPorts). Confirme a finalidade de cada porta, a necessidade e o RBAC; uma porta aberta é um ponto de postura, não evidência de exposição."
+   "$1 máquina(s) com portas de entrada configuradas no agente: $2 com SSH (22) ou Windows Admin Center (6516), $3 com portas que esta verificação não classifica (veja unclassifiedPorts); $4 com a porta 6516 liberada, mas sem a extensão AdminCenter. A lista define quais portas locais o canal de conectividade do Azure Arc pode alcançar; não é evidência de exposição: confirme a finalidade de cada porta, a necessidade e o RBAC."
+  ],
+  [
+   "Automatic agent upgrade: disabled in Azure on (\\d+) of (\\d+) machine\\(s\\); agent below 1\\.67 \\(not eligible\\) on (\\d+); last attempt failed on (\\d+)\\. A local block \\(automaticupgrade\\.blocklocally = true\\) takes precedence over the Azure setting and cannot be read through Azure: check a sample with 'azcmagent config get automaticupgrade\\.blocklocally' \\(CHK-36\\)\\.",
+   "g",
+   "Upgrade automático do agente: desabilitado no Azure em $1 de $2 máquina(s); agente abaixo da 1.67 (não elegível) em $3; última tentativa com falha em $4. Um bloqueio local (automaticupgrade.blocklocally = true) tem precedência sobre a configuração do Azure e não pode ser lido pelo Azure: confira uma amostra com 'azcmagent config get automaticupgrade.blocklocally' (CHK-36)."
   ],
   [
    "OS security baseline evidence: (\\d+) connected machine\\(s\\); compliant and timestamped: (\\d+); explicit failure\\/no recognized assignment: (\\d+); pending\\/missing\\/conflicting timestamped evidence: (\\d+)\\. Unknown evidence is never promoted to PASS\\.",

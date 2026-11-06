@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """pt-BR v4 report: engine and static texts are Portuguese, display-only (canonical JSON identical), and the rules mirror the app."""
-import html, json, re, subprocess, sys, tempfile
+import html, importlib.util, json, re, subprocess, sys, tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,8 +33,34 @@ def app_rules() -> list[list[str]]:
     return rows
 
 
+def golden_sentences() -> list[str]:
+    """Sentences produced by the collector in a real run (v4.2.0): each must be rendered in Portuguese, with no English left from the rule table."""
+    spec = importlib.util.spec_from_file_location("render_v4", RENDER)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    cases = [
+        ("6 machine(s) with inbound ports configured on the agent: 2 with SSH (22) or Windows Admin Center (6516), 5 with ports this check does not classify (see unclassifiedPorts); 2 with port 6516 allowed but no AdminCenter extension. The list defines which local ports the Azure Arc connectivity channel may reach, it is not evidence of exposure: confirm the purpose of each port, the need and RBAC.",
+         "6 máquina(s) com portas de entrada configuradas no agente"),
+        ("Automatic agent upgrade: disabled in Azure on 0 of 7 machine(s); agent below 1.67 (not eligible) on 0; last attempt failed on 0. A local block (automaticupgrade.blocklocally = true) takes precedence over the Azure setting and cannot be read through Azure: check a sample with 'azcmagent config get automaticupgrade.blocklocally' (CHK-36).",
+         "Upgrade automático do agente: desabilitado no Azure em 0 de 7"),
+        ("228 Defender recommendation(s) affect Arc machines; High severity: 13; Critical/High risk: 0; open 90+ days: 0; attack paths: 0; exemptions: 0.",
+         "228 Recomendações do Defender afetam máquinas Arc"),
+    ]
+    problems = []
+    for english, expected in cases:
+        shown = module._pt_text(english)
+        if expected not in shown:
+            problems.append(f"not translated: {english[:70]}...")
+        elif re.search(r"\b(machine\(s\)|with ports|not eligible|takes precedence)\b", shown):
+            problems.append(f"English left in: {shown[:90]}...")
+    return problems
+
+
 def main() -> int:
     data = json.loads(RULES.read_text(encoding="utf-8"))
+    leftovers_golden = golden_sentences()
+    if leftovers_golden:
+        fail("golden sentences: " + "; ".join(leftovers_golden))
     if data["rules"] != app_rules():
         fail("criteria/v4/pt-br-detail-rules.json differs from PT_DETAIL_RULES in arc-posture-review.pt-BR.html; regenerate it from the app table")
     for pattern, flags, _ in [*data["rules"], *data["narrative"]]:
