@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.2.3] — 2026-11-06
+
+### Repository cleanup
+
+- Workflows: a pull request runs `v4 PR quality` (full `release` gate profile once, then the browser app regression and the PDF matrix) and `analyze` (PSScriptAnalyzer). Removed as redundant subsets: `v4 methodology`, `v4 report quality`, `v4 release gate` and the legacy `Report quality`; `v4 security regression` runs weekly. One `requirements-dev.txt` replaces `requirements-v4.txt`.
+- Code: orphan scripts removed with the checkpoint 1 folders only they used; the evidence-availability negative test joined the gate; nine duplicated schemas removed; PowerShell wrappers around Python entry points removed; unused imports and constants removed.
+- `tools/Test-CodeQuality.py` (ruff pyflakes rules and orphan detection) runs in the gates. Collector logic and results are unchanged. See `docs/v4.2.3-cleanup.md`.
+
 ## [4.2.2] — 2026-11-06
 
 ### pt-BR truncated sentence

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import os
 import shutil
 import subprocess
 import sys
@@ -38,12 +37,8 @@ def steps(profile: str) -> list[tuple[str, list[str]]]:
     cp10 = ("checkpoint10-release-preparation", [sys.executable, "assurance/v4/checkpoint10/scripts/Invoke-AllGates.py"])
     syntax = ("v4-syntax", [sys.executable, "tools/Test-V4Syntax.py"])
     profiles = {
-        "pr-quality": [existing, cp8, cp9, cp10, syntax],
-        "methodology": [cp8, cp9, cp10, syntax],
         "security-regression": [existing, cp9, syntax],
-        "report-quality": [existing, cp6, cp7, syntax],
         "release": [existing, cp6, cp7, cp8, cp9, cp10, syntax],
-        "all": [existing, cp6, cp7, cp8, cp9, cp10, syntax],
     }
     return profiles[profile]
 
@@ -89,7 +84,7 @@ def isolated(profile: str) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--profile", choices=("all", "pr-quality", "methodology", "security-regression", "report-quality", "release"), default="all")
+    parser.add_argument("--profile", choices=("security-regression", "release"), default="release")
     parser.add_argument("--in-place", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
     return in_place(args.profile) if args.in_place else isolated(args.profile)

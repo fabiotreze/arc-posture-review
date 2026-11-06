@@ -2,15 +2,15 @@
 
 Checkpoint 6 adds a static, bilingual renderer for the canonical `assessment-result.v4.json` emitted by the Evaluation Engine. The report does not calculate risk, priority, scenario state, Defense Coverage or roadmap placement in HTML/JavaScript. Browser JavaScript is limited to navigation, expand/collapse and print.
 
-## PowerShell
+## Commands
 
 ```powershell
-./arc-posture.ps1 evaluate -Evidence ./collector.zip -Output ./assessment-result.v4.json
-./tools/New-V4Report.ps1 -Assessment ./assessment-result.v4.json -OutputDirectory ./report
-python ./tools/Invoke-V4FinalGates.py --profile report-quality
+python ./assurance/v4/checkpoint5/cli/arc_posture.py evaluate --evidence ./collector.zip --output ./assessment-result.v4.json
+python ./assurance/v4/checkpoint6/report/render_v4.py --input ./assessment-result.v4.json --locale en-US --output ./report/arc-posture-review.v4.en-US.html
+python ./tools/Invoke-V4FinalGates.py --profile release
 ```
 
-`New-V4Report.ps1` creates EN-US and PT-BR HTML reports. `comparison: null` is rendered as an explicit no-baseline disclosure. The 64 CHKs remain visible in Checks and in the Evidence → Observation → Claim traceability table.
+`render_v4.py` creates one HTML report per `--locale` (`en-US` or `pt-BR`). `comparison: null` is rendered as an explicit no-baseline disclosure. The 64 CHKs remain visible in Checks and in the Evidence → Observation → Claim traceability table.
 
 ## Gates
 

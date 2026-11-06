@@ -169,11 +169,10 @@ The offline HTML guide generates the collector, records checklist decisions and 
 
 ```powershell
 python -m pip install -r requirements-dev.txt
-python tools/Invoke-V4FinalGates.py --profile pr-quality
 python tools/Invoke-V4FinalGates.py --profile release
 ```
 
-Profiles: `pr-quality`, `report-quality`, `release`, `methodology`, `security-regression`. They run in an isolated copy and leave the working tree unchanged. The v4 Playwright tests can use an installed Edge or Chrome via `ARC_REVIEW_BROWSER` (path to the executable).
+Profiles: `release` (everything; this is what every pull request runs) and `security-regression` (weekly). They run in an isolated copy and leave the working tree unchanged. The v4 Playwright tests can use an installed Edge or Chrome via `ARC_REVIEW_BROWSER` (path to the executable).
 </details>
 
 <details>

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """The independent recomputation agrees with a consistent package and catches the three mistakes found in real runs."""
-import importlib.util, json, sys, tempfile, zipfile
+import importlib.util, json, tempfile, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]

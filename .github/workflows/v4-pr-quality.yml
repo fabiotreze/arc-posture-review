@@ -2,18 +2,45 @@ name: v4 PR quality
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
   pr-quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
           cache: pip
-      - run: python -m pip install -r requirements-v4.txt
+          cache-dependency-path: requirements-dev.txt
+      - run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
       - run: python -m playwright install --with-deps chromium
-      - run: python tools/Invoke-V4FinalGates.py --profile pr-quality
+      - name: All gates (checkpoints 1-10, report, comparison, release preparation, code quality)
+        run: python tools/Invoke-V4FinalGates.py --profile release
+      - name: Browser app regression (desktop/mobile, reviewed-lab E2E, EN-US/PT-BR parity)
+        run: |
+          python tools/Test-ReportVisual.py --package tests/fixtures/reviewed-lab-sanitized.zip --artifacts build/validation
+          python tools/Test-LocalizationParity.py --en build/validation/e2e-en-US.html --pt build/validation/e2e-pt-BR.html
+      - name: Generate A4/Letter portrait/landscape PDF matrix
+        run: |
+          for locale in en-US pt-BR; do
+            for format in A4 Letter; do
+              for orientation in portrait landscape; do
+                slug=$(echo "${format}-${orientation}" | tr '[:upper:]' '[:lower:]')
+                python tools/Generate-CleanPdf.py "docs/examples/sample-analysis.${locale}.html" \
+                  --format "$format" --orientation "$orientation" \
+                  --output "build/validation/sample-analysis.${locale}.${slug}.pdf"
+              done
+            done
+          done
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: v4-pr-quality-validation
+          path: build/
+          if-no-files-found: ignore

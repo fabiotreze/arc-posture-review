@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Executes the CHK-21 and CHK-29 rules of the collector with synthetic data (the other static tests only read the script text)."""
-import json, shutil, subprocess, sys, tempfile
+import json, shutil, subprocess, tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]

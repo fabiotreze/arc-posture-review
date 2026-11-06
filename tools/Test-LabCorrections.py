@@ -5,7 +5,6 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-import sys
 import zipfile
 from collections import Counter
 from pathlib import Path

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """The collector's v4 report step: report generated from a run folder, kit download verified by SHA-256."""
-import json, os, shutil, subprocess, sys, tempfile, zipfile
+import json, shutil, subprocess, sys, tempfile, zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]

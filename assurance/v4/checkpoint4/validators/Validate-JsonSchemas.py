@@ -15,18 +15,16 @@ import sys
 sys.path.insert(0, str(ROOT))
 
 from engine.repository_layout import (
-    REPO_ROOT,
     REVIEWED_LAB_FIXTURE,
     REVIEWED_LAB_REPORT,
+    schema_paths,
 )
-
-PROJECT = REPO_ROOT
 
 schemas = {
     p.name: json.loads(
         p.read_text(encoding="utf-8-sig")
     )
-    for p in (ROOT / "schemas").glob("*.json")
+    for p in schema_paths().values()
 }
 registry = Registry()
 for name, schema in schemas.items():

@@ -9,11 +9,8 @@ import yaml
 ROOT = Path(__file__).resolve().parents[4]
 WORKFLOWS = ROOT / ".github/workflows"
 EXPECTED = {
-    "v4-pr-quality.yml": "pr-quality",
-    "v4-methodology.yml": "methodology",
+    "v4-pr-quality.yml": "release",
     "v4-security-regression.yml": "security-regression",
-    "v4-report-quality.yml": "report-quality",
-    "v4-release-gate.yml": "release",
 }
 FORBIDDEN = ("terraform", "pull_request_target", "git push", "git tag", "gh release", "break-glass", "rollback", "promotion-stage")
 ALLOWED_ACTIONS = ("actions/checkout@v7", "actions/setup-python@v7", "actions/upload-artifact@v7")
@@ -54,14 +51,14 @@ def main() -> int:
     if release.index('gh release view') > release.index('gh release create'):
         errors.append("release.yml: existing-release check must precede release creation")
 
-    requirements = (ROOT / "requirements-v4.txt").read_text(encoding="utf-8")
+    requirements = (ROOT / "requirements-dev.txt").read_text(encoding="utf-8")
     if "pypdf==6.21.4" not in requirements:
-        errors.append("requirements-v4.txt must preserve approved pypdf==6.21.4 (KI-V4-001 remediation)")
+        errors.append("requirements-dev.txt must preserve approved pypdf==6.21.4 (KI-V4-001 remediation)")
     if errors:
         print(f"[FAIL] CP8 DevSecOps workflows: {len(errors)} error(s)")
         for error in errors: print(" - " + error)
         return 1
-    print("[PASS] CP8 workflows: PR quality, methodology, security regression, report quality and release gate")
+    print("[PASS] CP8 workflows: PR quality (release profile) and weekly security regression")
     return 0
 
 

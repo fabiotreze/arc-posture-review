@@ -26,18 +26,9 @@ load_evidence = _CP4_ENGINE.load_evidence
 
 CONTRACT_NAME = "assessment-result.v4"
 CONTRACT_VERSION = "4.0.0"
-PIPELINE_VERSION = "4.2.2-checkpoint5"
+PIPELINE_VERSION = "4.2.3-checkpoint5"
 BASELINE_COMMIT = "2d512a3"
-OUTCOMES = (
-    "AT_RISK",
-    "EFFECTIVE",
-    "INEFFECTIVE",
-    "INFORMATIONAL",
-    "NOT_APPLICABLE",
-    "UNASSESSED",
-)
 DEFENSE_FUNCTIONS = ("Prevent", "Detect", "Respond", "Recover")
-DEFENSE_STATUSES = ("DEGRADED", "EFFECTIVE", "GAP", "NOT_COVERED", "UNKNOWN")
 
 
 def _counts(values: Iterable[str]) -> dict[str, int]:

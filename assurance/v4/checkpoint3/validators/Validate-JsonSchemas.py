@@ -1,6 +1,5 @@
 from pathlib import Path
 import json
-import sys
 
 try:
     from jsonschema import Draft202012Validator

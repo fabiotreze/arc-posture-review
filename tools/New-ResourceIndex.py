@@ -11,7 +11,6 @@ import hashlib
 import io
 import json
 import re
-import sys
 import zipfile
 from pathlib import Path
 

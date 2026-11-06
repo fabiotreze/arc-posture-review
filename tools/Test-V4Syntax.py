@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import ast
-import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,8 +17,8 @@ def main() -> int:
         except SyntaxError as exc:
             errors.append(f"{path.relative_to(ROOT)}: {exc}")
     workflows = sorted((ROOT / ".github/workflows").glob("v4-*.yml"))
-    if len(workflows) != 5:
-        errors.append(f"expected five v4 workflows, found {len(workflows)}")
+    if len(workflows) != 2:
+        errors.append(f"expected two v4 workflows, found {len(workflows)}")
     if errors:
         print(f"[FAIL] v4 syntax inventory: {len(errors)} error(s)")
         for error in errors: print(" - " + error)
