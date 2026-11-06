@@ -31,7 +31,7 @@ jobs:
           $found = @(Invoke-ScriptAnalyzer -Path ./scripts -Recurse -Settings ./PSScriptAnalyzerSettings.psd1)
           $found | Format-Table Severity, RuleName, Line, Message -AutoSize -Wrap | Out-String -Width 200 | Write-Host
           if ($found.Count) { Write-Error "$($found.Count) PSScriptAnalyzer finding(s): release not created. Fix and publish a new version."; exit 1 }
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - name: Install report-test dependencies
