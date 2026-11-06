@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v4.1.5 — 06/11/2026.** Correção do relatório v4 em português: uma regra de tradução não reescreve mais texto que já está em português ("controle(s)"). Inclui a linguagem de postura da v4.1.4 (*Corrigir*), o relatório pt-BR completo e o `report/report.log`. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
+**Versão v4.1.6 — 06/11/2026.** Fidelidade aos dados coletados: a CHK-21 não chama mais toda porta aberta de SSH/WAC (classifica 22, 3389 e 6516 e informa as demais como não classificadas) e a CHK-33 conta máquinas distintas em vez de recursos aninhados. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 

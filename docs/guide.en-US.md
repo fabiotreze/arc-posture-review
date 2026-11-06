@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v4.1.5 — 2026-11-06.** Fix for the Portuguese v4 report: a translation rule no longer rewrites text that is already Portuguese ("controle(s)"). Includes the v4.1.4 posture wording (*Remediate*), the complete pt-BR report and `report/report.log`. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
+**Version v4.1.6 — 2026-11-06.** Fidelity to the collected data: CHK-21 no longer calls every open port SSH/WAC (it classifies 22, 3389 and 6516 and reports other ports as unclassified) and CHK-33 counts distinct machines instead of nested resources. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 

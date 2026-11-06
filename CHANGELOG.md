@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.1.6] — 2026-11-06
+
+### Fidelity to the collected data
+
+- **CHK-21:** an open agent port is no longer called SSH/Windows Admin Center by default. Ports 22 (SSH), 3389 (RDP) and 6516 (Windows Admin Center) are classified; any other port (for example 17426 seen in a lab) is reported as unclassified, with `managementChannels` and `unclassifiedPorts` per machine in the findings. The status is still WARN and the wording says an open port is a posture item, not evidence of exposure.
+- **CHK-33:** the Defender query reduced to distinct Arc machines; nested resources (SQL Server objects below a machine) inflated the machine count (13 for 7 machines).
+- Community files: `CONTRIBUTING.md`, an issue template and a pull request template. `tools/Sync-PtRules.py` regenerates the pt-BR rules JSON from the app table. The README labels the screenshot as synthetic fixture data.
+
 ## [4.1.5] — 2026-11-06
 
 ### pt-BR rendering fix
