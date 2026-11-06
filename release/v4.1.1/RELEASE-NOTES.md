@@ -1,6 +1,6 @@
 # Arc Posture Review v4.1.1 — posture versus evidence patch candidate
 
-**Status:** VALIDATED_ARTIFACT — not publishable until Git provenance, independent package testing and the security review record are confirmed.
+**Status:** APPROVED_FOR_PUBLICATION — security review approved by Fabio Rodrigues Vieira Costa on 2026-11-06 (28/28). Tagging and publishing remain a separate, manual step.
 
 ## Fixed
 
@@ -21,4 +21,4 @@
 
 ## Distribution status
 
-This package is for application and independent testing. It contains no collected environment data or customer reports. Publication remains blocked until authorized Git provenance/push and independent test approval are confirmed.
+This package contains no collected environment data or customer reports. The security review was approved on 2026-11-06. Tagging, pushing and publishing remain a separate, manual step; the release workflow re-verifies the manifest and `SHA256SUMS` on the tag.

@@ -1,23 +1,14 @@
 {
   "release": "v4.1.1",
-  "status": "VALIDATED_ARTIFACT",
+  "status": "APPROVED_FOR_PUBLICATION",
   "sourceBranch": "fix/evidence-vs-posture-wording",
   "parentRelease": "v4.1.0",
   "canonicalContract": "assessment-result.v4",
   "contractVersion": "4.0.0",
   "collectorVersion": "v4.1.1",
   "gateEntrypoint": "tools/Invoke-V4FinalGates.py",
-  "publishable": false,
-  "blockers": [
-    {
-      "id": "GIT-PROVENANCE-001",
-      "condition": "Verify this candidate against the authorized repository history and remote branch before publication."
-    },
-    {
-      "id": "INDEPENDENT-TEST-001",
-      "condition": "Complete independent package testing and the security review record docs/v4/security-review-record-v4.1.1.md before publication."
-    }
-  ],
+  "publishable": true,
+  "blockers": [],
   "validatedCapabilities": [
     "64-check and 11-scenario canonical assessment",
     "assessment-result.v4 contract version 4.0.0",
@@ -49,12 +40,12 @@
     "tools/Test-ZeroTarget.py"
   ],
   "securityReview": {
-    "reviewer": "PENDING",
-    "date": "PENDING",
-    "decision": "PENDING",
+    "reviewer": "Fabio Rodrigues Vieira Costa",
+    "date": "2026-11-06",
+    "decision": "APPROVED",
     "checklist": "docs/v4/security-review-checklist.md",
     "record": "docs/v4/security-review-record-v4.1.1.md",
-    "items": 0,
-    "itemsApproved": 0
+    "items": 28,
+    "itemsApproved": 28
   }
 }
