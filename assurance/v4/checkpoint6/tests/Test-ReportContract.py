@@ -74,8 +74,11 @@ def main() -> int:
     chk_hrefs = {href for href in parsed.hrefs if href.startswith("chk-")}  # PR18: CHK pills link to Checks rows
     if chk_hrefs - parsed.ids:
         errors.append(f"CHK links without target: {sorted(chk_hrefs - parsed.ids)[:5]}")
-    if set(parsed.hrefs) - chk_hrefs != required:
-        errors.append("navigation targets do not match required sections")
+    nav_targets = set(parsed.hrefs) - chk_hrefs
+    if nav_targets - parsed.ids:
+        errors.append(f"navigation targets without a section: {sorted(nav_targets - parsed.ids)}")
+    if not required <= nav_targets or nav_targets - required - {"executive-narrative", "action-plan"}:
+        errors.append("navigation must link every report section plus the executive summary and the action plan")
     if parsed.meta.get("arc-report-contract") != "assessment-result.v4" or parsed.meta.get("arc-report-mode") != "render-only":
         errors.append("render-only contract metadata is absent")
     if parsed.scenarios != [f"AS{i:02d}" for i in range(1, 12)]:

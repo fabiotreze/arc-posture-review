@@ -42,7 +42,7 @@ Example: `./Invoke-ArcPostureReview.ps1 -Subscriptions "<name or id>" -AllowedRe
 
 - **64 controls** (45 automated, 19 documentary) and **11 security scenarios**, each traced Evidence → Observation → Claim → Control → Scenario.
 - **Execution first:** a report-style executive summary (verified gaps, improvement opportunities and not-verified controls, with check titles and a reading legend) and a NOW action plan grouped by what to do (remediate verified gaps, improve posture, complete evidence collection), in canonical priority order, with a collapsible evidence trace per listed check.
-- **Navigation:** sticky menu with print/expand/collapse; every `CHK-xx` links to its row in *Checks*; Zero Trust × Tier view with outcome bars.
+- **Navigation:** grouped side menu (Summary, Posture analysis, Execution, Evidence) with icons, counts and a highlight that follows the scroll; a mobile menu drawer; a filter by ID, title or outcome in *Checks* (with titles and plain-language outcomes); every `CHK-xx` links to its row; back-to-top, print and expand/collapse; Zero Trust × Tier view with outcome bars.
 - **Azure portal links** per finding row (resource index bound to the run `runId` and package SHA-256).
 - **Before/after** only when a baseline package is supplied (`--baseline`).
 - Missing evidence never becomes a pass; attack paths are never asserted as confirmed.
