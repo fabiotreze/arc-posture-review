@@ -34,7 +34,7 @@ The report step needs Python 3.10+ (Cloud Shell has it). The collector downloads
 
 ### 2 · Open the analysis
 
-Open the app at <https://fabiotreze.github.io/arc-posture-review/> (or the `index.html` from this repository), go to step 3 and load the `.zip`. Step 4 shows the analysis: kit index, domains, priorities, evidence and the action plan. **Open v4 report (Zero Trust)** opens the canonical v4 report that came in the same `.zip`.
+Open the app at <https://fabiotreze.github.io/arc-posture-review/> (or the `index.html` from this repository), go to step 3 and load the `.zip`. Step 4 shows the analysis. It opens with a **verdict** (verified gaps, improvement opportunities and what is still not verified, plus the three actions to do first), followed by kit index, domains, priorities, evidence and the action plan. **Open v4 report (Zero Trust)** opens the canonical v4 report that came in the same `.zip`.
 
 ### 3 · Deliver
 
