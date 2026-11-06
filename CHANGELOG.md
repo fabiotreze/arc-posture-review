@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.2.1] — 2026-11-06
+
+### pt-BR rule table fix
+
+- The Portuguese rules for the new CHK-21 and CHK-29 sentences (v4.2.0) had been written into the wrong place of the app file, so the Portuguese v4 report showed them mostly in English. They are now in `PT_DETAIL_RULES` and in `criteria/v4/pt-br-detail-rules.json`.
+- `tools/Test-PtBrContent.py` gained golden sentences from a real run (CHK-21, CHK-29, CHK-33); each must be rendered in Portuguese.
+
 ## [4.2.0] — 2026-11-06
 
 ### Foundations of the claims
