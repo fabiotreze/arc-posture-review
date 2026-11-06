@@ -879,6 +879,7 @@ SUMMARY_CSS = r"""
 .sum-list h3{margin:14px 0 6px;font-size:15px}.sum-list .tablewrap table{min-width:0}
 .basis-tag{display:inline-block;border-radius:6px;padding:0 6px;font-size:12px;font-weight:650;background:#eef2f7;color:#34465b;margin-left:6px}
 .basis-VERIFIED_GAP{background:#fee4e2;color:#b42318}.basis-IMPROVEMENT{background:#fffaeb;color:#b54708}.basis-EVIDENCE_COLLECTION{background:#f2f4f7;color:#475467}
+.badge.NOT_APPLICABLE{background:#eef2f6;color:#475467}.k-NOT_APPLICABLE{border-left-color:#98a2b3}
 """
 _CATALOG_TITLES: dict[str, dict[str, str]] | None = None
 
