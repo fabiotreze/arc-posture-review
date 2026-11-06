@@ -90,13 +90,42 @@ CSS = r"""
 
 JS = r"""'use strict';
 (function(){
-  const links=[...document.querySelectorAll('.side nav a')];
-  const sections=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
-  const activate=()=>{let current=sections[0];for(const section of sections){if(section.getBoundingClientRect().top<=90)current=section;}links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+current.id));};
+  const doc=document,body=doc.body;
+  const links=[...doc.querySelectorAll('.side nav a')];
+  const pairs=links.map(a=>[a,doc.querySelector(a.getAttribute('href'))]).filter(p=>p[1]).sort((x,y)=>(x[1].compareDocumentPosition(y[1])&4)?-1:1);
+  const sections=pairs.map(p=>p[1]);
+  const label=doc.getElementById('curlabel'),totop=doc.getElementById('totop');
+  const activate=()=>{
+    if(!sections.length)return;
+    let current=sections[0];
+    for(const section of sections){if(section.getBoundingClientRect().top<=110)current=section;}
+    links.forEach(a=>{
+      const on=a.getAttribute('href')==='#'+current.id;
+      a.classList.toggle('active',on);
+      if(on&&label){const l=a.querySelector('.nl');label.textContent=l?l.textContent:'';}
+    });
+    if(totop)totop.classList.toggle('show',scrollY>600);
+  };
   addEventListener('scroll',activate,{passive:true});activate();
-  document.getElementById('print').addEventListener('click',()=>print());
-  document.getElementById('expand').addEventListener('click',()=>document.querySelectorAll('details').forEach(x=>x.open=true));
-  document.getElementById('collapse').addEventListener('click',()=>document.querySelectorAll('details').forEach(x=>x.open=false));
+  const toggle=doc.getElementById('navtoggle'),veil=doc.getElementById('navveil');
+  if(toggle)toggle.addEventListener('click',()=>body.classList.toggle('navopen'));
+  if(veil)veil.addEventListener('click',()=>body.classList.remove('navopen'));
+  links.forEach(a=>a.addEventListener('click',()=>body.classList.remove('navopen')));
+  if(totop)totop.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+  const notice=doc.getElementById('validation-notice');
+  if(notice)notice.addEventListener('click',()=>notice.classList.toggle('open'));
+  doc.getElementById('print').addEventListener('click',()=>print());
+  doc.getElementById('expand').addEventListener('click',()=>doc.querySelectorAll('details').forEach(x=>x.open=true));
+  doc.getElementById('collapse').addEventListener('click',()=>doc.querySelectorAll('details').forEach(x=>x.open=false));
+  const rows=[...doc.querySelectorAll('#checks tbody tr')],input=doc.getElementById('chkfilter'),chips=[...doc.querySelectorAll('[data-filter]')],count=doc.getElementById('chkcount');
+  let mode='ALL';
+  const apply=()=>{
+    const q=(input?input.value:'').trim().toLowerCase();let n=0;
+    rows.forEach(r=>{const ok=(mode==='ALL'||r.dataset.o===mode)&&(!q||r.textContent.toLowerCase().includes(q));r.hidden=!ok;if(ok)n++;});
+    if(count)count.textContent=n;
+  };
+  if(input)input.addEventListener('input',apply);
+  chips.forEach(c=>c.addEventListener('click',()=>{mode=c.dataset.filter;chips.forEach(x=>x.classList.toggle('on',x===c));apply();}));
 })();
 """
 
@@ -882,6 +911,21 @@ SUMMARY_CSS = r"""
 .badge.NOT_APPLICABLE{background:#eef2f6;color:#475467}.k-NOT_APPLICABLE{border-left-color:#98a2b3}
 """
 _CATALOG_TITLES: dict[str, dict[str, str]] | None = None
+_STAT_ICONS = {
+    "gap": '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+    "imp": '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+    "nv": '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="11"/><line x1="11" y1="14" x2="11.01" y2="14"/></svg>',
+}
+
+
+def _outcome_bar(outcomes: dict[str, Any], labels: dict[str, str]) -> str:
+    order = ("INEFFECTIVE", "AT_RISK", "UNASSESSED", "EFFECTIVE", "INFORMATIONAL", "NOT_APPLICABLE")
+    total = sum(int(outcomes.get(key, 0)) for key in order) or 1
+    segments = "".join(f'<i class="o-{key}" style="flex:{int(outcomes[key])}" title="{esc(labels.get(key, key))}: {int(outcomes[key])}"></i>'
+                       for key in order if outcomes.get(key))
+    legend = "".join(f'<span><i class="o-{key}"></i><b>{int(outcomes[key])}</b> {esc(labels.get(key, key))}</span>'
+                     for key in order if outcomes.get(key))
+    return f'<div class="ostack" role="img" aria-label="{total}">{segments}</div><div class="olegend">{legend}</div>'
 
 
 def _check_titles(locale: str) -> dict[str, str]:
@@ -938,9 +982,10 @@ def narrative_html(document: dict[str, Any], locale: str) -> str:
     verdict = t["sumVerdict"].format(run=meta["runId"], n=total, gap=gap, imp=imp, nv=nv)
     cards_html = (
         f'<div class="sum-grid">'
-        f'<div class="sum-card gap"><strong>{gap}</strong>{esc(labels["INEFFECTIVE"])}</div>'
-        f'<div class="sum-card imp"><strong>{imp}</strong>{esc(labels["AT_RISK"])}</div>'
-        f'<div class="sum-card nv"><strong>{nv}</strong>{esc(labels["UNASSESSED"])}</div></div>'
+        f'<div class="sum-card gap"><span class="ico">{_STAT_ICONS["gap"]}</span><strong>{gap}</strong><span>{esc(labels["INEFFECTIVE"])}</span></div>'
+        f'<div class="sum-card imp"><span class="ico">{_STAT_ICONS["imp"]}</span><strong>{imp}</strong><span>{esc(labels["AT_RISK"])}</span></div>'
+        f'<div class="sum-card nv"><span class="ico">{_STAT_ICONS["nv"]}</span><strong>{nv}</strong><span>{esc(labels["UNASSESSED"])}</span></div></div>'
+        + _outcome_bar(outcomes, labels)
     )
     roadmap = "".join(
         f'<li><b>{esc(row["actionCardId"])}</b> · {esc(cards.get(row["actionCardId"], {}).get("title"))}'
@@ -1032,6 +1077,234 @@ def render(document, locale):
     if "</style>" not in html_text:
         raise ValueError("report has no style block")
     return html_text.replace("</style>", SUMMARY_CSS + "</style>", 1)
+
+
+# --- Navigation and visual theme (render-only post-processing) ---------------
+TEXT["en-US"].update({
+    "uxNavLabel": "Report sections", "uxMenu": "Menu", "uxTop": "Back to top",
+    "uxGrpSummary": "Summary", "uxGrpAnalysis": "Posture analysis", "uxGrpExecution": "Execution", "uxGrpEvidence": "Evidence",
+    "uxOverview": "Overview", "uxZt": "Zero Trust × Tier", "uxScenarios": "Scenarios", "uxDefense": "Defense coverage",
+    "uxRisks": "Risks", "uxCards": "Action cards", "uxRoadmap": "Roadmap", "uxAssets": "Assets",
+    "uxChecks": "Checks", "uxEvidence": "Evidence", "uxComparison": "Comparison",
+    "uxFilter": "Filter checks by ID, title or text", "uxAll": "All", "uxShowing": "Showing",
+    "uxPackage": "Package", "uxCollector": "Collector", "uxGenerated": "Generated", "uxIntegrity": "Integrity", "uxRun": "Run",
+})
+TEXT["pt-BR"].update({
+    "uxNavLabel": "Seções do relatório", "uxMenu": "Menu", "uxTop": "Voltar ao topo",
+    "uxGrpSummary": "Resumo", "uxGrpAnalysis": "Análise de postura", "uxGrpExecution": "Execução", "uxGrpEvidence": "Evidências",
+    "uxOverview": "Visão geral", "uxZt": "Zero Trust × Tier", "uxScenarios": "Cenários", "uxDefense": "Cobertura de defesa",
+    "uxRisks": "Riscos", "uxCards": "Action cards", "uxRoadmap": "Roadmap", "uxAssets": "Assets",
+    "uxChecks": "Checks", "uxEvidence": "Evidências", "uxComparison": "Comparação",
+    "uxFilter": "Filtrar checks por ID, título ou texto", "uxAll": "Todos", "uxShowing": "Exibindo",
+    "uxPackage": "Pacote", "uxCollector": "Coletor", "uxGenerated": "Gerado em", "uxIntegrity": "Integridade", "uxRun": "Execução",
+})
+_ICONS = {
+    "executive-narrative": '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+    "action-plan": '<polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+    "overview": '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>',
+    "zt": '<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>',
+    "scenarios": '<line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
+    "defense": '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    "risks": '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+    "cards": '<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+    "roadmap": '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>',
+    "assets": '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
+    "checks": '<polyline points="20 6 9 17 4 12"/>',
+    "evidence": '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+    "comparison": '<circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/>',
+}
+
+
+def _icon(key: str) -> str:
+    return ('<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" '
+            f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{_ICONS[key]}</svg>')
+
+
+def _ux_nav(document: dict[str, Any], locale: str, page: str) -> str:
+    t = TEXT[locale]
+    cards = len(document["actionCards"])
+    groups = [
+        ("uxGrpSummary", [("executive-narrative", t["narrativeTitle"], ""), ("action-plan", t["planTitle"].split(" - ")[0], str(len(document["roadmap"]["NOW"])))]),
+        ("uxGrpAnalysis", [("overview", t["uxOverview"], ""), ("zt", t["uxZt"], ""), ("scenarios", t["uxScenarios"], str(len(document["securityScenarios"]))),
+                           ("defense", t["uxDefense"], ""), ("risks", t["uxRisks"], "")]),
+        ("uxGrpExecution", [("cards", t["uxCards"], str(cards)), ("roadmap", t["uxRoadmap"], "")]),
+        ("uxGrpEvidence", [("checks", t["uxChecks"], str(len(document["controlAssessments"]))), ("evidence", t["uxEvidence"], ""),
+                           ("assets", t["uxAssets"], ""), ("comparison", t["uxComparison"], "")]),
+    ]
+    out = []
+    for group_key, items in groups:
+        links = "".join(
+            f'<a href="#{sid}"><span class="ni">{_icon(sid)}</span><span class="nl">{esc(label)}</span>'
+            + (f'<span class="nc">{esc(count)}</span>' if count else "") + "</a>"
+            for sid, label, count in items if f'id="{sid}"' in page
+        )
+        if links:
+            out.append(f'<div class="ng">{esc(t[group_key])}</div>{links}')
+    return f'<nav aria-label="{esc(t["uxNavLabel"])}">{"".join(out)}</nav>'
+
+
+def _ux_hero_meta(document: dict[str, Any], locale: str) -> str:
+    t = TEXT[locale]
+    meta = document["metadata"]
+    source = meta["source"]
+    generated = str(meta["generatedAt"])[:16].replace("T", " ") + " UTC"
+    chips = [
+        (t["uxPackage"], source.get("name")), (t["uxCollector"], source.get("collectorVersion")),
+        (t["uxGenerated"], generated), (t["uxIntegrity"], source.get("integrity")), (t["uxRun"], meta["runId"]),
+    ]
+    return '<div class="meta">' + "".join(f'<span><i>{esc(k)}</i> {esc(v)}</span>' for k, v in chips if v) + "</div>"
+
+
+def _ux_checks(page: str, document: dict[str, Any], locale: str) -> str:
+    import re as _re
+    t = TEXT[locale]
+    labels = STATUS_LABELS[locale]
+    titles = _check_titles(locale)
+    outcomes = ("INEFFECTIVE", "AT_RISK", "UNASSESSED", "EFFECTIVE", "INFORMATIONAL", "NOT_APPLICABLE")
+    total = len(document["controlAssessments"])
+
+    def row(match: Any) -> str:
+        cid, inner = match.group(1), match.group(2)
+        found = next((o for o in outcomes if f'<span class="badge {o}">' in inner), "")
+        inner = inner.replace(f"<td>{cid}</td>", f'<td><b>{cid}</b><br><span class="ctitle">{esc(titles.get(cid, ""))}</span></td>', 1)
+        if found:
+            inner = inner.replace(f'<span class="badge {found}">{found}</span>',
+                                  f'<span class="badge {found}" title="{found}">{esc(labels.get(found, found))}</span>', 1)
+        return f'<tr id="chk-{cid}" data-o="{found}">{inner}</tr>'
+
+    page = _re.sub(r'<tr id="chk-(CHK-\d+)">(.*?)</tr>', row, page, flags=_re.S)
+    chips = "".join(
+        f'<button type="button" class="chip{" on" if key == "ALL" else ""}" data-filter="{key}">{esc(text)}</button>'
+        for key, text in (("ALL", t["uxAll"]), ("INEFFECTIVE", labels["INEFFECTIVE"]), ("AT_RISK", labels["AT_RISK"]),
+                          ("UNASSESSED", labels["UNASSESSED"]), ("EFFECTIVE", labels["EFFECTIVE"]))
+    )
+    bar = (f'<div class="fbar"><input id="chkfilter" type="search" placeholder="{esc(t["uxFilter"])}" aria-label="{esc(t["uxFilter"])}">'
+           f'<div class="chips">{chips}</div><span class="muted">{esc(t["uxShowing"])} <b id="chkcount">{total}</b> / {total}</span></div>')
+    marker = f'<h2>{esc(t["checks"])}</h2>'
+    if page.count(marker) != 1:
+        raise ValueError("checks heading anchor not found for the filter bar")
+    return page.replace(marker, marker + bar, 1)
+
+
+UX_CSS = r"""
+:root{--bg:#f4f6fa;--paper:#fff;--ink:#101828;--muted:#667085;--line:#e4e9f1;--blue:#0f6cbd;--accent:#0f6cbd;--soft:#eaf3fd;--shadow:0 1px 2px #1018280a,0 10px 28px #10182812}
+body{font:14px/1.55 "Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+.shell{grid-template-columns:288px minmax(0,1fr)}
+.side{background:#fff;color:var(--ink);border-right:1px solid var(--line);padding:18px 14px;display:flex;flex-direction:column;gap:4px;box-shadow:none}
+.brand{display:flex;align-items:center;gap:11px;font-size:15px;color:var(--ink);padding:4px 6px 14px}
+.brand .logo{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#0b3a6b,#1b86e0);color:#fff;font-weight:800;font-size:14px;letter-spacing:.02em}
+.brand small{color:var(--muted);font-size:11.5px;margin-top:1px}
+.side nav{display:flex;flex-direction:column;gap:2px;margin:0;flex:1}
+.ng{margin:14px 8px 4px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#98a2b3}
+.side nav a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;color:#344054;font-weight:560;white-space:normal;position:relative}
+.side nav a .ni{display:grid;place-items:center;color:#667085;flex:none}
+.side nav a .nl{flex:1;min-width:0}
+.side nav a .nc{flex:none;min-width:22px;text-align:center;font-size:11px;font-weight:700;color:#475467;background:#f2f4f7;border-radius:999px;padding:1px 7px}
+.side nav a:hover{background:#f5f8fc;color:var(--ink)}
+.side nav a.active{background:var(--soft);color:#0b5cad}
+.side nav a.active .ni{color:var(--accent)}
+.side nav a.active::before{content:"";position:absolute;left:-14px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--accent)}
+.side nav a.active .nc{background:#fff;color:#0b5cad}
+.side .toolbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 0;padding-top:12px;border-top:1px solid var(--line)}
+.side .toolbar .btn{padding:8px 10px;font-size:12.5px;border-radius:9px;background:#fff;color:#344054}
+.side .toolbar #print{grid-column:1/3;background:var(--accent);border-color:var(--accent);color:#fff}
+.side .toolbar .btn:hover{filter:brightness(.97)}
+.main{max-width:1320px;width:100%;margin:0 auto;padding:26px 30px 60px}
+.hero{background:radial-gradient(900px 260px at 90% -20%,#3aa0f255,transparent),linear-gradient(135deg,#072b50,#0f6cbd);border-radius:20px;padding:26px 30px;box-shadow:var(--shadow)}
+.hero h1{font-size:28px;letter-spacing:-.01em}
+.hero .meta{gap:8px;margin-top:16px}
+.hero .meta span{border-radius:10px;padding:5px 11px;font-weight:600;background:#ffffff1c}
+.hero .meta i{font-style:normal;font-weight:500;opacity:.75;margin-right:6px}
+#validation-notice{font-size:12.5px;line-height:1.45;padding:9px 14px;margin:0 0 14px;background:#fffaeb;border-left:4px solid #f79009;color:#5b3d05;border-radius:10px}
+.section,#executive-narrative,#action-plan{scroll-margin-top:76px}
+.section,.plan,.narrative{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:24px 26px;margin:18px 0}
+.narrative.notice{border-left:1px solid var(--line)}
+.section h2,.narrative h2,.plan h2{display:flex;align-items:center;gap:10px;font-size:20px;letter-spacing:-.005em;margin:0 0 14px}
+.section h2::before,.narrative h2::before,.plan h2::before{content:"";width:4px;height:20px;border-radius:3px;background:var(--accent)}
+th{background:#f8fafc;color:#475467;font-size:12px;font-weight:650}
+td,th{padding:10px 12px}
+tbody tr:hover td{background:#fafcff}
+.tablewrap{border-radius:12px}
+.badge{font-weight:620}
+td .badge{white-space:nowrap}
+.card{border-radius:14px}
+.ctitle{color:var(--muted);font-size:12px}
+.fbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 12px}
+.fbar input{flex:1 1 260px;min-width:0;padding:9px 12px;border:1px solid var(--line);border-radius:11px;font:inherit;background:#fff}
+.fbar input:focus,.btn:focus-visible,.chip:focus-visible,.side nav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 12px;font:inherit;font-size:12.5px;font-weight:600;color:#475467;cursor:pointer}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.sum-card{border-radius:14px;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;padding:14px 16px}
+.sum-card .ico{grid-row:1/3;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#f2f4f7;color:#475467}
+.sum-card.gap .ico{background:#fee4e2;color:#b42318}.sum-card.imp .ico{background:#fff1d6;color:#b54708}.sum-card.nv .ico{background:#eef2f6;color:#475467}
+.sum-card strong{font-size:28px;line-height:1.05}
+.ostack{display:flex;height:10px;border-radius:999px;overflow:hidden;background:#eef2f6;margin:12px 0 6px}
+.ostack i{display:block;min-width:3px}
+.o-INEFFECTIVE{background:#d92d20}.o-AT_RISK{background:#f79009}.o-UNASSESSED{background:#98a2b3}.o-EFFECTIVE{background:#12b76a}.o-INFORMATIONAL{background:#2e90fa}.o-NOT_APPLICABLE{background:#d0d5dd}
+.olegend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted);margin-bottom:6px}
+.olegend b{color:var(--ink)}.olegend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:baseline}
+.topbar,.veil{display:none}
+.totop{position:fixed;right:22px;bottom:22px;z-index:20;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;color:#344054;box-shadow:var(--shadow);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .15s}
+.totop.show{opacity:1;pointer-events:auto}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media(max-width:900px){
+.shell{display:block}
+.topbar{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:30;background:#ffffffee;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:9px 12px}
+.topbar button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 9px;display:grid;place-items:center;cursor:pointer}
+.topbar .tt{font-weight:700}.topbar .cur{margin-left:auto;color:var(--muted);font-size:12.5px;max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side{position:fixed;left:0;top:0;bottom:0;height:100vh;width:min(86vw,320px);z-index:40;transform:translateX(-104%);transition:transform .2s ease;box-shadow:0 0 40px #10182833;overflow:auto}
+body.navopen .side{transform:none}
+body.navopen .veil{display:block;position:fixed;inset:0;background:#0c122066;z-index:35}
+.side nav{display:flex;overflow:visible}
+.side nav a.active::before{left:-14px}
+.main{padding:14px 14px 50px}
+.section,.plan,.narrative{padding:18px 16px;border-radius:16px}
+.hero{padding:20px 18px}.hero h1{font-size:23px}
+.sum-card strong{font-size:24px}
+#validation-notice{cursor:pointer;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+#validation-notice.open{display:block;-webkit-line-clamp:unset}
+}
+@media print{#validation-notice{display:block;-webkit-line-clamp:unset;overflow:visible}.topbar,.veil,.totop,.fbar{display:none!important}.main{max-width:none;padding:0}.section,.plan,.narrative{box-shadow:none;border-radius:0}tr[hidden]{display:table-row}}
+"""
+
+
+def _ux_page(page: str, document: dict[str, Any], locale: str) -> str:
+    import re as _re
+    t = TEXT[locale]
+    aside = _re.search(r'<aside class="side">.*?</aside>', page, _re.S)
+    if not aside:
+        raise ValueError("sidebar anchor not found for the navigation layer")
+    side = (
+        f'<aside class="side" id="sidebar"><div class="brand"><span class="logo">AP</span><span>Arc Posture Review<small>{esc(t["subtitle"])}</small></span></div>'
+        f'{_ux_nav(document, locale, page)}'
+        f'<div class="toolbar"><button class="btn" id="print">{esc(t["print"])}</button>'
+        f'<button class="btn" id="expand">{esc(t["expand"])}</button><button class="btn" id="collapse">{esc(t["collapse"])}</button></div></aside>'
+    )
+    page = page[:aside.start()] + side + page[aside.end():]
+    topbar = (f'<div class="topbar"><button type="button" id="navtoggle" aria-controls="sidebar" aria-label="{esc(t["uxMenu"])}">{_icon("overview")}</button>'
+              f'<span class="tt">Arc Posture Review</span><span id="curlabel" class="cur"></span></div><div id="navveil" class="veil"></div>')
+    shell = '<div class="shell">'
+    if page.count(shell) != 1:
+        raise ValueError("shell anchor not found for the navigation layer")
+    page = page.replace(shell, shell + topbar, 1)
+    hero = _re.search(r'(<header class="hero">.*?)<div class="meta">.*?</div>(</header>)', page, _re.S)
+    if not hero:
+        raise ValueError("hero anchor not found for the navigation layer")
+    page = page[:hero.start()] + hero.group(1) + _ux_hero_meta(document, locale) + hero.group(2) + page[hero.end():]
+    page = _ux_checks(page, document, locale)
+    top = f'<button type="button" id="totop" class="totop" aria-label="{esc(t["uxTop"])}" title="{esc(t["uxTop"])}">↑</button>'
+    anchor = '<script type="application/json" id="canonical-assessment">'
+    if page.count(anchor) != 1:
+        raise ValueError("script anchor not found for the back-to-top control")
+    return page.replace(anchor, top + anchor, 1).replace("</style>", UX_CSS + "</style>", 1)
+
+
+_render_without_ux = render
+
+
+def render(document, locale):
+    return _ux_page(_render_without_ux(document, locale), document, locale)
 
 
 if __name__ == "__main__":

@@ -42,7 +42,7 @@ Exemplo: `./Invoke-ArcPostureReview.ps1 -Subscriptions "<nome ou id>" -AllowedRe
 
 - **64 controles** (45 automáticos, 19 documentais) e **11 cenários de segurança**, cada um rastreado Evidência → Observação → Afirmação → Controle → Cenário.
 - **Execução primeiro:** resumo executivo em formato de relatório (lacunas verificadas, oportunidades de melhoria e controles não verificados, com título dos checks e legenda de leitura) e plano de ação AGORA agrupado pelo que fazer (corrigir lacunas verificadas, melhorar a postura, completar a coleta de evidências), na ordem canônica de prioridade, com rastro de evidência recolhível para cada check listado.
-- **Navegação:** menu fixo com imprimir/expandir/recolher; cada `CHK-xx` leva à linha correspondente em *Checks*; visão Zero Trust × Tier com barras de resultado.
+- **Navegação:** menu lateral agrupado (Resumo, Análise de postura, Execução, Evidências) com ícones, contadores e destaque que acompanha a rolagem; menu em gaveta no celular; filtro por ID, título ou resultado em *Checks* (com títulos e resultados em linguagem clara); cada `CHK-xx` leva à linha correspondente; voltar ao topo, imprimir e expandir/recolher; visão Zero Trust × Tier com barras de resultado.
 - **Links para o portal Azure** por linha de achado (índice de recursos vinculado ao `runId` e ao SHA-256 do pacote).
 - **Antes/depois** somente quando um pacote de baseline é informado (`--baseline`).
 - Evidência ausente nunca vira aprovação; caminhos de ataque nunca são afirmados como confirmados.
