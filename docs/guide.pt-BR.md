@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v4.1.6 — 06/11/2026.** Fidelidade aos dados coletados: a CHK-21 não chama mais toda porta aberta de SSH/WAC (classifica 22, 3389 e 6516 e informa as demais como não classificadas) e a CHK-33 conta máquinas distintas em vez de recursos aninhados. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
+**Versão v4.2.0 — 06/11/2026.** Fundamento das afirmações: um registro de fontes (`docs/sources.pt-BR.md`) diz quais limiares são oficiais, quais são critérios do kit e quais ainda estão a verificar; CHK-21 e CHK-29 corrigidas (portas; faixas de CVE conforme o NVD; bloqueio local do upgrade automático); ferramenta de recálculo independente de pacotes. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 

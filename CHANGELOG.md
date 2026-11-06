@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.2.0] — 2026-11-06
+
+### Foundations of the claims
+
+- **Register of sources** (`criteria/v4/sources.json`, pages `docs/sources.en-US.md` and `docs/sources.pt-BR.md`): each threshold, date and label is an official source, an official CVE record, a kit criterion (with rationale) or still to verify (with a to-do). `tools/Test-ClaimRegister.py` fails when the collector gains an unregistered threshold or a registered one disappears; `tools/Sync-Sources.py --check` keeps the pages current. Both run in the gates and in the release workflow.
+- **`tools/Verify-Package.py`**: independent, read-only recomputation of key numbers from a package's raw data, compared with `results.json`; `tools/Test-VerifyPackage.py` covers it. On the v4.1.4 lab package it flags the CHK-33 machine inflation fixed in v4.1.6.
+- **CHK-21:** only SSH (22) and Windows Admin Center (6516), the channels documented on Microsoft Learn, are named; any other port is unclassified (the "RDP" label for 3389 had no source); a 6516 allowed without the `AdminCenter` extension is reported.
+- **CHK-29:** per-machine CVE ranges follow the NVD records (CVE-2025-49692 below 1.49, CVE-2025-55316 below 1.56, CVE-2026-26117 below 1.61); CVE-2025-26627 is no longer mapped to an agent version. The automatic upgrade detail counts machines below 1.67 (not eligible) and failed attempts, and states that `automaticupgrade.blocklocally`, which takes precedence over the Azure property, cannot be read through Azure. The machines query also reads `agentUpgrade.lastAttemptStatus` and `desiredVersion`. Agent 1.69 (October 2026) added to the release calendar.
+- The kit index is described as inspired by the Defender for Cloud Secure Score, not as its model (Microsoft uses a fixed maximum score per control; the severity weights are the kit's).
+- See `docs/v4.2.0-foundations.md`.
+
 ## [4.1.6] — 2026-11-06
 
 ### Fidelity to the collected data

@@ -15,6 +15,7 @@ Thanks for helping. This is a personal, independent project; corrections that ci
 1. Branch from `main` (it is protected: changes go through a pull request and CI).
 2. Keep the posture vocabulary: *verified gap* (observed with enough evidence), *improvement opportunity* (hardening or visibility not configured; not "insecure") and *not verified* (a collection task). `tools/Test-PostureWording.py` guards it.
 3. Collector changes must stay read-only. Keep the UTF-8 BOM and consistent line endings of `scripts/Invoke-ArcPostureReview.ps1` (`tools/Test-LineEndings.py`).
+   Every numeric threshold, date or price in the collector needs an entry in `criteria/v4/sources.json` (official source, kit criterion or to verify); then run `python tools/Sync-Sources.py`. `tools/Test-ClaimRegister.py` fails otherwise. Open the Microsoft page in full and quote it: a search summary is not evidence.
 4. Texts exist in EN-US and PT-BR. New Portuguese detail rules go in the app table (`PT_DETAIL_RULES`); then run `python tools/Sync-PtRules.py` to regenerate `criteria/v4/pt-br-detail-rules.json` (`tools/Test-PtBrContent.py` checks they match).
 5. After changing the collector, criteria, CSS or the kit files run `python tools/Build-Kit.py --write-hash` and `python tools/Sync-ReportAssets.py`, then `python tools/Prepare-Release.py checksums`.
 6. Run the gates before pushing:

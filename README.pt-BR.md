@@ -63,6 +63,7 @@ Use `--locale en-US` para a versão em inglês. Mais opções (baseline, antes/d
 | Entender cada check e o que fazer | [docs/guide.pt-BR.md](docs/guide.pt-BR.md) (também dentro do app, passo 1) |
 | Saber como os resultados são decididos (evidência, cobertura, linguagem) | [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) e [docs/v4.1.1-posture-vs-evidence.md](docs/v4.1.1-posture-vs-evidence.md) |
 | Ver quais consultas e permissões são usadas | [docs/v4/query-evidence-matrix.md](docs/v4/query-evidence-matrix.md) |
+| Saber em que cada limiar e rótulo se baseia (fonte oficial, critério do kit ou ainda a verificar) | [docs/sources.pt-BR.md](docs/sources.pt-BR.md) e [docs/v4.2.0-foundations.md](docs/v4.2.0-foundations.md) |
 | Revisar segurança e limitações conhecidas | [docs/v4/threat-model-v4.md](docs/v4/threat-model-v4.md), [docs/v4/known-issues.md](docs/v4/known-issues.md), [SECURITY.md](SECURITY.md) |
 | Ver o que mudou | [CHANGELOG.md](CHANGELOG.md) |
 
@@ -103,6 +104,16 @@ python assurance/v4/checkpoint6/report/render_v4.py --input assessment.v4.json -
 ```
 
 Execute a partir de um clone deste repositório. No Windows, `py -3` funciona no lugar de `python`.
+</details>
+
+<details>
+<summary><b>Conferir um pacote de forma independente</b></summary>
+
+```powershell
+python tools/Verify-Package.py arc-posture-review-<data>.zip
+```
+
+Recalcula números-chave (portas, allowlists, versões do agente, contagem de recomendações, SO legado) a partir dos `data/*.json` brutos do pacote e compara com o `results.json`. Só lê; rode nos seus pacotes e no de um cliente antes de entregar. Qualquer divergência é um item de revisão, não um veredito.
 </details>
 
 <details>
