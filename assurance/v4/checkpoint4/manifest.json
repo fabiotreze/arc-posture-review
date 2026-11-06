@@ -13,8 +13,7 @@
     "roadmapHorizons": ["NOW", "30d", "90d"]
   },
   "entrypoints": {
-    "evaluate": "checkpoint4-v4/scripts/Evaluate-Posture.py",
-    "allGates": "checkpoint4-v4/scripts/Invoke-AllGates.py",
-    "allGatesPowerShell": "checkpoint4-v4/scripts/Invoke-AllGates.ps1"
+    "evaluate": "assurance/v4/checkpoint4/scripts/Evaluate-Posture.py",
+    "allGates": "assurance/v4/checkpoint4/scripts/Invoke-AllGates.py"
   }
 }

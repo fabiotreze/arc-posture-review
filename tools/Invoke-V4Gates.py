@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""Single repository-root gate for APR v4: CP1-CP4.1, CP5 and CLI wrappers."""
+"""Single repository-root gate for APR v4: CP1-CP4.1 and CP5."""
 from __future__ import annotations
 
 import hashlib
 import shutil
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -45,31 +44,6 @@ def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def wrapper_smoke():
-    pwsh = shutil.which("pwsh")
-    if not pwsh:
-        print("[FAIL] CLI wrappers: pwsh was not found")
-        return False
-    with tempfile.TemporaryDirectory() as tmp:
-        direct = Path(tmp) / "result.json"
-        pipeline = Path(tmp) / "pipeline.json"
-        steps = [
-            ("wrapper-evaluate", [pwsh, "-NoProfile", "-File", str(ROOT / "arc-posture.ps1"),
-                                  "evaluate", "-Evidence", str(FIXTURE), "-Output", str(direct)]),
-            ("wrapper-pipeline", [pwsh, "-NoProfile", "-File", str(ROOT / "Invoke-AssessmentPipeline.ps1"),
-                                  "-CollectorOutput", str(FIXTURE), "-Output", str(pipeline)]),
-        ]
-        for label, command in steps:
-            if not run(label, command):
-                print(f"[FAIL] CLI wrappers: {label}")
-                return False
-        if sha256(direct) != sha256(pipeline):
-            print("[FAIL] CLI wrappers: evaluate and pipeline outputs differ")
-            return False
-    print("[PASS] CLI wrappers: evaluate and pipeline produce identical output")
-    return True
-
-
 def main():
     cleanup()
     before = git_status()
@@ -82,8 +56,6 @@ def main():
         for label, command in steps:
             if not run(label, command):
                 failures.append(label)
-        if not wrapper_smoke():
-            failures.append("cli-wrappers")
     finally:
         cleanup()
     after = git_status()

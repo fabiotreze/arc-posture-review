@@ -1,5 +1,5 @@
 from pathlib import Path
-import subprocess, sys, json, hashlib, os
+import subprocess, sys, json
 ROOT=Path(__file__).resolve().parents[1]
 validators=['Validate-JsonSchemas.py','Validate-Mappings.py','Validate-Claims.py','Validate-SecurityScenarios.py']
 tests=['Test-AttackPathHypotheses.py']

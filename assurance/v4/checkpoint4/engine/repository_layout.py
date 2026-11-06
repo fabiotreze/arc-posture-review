@@ -30,6 +30,10 @@ CP3_ROOT = REPO_ROOT / "assurance" / "v4" / "checkpoint3"
 CP4_ROOT = REPO_ROOT / "assurance" / "v4" / "checkpoint4"
 
 CP3_DATA = CP3_ROOT / "data"
+# One copy of the contract schemas (checkpoint 5). Checkpoint 4 keeps only the two schemas that differ: its reviewed-lab fixture comes from an older
+# collector, so it is validated with the older collector-results-v3 and scenario-evaluation schemas.
+SCHEMAS = REPO_ROOT / "assurance" / "v4" / "checkpoint5" / "schemas"
+CP4_SCHEMAS = CP4_ROOT / "schemas"
 CP4_REPORTS = CP4_ROOT / "reports"
 
 FIXTURE_ROOT = REPO_ROOT / "tests" / "fixtures"
@@ -43,26 +47,8 @@ REVIEWED_LAB_REPORT = (
 )
 
 
-def validate_layout() -> None:
-    required = [
-        CP3_ROOT,
-        CP4_ROOT,
-        CP3_DATA / "checks.enriched.json",
-        CP3_DATA / "control-assessments.json",
-        CP3_DATA / "defense-coverage.json",
-        CP3_DATA / "security-scenarios.json",
-        CP4_ROOT / "engine" / "deterministic_engine.py",
-        REVIEWED_LAB_FIXTURE,
-    ]
-
-    missing = [
-        str(path)
-        for path in required
-        if not path.exists()
-    ]
-
-    if missing:
-        raise RuntimeError(
-            "APR integrated layout is incomplete:\n"
-            + "\n".join(missing)
-        )
+def schema_paths() -> dict[str, Path]:
+    """Checkpoint 5 schemas, overridden by the few checkpoint 4 schemas that differ."""
+    paths = {p.name: p for p in sorted(SCHEMAS.glob("*.json"))}
+    paths.update({p.name: p for p in sorted(CP4_SCHEMAS.glob("*.json"))})
+    return paths

@@ -3,7 +3,7 @@
 
 Checks: schema; verified entries carry an official URL, evidence and a date; kit criteria carry a rationale; unverified entries say what to check;
 every threshold literal found in the collector is covered by an entry and every registered token still exists (no stale entry)."""
-import datetime, json, re, sys
+import datetime, json, re
 from pathlib import Path
 from urllib.parse import urlparse
 

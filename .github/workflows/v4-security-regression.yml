@@ -1,10 +1,6 @@
 name: v4 security regression
+# Weekly drift check; every pull request already runs the same gates in "v4 PR quality".
 on:
-  pull_request:
-    paths:
-      - 'assurance/v4/**'
-      - 'tools/**'
-      - 'tests/**'
   schedule:
     - cron: '17 3 * * 1'
   workflow_dispatch:
@@ -19,5 +15,5 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - run: python -m pip install -r requirements-v4.txt
+      - run: python -m pip install -r requirements-dev.txt
       - run: python tools/Invoke-V4FinalGates.py --profile security-regression

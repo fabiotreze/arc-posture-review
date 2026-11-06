@@ -21,14 +21,6 @@ from typing import Any, Iterable
 
 ENGINE_VERSION = "4.0.0-checkpoint4"
 CHECKPOINT_VERSION = "4.0.0"
-CONTROL_OUTCOME_RANK = {
-    "NOT_APPLICABLE": 0,
-    "INFORMATIONAL": 0,
-    "EFFECTIVE": 1,
-    "UNASSESSED": 3,
-    "AT_RISK": 4,
-    "INEFFECTIVE": 5,
-}
 SEVERITY_SCORE = {"High": 70, "Medium": 45, "Low": 20}
 SCOPE_BONUS = {"T0": 15, "T1": 10, "Global": 8, "T2": 4}
 PRIORITY_RANK = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
@@ -229,9 +221,7 @@ class DeterministicEvaluationEngine:
         self.taxonomies = read_json(cp3 / "taxonomies.json")
         self.check_by_id = {row["id"]: row for row in self.checks}
         self.assessment_by_check = {row["checkId"]: row for row in self.assessments}
-        self.coverage_by_check = {row["checkId"]: row for row in self.coverage}
         self.card_by_scenario = {row["scenarioId"]: row for row in self.cards}
-        self.risk_by_id = {row["id"]: row for row in self.taxonomies["risks"]}
         self._validate_model_cardinality()
 
     def _validate_model_cardinality(self) -> None:

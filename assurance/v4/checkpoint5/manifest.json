@@ -1,6 +1,6 @@
 {
   "name": "arc-posture-review-checkpoint5",
-  "version": "4.2.2",
+  "version": "4.2.3",
   "checkpoint": 5,
   "baseCheckpoint": "4.1",
   "baseCommit": "2d512a3",
@@ -13,10 +13,7 @@
     "comparison": "before/after"
   },
   "entrypoints": {
-    "cliPowerShell": "arc-posture.ps1",
-    "pipelinePowerShell": "Invoke-AssessmentPipeline.ps1",
-    "allGatesPowerShell": "Invoke-AllGates.ps1",
     "cliPython": "assurance/v4/checkpoint5/cli/arc_posture.py",
-    "allGatesPython": "scripts/Invoke-AllGates.py"
+    "allGatesPython": "assurance/v4/checkpoint5/scripts/Invoke-AllGates.py"
   }
 }

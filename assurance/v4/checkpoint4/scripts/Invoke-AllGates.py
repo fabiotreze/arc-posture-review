@@ -28,10 +28,12 @@ def main() -> int:
         ("legacy-report-contract", [sys.executable, "tools/Test-ReportContract.py"]),
         ("legacy-lab-contract", [sys.executable, "tools/Test-LabCorrections.py"]),
         ("evidence-hardening-negative-regression", [sys.executable, "tools/Test-EvidenceHardening.py"]),
+        ("evidence-availability-negative", [sys.executable, "tools/Test-EvidenceAvailability.py"]),
         ("zero-target-query-evidence", [sys.executable, "tools/Test-ZeroTarget.py"]),
         ("zero-connected-estate", [sys.executable, "tools/Test-ZeroConnectedEstate.py"]),
         ("posture-wording", [sys.executable, "tools/Test-PostureWording.py"]),
         ("claim-register", [sys.executable, "tools/Test-ClaimRegister.py"]),
+        ("code-quality", [sys.executable, "tools/Test-CodeQuality.py"]),
         ("claim-register-docs", [sys.executable, "tools/Sync-Sources.py", "--check"]),
         ("independent-recomputation", [sys.executable, "tools/Test-VerifyPackage.py"]),
         ("collector-rules-executed", [sys.executable, "tools/Test-CollectorChecks.py"]),
@@ -56,7 +58,7 @@ def main() -> int:
         if not ok:
             failures.append(name)
     parse_errors = []
-    for path in sorted((CP4 / "schemas").glob("*.json")) + [CP4 / "manifest.json", SAMPLE]:
+    for path in sorted((ROOT / "assurance/v4/checkpoint5/schemas").glob("*.json")) + sorted((CP4 / "schemas").glob("*.json")) + [CP4 / "manifest.json", SAMPLE]:
         try:
             json.loads(path.read_text(encoding="utf-8-sig"))
         except Exception as exc:

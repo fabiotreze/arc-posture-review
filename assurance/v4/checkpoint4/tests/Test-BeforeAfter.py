@@ -6,6 +6,7 @@ from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
 from test_lib import *
+from engine.repository_layout import schema_paths
 
 
 def mutate_after(document):
@@ -31,8 +32,7 @@ def main() -> int:
             failures.append("scenario before/after cardinality")
         if comparison["baselineRunId"] == comparison["currentRunId"]:
             failures.append("different evidence produced the same run ID")
-    schema_dir = CP4 / "schemas"
-    schemas = {path.name: json.loads(path.read_text(encoding="utf-8")) for path in schema_dir.glob("*.json")}
+    schemas = {name: json.loads(path.read_text(encoding="utf-8")) for name, path in schema_paths().items()}
     registry = Registry()
     for name, schema in schemas.items():
         registry = registry.with_resource(name, Resource.from_contents(schema))

@@ -6,7 +6,6 @@ import base64
 import hashlib
 import json
 import re
-import sys
 from html.parser import HTMLParser
 from pathlib import Path
 

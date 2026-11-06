@@ -1,0 +1,13 @@
+# Static quality gate (tools/Test-CodeQuality.py): pyflakes rules only (unused imports and variables, undefined names).
+target-version = "py310"
+exclude = ["tests/fixtures", "build", "reports"]
+
+[lint]
+select = ["F"]
+
+[lint.per-file-ignores]
+# Helper modules whose imports are re-exported by `from x_lib import *` in the checkpoint tests and validators.
+"**/*_lib.py" = ["F401"]
+# The star-import consumers of those helpers.
+"assurance/v4/checkpoint*/tests/*.py" = ["F403", "F405"]
+"assurance/v4/checkpoint*/validators/*.py" = ["F403", "F405"]
