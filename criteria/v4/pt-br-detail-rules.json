@@ -15,6 +15,11 @@
    "$1 máquina(s) com portas de entrada configuradas no agente: $2 com SSH (22) ou Windows Admin Center (6516), $3 com portas que esta verificação não classifica (veja unclassifiedPorts); $4 com a porta 6516 liberada, mas sem a extensão AdminCenter. A lista define quais portas locais o canal de conectividade do Azure Arc pode alcançar; não é evidência de exposição: confirme a finalidade de cada porta, a necessidade e o RBAC."
   ],
   [
+   "(\\d+) machine\\(s\\) with inbound ports configured on the agent: (\\d+) with SSH \\(22\\) or Windows Admin Center \\(6516\\), (\\d+) with ports this check does not classify \\(see unclassifiedPorts\\); (\\d+) with port 6516 allowed but no AdminCenter extension…",
+   "g",
+   "$1 máquina(s) com portas de entrada configuradas no agente: $2 com SSH (22) ou Windows Admin Center (6516), $3 com portas que esta verificação não classifica (veja unclassifiedPorts); $4 com a porta 6516 liberada, mas sem a extensão AdminCenter…"
+  ],
+  [
    "Automatic agent upgrade: disabled in Azure on (\\d+) of (\\d+) machine\\(s\\); agent below 1\\.67 \\(not eligible\\) on (\\d+); last attempt failed on (\\d+)\\. A local block \\(automaticupgrade\\.blocklocally = true\\) takes precedence over the Azure setting and cannot be read through Azure: check a sample with 'azcmagent config get automaticupgrade\\.blocklocally' \\(CHK-36\\)\\.",
    "g",
    "Upgrade automático do agente: desabilitado no Azure em $1 de $2 máquina(s); agente abaixo da 1.67 (não elegível) em $3; última tentativa com falha em $4. Um bloqueio local (automaticupgrade.blocklocally = true) tem precedência sobre a configuração do Azure e não pode ser lido pelo Azure: confira uma amostra com 'azcmagent config get automaticupgrade.blocklocally' (CHK-36)."

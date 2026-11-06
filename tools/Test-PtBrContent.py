@@ -45,6 +45,8 @@ def golden_sentences() -> list[str]:
          "Upgrade automático do agente: desabilitado no Azure em 0 de 7"),
         ("228 Defender recommendation(s) affect Arc machines; High severity: 13; Critical/High risk: 0; open 90+ days: 0; attack paths: 0; exemptions: 0.",
          "228 Recomendações do Defender afetam máquinas Arc"),
+        ("6 machine(s) with inbound ports configured on the agent: 2 with SSH (22) or Windows Admin Center (6516), 5 with ports this check does not classify (see unclassifiedPorts); 2 with port 6516 allowed but no AdminCenter extension…",
+         "6 máquina(s) com portas de entrada configuradas no agente"),
     ]
     problems = []
     for english, expected in cases:
