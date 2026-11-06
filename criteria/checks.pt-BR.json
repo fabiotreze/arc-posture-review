@@ -35,7 +35,7 @@
       ]
     ],
     "alerts": [],
-    "resultCriteria": "INFO por definição (inventário, sem pontuação): contabiliza máquinas Arc por status de conexão, SO e detecção de SQL; esse inventário é o denominador das demais verificações."
+    "resultCriteria": "INFO por definição (inventário, sem pontuação): contabiliza máquinas Arc por status de conexão, SO e detecção de SQL; esse inventário é o denominador das demais verificações. PARTIAL quando só a subscription padrão do Azure CLI foi consultada (sem -Subscriptions nem -ManagementGroup) e ela não tem máquina Arc."
   },
   {
     "id": "CHK-02",
@@ -624,7 +624,7 @@
     ],
     "title": "Acesso público do Private Link Scope",
     "what": "publicNetworkAccess de cada Azure Arc Private Link Scope.",
-    "crit": "FAIL se algum escopo aceitar acesso público; N/A sem Private Link.",
+    "crit": "FAIL se algum escopo permitir acesso público explicitamente; PARTIAL se a configuração não for retornada; N/A sem Private Link.",
     "refs": [
       "DEC-05"
     ],
@@ -645,7 +645,7 @@
       ]
     ],
     "alerts": [],
-    "resultCriteria": "N/A quando não houver Azure Arc Private Link Scope no escopo; caso contrário, PASS quando todo Private Link Scope negar acesso de rede pública e FAIL quando algum permitir."
+    "resultCriteria": "N/A quando não houver Azure Arc Private Link Scope no escopo; caso contrário, PASS quando todo Private Link Scope negar acesso de rede pública, FAIL quando algum permitir explicitamente e PARTIAL quando a configuração não for retornada."
   },
   {
     "id": "CHK-19",
@@ -795,7 +795,7 @@
     ],
     "title": "Allowlist/blocklist de extensões",
     "what": "extensionsAllowList e extensionsBlockList configurados no agente.",
-    "crit": "FAIL quando pelo menos metade das máquinas aplicáveis aceitar qualquer extensão; WARN quando isso ocorrer em uma parcela menor; PASS quando toda máquina aplicável tiver allowlist ou blocklist.",
+    "crit": "WARN (oportunidade de hardening) quando alguma máquina aplicável aceitar qualquer extensão (sem allowlist nem blocklist); PASS quando toda máquina aplicável tiver allowlist ou blocklist.",
     "refs": [
       "CTL-02"
     ],
@@ -816,7 +816,7 @@
       ]
     ],
     "alerts": [],
-    "resultCriteria": "FAIL quando pelo menos metade das máquinas aplicáveis aceitar qualquer extensão; WARN quando isso ocorrer em uma parcela menor; PASS quando toda máquina aplicável tiver allowlist ou blocklist."
+    "resultCriteria": "WARN (oportunidade de hardening) quando alguma máquina aplicável aceitar qualquer extensão (sem allowlist nem blocklist); PASS quando toda máquina aplicável tiver allowlist ou blocklist."
   },
   {
     "id": "CHK-24",
@@ -1107,7 +1107,7 @@
     ],
     "title": "Defender for Servers",
     "what": "Plano VirtualMachines por subscription (tier e subplano).",
-    "crit": "FAIL se Free.",
+    "crit": "FAIL se Free; PARTIAL se o plano não puder ser lido.",
     "refs": [
       "CTL-06"
     ],
@@ -1132,7 +1132,7 @@
       ]
     ],
     "alerts": [],
-    "resultCriteria": "PASS quando o Defender for Servers (P1 ou P2) estiver habilitado em toda subscription com máquinas Arc; não-PASS quando alguma delas estiver em Free."
+    "resultCriteria": "PASS quando o Defender for Servers (P1 ou P2) estiver habilitado em toda subscription com máquinas Arc; FAIL quando alguma delas estiver em Free; PARTIAL quando o plano não puder ser lido."
   },
   {
     "id": "CHK-32",
@@ -1585,7 +1585,7 @@
     ],
     "title": "Exportação do Activity Log",
     "what": "Diagnostic settings da subscription para Log Analytics.",
-    "crit": "FAIL se não houver exportação (retenção nativa de 90 dias).",
+    "crit": "FAIL se não houver exportação (retenção nativa de 90 dias); PARTIAL se as configurações não puderem ser lidas.",
     "refs": [
       "EVD",
       "LAT"
@@ -1607,7 +1607,7 @@
       ]
     ],
     "alerts": [],
-    "resultCriteria": "PASS quando o Activity Log for exportado para o Log Analytics em todas as subscriptions do escopo; não-PASS quando alguma subscription não tiver exportação."
+    "resultCriteria": "PASS quando o Activity Log for exportado para o Log Analytics em todas as subscriptions do escopo; FAIL quando uma subscription com configurações lidas não tiver exportação; PARTIAL quando as configurações de diagnóstico não puderem ser lidas."
   },
   {
     "id": "CHK-44",
@@ -2074,7 +2074,7 @@
     ],
     "title": "Auditoria dos administradores locais",
     "what": "Auditoria do grupo Administradores local por Machine Configuration (políticas built-in de membros do grupo Administradores) nas máquinas Windows conectadas.",
-    "crit": "FAIL quando nenhuma máquina Windows conectada tiver auditoria dos administradores locais; WARN para não conformidade quando houver cobertura; INFO quando somente parte do parque estiver coberta; PASS quando todas as máquinas aplicáveis estiverem auditadas e conformes.",
+    "crit": "WARN (lacuna de visibilidade) quando nenhuma máquina Windows conectada tiver auditoria dos administradores locais, e WARN para não conformidade quando houver cobertura; INFO quando somente parte do parque estiver coberta; PASS quando todas as máquinas aplicáveis estiverem auditadas e conformes.",
     "refs": [
       "CTL-04",
       "CTL-05"
@@ -2105,7 +2105,7 @@
       ]
     ],
     "alerts": [],
-    "resultCriteria": "FAIL quando nenhuma máquina Windows conectada tiver auditoria dos administradores locais; WARN para não conformidade quando houver cobertura; INFO quando somente parte do parque estiver coberta; PASS quando todas as máquinas aplicáveis estiverem auditadas e conformes."
+    "resultCriteria": "WARN (lacuna de visibilidade) quando nenhuma máquina Windows conectada tiver auditoria dos administradores locais, e WARN para não conformidade quando houver cobertura; INFO quando somente parte do parque estiver coberta; PASS quando todas as máquinas aplicáveis estiverem auditadas e conformes."
   },
   {
     "id": "CHK-57",

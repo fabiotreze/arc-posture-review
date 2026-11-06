@@ -63,7 +63,7 @@
       "sourceDatasets": [
         "machines"
       ],
-      "decisionRule": "INFO by design (inventory, not scored): counts Arc machines by connection status, OS and SQL detection; this inventory is the denominator for the other checks."
+      "decisionRule": "INFO by design (inventory, not scored): counts Arc machines by connection status, OS and SQL detection; this inventory is the denominator for the other checks. PARTIAL when only the default Azure CLI subscription was queried (no -Subscriptions or -ManagementGroup) and it holds no Arc machine."
     }
   },
   {
@@ -1120,7 +1120,7 @@
     "id": "CA-18",
     "checkId": "CHK-18",
     "objective": "publicNetworkAccess of each Azure Arc Private Link Scope.",
-    "assertion": "FAIL if any scope allows public access; N/A without Private Link.",
+    "assertion": "FAIL if any scope explicitly allows public access; PARTIAL if the setting is not returned; N/A without Private Link.",
     "statusModel": [
       "PASS",
       "WARN",
@@ -1178,7 +1178,7 @@
       "sourceDatasets": [
         "related"
       ],
-      "decisionRule": "N/A when no Azure Arc Private Link Scope exists in scope; otherwise PASS when every Private Link Scope denies public network access and FAIL when any allows it."
+      "decisionRule": "N/A when no Azure Arc Private Link Scope exists in scope; otherwise PASS when every Private Link Scope denies public network access, FAIL when any explicitly allows it, and PARTIAL when the setting is not returned."
     }
   },
   {
@@ -1441,7 +1441,7 @@
     "id": "CA-23",
     "checkId": "CHK-23",
     "objective": "extensionsAllowList and extensionsBlockList configured on the agent.",
-    "assertion": "FAIL when at least half of applicable machines accept any extension; WARN when a smaller subset does; PASS when every applicable machine has an allowlist or blocklist.",
+    "assertion": "WARN (hardening opportunity) when any applicable machine accepts any extension (no allowlist or blocklist); PASS when every applicable machine has an allowlist or blocklist.",
     "statusModel": [
       "PASS",
       "WARN",
@@ -1501,7 +1501,7 @@
       "sourceDatasets": [
         "machines"
       ],
-      "decisionRule": "FAIL when at least half of applicable machines accept any extension; WARN when a smaller subset does; PASS when every applicable machine has an allowlist or blocklist."
+      "decisionRule": "WARN (hardening opportunity) when any applicable machine accepts any extension (no allowlist or blocklist); PASS when every applicable machine has an allowlist or blocklist."
     }
   },
   {
@@ -1974,7 +1974,7 @@
     "id": "CA-31",
     "checkId": "CHK-31",
     "objective": "VirtualMachines plan per subscription (tier and subplan).",
-    "assertion": "FAIL if Free.",
+    "assertion": "FAIL if Free; PARTIAL if the plan cannot be read.",
     "statusModel": [
       "PASS",
       "WARN",
@@ -2033,7 +2033,7 @@
       "sourceDatasets": [
         "pricing"
       ],
-      "decisionRule": "PASS when Defender for Servers (P1 or P2) is enabled in every subscription with Arc machines; non-PASS when any such subscription is on Free."
+      "decisionRule": "PASS when Defender for Servers (P1 or P2) is enabled in every subscription with Arc machines; FAIL when any such subscription is on Free; PARTIAL when the plan could not be read."
     }
   },
   {
@@ -2788,7 +2788,7 @@
     "id": "CA-43",
     "checkId": "CHK-43",
     "objective": "Subscription diagnostic settings to Log Analytics.",
-    "assertion": "FAIL if there is no export (native retention of 90 days).",
+    "assertion": "FAIL if there is no export (native retention of 90 days); PARTIAL if the settings cannot be read.",
     "statusModel": [
       "PASS",
       "WARN",
@@ -2851,7 +2851,7 @@
       "sourceDatasets": [
         "diag"
       ],
-      "decisionRule": "PASS when the Activity Log is exported to Log Analytics in every subscription in scope; non-PASS when any subscription has no export."
+      "decisionRule": "PASS when the Activity Log is exported to Log Analytics in every subscription in scope; FAIL when a subscription whose settings were read has no export; PARTIAL when the diagnostic settings could not be read."
     }
   },
   {
@@ -3671,7 +3671,7 @@
     "id": "CA-56",
     "checkId": "CHK-56",
     "objective": "Audit of the local Administrators group through Machine Configuration (built-in Administrators group membership policies) on connected Windows machines.",
-    "assertion": "FAIL when no connected Windows machine has the local-administrators audit; WARN for non-compliance when audit coverage exists; INFO when only part of the estate is covered; PASS when all applicable machines are audited and compliant.",
+    "assertion": "WARN (visibility gap) when no connected Windows machine has the local-administrators audit, and WARN for non-compliance when audit coverage exists; INFO when only part of the estate is covered; PASS when all applicable machines are audited and compliant.",
     "statusModel": [
       "PASS",
       "WARN",
@@ -3733,7 +3733,7 @@
         "machines",
         "gcComp"
       ],
-      "decisionRule": "FAIL when no connected Windows machine has the local-administrators audit; WARN for non-compliance when audit coverage exists; INFO when only part of the estate is covered; PASS when all applicable machines are audited and compliant."
+      "decisionRule": "WARN (visibility gap) when no connected Windows machine has the local-administrators audit, and WARN for non-compliance when audit coverage exists; INFO when only part of the estate is covered; PASS when all applicable machines are audited and compliant."
     }
   },
   {

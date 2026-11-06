@@ -1,5 +1,22 @@
 # Changelog
 
+## [4.1.1] — 2026-11-06
+
+### Posture versus evidence
+
+- A missing configuration or missing evidence is no longer a conclusive FAIL. CHK-23 (no extension allowlist) and CHK-56 (local-administrators audit not configured) are WARN; CHK-18, CHK-31, CHK-33, CHK-41, CHK-43 and CHK-45 return PARTIAL when the evidence cannot support a conclusion. Explicit adverse evidence (NonCompliant, Free Defender tier, expired agent, missing export on a readable subscription) stays FAIL.
+- A run without `-Subscriptions` or `-ManagementGroup` warns that only the default Azure CLI subscription is queried; CHK-01 returns PARTIAL when that subscription holds no Arc machine instead of reporting zero machines with full coverage. README and guide now show `-Subscriptions` in every command and document `-AllowedRegions`, `-RequiredTags` and `-MaxMachines`.
+- The collector warns when the same resource group and machine name exist in more than one subscription.
+- N/A results carry FULL evidence coverage so the engine can prove non-applicability (v4.0.3 addendum item F5).
+- Engine: scenarios driven only by not-verified controls cannot score above P2 or reach NOW; a defense function with only informational or not-applicable controls is UNKNOWN; action cards carry an optional `basis` (`VERIFIED_GAP`, `IMPROVEMENT`, `EVIDENCE_COLLECTION`) and containment wording is reserved for verified gaps.
+- v4 report: report-style executive summary (verified gaps, improvement opportunities, not-verified controls with check titles), reading guide and legend, and an action plan grouped by what to do. Stored enums and canonical codes are unchanged.
+- Guide (EN-US/PT-BR, Markdown and embedded HTML) explains how to read results; the stale "Canonical guide" badge and the `var VERSION` marker are now covered by `tools/Test-GuideVersion.py`; version-sensitive tests read `VERSION` instead of hardcoding it.
+- Moved the approved `pypdf` pin to `6.21.4`, the first patched version for the 14 alerts raised against `6.21.2`.
+- `tools/Prepare-Release.py checksums` also regenerates the root `SHA256SUMS.txt` from the tracked files; the release gate no longer hardcodes the v4.1.0 branch and documents.
+- Added `tools/Test-PostureWording.py` (registered in the checkpoint 4 gate) and `docs/v4.1.1-posture-vs-evidence.md`.
+- Not changed: F3 (engine does not gate FAIL/WARN on missing required fields), per-machine correlation without the subscription, and CHK-37 mixing the machine sample with whole-estate counts under `-MaxMachines`; see `docs/v4/known-issues.md`.
+- No collected environment data or customer reports are included.
+
 ## [4.1.0] — 2026-10-30
 
 ### Evidence hardening and release idempotency

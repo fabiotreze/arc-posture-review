@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v4.1.0 — 30/10/2026.** Correção focada: um inventário Arc existente com zero máquinas Connected retorna N/A nas CHK-32 e CHK-39, nunca PASS vacuamente verdadeiro. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
+**Versão v4.1.1 — 06/11/2026.** Linguagem de postura versus evidência: configuração ausente é tratada como oportunidade de melhoria e evidência ausente como tarefa de coleta; somente condições observadas são lacunas verificadas. O escopo implícito (sem `-Subscriptions`) agora é sinalizado. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 
@@ -95,7 +95,8 @@ Cada verificação pertence a uma camada. Só as camadas 1 a 3 medem conformidad
 | **ALR-xx** | Alerta recomendado | Seção 5 |
 
 - Cada item do playbook termina com **Verificado por** (CHK que comprovam o item); cada CHK lista a camada, o controle MCSB, a árvore e as referências do playbook.
-- Status: **PASS**, **WARN**, **FAIL**, **INFO**, **N/A**, **ERRO** (coleta falhou), **PARCIAL** (faltou permissão em parte do escopo) e **TODO** (documental pendente).
+- Status: **PASS**, **WARN**, **FAIL**, **INFO**, **N/A**, **ERROR** (coleta falhou), **PARTIAL** (a evidência não sustenta uma conclusão, por exemplo faltou permissão em parte do escopo) e **TODO** (documental pendente).
+- Como ler os resultados: PASS, WARN e FAIL são medidos contra o critério de cada check; não afirmam que uma prática é insegura. WARN costuma ser uma oportunidade de melhoria ou de hardening. FAIL é uma condição observada com evidência suficiente (por exemplo NonCompliant, agente expirado ou Defender no tier Free). PARTIAL, N/A e TODO indicam evidência incompleta, não aplicável ou documental: são tarefas de coleta, nunca achados. O relatório v4 mostra esses casos como Lacuna verificada, Oportunidade de melhoria e Não verificado.
 - Automáticos são avaliados pelo script somente leitura; documentais, em entrevista ou evidência com o cliente.
 
 ## 2) Árvores de decisão
@@ -1018,7 +1019,7 @@ Mesma lista, na mesma ordem, do `arc-posture-review.pt-BR.html`. Camada: 1 MCSB 
 | ID | Verificação | Tipo | Sev. | Camada | MCSB | Árvore | O que verifica | Critério | Referências |
 |---|---|---|---|---|---|---|---|---|---|
 | CHK-17 | Modelo de conectividade em uso | Automático | Média | 1 | NS-2 | D3 | Máquinas via Private Link, via proxy, Arc gateways e endpoints públicos. | Informativo: comparar com a decisão de conectividade. | DEC-05, DEC-06, DEC-07, DEC-08 |
-| CHK-18 | Acesso público do Private Link Scope | Automático | Alta | 1 | NS-2 | D3 | publicNetworkAccess de cada Azure Arc Private Link Scope. | FAIL se algum escopo aceitar acesso público; N/A sem Private Link. | DEC-05 |
+| CHK-18 | Acesso público do Private Link Scope | Automático | Alta | 1 | NS-2 | D3 | publicNetworkAccess de cada Azure Arc Private Link Scope. | FAIL se algum escopo permitir acesso público explicitamente; PARTIAL se a configuração não for retornada; N/A sem Private Link. | DEC-05 |
 | CHK-19 | DNS privado do Arc | Automático | Média | 3 | NS-10 | D3 | Zonas privatelink.his.arc.azure.com e privatelink.guestconfiguration.azure.com e DNS Private Resolver. | WARN se houver Private Link sem as zonas no escopo (podem estar no hub). | CTL-01 |
 | CHK-20 | Decisão de conectividade e liberações de rede | Documental | Alta | 4 | NS-2, NS-9 | D3 | Modelo escolhido (privado, Arc gateway, proxy explícito ou direto), allowlist de FQDN/Service Tags, Entra ID e ARM liberados, sem inspeção TLS no gateway. | Evidência: decisão aprovada e regras de firewall/proxy. | DEC-05, DEC-06, DEC-07, DEC-08, CTL-01 |
 
@@ -1036,7 +1037,7 @@ Mesma lista, na mesma ordem, do `arc-posture-review.pt-BR.html`. Camada: 1 MCSB 
 | CHK-28 | Extensões com falha | Automático | Média | 3 | — | D7 | provisioningState de todas as extensões. | FAIL se diferente de Succeeded. | OPS-06, OPS-11 |
 | CHK-29 | Versão do agente dentro do suporte | Automático | Alta | 3 | PV-6 | D7 | Versão de cada Connected Machine agent × data de lançamento nas release notes, com a idade em meses na data da execução; só versões lançadas nos últimos 12 meses são suportadas (tabela de 22/10/2026: última 1.68, set/2026). Inclui o piso de segurança 1.61 (CVEs de elevação de privilégio publicadas). | FAIL se houver agente fora do suporte; WARN se suportado mas com mais de 6 meses. FAIL também para versões anteriores à 1.61. | OPS-05 |
 | CHK-30 | Versões e atualização automática das extensões | Automático | Média | 3 | PV-6 | D7 | Extensão SQL e Azure Monitor Agent × janela de suporte de 12 meses (release notes; alvo atual da SQL 1.1.3518.465); demais extensões × versão mais recente publicada pelo Azure na região (Extension Metadata; reserva: a mais nova do parque); enableAutomaticUpgrade. | FAIL se a extensão SQL ou o Azure Monitor Agent estiver fora do suporte; WARN se houver extensão atrás da versão publicada (ou da mais nova do parque) ou sem atualização automática. | OPS-06, CTL-04 |
-| CHK-31 | Defender for Servers | Automático | Alta | 1 | LT-1 | D6 | Plano VirtualMachines por subscription (tier e subplano). | FAIL se Free. | CTL-06 |
+| CHK-31 | Defender for Servers | Automático | Alta | 1 | LT-1 | D6 | Plano VirtualMachines por subscription (tier e subplano). | FAIL se Free; PARTIAL se o plano não puder ser lido. | CTL-06 |
 | CHK-32 | Defender for Endpoint | Automático | Alta | 1 | ES-1 | D6 | Máquinas conectadas sem extensão MDE.Windows/MDE.Linux. | WARN se houver máquinas sem o sensor via Arc. | CTL-06, Movimento lateral |
 | CHK-33 | Recomendações do Defender | Automático | Média | 1 | PV-5, PV-4 | D6 | Avaliações Unhealthy em máquinas Arc, por severidade. | WARN se houver recomendações pendentes. | CTL-06 |
 | CHK-34 | SQL Server: Defender for SQL e menor privilégio | Automático | Média | 1 | LT-1, PA-7 | D6 | Máquinas com SQL, plano Defender for SQL, versão/atualização automática da extensão SQL (menor privilégio a partir de 1.1.2859.223), SQL em máquina associada a Private Link (o serviço de processamento de dados *.<region>.arcdataservices.com não suporta Private Link) e SQL em SO não suportado (anterior ao Windows Server 2016). | WARN se houver qualquer um desses casos; N/A sem SQL. | CTL-04, DEC-05 |
@@ -1059,7 +1060,7 @@ Mesma lista, na mesma ordem, do `arc-posture-review.pt-BR.html`. Camada: 1 MCSB 
 | CHK-40 | Associação a DCR | Automático | Média | 1 | LT-3, LT-5 | D6 | Máquinas com AMA sem Data Collection Rule associada; DCRs em uso e workspaces de destino. | WARN: agente instalado sem coletar dados. | OPS-04, CTL-07 |
 | CHK-41 | Microsoft Sentinel e cobertura das máquinas | Automático | Média | 1 | LT-5, IR-3 | D6 | Workspaces com Sentinel; DCRs que enviam dados a eles (fluxos), máquinas Arc cobertas por essas DCRs, retenção e exportação do Activity Log para o Sentinel. | WARN se não houver Sentinel no escopo ou se nenhuma máquina Arc enviar dados a ele; INFO com a cobertura. | CTL-07, Movimento lateral |
 | CHK-42 | Avaliação de patches (Update Manager/WSUS) | Automático | Média | 1 | PV-6 | D7 | Avaliação periódica (AutomaticByPlatform) e patches críticos/segurança pendentes. | WARN se sem avaliação periódica ou com pendências. | OPS-10 |
-| CHK-43 | Exportação do Activity Log | Automático | Alta | 1 | LT-3, LT-5 | D6 | Diagnostic settings da subscription para Log Analytics. | FAIL se não houver exportação (retenção nativa de 90 dias). | Matriz de evidências, Movimento lateral |
+| CHK-43 | Exportação do Activity Log | Automático | Alta | 1 | LT-3, LT-5 | D6 | Diagnostic settings da subscription para Log Analytics. | FAIL se não houver exportação (retenção nativa de 90 dias); PARTIAL se as configurações não puderem ser lidas. | Matriz de evidências, Movimento lateral |
 | CHK-44 | Operações sensíveis no período | Automático | Alta | 1 | LT-3, IR-4 | D6 | Run Command, instalação/remoção de extensões, remoção de máquinas e licenças. | WARN se houver Run Command ou remoções: revisar autor e justificativa. | CTL-03, Matriz de evidências, Movimento lateral |
 | CHK-45 | Retenção do Log Analytics | Automático | Baixa | 1 | LT-6 | D6 | retentionInDays dos workspaces. | WARN se inferior a 90 dias. | Matriz de evidências |
 | CHK-46 | Piloto executado e aceito | Documental | Média | P | — | P | Escopo representativo, métricas e critérios de sucesso (30 dias recomendado). | Evidência: relatório do piloto. | OPS-01 |

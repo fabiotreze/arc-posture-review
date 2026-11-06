@@ -33,6 +33,30 @@ SEVERITY_SCORE = {"High": 70, "Medium": 45, "Low": 20}
 SCOPE_BONUS = {"T0": 15, "T1": 10, "Global": 8, "T2": 4}
 PRIORITY_RANK = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
 DEFENSE_FUNCTIONS = ("Prevent", "Detect", "Respond", "Recover")
+BASIS_TITLE_PREFIX = {"IMPROVEMENT": "Improve posture:", "EVIDENCE_COLLECTION": "Complete evidence:"}
+BASIS_ACTIONS = {
+    "IMPROVEMENT": [
+        "Review the listed checks and decide which hardening steps to adopt.",
+        "Prioritize by the residual risk of each check and the criticality tier of the machines.",
+        "Apply approved changes through change control and record the owner and date.",
+        "Re-run the collection and confirm the listed checks reach PASS.",
+    ],
+    "EVIDENCE_COLLECTION": [
+        "Identify which evidence is missing, documentary or outside the collected scope for the listed checks.",
+        "Collect it: extend the collector scope, grant read access, or record the documentary evidence.",
+        "Re-run the collection and re-evaluate; this is evidence work, not a confirmed exposure.",
+    ],
+}
+BASIS_CLOSURE = {
+    "IMPROVEMENT": [
+        "Each listed check is PASS, or an accepted-risk decision is recorded.",
+        "Owner and timestamp are recorded.",
+    ],
+    "EVIDENCE_COLLECTION": [
+        "Each listed check has FULL evidence or a documented N/A.",
+        "Owner and timestamp are recorded.",
+    ],
+}
 CANONICAL_STATUSES = {
     "PASS", "WARN", "FAIL", "PARTIAL", "INFO", "N/A", "TODO", "MANUAL", "UNKNOWN", "ERROR"
 }
@@ -512,6 +536,9 @@ class DeterministicEvaluationEngine:
                     status = "DEGRADED"
                 elif "UNASSESSED" in outcomes:
                     status = "UNKNOWN"
+                elif "EFFECTIVE" not in outcomes:
+                    # Only informational or not-applicable controls: effectiveness is not demonstrated.
+                    status = "UNKNOWN"
                 else:
                     status = "EFFECTIVE"
                 defense[function] = {
@@ -527,6 +554,9 @@ class DeterministicEvaluationEngine:
             gap_bonus = 4 * sum(1 for item in defense.values() if item["status"] == "GAP")
             unknown_bonus = min(10, 2 * len(unassessed))
             score = 0 if state == "MITIGATED" else clamp(base + 0.65 * maximum + 0.20 * top_average + gap_bonus + unknown_bonus)
+            if state == "UNRESOLVED":
+                # Evidence gaps alone never reach NOW: they are evidence-collection work, not verified exposure.
+                score = min(score, 59)
             priority = priority_for(score)
             rows.append({
                 "id": "SE-" + scenario["id"],
@@ -564,20 +594,27 @@ class DeterministicEvaluationEngine:
                 f"{check_id}:{by_check[check_id]['outcome']}:{by_check[check_id]['residualRisk']['score']}"
                 for check_id in top
             ]
+            basis = {"OPEN": "VERIFIED_GAP", "ELEVATED": "IMPROVEMENT"}.get(scenario["state"], "EVIDENCE_COLLECTION")
+            title, actions, closure = template["title"], template["actions"], template["closureEvidence"]
+            if basis != "VERIFIED_GAP":
+                # Containment wording is reserved for verified gaps; other cards describe posture work or evidence work.
+                title = title.replace("Contain and remediate:", BASIS_TITLE_PREFIX[basis], 1)
+                actions, closure = BASIS_ACTIONS[basis], BASIS_CLOSURE[basis]
             rows.append({
                 "id": "ACI-" + template["riskId"],
                 "templateId": template["id"],
+                "basis": basis,
                 "riskId": template["riskId"],
                 "scenarioId": template["scenarioId"],
-                "title": template["title"],
+                "title": title,
                 "priority": priority,
                 "priorityScore": scenario["residualRisk"]["score"],
                 "horizon": horizon,
                 "owners": sorted(template["owners"]),
                 "triggeredControlIds": triggered,
                 "priorityReasons": reasons,
-                "actions": template["actions"],
-                "closureEvidence": template["closureEvidence"],
+                "actions": actions,
+                "closureEvidence": closure,
                 "rollback": template["rollback"],
             })
         return sorted(rows, key=lambda row: (PRIORITY_RANK[row["priority"]], -row["priorityScore"], row["riskId"]))

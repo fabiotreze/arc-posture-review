@@ -63,7 +63,7 @@
         "machines"
       ]
     },
-    "resultCriteria": "INFO by design (inventory, not scored): counts Arc machines by connection status, OS and SQL detection; this inventory is the denominator for the other checks."
+    "resultCriteria": "INFO by design (inventory, not scored): counts Arc machines by connection status, OS and SQL detection; this inventory is the denominator for the other checks. PARTIAL when only the default Azure CLI subscription was queried (no -Subscriptions or -ManagementGroup) and it holds no Arc machine."
   },
   {
     "id": "CHK-02",
@@ -1175,7 +1175,7 @@
         "related"
       ]
     },
-    "resultCriteria": "N/A when no Azure Arc Private Link Scope exists in scope; otherwise PASS when every Private Link Scope denies public network access and FAIL when any allows it."
+    "resultCriteria": "N/A when no Azure Arc Private Link Scope exists in scope; otherwise PASS when every Private Link Scope denies public network access, FAIL when any explicitly allows it, and PARTIAL when the setting is not returned."
   },
   {
     "id": "CHK-19",
@@ -1500,7 +1500,7 @@
         "machines"
       ]
     },
-    "resultCriteria": "FAIL when at least half of applicable machines accept any extension; WARN when a smaller subset does; PASS when every applicable machine has an allowlist or blocklist."
+    "resultCriteria": "WARN (hardening opportunity) when any applicable machine accepts any extension (no allowlist or blocklist); PASS when every applicable machine has an allowlist or blocklist."
   },
   {
     "id": "CHK-24",
@@ -2028,7 +2028,7 @@
         "pricing"
       ]
     },
-    "resultCriteria": "PASS when Defender for Servers (P1 or P2) is enabled in every subscription with Arc machines; non-PASS when any such subscription is on Free."
+    "resultCriteria": "PASS when Defender for Servers (P1 or P2) is enabled in every subscription with Arc machines; FAIL when any such subscription is on Free; PARTIAL when the plan could not be read."
   },
   {
     "id": "CHK-32",
@@ -2835,7 +2835,7 @@
         "diag"
       ]
     },
-    "resultCriteria": "PASS when the Activity Log is exported to Log Analytics in every subscription in scope; non-PASS when any subscription has no export."
+    "resultCriteria": "PASS when the Activity Log is exported to Log Analytics in every subscription in scope; FAIL when a subscription whose settings were read has no export; PARTIAL when the diagnostic settings could not be read."
   },
   {
     "id": "CHK-44",
@@ -3711,7 +3711,7 @@
         "gcComp"
       ]
     },
-    "resultCriteria": "FAIL when no connected Windows machine has the local-administrators audit; WARN for non-compliance when audit coverage exists; INFO when only part of the estate is covered; PASS when all applicable machines are audited and compliant."
+    "resultCriteria": "WARN (visibility gap) when no connected Windows machine has the local-administrators audit, and WARN for non-compliance when audit coverage exists; INFO when only part of the estate is covered; PASS when all applicable machines are audited and compliant."
   },
   {
     "id": "CHK-57",

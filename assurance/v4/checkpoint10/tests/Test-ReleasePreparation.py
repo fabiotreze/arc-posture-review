@@ -49,8 +49,8 @@ def main() -> int:
     else:
         errors.append(f"unsupported release status: {status!r}")
 
-    if manifest.get("sourceBranch") != "feature/v4.1.0":
-        errors.append("v4.1.0 source branch drift")
+    if not str(manifest.get("sourceBranch", "")).strip():
+        errors.append(f"{release_name} source branch is missing")
     seen: set[str] = set()
     for line in sums_path.read_text(encoding="utf-8").splitlines():
         if not line.strip():
@@ -85,11 +85,8 @@ def main() -> int:
         "tools/Test-ZeroConnectedEstate.py",
         "tools/Test-GuideVersion.py",
         "tools/Test-EvidenceHardening.py",
-        "docs/v4.1.0-evidence-hardening.md",
-        "docs/v4/security-review-record-v4.1.0.md",
-        "tests/fixtures/evidence-hardening-negative.v4.1.0.json",
-        "tests/fixtures/reviewed-lab-sanitized.zip",
-        "tests/fixtures/zero-connected-estate.v4.0.3.json",
+        str(review.get("record", "")),
+        *manifest.get("checksumTargets", []),
     }
     if not required <= seen:
         errors.append(f"checksum coverage missing: {sorted(required - seen)}")

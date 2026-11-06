@@ -16,8 +16,10 @@ Avaliação somente leitura da postura de segurança de **servidores habilitados
 
 ```powershell
 Invoke-WebRequest https://github.com/fabiotreze/arc-posture-review/releases/latest/download/Invoke-ArcPostureReview.ps1 -OutFile Invoke-ArcPostureReview.ps1
-./Invoke-ArcPostureReview.ps1
+./Invoke-ArcPostureReview.ps1 -Subscriptions "<nome ou id da subscription>"
 ```
+
+> **Sempre informe `-Subscriptions` (ou `-ManagementGroup`) com a(s) subscription(s) que contêm as máquinas Arc.** Sem isso, só a subscription padrão atual do CLI é consultada; se as máquinas estiverem em outra, o relatório mostra 0 máquinas e a maioria das verificações vira N/A. Confira a linha `Scope:` na saída antes de confiar no resultado.
 
 | Saída | Conteúdo |
 |---|---|
@@ -25,16 +27,26 @@ Invoke-WebRequest https://github.com/fabiotreze/arc-posture-review/releases/late
 | `arc-posture-review/arc-posture-review-<data>-v4/` | `arc-posture-review.v4.pt-BR.html`, `arc-posture-review.v4.en-US.html`, `assessment.v4.json`, `resource-index.v4.json` |
 | `arc-posture-review/arc-posture-review-<data>-v4.zip` | A pasta do relatório v4 compactada (+ `.sha256`): **baixe só este arquivo** do Cloud Shell. |
 
-Escopo: `-Subscriptions <id1>,<id2>` ou `-ManagementGroup <nome>` (padrão: subscription atual). O relatório v4 é gerado por padrão (para pular, use `-NoV4Report`) e precisa de git e Python 3.10+; o Cloud Shell já tem os dois. Se faltarem, a coleta termina normalmente e os comandos manuais são exibidos.
+Escopo: `-Subscriptions <id1>,<id2>` ou `-ManagementGroup <nome>` (padrão: somente a subscription atual do CLI, o que raramente é o desejado). O relatório v4 é gerado por padrão (para pular, use `-NoV4Report`) e precisa de git e Python 3.10+; o Cloud Shell já tem os dois. Se faltarem, a coleta termina normalmente e os comandos manuais são exibidos.
 
+Parâmetros opcionais que transformam verificações PARTIAL em conclusivas:
+
+| Parâmetro | Efeito |
+|---|---|
+| `-AllowedRegions brazilsouth,brazilsoutheast` | Regiões Azure aprovadas (política de residência de dados). Sem ele, o **CHK-05** fica PARTIAL, pois não há com o que comparar as regiões de metadados das máquinas. |
+| `-RequiredTags env,owner,...` | Tags exigidas pela sua governança (**CHK-06**). |
+| `-MaxMachines <n>` | Limita ambientes grandes a uma amostra priorizada por risco; use `0` (padrão) na execução final. |
+
+Exemplo: `./Invoke-ArcPostureReview.ps1 -Subscriptions "<nome ou id>" -AllowedRegions brazilsouth`
 ## O que o relatório mostra
 
 - **64 controles** (45 automáticos, 19 documentais) e **11 cenários de segurança**, cada um rastreado Evidência → Observação → Afirmação → Controle → Cenário.
-- **Execução primeiro:** indicadores de status, aviso de lacunas de dados, narrativa executiva e plano de ação AGORA na ordem canônica de prioridade, com rastro de evidência recolhível para cada verificação com falha ou em risco.
+- **Execução primeiro:** resumo executivo em formato de relatório (lacunas verificadas, oportunidades de melhoria e controles não verificados, com título dos checks e legenda de leitura) e plano de ação AGORA agrupado pelo que fazer (corrigir lacunas verificadas, melhorar a postura, completar a coleta de evidências), na ordem canônica de prioridade, com rastro de evidência recolhível para cada check listado.
 - **Navegação:** menu fixo com imprimir/expandir/recolher; cada `CHK-xx` leva à linha correspondente em *Checks*; visão Zero Trust × Tier com barras de resultado.
 - **Links para o portal Azure** por linha de achado (índice de recursos vinculado ao `runId` e ao SHA-256 do pacote).
 - **Antes/depois** somente quando um pacote de baseline é informado (`--baseline`).
 - Evidência ausente nunca vira aprovação; caminhos de ataque nunca são afirmados como confirmados.
+- **Postura, não acusação:** configuração ausente é oportunidade de melhoria e evidência ausente é tarefa de coleta. Só condições observadas com evidência suficiente (por exemplo NonCompliant, agente expirado, Defender no tier Free) são lacunas verificadas. Veja o guia de leitura em `docs/guide.pt-BR.md`, seção 1.3.
 
 ## Comandos v4
 
@@ -66,7 +78,7 @@ Depois gere o HTML como acima. As duas entradas precisam ser pacotes do coletor 
 
 ```powershell
 az login
-./scripts/Invoke-ArcPostureReview.ps1
+./scripts/Invoke-ArcPostureReview.ps1 -Subscriptions "<nome ou id da subscription>"
 ```
 
 Revise o script antes de executar. O acesso ao Azure é somente leitura (Azure Resource Graph e comandos de leitura do Azure CLI).

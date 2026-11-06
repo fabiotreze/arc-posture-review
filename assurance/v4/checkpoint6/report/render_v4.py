@@ -382,35 +382,6 @@ NARRATIVE_CSS = r"""
 """
 
 
-def narrative_html(document: dict[str, Any], locale: str) -> str:
-    t = TEXT[locale]
-    meta = document["metadata"]
-    assurance = document["assurance"]
-    now = document["roadmap"]["NOW"]
-    scenarios = document["securityScenarios"]
-    comparison = document["comparison"]
-    confirmations = list(dict.fromkeys(row["attackConfirmation"] for row in scenarios))
-    partial = assurance["evidenceCoverage"].get("PARTIAL")
-    run_text = t["narrativeRun"].format(run=meta["runId"], n=len(document["controlAssessments"]))
-    parts = [
-        f'<p>{esc(run_text)} {badges(f"{key}:{value}" for key, value in assurance["controlOutcomes"].items())}</p>',
-        f'<p>{esc(t["narrativeCoverage"])} {badges(f"{key}:{value}" for key, value in assurance["evidenceCoverage"].items())}'
-        + (f' <span class="narrative-partial">{esc(t["narrativePartial"].format(k=partial))}</span>' if partial else "")
-        + "</p>",
-        (f'<p>{esc(t["narrativeNow"].format(n=len(now)))} {badges(row["actionCardId"] for row in now)}</p>'
-         if now else f'<p>{esc(t["narrativeNowEmpty"])}</p>'),
-        f'<p>{esc(t["narrativeScenarios"].format(n=len(scenarios)))} {badges(confirmations)} {esc(t["narrativeNoAttack"])}</p>',
-        (f'<p>{esc(t["narrativeNoBaseline"])}</p>' if comparison is None else
-         f'<p>{esc(t["narrativeComparison"].format(run=comparison["baselineRunId"]))} '
-         f'{badges(f"{key}:{value}" for key, value in comparison["summary"].items())}</p>'),
-        f'<p class="muted">{esc(t["narrativeSource"])}</p>',
-    ]
-    return (
-        f'<section class="notice narrative" id="executive-narrative" aria-label="{esc(t["narrativeTitle"])}">'
-        f'<h2>{esc(t["narrativeTitle"])}</h2>{"".join(parts)}</section>'
-    )
-
-
 _render_without_narrative = render
 
 
@@ -484,90 +455,6 @@ PLAN_CSS = r"""
 .plan-howto h3{margin:0 0 6px;font-size:14px}
 @media print{.plan-item,.plan-howto{break-inside:avoid}}
 """
-
-
-def _kpis(counts: dict[str, Any], locale: str) -> str:
-    labels = STATUS_LABELS[locale]
-    return '<span class="kpis">' + "".join(
-        f'<span class="kpi k-{esc(key)}" title="{esc(key)}:{esc(value)}"><b>{esc(value)}</b> {esc(labels.get(key, key))}</span>'
-        for key, value in counts.items()
-    ) + "</span>"
-
-
-def narrative_html(document: dict[str, Any], locale: str) -> str:
-    t = TEXT[locale]
-    meta = document["metadata"]
-    assurance = document["assurance"]
-    now = document["roadmap"]["NOW"]
-    scenarios = document["securityScenarios"]
-    comparison = document["comparison"]
-    cards = {row["id"]: row for row in document["actionCards"]}
-    confirmations = list(dict.fromkeys(row["attackConfirmation"] for row in scenarios))
-    partial = assurance["evidenceCoverage"].get("PARTIAL")
-    unassessed = assurance["controlOutcomes"].get("UNASSESSED")
-    total = len(document["controlAssessments"])
-    parts = [
-        f'<p>{esc(t["narrativeRun"].format(run=meta["runId"], n=total))}</p>{_kpis(assurance["controlOutcomes"], locale)}',
-        f'<p class="narrative-gap">{esc(t["narrativeGap"].format(u=unassessed, n=total))}</p>' if unassessed else "",
-        f'<p>{esc(t["narrativeCoverage"])}</p>{_kpis(assurance["evidenceCoverage"], locale)}'
-        + (f'<p><span class="narrative-partial">{esc(t["narrativePartial"].format(k=partial))}</span></p>' if partial else ""),
-        (f'<p>{esc(t["narrativeNow"].format(n=len(now)))}</p><ul class="now-list">'
-         + "".join(f'<li><b>{esc(row["actionCardId"])}</b> · {esc(cards.get(row["actionCardId"], {}).get("title"))}</li>' for row in now)
-         + "</ul>") if now else f'<p>{esc(t["narrativeNowEmpty"])}</p>',
-        f'<p>{esc(t["narrativeScenarios"].format(n=len(scenarios)))} {badges(confirmations)} {esc(t["narrativeNoAttack"])}</p>',
-        (f'<p>{esc(t["narrativeNoBaseline"])}</p>' if comparison is None else
-         f'<p>{esc(t["narrativeComparison"].format(run=comparison["baselineRunId"]))}</p>{_kpis(comparison["summary"], locale)}'),
-        f'<p class="muted">{esc(t["narrativeSource"])}</p>',
-    ]
-    return (
-        f'<section class="notice narrative" id="executive-narrative" aria-label="{esc(t["narrativeTitle"])}">'
-        f'<h2>{esc(t["narrativeTitle"])}</h2>{"".join(parts)}</section>'
-    )
-
-
-def action_plan_html(document: dict[str, Any], locale: str) -> str:
-    t = TEXT[locale]
-    labels = STATUS_LABELS[locale]
-    now = document["roadmap"]["NOW"]
-    cards = {row["id"]: row for row in document["actionCards"]}
-    outcomes = {row["checkId"]: row["outcome"] for row in document["controlAssessments"]}
-    statements = {row["checkId"]: row["statement"] for row in document["traceability"]["observations"]}
-    shown = ("INEFFECTIVE", "AT_RISK")
-    playbooks = [(tuple(cards.get(row["actionCardId"], {}).get("actions", [])),
-                  tuple(cards.get(row["actionCardId"], {}).get("closureEvidence", []))) for row in now]
-    shared = bool(playbooks) and len(set(playbooks)) == 1
-
-    def howto(actions: Iterable[Any], closure: Iterable[Any]) -> str:
-        return (f'<div class="plan-howto"><h3>{esc(t["planHowTo"])}</h3>{ul(actions)}'
-                f'<h3>{esc(t["planClosure"])}</h3>{ul(closure)}</div>')
-
-    items = []
-    for row in now:
-        card = cards.get(row["actionCardId"], {})
-        failing = [cid for cid in row["controlIds"] if outcomes.get(cid) in shown]
-        others = [cid for cid in row["controlIds"] if outcomes.get(cid) not in shown]
-        checks = "".join(
-            f'<li><span class="kpi k-{esc(outcomes[cid])}" title="{esc(outcomes[cid])}">{esc(labels.get(outcomes[cid], outcomes[cid]))}</span> '
-            f'<b>{esc(cid)}</b> - {esc(statements.get(cid))}</li>'
-            for cid in failing
-        ) or f'<li class="muted">{esc(t["planNoFailing"])}</li>'
-        other_html = (f'<div class="plan-others muted">{esc(t["planOthers"])} {esc(", ".join(others))}</div>' if others else "")
-        items.append(
-            f'<li class="plan-item" data-plan-card="{esc(row["actionCardId"])}">'
-            f'<div class="plan-head"><span class="prio p-{esc(row["priority"])}">{esc(row["priority"])}</span> '
-            f'<strong>{esc(row["actionCardId"])} · {esc(card.get("title"))}</strong></div>'
-            f'<div class="plan-meta muted">{esc(t["planOwners"])}: {esc(", ".join(row["owners"]))} · '
-            f'{esc(t["planDue"])}: {esc(row["dueInDays"])} {esc(t["planDays"])}</div>'
-            f'<ul class="plan-checks">{checks}</ul>{other_html}'
-            + ("" if shared else howto(card.get("actions", []), card.get("closureEvidence", [])))
-            + "</li>"
-        )
-    body = (f'<ol class="plan-list">{"".join(items)}</ol>' if items else f'<p class="muted">{esc(t["planEmpty"])}</p>')
-    common = howto(playbooks[0][0], playbooks[0][1]) if shared else ""
-    return (
-        f'<section class="plan" id="action-plan" aria-label="{esc(t["planTitle"])}">'
-        f'<h2>{esc(t["planTitle"])}</h2><p class="muted">{esc(t["planIntro"])}</p>{body}{common}</section>'
-    )
 
 
 _render_without_action_plan = render
@@ -653,56 +540,6 @@ def evidence_trace_html(check_id: str, evidence: dict[str, Any], observation: di
     body = "".join(f"<dt>{esc(label)}</dt><dd>{value}</dd>" for label, value in rows)
     return (f'<details class="trace" data-trace="{esc(check_id)}"><summary>{esc(t["traceTitle"])} · {esc(check_id)}</summary>'
             f'<div class="inside"><dl>{body}</dl></div></details>')
-
-
-def action_plan_html(document: dict[str, Any], locale: str) -> str:
-    t = TEXT[locale]
-    labels = STATUS_LABELS[locale]
-    now = document["roadmap"]["NOW"]
-    cards = {row["id"]: row for row in document["actionCards"]}
-    outcomes = {row["checkId"]: row["outcome"] for row in document["controlAssessments"]}
-    observations = {row["checkId"]: row for row in document["traceability"]["observations"]}
-    claims = {row["checkId"]: row for row in document["traceability"]["claims"]}
-    evidence = {row["checkId"]: row for row in document["traceability"]["evidence"]}
-    package = document["metadata"]["source"]["name"]
-    shown = ("INEFFECTIVE", "AT_RISK")
-    playbooks = [(tuple(cards.get(row["actionCardId"], {}).get("actions", [])),
-                  tuple(cards.get(row["actionCardId"], {}).get("closureEvidence", []))) for row in now]
-    shared = bool(playbooks) and len(set(playbooks)) == 1
-
-    def howto(actions: Iterable[Any], closure: Iterable[Any]) -> str:
-        return (f'<div class="plan-howto"><h3>{esc(t["planHowTo"])}</h3>{ul(actions)}'
-                f'<h3>{esc(t["planClosure"])}</h3>{ul(closure)}</div>')
-
-    items = []
-    for row in now:
-        card = cards.get(row["actionCardId"], {})
-        failing = [cid for cid in row["controlIds"] if outcomes.get(cid) in shown]
-        others = [cid for cid in row["controlIds"] if outcomes.get(cid) not in shown]
-        checks = "".join(
-            f'<li><span class="kpi k-{esc(outcomes[cid])}" title="{esc(outcomes[cid])}">{esc(labels.get(outcomes[cid], outcomes[cid]))}</span> '
-            f'<b>{esc(cid)}</b> - {esc(observations.get(cid, {}).get("statement"))}'
-            + evidence_trace_html(cid, evidence.get(cid, {}), observations.get(cid, {}), claims.get(cid, {}), package, locale)
-            + "</li>"
-            for cid in failing
-        ) or f'<li class="muted">{esc(t["planNoFailing"])}</li>'
-        other_html = (f'<div class="plan-others muted">{esc(t["planOthers"])} {esc(", ".join(others))}</div>' if others else "")
-        items.append(
-            f'<li class="plan-item" data-plan-card="{esc(row["actionCardId"])}">'
-            f'<div class="plan-head"><span class="prio p-{esc(row["priority"])}">{esc(row["priority"])}</span> '
-            f'<strong>{esc(row["actionCardId"])} · {esc(card.get("title"))}</strong></div>'
-            f'<div class="plan-meta muted">{esc(t["planOwners"])}: {esc(", ".join(row["owners"]))} · '
-            f'{esc(t["planDue"])}: {esc(row["dueInDays"])} {esc(t["planDays"])}</div>'
-            f'<ul class="plan-checks">{checks}</ul>{other_html}'
-            + ("" if shared else howto(card.get("actions", []), card.get("closureEvidence", [])))
-            + "</li>"
-        )
-    body = (f'<ol class="plan-list">{"".join(items)}</ol>' if items else f'<p class="muted">{esc(t["planEmpty"])}</p>')
-    common = howto(playbooks[0][0], playbooks[0][1]) if shared else ""
-    return (
-        f'<section class="plan" id="action-plan" aria-label="{esc(t["planTitle"])}">'
-        f'<h2>{esc(t["planTitle"])}</h2><p class="muted">{esc(t["planIntro"])}</p>{body}{common}</section>'
-    )
 
 
 _render_without_evidence_trace = render
@@ -985,6 +822,215 @@ def render(document, locale):
     if "</style>" not in html_text:
         raise ValueError("report style block not found for print CSS")
     return html_text.replace("</style>", PRINT19_CSS + "</style>", 1)
+
+
+# --- Report-style executive summary and posture vocabulary (render-only) -----
+# Stored enums are unchanged. Only display wording changes: a control that is not
+# verified or that offers a hardening opportunity is not presented as an insecure practice.
+STATUS_LABELS["en-US"].update({
+    "INEFFECTIVE": "Verified gap", "AT_RISK": "Improvement opportunity", "UNASSESSED": "Not verified",
+    "EFFECTIVE": "Meets the criterion", "NOT_APPLICABLE": "Not applicable",
+})
+STATUS_LABELS["pt-BR"].update({
+    "INEFFECTIVE": "Lacuna verificada", "AT_RISK": "Oportunidade de melhoria", "UNASSESSED": "Não verificado",
+    "EFFECTIVE": "Atende ao critério", "NOT_APPLICABLE": "Não aplicável",
+})
+BASIS_LABELS = {
+    "en-US": {"VERIFIED_GAP": "Remediate verified gaps", "IMPROVEMENT": "Improve posture", "EVIDENCE_COLLECTION": "Complete evidence collection"},
+    "pt-BR": {"VERIFIED_GAP": "Corrigir lacunas verificadas", "IMPROVEMENT": "Melhorar a postura", "EVIDENCE_COLLECTION": "Completar a coleta de evidências"},
+}
+TEXT["en-US"].update({
+    "narrativeTitle": "Executive summary",
+    "sumVerdict": "{run} · {n} controls assessed. {gap} verified gap(s), {imp} improvement opportunity(ies) and {nv} control(s) not verified.",
+    "sumHow": "A verified gap is a condition observed with enough evidence. An improvement opportunity is a hardening or visibility step that is not configured; it does not mean a practice is insecure. Not verified means the evidence was not collected or does not apply: it is a collection task, not a finding.",
+    "sumGaps": "Verified gaps", "sumImprove": "Improvement opportunities", "sumNotVerified": "Not verified (evidence to complete)",
+    "sumNone": "None.", "sumMore": "and {n} more in Checks.",
+    "sumCheck": "Check", "sumObserved": "What was observed", "sumPriority": "Priority",
+    "sumCodes": "Canonical codes", "sumLegend": "Legend: INEFFECTIVE = verified gap · AT_RISK = improvement opportunity · UNASSESSED = not verified.",
+    "sumScope": "Reading guide",
+    "sumRoadmap": "Planned actions (NOW)",
+    "narrativeRun": "Run {run}",
+    "planTitle": "Action plan - NOW",
+    "planIntro": "Canonical roadmap order. Each action lists the checks that justify it, grouped by what to do: remediate verified gaps, improve posture, or complete evidence collection. Full detail is in Action Cards.",
+    "planNoFailing": "No gap or improvement opportunity in this action; see Action Cards.",
+})
+TEXT["pt-BR"].update({
+    "narrativeTitle": "Resumo executivo",
+    "sumVerdict": "{run} · {n} controles avaliados. {gap} lacuna(s) verificada(s), {imp} oportunidade(s) de melhoria e {nv} controle(s) não verificado(s).",
+    "sumHow": "Lacuna verificada é uma condição observada com evidência suficiente. Oportunidade de melhoria é um passo de hardening ou visibilidade que não está configurado; não significa que a prática seja insegura. Não verificado indica que a evidência não foi coletada ou não se aplica: é uma tarefa de coleta, não um achado.",
+    "sumGaps": "Lacunas verificadas", "sumImprove": "Oportunidades de melhoria", "sumNotVerified": "Não verificado (evidências a completar)",
+    "sumNone": "Nenhuma.", "sumMore": "e mais {n} em Checks.",
+    "sumCheck": "Check", "sumObserved": "O que foi observado", "sumPriority": "Prioridade",
+    "sumCodes": "Códigos canônicos", "sumLegend": "Legenda: INEFFECTIVE = lacuna verificada · AT_RISK = oportunidade de melhoria · UNASSESSED = não verificado.",
+    "sumScope": "Como ler",
+    "sumRoadmap": "Ações planejadas (NOW)",
+    "narrativeRun": "Execução {run}",
+    "planTitle": "Plano de ação - agora (NOW)",
+    "planIntro": "Ordem do roadmap canônico. Cada ação lista os checks que a justificam, agrupados pelo que fazer: corrigir lacunas verificadas, melhorar a postura ou completar a coleta de evidências. O detalhe completo está em Action Cards.",
+    "planNoFailing": "Nenhuma lacuna ou oportunidade de melhoria nesta ação; veja Action Cards.",
+})
+SUMMARY_CSS = r"""
+.summary-verdict{font-size:15px;font-weight:650;margin:4px 0 6px}
+.summary-how{margin:0 0 10px}
+.sum-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:8px 0}
+.sum-card{border:1px solid var(--line);border-left:6px solid #94a3b8;border-radius:10px;padding:10px 12px;background:#fff}
+.sum-card strong{display:block;font-size:26px;line-height:1.1}
+.sum-card.gap{border-left-color:#b42318}.sum-card.imp{border-left-color:#b54708}.sum-card.nv{border-left-color:#475467}
+.sum-list h3{margin:14px 0 6px;font-size:15px}.sum-list .tablewrap table{min-width:0}
+.basis-tag{display:inline-block;border-radius:6px;padding:0 6px;font-size:12px;font-weight:650;background:#eef2f7;color:#34465b;margin-left:6px}
+.basis-VERIFIED_GAP{background:#fee4e2;color:#b42318}.basis-IMPROVEMENT{background:#fffaeb;color:#b54708}.basis-EVIDENCE_COLLECTION{background:#f2f4f7;color:#475467}
+"""
+_CATALOG_TITLES: dict[str, dict[str, str]] | None = None
+
+
+def _check_titles(locale: str) -> dict[str, str]:
+    global _CATALOG_TITLES
+    if _CATALOG_TITLES is None:
+        try:
+            data = json.loads((ROOT / "criteria" / "v4" / "check-catalog.v4.json").read_text(encoding="utf-8-sig"))
+            _CATALOG_TITLES = {row["id"]: row.get("title", {}) for row in data["checks"]}
+        except (OSError, ValueError, KeyError):
+            _CATALOG_TITLES = {}
+    return {cid: (titles.get(locale) or titles.get("en-US") or cid) for cid, titles in _CATALOG_TITLES.items()}
+
+
+def _short(text: Any, limit: int = 230) -> str:
+    value = " ".join(str(text or "").split())
+    if len(value) <= limit:
+        return value
+    cut = value[:limit].rsplit(" ", 1)[0]
+    return cut.rstrip(".,;:") + "…"
+
+
+def _summary_list(document: dict[str, Any], locale: str, outcome: str, heading: str, limit: int = 6) -> str:
+    t = TEXT[locale]
+    titles = _check_titles(locale)
+    observations = {row["checkId"]: row for row in document["traceability"]["observations"]}
+    rows = sorted((c for c in document["controlAssessments"] if c["outcome"] == outcome),
+                  key=lambda c: (-c["residualRisk"]["score"], c["checkId"]))
+    if not rows:
+        return f'<div class="sum-list"><h3>{esc(heading)} (0)</h3><p class="muted">{esc(t["sumNone"])}</p></div>'
+    body = table(
+        [t["sumCheck"], t["sumObserved"], t["sumPriority"]],
+        ([f'<strong>{esc(c["checkId"])}</strong><br>{esc(titles.get(c["checkId"], ""))}',
+          esc(_short(observations.get(c["checkId"], {}).get("statement"))),
+          badge(c["priority"])] for c in rows[:limit]),
+    )
+    more = f'<p class="muted">{esc(t["sumMore"].format(n=len(rows) - limit))}</p>' if len(rows) > limit else ""
+    return f'<div class="sum-list"><h3>{esc(heading)} ({len(rows)})</h3>{body}{more}</div>'
+
+
+def narrative_html(document: dict[str, Any], locale: str) -> str:
+    t = TEXT[locale]
+    labels = STATUS_LABELS[locale]
+    meta = document["metadata"]
+    assurance = document["assurance"]
+    outcomes = assurance["controlOutcomes"]
+    now = document["roadmap"]["NOW"]
+    scenarios = document["securityScenarios"]
+    comparison = document["comparison"]
+    cards = {row["id"]: row for row in document["actionCards"]}
+    confirmations = list(dict.fromkeys(row["attackConfirmation"] for row in scenarios))
+    partial = assurance["evidenceCoverage"].get("PARTIAL")
+    total = len(document["controlAssessments"])
+    gap, imp, nv = (outcomes.get(key, 0) for key in ("INEFFECTIVE", "AT_RISK", "UNASSESSED"))
+    verdict = t["sumVerdict"].format(run=meta["runId"], n=total, gap=gap, imp=imp, nv=nv)
+    cards_html = (
+        f'<div class="sum-grid">'
+        f'<div class="sum-card gap"><strong>{gap}</strong>{esc(labels["INEFFECTIVE"])}</div>'
+        f'<div class="sum-card imp"><strong>{imp}</strong>{esc(labels["AT_RISK"])}</div>'
+        f'<div class="sum-card nv"><strong>{nv}</strong>{esc(labels["UNASSESSED"])}</div></div>'
+    )
+    roadmap = "".join(
+        f'<li><b>{esc(row["actionCardId"])}</b> · {esc(cards.get(row["actionCardId"], {}).get("title"))}'
+        f'<span class="basis-tag basis-{esc(cards.get(row["actionCardId"], {}).get("basis"))}">'
+        f'{esc(BASIS_LABELS[locale].get(cards.get(row["actionCardId"], {}).get("basis"), ""))}</span></li>'
+        for row in now
+    )
+    parts = [
+        f'<p class="summary-verdict">{esc(verdict)}</p>',
+        f'<p class="summary-how muted">{esc(t["sumHow"])}</p>',
+        cards_html,
+        _summary_list(document, locale, "INEFFECTIVE", t["sumGaps"]),
+        _summary_list(document, locale, "AT_RISK", t["sumImprove"]),
+        _summary_list(document, locale, "UNASSESSED", t["sumNotVerified"], limit=4),
+        (f'<h3>{esc(t["sumRoadmap"])}</h3><ul class="now-list">{roadmap}</ul>' if now else f'<p class="muted">{esc(t["planEmpty"])}</p>'),
+        f'<p class="muted"><b>{esc(t["sumCodes"])}:</b> {badges(f"{k}:{v}" for k, v in outcomes.items())} '
+        f'{badges(f"{k}:{v}" for k, v in assurance["evidenceCoverage"].items())}<br>{esc(t["sumLegend"])}</p>',
+        (f'<p><span class="narrative-partial">{esc(t["narrativePartial"].format(k=partial))}</span></p>' if partial else ""),
+        f'<p>{esc(t["narrativeScenarios"].format(n=len(scenarios)))} {badges(confirmations)} {esc(t["narrativeNoAttack"])}</p>',
+        (f'<p>{esc(t["narrativeNoBaseline"])}</p>' if comparison is None else
+         f'<p>{esc(t["narrativeComparison"].format(run=comparison["baselineRunId"]))} '
+         f'{badges(f"{k}:{v}" for k, v in comparison["summary"].items())}</p>'),
+        f'<p class="muted">{esc(t["narrativeSource"])}</p>',
+    ]
+    return (
+        f'<section class="notice narrative" id="executive-narrative" aria-label="{esc(t["narrativeTitle"])}">'
+        f'<h2>{esc(t["narrativeTitle"])}</h2>{"".join(parts)}</section>'
+    )
+
+
+def action_plan_html(document: dict[str, Any], locale: str) -> str:
+    t = TEXT[locale]
+    labels = STATUS_LABELS[locale]
+    now = document["roadmap"]["NOW"]
+    cards = {row["id"]: row for row in document["actionCards"]}
+    outcomes = {row["checkId"]: row["outcome"] for row in document["controlAssessments"]}
+    observations = {row["checkId"]: row for row in document["traceability"]["observations"]}
+    claims = {row["checkId"]: row for row in document["traceability"]["claims"]}
+    evidence = {row["checkId"]: row for row in document["traceability"]["evidence"]}
+    titles = _check_titles(locale)
+    package = document["metadata"]["source"]["name"]
+    playbooks = [(tuple(cards.get(row["actionCardId"], {}).get("actions", [])),
+                  tuple(cards.get(row["actionCardId"], {}).get("closureEvidence", []))) for row in now]
+    shared = bool(playbooks) and len(set(playbooks)) == 1
+
+    def howto(actions: Iterable[Any], closure: Iterable[Any]) -> str:
+        return (f'<div class="plan-howto"><h3>{esc(t["planHowTo"])}</h3>{ul(actions)}'
+                f'<h3>{esc(t["planClosure"])}</h3>{ul(closure)}</div>')
+
+    items = []
+    for row in now:
+        card = cards.get(row["actionCardId"], {})
+        basis = card.get("basis", "VERIFIED_GAP")
+        shown = ("INEFFECTIVE", "AT_RISK", "UNASSESSED") if basis == "EVIDENCE_COLLECTION" else ("INEFFECTIVE", "AT_RISK")
+        listed = [cid for cid in row["controlIds"] if outcomes.get(cid) in shown]
+        others = [cid for cid in row["controlIds"] if outcomes.get(cid) not in shown]
+        checks = "".join(
+            f'<li><span class="kpi k-{esc(outcomes[cid])}" title="{esc(outcomes[cid])}">{esc(labels.get(outcomes[cid], outcomes[cid]))}</span> '
+            f'<b>{esc(cid)}</b> {esc(titles.get(cid, ""))} - {esc(observations.get(cid, {}).get("statement"))}'
+            + evidence_trace_html(cid, evidence.get(cid, {}), observations.get(cid, {}), claims.get(cid, {}), package, locale)
+            + "</li>"
+            for cid in listed
+        ) or f'<li class="muted">{esc(t["planNoFailing"])}</li>'
+        other_html = (f'<div class="plan-others muted">{esc(t["planOthers"])} {esc(", ".join(others))}</div>' if others else "")
+        items.append(
+            f'<li class="plan-item" data-plan-card="{esc(row["actionCardId"])}">'
+            f'<div class="plan-head"><span class="prio p-{esc(row["priority"])}">{esc(row["priority"])}</span> '
+            f'<strong>{esc(row["actionCardId"])} · {esc(card.get("title"))}</strong>'
+            f'<span class="basis-tag basis-{esc(basis)}">{esc(BASIS_LABELS[locale].get(basis, basis))}</span></div>'
+            f'<div class="plan-meta muted">{esc(t["planOwners"])}: {esc(", ".join(row["owners"]))} · '
+            f'{esc(t["planDue"])}: {esc(row["dueInDays"])} {esc(t["planDays"])}</div>'
+            f'<ul class="plan-checks">{checks}</ul>{other_html}'
+            + ("" if shared else howto(card.get("actions", []), card.get("closureEvidence", [])))
+            + "</li>"
+        )
+    body = (f'<ol class="plan-list">{"".join(items)}</ol>' if items else f'<p class="muted">{esc(t["planEmpty"])}</p>')
+    common = howto(playbooks[0][0], playbooks[0][1]) if shared else ""
+    return (
+        f'<section class="plan" id="action-plan" aria-label="{esc(t["planTitle"])}">'
+        f'<h2>{esc(t["planTitle"])}</h2><p class="muted">{esc(t["planIntro"])}</p>{body}{common}</section>'
+    )
+
+
+_render_without_summary_css = render
+
+
+def render(document, locale):
+    html_text = _render_without_summary_css(document, locale)
+    if "</style>" not in html_text:
+        raise ValueError("report has no style block")
+    return html_text.replace("</style>", SUMMARY_CSS + "</style>", 1)
 
 
 if __name__ == "__main__":

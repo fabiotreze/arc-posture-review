@@ -1,0 +1,51 @@
+{
+  "release": "v4.1.1",
+  "status": "APPROVED_FOR_PUBLICATION",
+  "sourceBranch": "fix/evidence-vs-posture-wording",
+  "parentRelease": "v4.1.0",
+  "canonicalContract": "assessment-result.v4",
+  "contractVersion": "4.0.0",
+  "collectorVersion": "v4.1.1",
+  "gateEntrypoint": "tools/Invoke-V4FinalGates.py",
+  "publishable": true,
+  "blockers": [],
+  "validatedCapabilities": [
+    "64-check and 11-scenario canonical assessment",
+    "assessment-result.v4 contract version 4.0.0",
+    "posture versus evidence wording: missing configuration or evidence is WARN or PARTIAL, explicit adverse evidence stays FAIL",
+    "implicit collection scope disclosure",
+    "report-style executive summary with verified gaps, improvement opportunities and not-verified controls",
+    "pypdf 6.21.4",
+    "bilingual report and localization parity"
+  ],
+  "scope": "Posture-versus-evidence patch candidate only; no environment data or customer reports included.",
+  "checksumTargets": [
+    "assurance/v4/checkpoint4/engine/deterministic_engine.py",
+    "assurance/v4/checkpoint5/engine/canonical_v4.py",
+    "assurance/v4/checkpoint6/report/render_v4.py",
+    "docs/v4.1.1-posture-vs-evidence.md",
+    "docs/v4/query-evidence-matrix.md",
+    "docs/v4/security-review-record-v4.1.1.md",
+    "requirements-dev.txt",
+    "requirements-v4.txt",
+    "scripts/Invoke-ArcPostureReview.ps1",
+    "tests/fixtures/evidence-hardening-negative.v4.1.0.json",
+    "tests/fixtures/reviewed-lab-sanitized.zip",
+    "tests/fixtures/zero-connected-estate.v4.0.3.json",
+    "tools/Invoke-V4FinalGates.py",
+    "tools/Test-EvidenceHardening.py",
+    "tools/Test-GuideVersion.py",
+    "tools/Test-PostureWording.py",
+    "tools/Test-ZeroConnectedEstate.py",
+    "tools/Test-ZeroTarget.py"
+  ],
+  "securityReview": {
+    "reviewer": "Fabio Rodrigues Vieira Costa",
+    "date": "2026-11-06",
+    "decision": "APPROVED",
+    "checklist": "docs/v4/security-review-checklist.md",
+    "record": "docs/v4/security-review-record-v4.1.1.md",
+    "items": 28,
+    "itemsApproved": 28
+  }
+}
