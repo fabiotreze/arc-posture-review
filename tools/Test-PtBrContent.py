@@ -77,6 +77,8 @@ def main() -> int:
             fail("incident-response wording in a posture report: " + marker)
     if "Corrigir:" not in joined and "Melhorar a postura:" not in joined:
         fail("action card titles were not localized")
+    if "contpapel" in joined or not re.search(r"\d+ controle\(s\) não verificado\(s\)", joined):
+        fail("a rule rewrote text that was already Portuguese (controle(s) -> contpapel(is))")
     print("[PASS] pt-BR v4 report: rules mirror the app, static and engine texts are Portuguese, canonical JSON untouched, no incident wording")
     return 0
 

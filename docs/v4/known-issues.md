@@ -1,4 +1,4 @@
-# Known issues — v4.1.1
+# Known issues — v4.1.5
 
 ## KI-V4-001 — pypdf Dependabot alerts
 
@@ -29,3 +29,9 @@ Up to v4.0.4 the guide markers embedded in the HTML files did not follow the col
 Posture versus evidence: a missing configuration or missing evidence was reported as a conclusive FAIL in several checks, and a run without `-Subscriptions` silently queried only the CLI default subscription while reporting full coverage. Fixed in v4.1.1; see `docs/v4.1.1-posture-vs-evidence.md` and `docs/v4/security-review-record-v4.1.1.md`.
 
 Still open (documented, not regressions): F3 (FAIL/WARN is not gated by missing required fields in the engine; the approved model allows a conclusive FAIL with PARTIAL coverage and the fixtures carry no `data/*.json` members), per-machine correlation by `resourceGroup/name` without subscription (the collector now warns when the same pair exists in more than one subscription), and CHK-37 mixing the machine sample with the whole-estate status counts when `-MaxMachines` is used.
+
+## v4.1.4 and v4.1.5 review notes
+
+First end-to-end run in Cloud Shell: verified-gap action cards used incident-response wording (fixed in v4.1.4: *Remediate*), the PT-BR v4 report showed engine and collector sentences in English (fixed in v4.1.4, display-only), and a Portuguese rule rewrote already-Portuguese text ("controle(s)" became "contpapel(is)"; fixed in v4.1.5 and guarded by `tools/Test-PtBrContent.py`). See `docs/v4.1.4-wording-and-pt-br.md`.
+
+Still open (documented, not regressions): scenarios with a high residual score are P0 (NOW) even for small estates (the priority scale prioritizes posture work, it is not an incident severity); collector sentences that did not appear in a real run may remain in English in the PT-BR report (add a rule to the app table and regenerate `criteria/v4/pt-br-detail-rules.json`); the CHK-55 branch for a missing assignment is unreachable because an empty result counts as one row.

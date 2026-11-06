@@ -1383,6 +1383,9 @@ _PT_CACHE: dict[str, Any] | None = None
 
 def _js_regex(source: str, flags: str) -> Any:
     import re as _re
+    if source[:1].isalnum():
+        # Rules are written for English collector text; never match inside a word of text that is already Portuguese ("controle(s)" contains "role(s)").
+        source = r"(?<![A-Za-zÀ-ÿ0-9_])" + source
     return _re.compile(source, (_re.I if "i" in flags else 0) | (_re.S if "s" in flags else 0))
 
 
