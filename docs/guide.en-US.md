@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v4.1.4 — 2026-11-06.** Posture wording and full pt-BR report: action cards say *Remediate* (never incident-response wording), the Portuguese v4 report no longer shows English engine texts, and the collector traces the report step in `report/report.log`. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
+**Version v4.1.5 — 2026-11-06.** Fix for the Portuguese v4 report: a translation rule no longer rewrites text that is already Portuguese ("controle(s)"). Includes the v4.1.4 posture wording (*Remediate*), the complete pt-BR report and `report/report.log`. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 

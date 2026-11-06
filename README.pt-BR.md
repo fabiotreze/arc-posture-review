@@ -85,6 +85,8 @@ Exemplo: `./Invoke-ArcPostureReview.ps1 -Subscriptions "<nome ou id>" -AllowedRe
 - **Antes/depois** somente quando um pacote de baseline é informado (`--baseline`).
 - Evidência ausente nunca vira aprovação; caminhos de ataque nunca são afirmados como confirmados.
 - **Postura, não acusação:** configuração ausente é oportunidade de melhoria e evidência ausente é tarefa de coleta. Só condições observadas com evidência suficiente (por exemplo NonCompliant, agente expirado, Defender no tier Free) são lacunas verificadas. Veja o guia de leitura em `docs/guide.pt-BR.md`, seção 1.3.
+- **Completo nos dois idiomas:** o relatório PT-BR mostra em português as frases do motor e do coletor; passe o mouse sobre uma frase traduzida para ver o original canônico em inglês. O JSON canônico embutido é idêntico nos dois idiomas.
+- **Linguagem das ações:** os cards dizem *Corrigir*, *Melhorar a postura* ou *Completar evidências*; o relatório nunca afirma um incidente.
 
 ## Comandos v4
 
@@ -168,6 +170,7 @@ Perfis: `pr-quality`, `report-quality`, `release`, `methodology`, `security-regr
 scripts/Invoke-ArcPostureReview.ps1   coletor somente leitura (gera e compacta o relatório v4 por padrão)
 assurance/v4/                         motor, CLI, renderer e gates da v4 (checkpoints)
 tools/New-ResourceIndex.py            links do portal Azure no relatório v4
+tools/Build-Kit.py                    gera o kit de execução (fixado por SHA-256 no coletor)
 tools/Invoke-V4FinalGates.py          perfis de gate da v4
 criteria/checks.*.json                fonte canônica bilíngue das 64 verificações
 docs/v4/                              metodologia, modelo de ameaças, registro da revisão de segurança
@@ -176,7 +179,7 @@ arc-posture-review.*.html, index.html guia offline e análise no navegador
 ```
 </details>
 
-Metodologia: [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) · Revisão de segurança: [docs/v4/security-review-record-v4.0.0.md](docs/v4/security-review-record-v4.0.0.md) · Mudanças: [CHANGELOG.md](CHANGELOG.md)
+Metodologia: [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) · Revisão de segurança: [docs/v4/security-review-record-v4.1.5.md](docs/v4/security-review-record-v4.1.5.md) · Mudanças: [CHANGELOG.md](CHANGELOG.md)
 
 ## Contribuições e licença
 

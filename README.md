@@ -85,6 +85,8 @@ Example: `./Invoke-ArcPostureReview.ps1 -Subscriptions "<name or id>" -AllowedRe
 - **Before/after** only when a baseline package is supplied (`--baseline`).
 - Missing evidence never becomes a pass; attack paths are never asserted as confirmed.
 - **Posture, not accusation:** a missing configuration is an improvement opportunity and missing evidence is a collection task. Only conditions observed with enough evidence (for example NonCompliant, an expired agent, a Free Defender tier) are verified gaps. See the reading guide in `docs/guide.en-US.md`, section 1.3.
+- **Complete in both languages:** the PT-BR report shows engine and collector sentences in Portuguese; hover a translated sentence to see the canonical English original. The embedded canonical JSON is identical in both languages.
+- **Action wording:** cards say *Remediate*, *Improve posture* or *Complete evidence*; the report never asserts an incident.
 
 ## v4 commands
 
@@ -168,6 +170,7 @@ Profiles: `pr-quality`, `report-quality`, `release`, `methodology`, `security-re
 scripts/Invoke-ArcPostureReview.ps1   read-only collector (renders and zips the v4 report by default)
 assurance/v4/                         v4 engine, CLI, renderer and gates (checkpoints)
 tools/New-ResourceIndex.py            Azure portal links for the v4 report
+tools/Build-Kit.py                    builds the runtime kit (pinned by SHA-256 in the collector)
 tools/Invoke-V4FinalGates.py          v4 gate profiles
 criteria/checks.*.json                canonical bilingual source of the 64 checks
 docs/v4/                              methodology, threat model, security review record
@@ -176,7 +179,7 @@ arc-posture-review.*.html, index.html offline guide and browser analysis
 ```
 </details>
 
-Methodology: [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) · Security review: [docs/v4/security-review-record-v4.0.0.md](docs/v4/security-review-record-v4.0.0.md) · Changes: [CHANGELOG.md](CHANGELOG.md)
+Methodology: [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) · Security review: [docs/v4/security-review-record-v4.1.5.md](docs/v4/security-review-record-v4.1.5.md) · Changes: [CHANGELOG.md](CHANGELOG.md)
 
 ## Feedback and license
 

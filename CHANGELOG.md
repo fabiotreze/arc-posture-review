@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.5] — 2026-11-06
+
+### pt-BR rendering fix
+
+- The Portuguese v4 report no longer rewrites text that is already Portuguese: the `role(s)` rule turned "controle(s)" into "contpapel(is)" in the executive summary and the PARTIAL coverage sentence (v4.1.4). Rules that start with a letter now require a word boundary; `tools/Test-PtBrContent.py` guards it.
+- README (EN-US/PT-BR), known issues and the pt-BR README screenshot refreshed; the README documents the complete pt-BR report and the action wording.
+
 ## [4.1.4] — 2026-11-06
 
 ### Posture wording and a complete pt-BR report
