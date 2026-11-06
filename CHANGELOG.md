@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.1.4] — 2026-11-06
+
+### Posture wording and a complete pt-BR report
+
+- Verified-gap action cards say **Remediate** (not *Contain and remediate*) and list posture steps and closure criteria; no incident-response wording in a posture report. Priorities and scores are unchanged.
+- The pt-BR v4 report renders engine, scenario, card, criterion and collector sentences in Portuguese. Display-only: the embedded canonical JSON is identical in both languages.
+- `criteria/v4/pt-br-detail-rules.json` mirrors the app's Portuguese rules (parity checked by `tools/Test-PtBrContent.py`); fixed a rule-order bug that produced mixed text such as "connected máquina(s)" in the app and the report.
+- The collector records the report step in `report/report.log` (outside the manifest).
+- The runtime kit includes the two data files the renderer reads. See `docs/v4.1.4-wording-and-pt-br.md`.
+
 ## [4.1.3] — 2026-11-06
 
 ### App redesign

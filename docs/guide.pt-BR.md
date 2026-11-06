@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v4.1.3 — 06/11/2026.** App redesenhado: veredito no topo da Análise (lacunas verificadas, oportunidades de melhoria, não verificado) com as ações a fazer primeiro, página Comece aqui e busca no guia, e a lista de subscriptions como escopo padrão. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
+**Versão v4.1.4 — 06/11/2026.** Linguagem de postura e relatório pt-BR completo: os cards de ação dizem *Corrigir* (sem linguagem de resposta a incidente), o relatório v4 em português não mostra mais textos do motor em inglês, e o coletor registra a etapa do relatório em `report/report.log`. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 

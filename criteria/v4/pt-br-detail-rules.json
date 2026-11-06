@@ -1,0 +1,1005 @@
+{
+ "_comment": "Portuguese (pt-BR) rendering rules for collector text in the v4 report. Mirrors PT_DETAIL_EXACT, PT_DETAIL_RULES and ptEvidenceNarrative of arc-posture-review.pt-BR.html (tools/Test-PtBrContent.py checks the parity).",
+ "exact": {
+  "One vault has a definite baseline gap; a null/absent property remains unknown and is not coerced to false.": "Um Key Vault tem uma lacuna comprovada no baseline; uma propriedade nula/ausente permanece desconhecida e não é convertida em false.",
+  "228 Defender recommendations affect Arc machines; 13 are High severity. The report body is summarized; findings/CHK-33.csv contains recommendation-level detail.": "228 recomendações do Defender afetam máquinas Arc; 13 têm severidade High. O corpo do relatório está resumido; findings/CHK-33.csv mantém o detalhe por recomendação.",
+  "Sentinel exists in the collected scope and 0/5 machines send events to it: conclusive FAIL for the observed workspace. Coverage is PARTIAL only because an external SOC workspace may exist outside scope.": "Há Microsoft Sentinel no escopo coletado e 0/5 máquinas enviam eventos para ele: FAIL conclusivo para o workspace observado. A cobertura é PARTIAL somente porque pode existir um workspace de SOC externo fora do escopo.",
+  "Canonical patch evidence: exactly one row for each of 5 connected machines; authority or valid assessment is unknown, so the result remains PARTIAL.": "Evidência canônica de patches: exatamente uma linha para cada uma das 5 máquinas conectadas; a autoridade ou uma avaliação válida é desconhecida, portanto o resultado permanece PARTIAL.",
+  "5 affected machines: four NonCompliant and one without an assigned baseline.": "5 máquinas afetadas: quatro NonCompliant e uma sem baseline atribuído.",
+  "Four SQL extensions have conclusive technical failures (stale upload/disconnection); pCore entitlement remains outside the package, so Evidence Coverage is PARTIAL.": "Quatro extensões SQL têm falhas técnicas conclusivas (envio desatualizado/desconexão); o entitlement de pCore permanece fora do pacote, portanto a Cobertura da evidência é PARTIAL."
+ },
+ "rules": [
+  [
+   "OS security baseline evidence: (\\d+) connected machine\\(s\\); compliant and timestamped: (\\d+); explicit failure\\/no recognized assignment: (\\d+); pending\\/missing\\/conflicting timestamped evidence: (\\d+)\\. Unknown evidence is never promoted to PASS\\.",
+   "g",
+   "Evidência de baseline de segurança do SO: $1 máquina(s) conectada(s); conformes e com timestamp: $2; falha explícita/sem atribuição reconhecida: $3; evidência pendente/ausente/conflitante: $4. Evidência desconhecida nunca é promovida a PASS."
+  ],
+  [
+   "The body is intentionally summarized; use findings\\/CHK-33\\.csv for the complete",
+   "g",
+   "O corpo é resumido de propósito; use findings/CHK-33.csv para o detalhe completo"
+  ],
+  [
+   "This is a visibility gap for the observed workspace; Evidence Coverage is PARTIAL only because an external SOC workspace may exist outside the collected scope\\.",
+   "g",
+   "Isto é uma lacuna de visibilidade do workspace observado; a Evidence Coverage é PARTIAL apenas porque pode existir um workspace de SOC externo fora do escopo coletado."
+  ],
+  [
+   "This is a visibility gap for the observed workspace; Evidence Coverage is PARTIAL only because an external SOC workspace may exist outside the",
+   "g",
+   "Isto é uma lacuna de visibilidade do workspace observado; a Evidence Coverage é PARTIAL apenas porque pode existir um workspace de SOC externo fora do"
+  ],
+  [
+   "Connected machines without a Succeeded MDE extension: (\\d+) of (\\d+)\\. Extension inventory is only a proxy for sensor onboarding\\/health\\.",
+   "g",
+   "Máquinas Connected sem a extensão MDE em estado Succeeded: $1 de $2. O inventário de extensões é apenas um indicador indireto do onboarding e da integridade do sensor."
+  ],
+  [
+   "Connected machines without a Succeeded MDE extension:",
+   "g",
+   "Máquinas Connected sem a extensão MDE em estado Succeeded:"
+  ],
+  [
+   "Extension inventory is only a proxy for sensor",
+   "g",
+   "O inventário de extensões é apenas um indicador indireto do sensor"
+  ],
+  [
+   "Local Administrators group audit \\(Machine Configuration\\): (\\d+) of (\\d+) connected Windows machine\\(s\\); non-compliant: (\\d+)\\. The audit is not configured on any machine: a visibility gap, not evidence of unexpected administrators\\.",
+   "g",
+   "Auditoria do grupo Administradores local (Machine Configuration): $1 de $2 máquina(s) Windows conectada(s); não conformes: $3. A auditoria não está configurada em nenhuma máquina: é uma lacuna de visibilidade, não evidência de administradores inesperados."
+  ],
+  [
+   "All machines in the allowed regions\\. Distribution - ",
+   "g",
+   "Todas as máquinas estão nas regiões permitidas. Distribuição - "
+  ],
+  [
+   "(\\d+) machine\\(s\\) missing at least one recommended tag \\((.*?)\\)\\. Best practice, not required\\.",
+   "g",
+   "$1 máquina(s) sem ao menos uma tag recomendada ($2). Boa prática, não obrigatória."
+  ],
+  [
+   "Essential and recommended providers registered in all subscriptions\\.",
+   "g",
+   "Providers essenciais e recomendados registrados em todas as subscriptions."
+  ],
+  [
+   "(\\d+) of (\\d+) assignments that reach the Arc machines are related to Arc\\/security\\/monitoring; (\\d+) in DoNotEnforce\\.",
+   "g",
+   "$1 de $2 atribuições que alcançam as máquinas Arc são relacionadas a Arc/segurança/monitoramento; $3 em DoNotEnforce."
+  ],
+  [
+   "Private Link Scopes: (\\d+)\\. Machines via Private Link: (\\d+)\\/(\\d+)\\. Via proxy: (\\d+)\\. Arc gateways: (\\d+)\\. The rest use public endpoints\\.",
+   "g",
+   "Private Link Scopes: $1. Máquinas via Private Link: $2/$3. Via proxy: $4. Arc gateways: $5. As demais usam endpoints públicos."
+  ],
+  [
+   "(\\d+) Entra\\/SSH\\/WAC login assignment\\(s\\) that reach the Arc machines\\. Validate scope and use of groups\\.",
+   "g",
+   "$1 atribuição(ões) de login Entra/SSH/WAC que alcançam as máquinas Arc. Valide o escopo e o uso de grupos."
+  ],
+  [
+   "Below 1\\.61 \\(published elevation of privilege CVEs\\):",
+   "g",
+   "Abaixo de 1.61 (CVEs de elevação de privilégio publicadas):"
+  ],
+  [
+   "Run date:",
+   "g",
+   "Data da execução:"
+  ],
+  [
+   "Official policy: only versions released in the last 12 months are supported \\(cutoff:",
+   "g",
+   "Política oficial: só há suporte para versões lançadas nos últimos 12 meses (corte:"
+  ],
+  [
+   "Latest published:",
+   "g",
+   "Mais recente publicada:"
+  ],
+  [
+   "\\(read from Azure; estimated date\\)",
+   "g",
+   "(lido do Azure; data estimada)"
+  ],
+  [
+   "Out of support: (\\d+); supported but more than 6 months old: (\\d+)",
+   "g",
+   "Sem suporte: $1; com suporte, mas com mais de 6 meses: $2"
+  ],
+  [
+   "Distribution: ",
+   "g",
+   "Distribuição: "
+  ],
+  [
+   "Automatic agent upgrade disabled on",
+   "g",
+   "Upgrade automático do agente desabilitado em"
+  ],
+  [
+   "Below 1\\.61 in the whole estate:",
+   "g",
+   "Abaixo de 1.61 em todo o parque:"
+  ],
+  [
+   "Defender for Servers enabled in all subscriptions \\(([^)]+)\\)\\.",
+   "g",
+   "Defender for Servers habilitado em todas as subscriptions ($1)."
+  ],
+  [
+   "Patch authority\\/evidence integrity:",
+   "g",
+   "Integridade de autoridade/evidência de patch:"
+  ],
+  [
+   "PASS requires exactly one successful, timestamped assessment row with parseable non-negative counts per machine plus documented AutomaticByPlatform authority\\.",
+   "g",
+   "PASS exige exatamente uma linha de avaliação bem-sucedida e com timestamp, com contagens numéricas não negativas por máquina, mais a autoridade AutomaticByPlatform documentada."
+  ],
+  [
+   "Activity Log exported to Log Analytics in all subscriptions\\.",
+   "g",
+   "Activity Log exportado para o Log Analytics em todas as subscriptions."
+  ],
+  [
+   "No workspace receives data from the Arc machines through a DCR\\. This is N\\/A only for retention; resolve CHK-39 \\(AMA\\) and CHK-40 \\(DCR association\\) before interpreting monitoring coverage\\. Workspaces outside the Arc scope \\(ignored\\): (\\d+)\\.",
+   "g",
+   "Nenhum workspace recebe dados das máquinas Arc por meio de DCR. É N/A apenas para retenção; resolva a CHK-39 (AMA) e a CHK-40 (associação de DCR) antes de interpretar a cobertura de monitoramento. Workspaces fora do escopo do Arc (ignorados): $1."
+  ],
+  [
+   "List price estimate: US\\$ ([0-9.,]+)\\/month for (\\d+) connected server\\(s\\) \\(Defender, Update Manager, Machine Configuration\\/Change Tracking, and WS PAYG\\)\\. (\\d+) with benefit \\(Defender P2, attested SA, WS PAYG, or ESU\\)\\. (\\d+) with AMA: Log Analytics cost per GB not estimated\\.",
+   "g",
+   "Estimativa a preço de lista: US$ $1/mês para $2 servidor(es) conectado(s) (Defender, Update Manager, Machine Configuration/Change Tracking e WS PAYG). $3 com benefício (Defender P2, SA atestado, WS PAYG ou ESU). $4 com AMA: o custo do Log Analytics por GB não é estimado."
+  ],
+  [
+   "(\\d+) of (\\d+) Arc capabilities in use on at least one machine \\((\\d+) machines, (\\d+) Windows\\)\\. With Windows Server Management benefits: (\\d+); Hotpatch: (\\d+)\\.",
+   "g",
+   "$1 de $2 capacidades do Arc em uso em ao menos uma máquina ($3 máquinas, $4 Windows). Com benefícios do Windows Server Management: $5; Hotpatch: $6."
+  ],
+  [
+   "Defender for Servers effective plan per Arc machine: (.*?)\\. Free: (\\d+); different\\/overridden: (\\d+); not conclusively read: (\\d+) of (\\d+)\\. An unread resource plan is unknown evidence, never PASS and never inferred from the subscription plan\\.",
+   "g",
+   "Plano efetivo do Defender for Servers por máquina Arc: $1. Free: $2; diferente/sobrescrito: $3; não lido de forma conclusiva: $4 de $5. Um plano de recurso não lido é evidência desconhecida: nunca PASS e nunca inferido do plano da subscription."
+  ],
+  [
+   "Below the latest version published in the region",
+   "g",
+   "Abaixo da versão mais recente publicada na região"
+  ],
+  [
+   "([0-9]+) of ([0-9]+) machine\\(s\\) accept any extension \\(no allowlist or blocklist\\)\\.",
+   "g",
+   "$1 de $2 máquinas aceitam qualquer extensão (sem allowlist ou blocklist)."
+  ],
+  [
+   "With allowlist:",
+   "g",
+   "Com allowlist:"
+  ],
+  [
+   "Defender recommendation\\(s\\) affect Arc machines",
+   "g",
+   "Recomendações do Defender afetam máquinas Arc"
+  ],
+  [
+   "machine x recommendation pairs",
+   "g",
+   "pares máquina × recomendação"
+  ],
+  [
+   "attack paths:",
+   "g",
+   "caminhos de ataque:"
+  ],
+  [
+   "([0-9]+) machine\\(s\\) not Connected",
+   "g",
+   "$1 máquinas não estão em estado Connected"
+  ],
+  [
+   "Expired: agent key expired, requires new onboarding",
+   "g",
+   "Expired: a chave do agente expirou e exige novo onboarding"
+  ],
+  [
+   "Without connectivity, the machine does not receive policies, patches, or extensions\\.",
+   "g",
+   "Sem conectividade, a máquina não recebe policies, patches nem extensões."
+  ],
+  [
+   "Disconnected for 30 to 44 days \\(they expire at 45; reconnecting now avoids a new onboarding\\):",
+   "g",
+   "Em estado Disconnected de 30 a 44 dias (expira aos 45; reconectar agora evita novo onboarding):"
+  ],
+  [
+   "Disconnected up to 6 days:",
+   "g",
+   "Disconnected por até 6 dias:"
+  ],
+  [
+   "Disconnected 7 to 29 days:",
+   "g",
+   "Disconnected de 7 a 29 dias:"
+  ],
+  [
+   "Disconnected 30 to 44 days \\(expires at 45\\):",
+   "g",
+   "Disconnected de 30 a 44 dias (expira aos 45):"
+  ],
+  [
+   "Disconnected 45 days or more:",
+   "g",
+   "Disconnected há 45 dias ou mais:"
+  ],
+  [
+   "([0-9]+) 2008\\/2012\\/2012 R2 server\\(s\\) without security updates;",
+   "g",
+   "$1 servidor(es) 2008/2012/2012 R2 sem atualizações de segurança;"
+  ],
+  [
+   "\\(([0-9]+) without ESU ready for ([^)]+)\\)",
+   "g",
+   "($1 sem ESU pronto para $2)"
+  ],
+  [
+   "([0-9]+) of ([0-9]+) connected machine\\(s\\)",
+   "gi",
+   "$1 de $2 máquinas em estado Connected"
+  ],
+  [
+   "([0-9]+) SQL Server extension\\(s\\)\\.",
+   "g",
+   "$1 extensões do SQL Server."
+  ],
+  [
+   "Using a physical core license \\(pCore\\):",
+   "g",
+   "Uso de licença por núcleo físico (pCore):"
+  ],
+  [
+   "pCore licenses in scope:",
+   "g",
+   "licenças pCore no escopo:"
+  ],
+  [
+   "Usage upload with error:",
+   "g",
+   "Envio de uso com erro:"
+  ],
+  [
+   "no upload for more than 24 hours:",
+   "g",
+   "sem envio há mais de 24 horas:"
+  ],
+  [
+   "failed extension:",
+   "g",
+   "extensão com falha:"
+  ],
+  [
+   "machine not Connected:",
+   "g",
+   "máquina fora do estado Connected:"
+  ],
+  [
+   "empty LicenseType:",
+   "g",
+   "LicenseType vazio:"
+  ],
+  [
+   "pCore license with LicenseType different from the billingPlan or no license in scope:",
+   "g",
+   "Licença pCore com LicenseType diferente do billingPlan ou sem licença no escopo:"
+  ],
+  [
+   "the documentation requires LicenseType to match the license billingPlan",
+   "g",
+   "a documentação exige que LicenseType corresponda ao billingPlan da licença"
+  ],
+  [
+   "Sentinel in ([0-9]+) workspace\\(s\\):",
+   "g",
+   "Sentinel em $1 workspace(s):"
+  ],
+  [
+   "Arc machines sending data to Sentinel via DCR:",
+   "g",
+   "Máquinas Arc enviando dados ao Sentinel via DCR:"
+  ],
+  [
+   "by RG: none",
+   "g",
+   "por RG: nenhum"
+  ],
+  [
+   "DCRs for Sentinel:",
+   "g",
+   "DCRs para o Sentinel:"
+  ],
+  [
+   "flows: none",
+   "g",
+   "fluxos: nenhum"
+  ],
+  [
+   "Activity Log exported to Sentinel: no",
+   "g",
+   "Activity Log exportado para o Sentinel: não"
+  ],
+  [
+   "Privileged assignments that reach the Arc machines -",
+   "g",
+   "Atribuições privilegiadas que alcançam as máquinas Arc —"
+  ],
+  [
+   "direct Owner\\/UAA\\/RBAC Admin assignment\\(s\\) to users \\(prefer groups and PIM\\)",
+   "g",
+   "atribuição(ões) direta(s) de Owner/UAA/RBAC Admin a usuários (prefira grupos e PIM)"
+  ],
+  [
+   "through Arc\\. Confirm need and RBAC\\.",
+   "g",
+   "via Arc. Confirme a necessidade e o RBAC."
+  ],
+  [
+   "This proves only the Arc extension gap; confirm sensor onboarding and health in the Defender portal before concluding endpoint protection coverage\\.",
+   "g",
+   "Isso comprova apenas a ausência da extensão pelo Arc; confirme o onboarding e a integridade do sensor no portal do Defender antes de concluir sobre a cobertura de proteção de endpoint."
+  ],
+  [
+   "Sensitive operations in ([0-9]+) day\\(s\\) -",
+   "g",
+   "Operações sensíveis em $1 dias —"
+  ],
+  [
+   "Extension installed\\/changed:",
+   "g",
+   "extensão instalada/alterada:"
+  ],
+  [
+   "Extension removed:",
+   "g",
+   "extensão removida:"
+  ],
+  [
+   "Machine removed:",
+   "g",
+   "máquina removida:"
+  ],
+  [
+   "Review author and justification\\.",
+   "g",
+   "Revise o autor e a justificativa."
+  ],
+  [
+   "Active security alerts:",
+   "g",
+   "Alertas de segurança ativos:"
+  ],
+  [
+   "Distinct vulnerabilities:",
+   "g",
+   "Vulnerabilidades distintas:"
+  ],
+  [
+   "Subscription Secure Score \\(includes non-Arc resources\\):",
+   "g",
+   "Secure Score da subscription (inclui recursos que não são Arc):"
+  ],
+  [
+   "Vulnerability coverage depends on the Defender plan and MDE\\.",
+   "g",
+   "A cobertura de vulnerabilidades depende do plano do Defender e do MDE."
+  ],
+  [
+   "MDE extension deployed through Arc on",
+   "g",
+   "Extensão MDE implantada pelo Arc em"
+  ],
+  [
+   "Zero findings without confirmed coverage is not evidence of no exposure\\.",
+   "g",
+   "Zero achados sem cobertura confirmada não comprova ausência de exposição."
+  ],
+  [
+   "Endpoint protection recommendations with Unhealthy machines in Defender for Cloud:",
+   "g",
+   "Recomendações de proteção de endpoint com máquinas em estado Unhealthy no Defender for Cloud:"
+  ],
+  [
+   "Connected machines without the MDE extension:",
+   "g",
+   "Máquinas em estado Connected sem a extensão MDE:"
+  ],
+  [
+   "MDE extension absence does not prove sensor absence; correlate device health in the Defender portal\\.",
+   "g",
+   "A ausência da extensão MDE não comprova ausência do sensor; correlacione a integridade do dispositivo no portal do Defender."
+  ],
+  [
+   "Metadata regions observed -",
+   "g",
+   "Regiões de metadados observadas —"
+  ],
+  [
+   "The allowed-region\\/data-residency policy was not supplied, so compliance cannot be concluded\\.",
+   "g",
+   "A política de regiões permitidas/residência de dados não foi fornecida; portanto, não é possível concluir sobre a conformidade."
+  ],
+  [
+   "policy rule\\(s\\) with noncompliance on Arc machines \\(worst case:",
+   "g",
+   "regras de policy com não conformidade em máquinas Arc (pior caso:"
+  ],
+  [
+   "SQL extension outside the 12-month support window:",
+   "g",
+   "Extensão SQL fora da janela de suporte de 12 meses:"
+  ],
+  [
+   "latest version:",
+   "g",
+   "versão mais recente:"
+  ],
+  [
+   "source: Azure",
+   "g",
+   "fonte: Azure"
+  ],
+  [
+   "Azure Monitor Agent outside the 12-month support window:",
+   "g",
+   "Azure Monitor Agent fora da janela de suporte de 12 meses:"
+  ],
+  [
+   "Occurrences below the latest version published in the region \\(or the newest in the estate if the Azure query fails\\) or without automatic upgrade:",
+   "g",
+   "Ocorrências abaixo da versão mais recente publicada na região (ou da mais nova no parque, se a consulta ao Azure falhar) ou sem atualização automática:"
+  ],
+  [
+   "machine\\(s\\) with SQL Server",
+   "g",
+   "máquina(s) com SQL Server"
+  ],
+  [
+   "Subscriptions without Defender for SQL on machines: none\\.",
+   "g",
+   "Subscriptions sem Defender for SQL em máquinas: nenhuma."
+  ],
+  [
+   "SQL extensions below ([^ ]+) or without automatic upgrade:",
+   "g",
+   "Extensões SQL abaixo da versão $1 ou sem atualização automática:"
+  ],
+  [
+   "SQL on a machine with Private Link",
+   "g",
+   "SQL em máquina com Private Link"
+  ],
+  [
+   "does not support Private Link, requires outbound 443",
+   "g",
+   "não oferece suporte a Private Link e exige saída 443"
+  ],
+  [
+   "SQL on an OS earlier than Windows Server 2016 \\(not supported\\):",
+   "g",
+   "SQL em SO anterior ao Windows Server 2016 (sem suporte):"
+  ],
+  [
+   "Assessment blocked: no connected machine has Azure Monitor Agent\\.",
+   "g",
+   "Avaliação bloqueada: nenhuma máquina em estado Connected possui Azure Monitor Agent."
+  ],
+  [
+   "Resolve CHK-39, then reassess DCR association\\.",
+   "g",
+   "Resolva a CHK-39 e reavalie a associação de DCR."
+  ],
+  [
+   "Connected machines with AMA:",
+   "g",
+   "Máquinas em estado Connected com AMA:"
+  ],
+  [
+   "DCRs in use:",
+   "g",
+   "DCRs em uso:"
+  ],
+  [
+   "Destinations: not identified\\.",
+   "g",
+   "Destinos: não identificados."
+  ],
+  [
+   "^Documentary control: validate with the customer and record the evidence\\.$",
+   "",
+   "Controle documental: validar com o cliente e registrar a evidência."
+  ],
+  [
+   "^Collection failed: (.*) \\(see commands in results\\.json and run\\.log\\)\\.$",
+   "",
+   "Falha na coleta: $1 (consultar os comandos em results.json e run.log)."
+  ],
+  [
+   "^No automatic assessment\\.$",
+   "",
+   "Sem avaliação automática."
+  ],
+  [
+   "^Assessment error \\(line ([^)]+)\\): ",
+   "",
+   "Erro de avaliação (linha $1): "
+  ],
+  [
+   "^Insufficient permission in all subscriptions \\(([^)]+)\\); result is not reliable\\. ",
+   "",
+   "Permissão insuficiente em todas as subscriptions ($1); o resultado não é confiável. "
+  ],
+  [
+   "^\\[PARTIAL: no permission on ([^\\]]+)\\] ",
+   "",
+   "[PARTIAL: sem permissão em $1] "
+  ],
+  [
+   "No connected machines in scope\\.",
+   "g",
+   "Nenhuma máquina conectada no escopo."
+  ],
+  [
+   "No connected Windows machine in scope\\.",
+   "g",
+   "Nenhuma máquina Windows conectada no escopo."
+  ],
+  [
+   "No Arc machine in scope\\.",
+   "g",
+   "Nenhuma máquina Arc no escopo."
+  ],
+  [
+   "No machine with SQL Server detected\\.",
+   "g",
+   "Nenhuma máquina com SQL Server detectado."
+  ],
+  [
+   "No machine with the SQL Server extension in the evaluated scope\\.",
+   "g",
+   "Nenhuma máquina com a extensão do SQL Server no escopo avaliado."
+  ],
+  [
+   "No Log Analytics workspace in scope \\(the SOC may be in another subscription\\)\\.",
+   "g",
+   "Nenhum workspace do Log Analytics no escopo (o SOC pode estar em outra subscription)."
+  ],
+  [
+   "No Azure Arc Private Link Scope in scope\\.",
+   "g",
+   "Nenhum Azure Arc Private Link Scope no escopo."
+  ],
+  [
+   "No Private Link Scope: Arc private zones do not apply\\.",
+   "g",
+   "Sem Private Link Scope: as zonas privadas do Arc não se aplicam."
+  ],
+  [
+   "No Key Vault in the resource groups of the Arc machines\\.",
+   "g",
+   "Nenhum Key Vault nos resource groups das máquinas Arc."
+  ],
+  [
+   "No agent version reported\\.",
+   "g",
+   "Nenhuma versão do agente informada."
+  ],
+  [
+   "No extensions in scope\\.",
+   "g",
+   "Nenhuma extensão no escopo."
+  ],
+  [
+   "No recommended tag provided \\(optional\\)\\.",
+   "g",
+   "Nenhuma tag recomendada foi informada (opcional)."
+  ],
+  [
+   "All machines are Connected\\.",
+   "g",
+   "Todas as máquinas estão Connected."
+  ],
+  [
+   "All machines have the recommended tags\\.",
+   "g",
+   "Todas as máquinas têm as tags recomendadas."
+  ],
+  [
+   "All machines have an allowlist or blocklist defined",
+   "g",
+   "Todas as máquinas têm allowlist ou blocklist definida"
+  ],
+  [
+   "All machines with AMA have an associated DCR\\.",
+   "g",
+   "Todas as máquinas com AMA têm uma DCR associada."
+  ],
+  [
+   "No inbound ports open on the agent\\.",
+   "g",
+   "Nenhuma porta de entrada aberta no agente."
+  ],
+  [
+   "No sensitive extensions installed\\.",
+   "g",
+   "Nenhuma extensão sensível instalada."
+  ],
+  [
+   "No Arc machine identity with an assigned role in scope\\.",
+   "g",
+   "Nenhuma identidade de máquina Arc com papel atribuído no escopo."
+  ],
+  [
+   "No Unhealthy Defender recommendation for Arc machines\\.",
+   "g",
+   "Nenhuma recomendação Unhealthy do Defender para máquinas Arc."
+  ],
+  [
+   "No NonCompliant policy state on Arc machines\\.",
+   "g",
+   "Nenhum estado NonCompliant de policy nas máquinas Arc."
+  ],
+  [
+   "No sensitive operations in ([^.]+)\\.",
+   "g",
+   "Nenhuma operação sensível em $1."
+  ],
+  [
+   "Outside the Arc scope \\(ignored\\):",
+   "g",
+   "Fora do escopo do Arc (ignorado):"
+  ],
+  [
+   "Whole estate in scope:",
+   "g",
+   "Parque completo no escopo:"
+  ],
+  [
+   "connected machine\\(s\\)",
+   "gi",
+   "máquina(s) conectada(s)"
+  ],
+  [
+   "machine\\(s\\)",
+   "g",
+   "máquina(s)"
+  ],
+  [
+   "recommendation\\(s\\)",
+   "g",
+   "recomendação(ões)"
+  ],
+  [
+   "workspace\\(s\\)",
+   "g",
+   "workspace(s)"
+  ],
+  [
+   "subscription\\(s\\)",
+   "g",
+   "subscription(s)"
+  ],
+  [
+   "extension\\(s\\)",
+   "g",
+   "extensão(ões)"
+  ],
+  [
+   "role\\(s\\)",
+   "g",
+   "papel(is)"
+  ],
+  [
+   "assignment\\(s\\)",
+   "g",
+   "atribuição(ões)"
+  ],
+  [
+   "finding\\(s\\)",
+   "g",
+   "achado(s)"
+  ],
+  [
+   "with inbound ports open on the agent",
+   "g",
+   "com portas de entrada abertas no agente"
+  ],
+  [
+   "without Azure Monitor Agent",
+   "g",
+   "sem Azure Monitor Agent"
+  ],
+  [
+   "without the MDE extension deployed through Arc",
+   "g",
+   "sem a extensão MDE implantada pelo Arc"
+  ],
+  [
+   "without an associated Data Collection Rule \\(agent not collecting data\\)",
+   "g",
+   "sem Data Collection Rule associada (agente sem coleta de dados)"
+  ],
+  [
+   "accept any extension \\(no allowlist or blocklist\\)",
+   "g",
+   "aceitam qualquer extensão (sem allowlist ou blocklist)"
+  ],
+  [
+   "with guest configuration disabled \\(no policy auditing inside the OS\\)",
+   "g",
+   "com guest configuration desabilitada (sem auditoria de policy dentro do SO)"
+  ],
+  [
+   "Defender recommendation\\(ões\\) affect Arc machines",
+   "g",
+   "recomendação(ões) do Defender afetam máquinas Arc"
+  ],
+  [
+   "High severity:",
+   "g",
+   "severidade High:"
+  ],
+  [
+   "Critical\\/High risk:",
+   "g",
+   "risco Critical/High:"
+  ],
+  [
+   "open 90\\+ days:",
+   "g",
+   "abertas há 90+ dias:"
+  ],
+  [
+   "attack paths:",
+   "g",
+   "attack paths:"
+  ],
+  [
+   "exemptions:",
+   "g",
+   "isenções:"
+  ],
+  [
+   "The body is intentionally summarized; use ([^ ]+) for the complete recommendation-level evidence\\.",
+   "g",
+   "O corpo está intencionalmente resumido; use $1 para a evidência completa por recomendação."
+  ],
+  [
+   "Governance owner coverage:",
+   "g",
+   "Cobertura de responsável na governança:"
+  ],
+  [
+   "overdue:",
+   "g",
+   "atrasadas:"
+  ],
+  [
+   "no due date:",
+   "g",
+   "sem data limite:"
+  ],
+  [
+   "Key Vault baseline in Arc resource groups:",
+   "g",
+   "Baseline de Key Vault nos resource groups do Arc:"
+  ],
+  [
+   "evaluated; definite gaps:",
+   "g",
+   "avaliados; lacunas comprovadas:"
+  ],
+  [
+   "properties absent\\/null:",
+   "g",
+   "propriedades ausentes/nulas:"
+  ],
+  [
+   "Missing\\/null is evidence unknown and is not treated as false\\.",
+   "g",
+   "Ausente/nulo é evidência desconhecida e não é tratado como false."
+  ],
+  [
+   "Patch authority and freshness:",
+   "g",
+   "Autoridade e validade da avaliação de patches:"
+  ],
+  [
+   "failed,",
+   "g",
+   "com falha,"
+  ],
+  [
+   "unknown,",
+   "g",
+   "desconhecidas,"
+  ],
+  [
+   "passed\\.",
+   "g",
+   "aprovadas."
+  ],
+  [
+   "Evidence is canonical: exactly one row per machine\\.",
+   "g",
+   "A evidência é canônica: exatamente uma linha por máquina."
+  ],
+  [
+   "A zero pending count is evidence only with a valid assessment;",
+   "g",
+   "Contagem zero de pendências só é evidência com avaliação válida;"
+  ],
+  [
+   "document WSUS\\/SCCM or another approved external authority\\.",
+   "g",
+   "documente WSUS/SCCM ou outra autoridade externa aprovada."
+  ],
+  [
+   "Sentinel exists in the collected scope, but no Arc machine sends events to it\\.",
+   "g",
+   "Há Microsoft Sentinel no escopo coletado, mas nenhuma máquina Arc envia eventos para ele."
+  ],
+  [
+   "This is a conclusive failure for the observed workspace;",
+   "g",
+   "Esta é uma falha conclusiva para o workspace observado;"
+  ],
+  [
+   "Evidence Coverage is PARTIAL only because an external SOC workspace may exist outside the collected scope\\.",
+   "g",
+   "a Cobertura da evidência é PARTIAL somente porque pode existir um workspace de SOC externo fora do escopo coletado."
+  ],
+  [
+   "CHK-43 proves Activity Log export to a destination, not ingestion by this Sentinel workspace\\.",
+   "g",
+   "CHK-43 comprova a exportação do Activity Log para um destino, não a ingestão por este workspace do Microsoft Sentinel."
+  ],
+  [
+   "OS security baseline \\(Azure compute security baseline\\):",
+   "g",
+   "Baseline de segurança do SO (Azure compute security baseline):"
+  ],
+  [
+   "with a baseline assigned;",
+   "g",
+   "com baseline atribuído;"
+  ],
+  [
+   "compliant:",
+   "g",
+   "conformes:"
+  ],
+  [
+   "non-compliant:",
+   "g",
+   "não conformes:"
+  ],
+  [
+   "no baseline:",
+   "g",
+   "sem baseline:"
+  ],
+  [
+   "Local Administrators group audit \\(Machine Configuration\\):",
+   "g",
+   "Auditoria do grupo Administradores local (Machine Configuration):"
+  ],
+  [
+   "Telemetry of the",
+   "g",
+   "Telemetria das"
+  ],
+  [
+   "performance",
+   "g",
+   "desempenho"
+  ],
+  [
+   "dependency map",
+   "g",
+   "mapa de dependências"
+  ],
+  [
+   "security events",
+   "g",
+   "eventos de segurança"
+  ],
+  [
+   "Without performance and without security events:",
+   "g",
+   "Sem desempenho e sem eventos de segurança:"
+  ],
+  [
+   "The observed technical failure is conclusive;",
+   "g",
+   "A falha técnica observada é conclusiva;"
+  ],
+  [
+   "only for contractual entitlement\\/licensing evidence outside the package\\.",
+   "g",
+   "somente para evidência contratual de entitlement/licenciamento fora do pacote."
+  ],
+  [
+   "The hourly usage upload supports PAYG billing and the usage reporting of Software Assurance licenses\\.",
+   "g",
+   "O envio de uso a cada hora sustenta o faturamento PAYG e o registro do uso de licenças com Software Assurance."
+  ],
+  [
+   "No date of the last usage upload",
+   "g",
+   "Sem data do último envio de uso"
+  ],
+  [
+   "Last usage upload ([^;]+) day\\(s\\) ago",
+   "g",
+   "Último envio de uso há $1 dia(s)"
+  ],
+  [
+   "no usage upload;",
+   "g",
+   "sem envio de uso;"
+  ],
+  [
+   "LicenseType not set on the extension",
+   "g",
+   "LicenseType não configurado na extensão"
+  ],
+  [
+   "OS older than Windows Server 2016",
+   "g",
+   "SO anterior ao Windows Server 2016"
+  ],
+  [
+   "result is not reliable",
+   "g",
+   "o resultado não é confiável"
+  ]
+ ],
+ "narrative": [
+  [
+   "^Collector dataset\\(s\\); CLI calls and failures are recorded in results\\.json and run\\.log$",
+   "",
+   "Dataset(s) do coletor; chamadas de CLI e falhas são registradas em results.json e run.log"
+  ],
+  [
+   "^Defined by the check detail and findings rows$",
+   "",
+   "Definido pelo detalhe da verificação e pelas linhas de achados"
+  ],
+  [
+   "^Machine sampling when MaxMachines is set; external authorities require documentary evidence$",
+   "",
+   "Amostragem de máquinas quando MaxMachines está definido; autoridades externas exigem evidência documental"
+  ],
+  [
+   "^Point-in-time at collection; Activity Log uses ActivityDays$",
+   "",
+   "Snapshot no momento da coleta; o Activity Log usa ActivityDays"
+  ],
+  [
+   "^Missing dataset = ERROR; proxy\\/external scope = PARTIAL; not applicable = N\\/A$",
+   "",
+   "Dataset ausente = ERROR; proxy/escopo externo = PARTIAL; não aplicável = N/A"
+  ],
+  [
+   "sanitized reviewed lab fixture",
+   "gi",
+   "fixture sanitizada de revisão do lab"
+  ],
+  [
+   "Arc machines",
+   "g",
+   "máquinas Arc"
+  ]
+ ]
+}

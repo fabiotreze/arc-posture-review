@@ -1307,5 +1307,163 @@ def render(document, locale):
     return _ux_page(_render_without_ux(document, locale), document, locale)
 
 
+# ---------- pt-BR rendering of engine and collector text (display only; the embedded canonical JSON is untouched) ----------
+_PT_PREFIX = [
+    ("Remediate: ", "Corrigir: "), ("Improve posture: ", "Melhorar a postura: "), ("Complete evidence: ", "Completar evidências: "),
+]
+_PT_STATIC = [
+    ("Confirm the verified gap in the listed checks and the machines or scope it affects.", "Confirme a lacuna verificada nas verificações listadas e as máquinas ou o escopo afetados."),
+    ("Remediate the highest-severity listed checks first, through change control.", "Corrija primeiro as verificações listadas de maior severidade, por meio de controle de mudanças."),
+    ("Re-run the collection and confirm the listed checks reach PASS.", "Execute a coleta novamente e confirme que as verificações listadas chegam a PASS."),
+    ("Record the owner, the date and any accepted-risk decision.", "Registre o responsável, a data e qualquer decisão de risco aceito."),
+    ("The evidence behind each listed check is complete (Evidence Coverage FULL).", "A evidência de cada verificação listada está completa (Evidence Coverage FULL)."),
+    ("Review the listed checks and decide which hardening steps to adopt.", "Revise as verificações listadas e decida quais passos de hardening adotar."),
+    ("Prioritize by the residual risk of each check and the criticality tier of the machines.", "Priorize pelo risco residual de cada verificação e pelo tier de criticidade das máquinas."),
+    ("Apply approved changes through change control and record the owner and date.", "Aplique as mudanças aprovadas por controle de mudanças e registre o responsável e a data."),
+    ("Each listed check is PASS, or an accepted-risk decision is recorded.", "Cada verificação listada está em PASS ou há uma decisão de risco aceito registrada."),
+    ("Identify which evidence is missing, documentary or outside the collected scope for the listed checks.", "Identifique qual evidência está ausente, é documental ou está fora do escopo coletado nas verificações listadas."),
+    ("Collect it: extend the collector scope, grant read access, or record the documentary evidence.", "Colete-a: amplie o escopo do coletor, conceda acesso de leitura ou registre a evidência documental."),
+    ("Re-run the collection and re-evaluate; this is evidence work, not a confirmed exposure.", "Execute a coleta novamente e reavalie; é trabalho de evidência, não uma exposição confirmada."),
+    ("Each listed check has FULL evidence or a documented N/A.", "Cada verificação listada tem evidência FULL ou um N/A documentado."),
+    ("Owner and timestamp are recorded.", "Responsável e data/hora estão registrados."),
+    ("If remediation affects connectivity or management, use the approved rollback for the environment and revalidate SB01-SB08 as applicable.", "Se a correção afetar a conectividade ou o gerenciamento, use o rollback aprovado do ambiente e revalide SB01-SB08 conforme aplicável."),
+    ("A posture weakness is not evidence of exploitation or compromise.", "Uma fragilidade de postura não é evidência de exploração ou comprometimento."),
+    # Risks (action card titles)
+    ("Compromise of privileged identity", "Comprometimento de identidade privilegiada"),
+    ("Unsafe onboarding identity or secret", "Identidade ou segredo de onboarding inseguro"),
+    ("Control-plane privilege escalation", "Escalação de privilégio no plano de controle"),
+    ("Network and name-resolution boundary bypass", "Contorno da fronteira de rede e de resolução de nomes"),
+    ("Agent, extension, or local-control tampering", "Adulteração do agente, de extensões ou de controles locais"),
+    ("Abuse of extensions and remote execution", "Abuso de extensões e de execução remota"),
+    ("Security telemetry blind spot", "Ponto cego na telemetria de segurança"),
+    ("Exploitation of vulnerability or legacy platform", "Exploração de vulnerabilidade ou de plataforma legada"),
+    ("Governance, lifecycle, or scope drift", "Desvio de governança, ciclo de vida ou escopo"),
+    ("SQL protection, entitlement, or telemetry failure", "Falha de proteção, licenciamento ou telemetria do SQL"),
+    ("Operational resilience and recovery failure", "Falha de resiliência operacional e de recuperação"),
+    # Scenarios
+    ("Privileged identity takeover", "Tomada de identidade privilegiada"),
+    ("Onboarding credential replay", "Reuso de credencial de onboarding"),
+    ("Management-plane privilege escalation", "Escalação de privilégio no plano de gerenciamento"),
+    ("Unintended management network path", "Caminho de rede de gerenciamento não previsto"),
+    ("Arc agent trust degradation", "Degradação da confiança no agente Arc"),
+    ("Extension or Run Command abuse", "Abuso de extensão ou de Run Command"),
+    ("Telemetry suppression and delayed detection", "Supressão de telemetria e detecção tardia"),
+    ("Exploit of vulnerable or legacy host", "Exploração de host vulnerável ou legado"),
+    ("Governance and lifecycle drift", "Desvio de governança e de ciclo de vida"),
+    ("SQL protection or usage-telemetry gap", "Lacuna de proteção do SQL ou de telemetria de uso"),
+    ("Recovery and trusted-state failure", "Falha de recuperação e de estado confiável"),
+    ("An attacker with stolen or weakly protected administrator credentials attempts to reach Arc management and hosts.", "Um atacante com credenciais de administrador roubadas ou fracamente protegidas tenta alcançar o gerenciamento do Arc e os hosts."),
+    ("A leaked or overprivileged onboarding identity is replayed to enroll or alter managed resources.", "Uma identidade de onboarding vazada ou com privilégios excessivos é reutilizada para registrar ou alterar recursos gerenciados."),
+    ("A principal exploits broad RBAC or an unreviewed control-plane operation to gain administrative execution.", "Um principal explora RBAC amplo ou uma operação do plano de controle não revisada para obter execução administrativa."),
+    ("An attacker uses public access, open inbound management, or incorrect DNS to bypass the approved connectivity design.", "Um atacante usa acesso público, gerenciamento de entrada aberto ou DNS incorreto para contornar o desenho de conectividade aprovado."),
+    ("An attacker or failure condition exploits an unsupported agent, failed extension, unsafe mode, or weak local control.", "Um atacante ou uma condição de falha explora um agente sem suporte, uma extensão com falha, um modo inseguro ou um controle local fraco."),
+    ("A privileged actor deploys or invokes an unapproved extension or remote command for persistence or lateral movement.", "Um agente privilegiado implanta ou invoca uma extensão ou um comando remoto não aprovado para persistência ou movimentação lateral."),
+    ("An attacker disables, evades, or benefits from missing Defender, MDE, Monitor, Sentinel, or Activity Log coverage.", "Um atacante desabilita, evita ou se beneficia da falta de cobertura de Defender, MDE, Monitor, Sentinel ou Activity Log."),
+    ("An attacker exploits an unpatched, unsupported, weakly baselined, or unencrypted host.", "Um atacante explora um host sem patches, sem suporte, com baseline fraco ou sem criptografia."),
+    ("Unmanaged scope, inconsistent policy, manual deployment, or unsafe decommission creates an exploitable gap.", "Escopo não gerenciado, policy inconsistente, implantação manual ou descomissionamento inseguro criam uma lacuna explorável."),
+    ("An attacker or configuration failure affects SQL protection, privilege, telemetry, or entitlement evidence.", "Um atacante ou uma falha de configuração afeta a proteção, o privilégio, a telemetria ou a evidência de licenciamento do SQL."),
+    ("An incident cannot be contained or recovered because rollback, health, removal, or exception evidence is missing.", "Um incidente não pode ser contido nem recuperado porque faltam evidências de rollback, integridade, remoção ou exceção."),
+    # Security boundaries
+    ("Identity and privileged-access boundary", "Fronteira de identidade e de acesso privilegiado"),
+    ("Azure management-plane boundary", "Fronteira do plano de gerenciamento do Azure"),
+    ("Connectivity and DNS boundary", "Fronteira de conectividade e DNS"),
+    ("Host operating-system boundary", "Fronteira do sistema operacional do host"),
+    ("Agent and extension boundary", "Fronteira de agente e extensões"),
+    ("Detection and response boundary", "Fronteira de detecção e resposta"),
+    ("SQL and protected-data boundary", "Fronteira do SQL e dos dados protegidos"),
+    ("Delivery and lifecycle boundary", "Fronteira de entrega e ciclo de vida"),
+    ("Render-only report: risk, priority, scenario and roadmap values are supplied by the Evaluation Engine.", "Relatório somente de renderização: os valores de risco, prioridade, cenário e roadmap vêm do Evaluation Engine."),
+]
+_PT_TOKENS = {
+    "Verify explicitly": "Verificar explicitamente", "Use least privilege access": "Usar acesso com privilégio mínimo", "Assume breach": "Presumir violação",
+    "Identity": "Identidade", "Endpoints": "Endpoints", "Apps": "Aplicativos", "Data": "Dados", "Infrastructure": "Infraestrutura", "Network": "Rede",
+}
+_PT_CACHE: dict[str, Any] | None = None
+
+
+def _js_regex(source: str, flags: str) -> Any:
+    import re as _re
+    return _re.compile(source, (_re.I if "i" in flags else 0) | (_re.S if "s" in flags else 0))
+
+
+def _pt_data() -> dict[str, Any]:
+    global _PT_CACHE
+    if _PT_CACHE is not None:
+        return _PT_CACHE
+    import re as _re
+    rules: list[Any] = []
+    exact: dict[str, str] = {}
+    catalog: list[tuple[str, str]] = []
+    try:
+        data = json.loads((ROOT / "criteria" / "v4" / "pt-br-detail-rules.json").read_text(encoding="utf-8-sig"))
+        exact = dict(data.get("exact", {}))
+        rules = [(_js_regex(p, f), "g" in f, r) for p, f, r in [*data.get("rules", []), *data.get("narrative", [])]]
+    except (OSError, ValueError):
+        pass
+    try:
+        pt_crit = {row["id"]: row.get("crit") for row in json.loads((ROOT / "criteria" / "checks.pt-BR.json").read_text(encoding="utf-8-sig"))}
+        enriched = json.loads((ROOT / "assurance" / "v4" / "checkpoint3" / "data" / "checks.enriched.json").read_text(encoding="utf-8-sig"))
+        for row in enriched["checks"] if isinstance(enriched, dict) else enriched:
+            if row.get("resultCriteria") and pt_crit.get(row["id"]):
+                catalog.append((row["resultCriteria"], pt_crit[row["id"]]))
+    except (OSError, ValueError, KeyError):
+        pass
+    statics = sorted([*_PT_STATIC, *catalog], key=lambda pair: -len(pair[0]))
+    _PT_CACHE = {"rules": rules, "exact": exact, "statics": statics, "re": _re}
+    return _PT_CACHE
+
+
+def _pt_text(text: str) -> str:
+    stripped = text.strip()
+    if not stripped:
+        return text
+    start = text.index(stripped)
+    return text[:start] + _pt_core(stripped) + text[start + len(stripped):]
+
+
+def _pt_core(text: str) -> str:
+    data = _pt_data()
+    stripped = text
+    if stripped in _PT_TOKENS:
+        return _PT_TOKENS[stripped]
+    if stripped in data["exact"]:
+        return data["exact"][stripped]
+    out = text
+    for prefix, replacement in _PT_PREFIX:
+        out = out.replace(prefix, replacement)
+    for english, portuguese in data["statics"]:
+        if english in out:
+            out = out.replace(english, portuguese)
+    for rx, every, replacement in data["rules"]:
+        expand = lambda m, r=replacement: data["re"].sub(r"\$(\d)", lambda g: m.group(int(g.group(1))) or "", r)
+        out = rx.sub(expand, out, count=0 if every else 1)
+    return out
+
+
+def _localize_pt(page: str) -> str:
+    import re as _re
+    parts = _re.split(r"(<script\b.*?</script>|<style\b.*?</style>|<[^>]+>)", page, flags=_re.S | _re.I)
+    for index in range(0, len(parts), 2):
+        raw = parts[index]
+        if len(raw.strip()) < 3:
+            continue
+        source = html.unescape(raw)
+        translated = _pt_text(source)
+        if translated != source:
+            # The canonical (engine/collector) text stays verbatim in the tooltip: the report contract requires canonical values to be present.
+            tip = html.escape(source.strip(), quote=True)
+            shown = html.escape(translated.strip(), quote=True)
+            parts[index] = raw.replace(raw.strip(), f'<span class="i18n" title="{tip}">{shown}</span>', 1)
+    return "".join(parts)
+
+
+_render_before_localization = render
+
+
+def render(document, locale):
+    page = _render_before_localization(document, locale)
+    return _localize_pt(page) if locale == "pt-BR" else page
+
+
 if __name__ == "__main__":
     raise SystemExit(main())

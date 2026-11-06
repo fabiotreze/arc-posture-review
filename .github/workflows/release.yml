@@ -46,6 +46,7 @@ jobs:
         run: |
           python tools/Test-ReportVisual.py
           python tools/Test-AppV4Report.py
+          python tools/Test-PtBrContent.py
       - name: Build the runtime kit (SHA-256 must equal the value pinned in the collector)
         run: |
           python tools/Build-Kit.py --check
