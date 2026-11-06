@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v4.2.3 — 2026-11-06.** Repository cleanup (fewer workflows, no orphan scripts, one copy of the schemas, a code-quality gate) on top of the foundations of the claims: a register of sources (`docs/sources.en-US.md`) states which thresholds are official, which are criteria of the kit and which are still to verify; CHK-21 and CHK-29 corrected (ports; CVE ranges per NVD; local block of automatic upgrade); an independent recomputation tool for packages. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
+**Version v4.3.0 — 2026-11-06.** Calm, presentation-ready design for the browser app (analysis and guide) and the canonical v4 report: soft surfaces, tinted status colors instead of solid ones, numbered sections with a one-line purpose, one table style, and the same look in dark mode and print/PDF. Content, checks, results and claims are unchanged: the register of sources (`docs/sources.en-US.md`) still states which thresholds are official, which are criteria of the kit and which are still to verify. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.3.0] — 2026-11-06
+
+### Calm visual design
+
+- App (analysis, guide, wizard) and canonical v4 report share one calm look: flat navy header, pale surfaces, thin borders, tinted status colors with dark text instead of solid red, orange and violet, soft outcome bars, a proportional index ring, one table style (navy header, zebra rows), numbered sections. Dark mode and print/PDF follow the same tokens.
+- v4 report: a one-line purpose under each section (EN-US and pt-BR); KPI tiles and numbered actions in the executive summary and the action plan.
+- App analysis: the kit-index explanation and the two reading notes are folded; the Quick read no longer repeats the top gains already shown in "Do first"; the Executive assessment and the Evidence appendix are numbered parts.
+- Fixed a stray `\1` next to the scope selector in "Prepare collection" (since v4.1.3).
+- Presentation only: collector logic, results, scores, priorities and the canonical contract are unchanged. See `docs/v4.3.0-calm-design.md`.
+
 ## [4.2.3] — 2026-11-06
 
 ### Repository cleanup
