@@ -12,7 +12,11 @@ Avaliação somente leitura da postura de segurança de **servidores habilitados
 
 ![Relatório v4](docs/images/v4-report.pt-BR.png)
 
-## Início rápido (Azure Cloud Shell · PowerShell)
+## Comece aqui — 3 passos
+
+**Coletar → Abrir → Entregar.** Tudo é somente leitura.
+
+### 1 · Coletar (Azure Cloud Shell · PowerShell)
 
 ```powershell
 Invoke-WebRequest https://github.com/fabiotreze/arc-posture-review/releases/latest/download/Invoke-ArcPostureReview.ps1 -OutFile Invoke-ArcPostureReview.ps1
@@ -21,13 +25,44 @@ Invoke-WebRequest https://github.com/fabiotreze/arc-posture-review/releases/late
 
 > **Sempre informe `-Subscriptions` (ou `-ManagementGroup`) com a(s) subscription(s) que contêm as máquinas Arc.** Sem isso, só a subscription padrão atual do CLI é consultada; se as máquinas estiverem em outra, o relatório mostra 0 máquinas e a maioria das verificações vira N/A. Confira a linha `Scope:` na saída antes de confiar no resultado.
 
-| Saída | Conteúdo |
+| Saída (em `arc-posture-review/`) | Conteúdo |
 |---|---|
-| `arc-posture-review/arc-posture-review-<data>.zip` | Pacote de evidências (resultados, achados, SHA-256 do manifest). O script imprime o SHA-256 do pacote. |
-| `arc-posture-review/arc-posture-review-<data>-v4/` | `arc-posture-review.v4.pt-BR.html`, `arc-posture-review.v4.en-US.html`, `assessment.v4.json`, `resource-index.v4.json` |
-| `arc-posture-review/arc-posture-review-<data>-v4.zip` | A pasta do relatório v4 compactada (+ `.sha256`): **baixe só este arquivo** do Cloud Shell. |
+| `arc-posture-review-<data>.zip` | O pacote de evidências (resultados, achados, SHA-256 do manifest). **Baixe este arquivo** do Cloud Shell. |
+| `arc-posture-review-<data>.zip.sha256` | O SHA-256 dele, para conferir o download. |
 
-Escopo: `-Subscriptions <id1>,<id2>` ou `-ManagementGroup <nome>` (padrão: somente a subscription atual do CLI, o que raramente é o desejado). O relatório v4 é gerado por padrão (para pular, use `-NoV4Report`) e precisa de git e Python 3.10+; o Cloud Shell já tem os dois. Se faltarem, a coleta termina normalmente e os comandos manuais são exibidos.
+### 2 · Abrir a análise
+
+Abra o app em <https://fabiotreze.github.io/arc-posture-review/> (ou o `index.html` deste repositório), vá ao passo 3 e carregue o `.zip`. O passo 4 mostra a análise: índice do kit, domínios, prioridades, evidências e plano de ação.
+
+### 3 · Entregar
+
+No passo 4, use **Salvar análise (.html)** ou **Imprimir / PDF** (para um PDF limpo, `python tools/Generate-CleanPdf.py <salvo.html>`). Marque *Ocultar e-mails nos arquivos salvos* antes de compartilhar.
+
+### Opcional · Relatório canônico v4 (Zero Trust × Tier, cenários, action cards)
+
+O relatório canônico v4 **não** é gerado pelo coletor; ele sai do mesmo `.zip`, com Python 3.10+ em um clone deste repositório:
+
+```powershell
+git clone https://github.com/fabiotreze/arc-posture-review.git; cd arc-posture-review
+python assurance/v4/checkpoint5/cli/arc_posture.py evaluate --evidence <caminho-do>.zip --output assessment.v4.json
+python tools/New-ResourceIndex.py --evidence <caminho-do>.zip --assessment assessment.v4.json --output resource-index.v4.json
+python assurance/v4/checkpoint6/report/render_v4.py --input assessment.v4.json --resources resource-index.v4.json --locale pt-BR --output arc-posture-review.v4.pt-BR.html
+```
+
+Use `--locale en-US` para a versão em inglês. Mais opções (baseline, antes/depois) estão em *Comandos v4*, abaixo.
+
+### Qual documento ler?
+
+| Quero… | Leia |
+|---|---|
+| Executar a avaliação | Esta página, passos 1–3 |
+| Entender cada check e o que fazer | [docs/guide.pt-BR.md](docs/guide.pt-BR.md) (também dentro do app, passo 1) |
+| Saber como os resultados são decididos (evidência, cobertura, linguagem) | [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) e [docs/v4.1.1-posture-vs-evidence.md](docs/v4.1.1-posture-vs-evidence.md) |
+| Ver quais consultas e permissões são usadas | [docs/v4/query-evidence-matrix.md](docs/v4/query-evidence-matrix.md) |
+| Revisar segurança e limitações conhecidas | [docs/v4/threat-model-v4.md](docs/v4/threat-model-v4.md), [docs/v4/known-issues.md](docs/v4/known-issues.md), [SECURITY.md](SECURITY.md) |
+| Ver o que mudou | [CHANGELOG.md](CHANGELOG.md) |
+
+Escopo: `-Subscriptions <id1>,<id2>` ou `-ManagementGroup <nome>` (padrão: somente a subscription atual do CLI, o que raramente é o desejado).
 
 Parâmetros opcionais que transformam verificações PARTIAL em conclusivas:
 
@@ -38,6 +73,7 @@ Parâmetros opcionais que transformam verificações PARTIAL em conclusivas:
 | `-MaxMachines <n>` | Limita ambientes grandes a uma amostra priorizada por risco; use `0` (padrão) na execução final. |
 
 Exemplo: `./Invoke-ArcPostureReview.ps1 -Subscriptions "<nome ou id>" -AllowedRegions brazilsouth`
+
 ## O que o relatório mostra
 
 - **64 controles** (45 automáticos, 19 documentais) e **11 cenários de segurança**, cada um rastreado Evidência → Observação → Afirmação → Controle → Cenário.

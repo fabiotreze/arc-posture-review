@@ -2,6 +2,10 @@
 
 ## [4.1.1] — 2026-11-06
 
+### Documentation corrected
+
+- The README claimed that the collector generates the v4 report by default (`-NoV4Report`) and a separate `…-v4.zip`. That behavior was removed in v4.1.0 (`8ccf98e`) and is not in the script. The README (EN-US/PT-BR) now has a "Start here" flow (Collect, Open, Deliver), lists the real outputs (the evidence `.zip` and its `.sha256`), documents the optional Python step that produces the canonical v4 report, and adds a "Which document do I read?" map. The in-app note points to the new section.
+
 ### Posture versus evidence
 
 - A missing configuration or missing evidence is no longer a conclusive FAIL. CHK-23 (no extension allowlist) and CHK-56 (local-administrators audit not configured) are WARN; CHK-18, CHK-31, CHK-33, CHK-41, CHK-43 and CHK-45 return PARTIAL when the evidence cannot support a conclusion. Explicit adverse evidence (NonCompliant, Free Defender tier, expired agent, missing export on a readable subscription) stays FAIL.
