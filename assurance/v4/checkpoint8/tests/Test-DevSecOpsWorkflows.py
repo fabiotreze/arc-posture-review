@@ -16,7 +16,7 @@ EXPECTED = {
     "v4-release-gate.yml": "release",
 }
 FORBIDDEN = ("terraform", "pull_request_target", "git push", "git tag", "gh release", "break-glass", "rollback", "promotion-stage")
-ALLOWED_ACTIONS = ("actions/checkout@v4", "actions/setup-python@v5", "actions/upload-artifact@v4")
+ALLOWED_ACTIONS = ("actions/checkout@v7", "actions/setup-python@v7", "actions/upload-artifact@v7")
 
 
 def main() -> int:
