@@ -1,0 +1,409 @@
+{
+  "schemaVersion": 1,
+  "description": "Register of the claims, thresholds and labels used by the collector, the engine and the reports, with the state of their foundation. Rendered in docs/sources.en-US.md and docs/sources.pt-BR.md by tools/Sync-Sources.py; checked by tools/Test-ClaimRegister.py.",
+  "statuses": {
+    "VERIFIED_OFFICIAL": "The page was opened in full and the quoted statement supports the claim.",
+    "VERIFIED_CVE": "Confirmed in the NVD record that cites the MSRC advisory.",
+    "KIT_CRITERION": "A criterion of this kit, not a Microsoft recommendation. The rationale says why it exists.",
+    "UNVERIFIED": "Not yet confirmed in an official source; the todo says what must be checked. The result still shows it, but it must not be presented as official."
+  },
+  "ignoredTokens": ["'2000-01-01'"],
+  "entries": [
+    {
+      "id": "AGENT-SUPPORT-12M",
+      "status": "VERIFIED_OFFICIAL",
+      "checks": ["CHK-29"],
+      "claim": {
+        "en-US": "Only Connected Machine agent versions released within the last year are officially supported.",
+        "pt-BR": "Só as versões do agente Connected Machine lançadas no último ano têm suporte oficial."
+      },
+      "tokens": ["$SupportCutoff = (Get-Date", "AddMonths(-12)", "AddMonths(12)", "12 months"],
+      "sources": [
+        {"title": "Overview of the Azure Connected Machine agent", "url": "https://learn.microsoft.com/en-us/azure/azure-arc/servers/agent-overview"},
+        {"title": "Manage Azure Connected Machine agent versions", "url": "https://learn.microsoft.com/en-us/azure/azure-arc/servers/manage-agent"}
+      ],
+      "evidence": "\"Only Connected Machine agent versions within the last year are officially supported by the product group.\"",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "AGENT-RELEASE-CALENDAR",
+      "status": "VERIFIED_OFFICIAL",
+      "checks": ["CHK-29"],
+      "claim": {
+        "en-US": "Agent release months used to date a version: 1.57 (2025-10) to 1.69 (2026-10).",
+        "pt-BR": "Meses de lançamento do agente usados para datar uma versão: 1.57 (2025-10) a 1.69 (2026-10)."
+      },
+      "tokens": [],
+      "sources": [
+        {"title": "What's new with the Azure Connected Machine agent", "url": "https://learn.microsoft.com/en-us/azure/azure-arc/servers/agent-release-notes"}
+      ],
+      "evidence": "Release notes headings 'Version 1.60 - January 2026' to 'Version 1.69 - October 2026' match the table. Versions 1.57 to 1.59 are corroborated by the release calendar of the Arc agent support workbook (https://github.com/fabiotreze/AzureArcBRTips/tree/main/workbooks/arc-agent-support), not by the page section opened.",
+      "verifiedOn": "2026-11-06",
+      "reviewBy": "2026-12-06"
+    },
+    {
+      "id": "AGENT-SEC-FLOOR-61",
+      "status": "VERIFIED_CVE",
+      "checks": ["CHK-29"],
+      "claim": {
+        "en-US": "Agents below 1.61 are affected by CVE-2026-26117 (local elevation of privilege, CVSS 7.8). The floor 1.61 is the highest fixed version among the Arc agent CVEs listed here.",
+        "pt-BR": "Agentes abaixo da 1.61 são afetados pelo CVE-2026-26117 (elevação local de privilégio, CVSS 7,8). O piso 1.61 é a maior versão corrigida entre os CVEs do agente Arc listados aqui."
+      },
+      "tokens": ["$AgentSecFloor = 61", "-lt 61"],
+      "sources": [
+        {"title": "NVD: CVE-2026-26117", "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-26117"},
+        {"title": "MSRC: CVE-2026-26117", "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-26117"}
+      ],
+      "evidence": "NVD: product 'Arc Enabled Servers - Azure Connected Machine Agent', affected versions 1.0.0 up to (excluding) 1.61.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "AGENT-CVE-2025-55316",
+      "status": "VERIFIED_CVE",
+      "checks": ["CHK-29"],
+      "claim": {
+        "en-US": "CVE-2025-55316 affects agents below 1.56.",
+        "pt-BR": "O CVE-2025-55316 afeta agentes abaixo da 1.56."
+      },
+      "tokens": ["-lt 56"],
+      "sources": [{"title": "NVD: CVE-2025-55316", "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-55316"}],
+      "evidence": "NVD: Azure Connected Machine Agent, affected 1.0.0 up to (excluding) 1.56.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "AGENT-CVE-2025-49692",
+      "status": "VERIFIED_CVE",
+      "checks": ["CHK-29"],
+      "claim": {
+        "en-US": "CVE-2025-49692 affects agents below 1.49.",
+        "pt-BR": "O CVE-2025-49692 afeta agentes abaixo da 1.49."
+      },
+      "tokens": ["-lt 49"],
+      "sources": [{"title": "NVD: CVE-2025-49692", "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-49692"}],
+      "evidence": "NVD: Azure Connected Machine Agent, affected 1.0.0 up to (excluding) 1.49.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "AGENT-CVE-2025-26627",
+      "status": "UNVERIFIED",
+      "checks": ["CHK-29"],
+      "claim": {
+        "en-US": "CVE-2025-26627 is not mapped to an agent version: NVD lists product 'Azure ARC' below 1.0.10, which does not correspond to the Connected Machine agent numbering. It is not shown per machine.",
+        "pt-BR": "O CVE-2025-26627 não é mapeado a uma versão do agente: o NVD lista o produto 'Azure ARC' abaixo de 1.0.10, que não corresponde à numeração do agente Connected Machine. Ele não aparece por máquina."
+      },
+      "tokens": [],
+      "sources": [{"title": "NVD: CVE-2025-26627", "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-26627"}],
+      "todo": "Confirm in the MSRC advisory which component and fixed agent version apply before listing it per machine.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "AGENT-AUTOUPGRADE-MIN-167",
+      "status": "VERIFIED_OFFICIAL",
+      "checks": ["CHK-29"],
+      "claim": {
+        "en-US": "Automatic agent upgrade requires agent 1.67 or later (Windows: PowerShell execution policy RemoteSigned; Linux: cron). It is available only in the Azure public cloud.",
+        "pt-BR": "O upgrade automático do agente exige o agente 1.67 ou superior (Windows: política de execução RemoteSigned; Linux: cron). Só está disponível na nuvem pública do Azure."
+      },
+      "tokens": ["-lt 67"],
+      "sources": [{"title": "Automatically upgrade the Azure Connected Machine agent", "url": "https://learn.microsoft.com/en-us/azure/azure-arc/servers/automatic-agent-upgrade"}],
+      "evidence": "\"All Arc-enabled servers: Azure Connected Machine agent version 1.67 or later is required.\"",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "AGENT-AUTOUPGRADE-LOCALBLOCK",
+      "status": "VERIFIED_OFFICIAL",
+      "checks": ["CHK-29", "CHK-36"],
+      "claim": {
+        "en-US": "The local setting automaticupgrade.blocklocally takes precedence over the Azure property enableAutomaticUpgrade: when true, automatic upgrades are blocked even if the Azure property is true. It is read on the machine with 'azcmagent config get automaticupgrade.blocklocally', not through Azure.",
+        "pt-BR": "A configuração local automaticupgrade.blocklocally tem precedência sobre a propriedade do Azure enableAutomaticUpgrade: com valor true, os upgrades automáticos ficam bloqueados mesmo que a propriedade do Azure seja true. Lê-se na máquina com 'azcmagent config get automaticupgrade.blocklocally', não pelo Azure."
+      },
+      "tokens": [],
+      "sources": [{"title": "Automatically upgrade the Azure Connected Machine agent (section: Block automatic agent upgrades locally)", "url": "https://learn.microsoft.com/en-us/azure/azure-arc/servers/automatic-agent-upgrade"}],
+      "evidence": "\"The automaticupgrade.blocklocally setting takes precedence over the enableAutomaticUpgrade property.\" The option was introduced in agent 1.61 (release notes: 'Added option to disable automatic upgrades locally').",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "AGENT-OLD-6M",
+      "status": "KIT_CRITERION",
+      "checks": ["CHK-29"],
+      "claim": {
+        "en-US": "A supported agent more than 6 months old is a warning.",
+        "pt-BR": "Um agente com suporte, mas com mais de 6 meses, é um alerta."
+      },
+      "tokens": ["AddMonths(-6)", "6 months"],
+      "sources": [],
+      "rationale": "Microsoft publishes a 12-month support window, not a 6-month one. The kit warns at half of the window so the upgrade is planned before support ends.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "AMA-SUPPORT-12M",
+      "status": "VERIFIED_OFFICIAL",
+      "checks": ["CHK-30"],
+      "claim": {
+        "en-US": "Microsoft supports Azure Monitor Agent versions released within the last year only.",
+        "pt-BR": "A Microsoft só dá suporte às versões do Azure Monitor Agent lançadas no último ano."
+      },
+      "tokens": [],
+      "sources": [{"title": "Azure Monitor Agent extension versions", "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-extension-versions"}],
+      "evidence": "\"Microsoft supports Azure Monitor Agent versions released within the last year only.\"",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "SQLEXT-SUPPORT-12M",
+      "status": "VERIFIED_OFFICIAL",
+      "checks": ["CHK-30", "CHK-34"],
+      "claim": {
+        "en-US": "Only Azure extension for SQL Server versions released within the last year are supported.",
+        "pt-BR": "Só as versões da extensão do Azure para SQL Server lançadas no último ano têm suporte."
+      },
+      "tokens": [],
+      "sources": [{"title": "Release notes - SQL Server enabled by Azure Arc", "url": "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/release-notes?view=sql-server-ver17"}],
+      "evidence": "\"Only Azure extension for SQL Server versions released within the last year are supported.\"",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "SQLEXT-TARGET",
+      "status": "VERIFIED_OFFICIAL",
+      "checks": ["CHK-30", "CHK-34"],
+      "claim": {
+        "en-US": "The current auto-upgrade target of the Azure extension for SQL Server is 1.1.3518.465 (August 2026); the live value read from Azure takes precedence when higher.",
+        "pt-BR": "O alvo atual do upgrade automático da extensão do Azure para SQL Server é 1.1.3518.465 (agosto de 2026); o valor lido do Azure prevalece quando for maior."
+      },
+      "tokens": ["$SqlExtTarget = '1.1.3518.465'", "$SqlExtTarget = [string]$ExtLatest[$k2]"],
+      "sources": [{"title": "Release notes - SQL Server enabled by Azure Arc", "url": "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/release-notes?view=sql-server-ver17"}],
+      "evidence": "\"The current auto-upgrade target version of the Azure extension for SQL Server is 1.1.3518.465\".",
+      "verifiedOn": "2026-11-06",
+      "reviewBy": "2026-12-06"
+    },
+    {
+      "id": "SQLEXT-MIN-2859",
+      "status": "UNVERIFIED",
+      "checks": ["CHK-34"],
+      "claim": {
+        "en-US": "SQL extension below 1.1.2859.223 is reported.",
+        "pt-BR": "Extensão SQL abaixo de 1.1.2859.223 é reportada."
+      },
+      "tokens": ["[version]'1.1.2859.223'"],
+      "sources": [{"title": "Release notes - SQL Server enabled by Azure Arc", "url": "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/release-notes?view=sql-server-ver17"}],
+      "todo": "The release notes list 1.1.2859.223 (November 2024) but the page does not say it is a minimum. Find the documented minimum for automatic extension upgrade or replace this threshold by the 12-month window.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "AGENT-DISCONNECT-45D",
+      "status": "UNVERIFIED",
+      "checks": ["CHK-37"],
+      "claim": {
+        "en-US": "A machine disconnected for 45 days expires and needs a new onboarding; 30 to 44 days is the warning band.",
+        "pt-BR": "Uma máquina desconectada por 45 dias expira e exige novo onboarding; de 30 a 44 dias é a faixa de alerta."
+      },
+      "tokens": ["-ge 30", "-lt 45", "44 days"],
+      "sources": [],
+      "todo": "The agent overview and manage-agent pages do not state the 45-day expiry. Find the Learn page that documents the Expired status and its timeline.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "ESU-2012-END",
+      "status": "VERIFIED_OFFICIAL",
+      "checks": ["CHK-51"],
+      "claim": {
+        "en-US": "Windows Server 2012/2012 R2 ESU ends on 2026-10-13; ESU licenses enabled by Azure Arc are deactivated at 00:00 UTC on 2026-10-14. ESU through Arc for 2012 needs agent 1.34 or later.",
+        "pt-BR": "O ESU do Windows Server 2012/2012 R2 termina em 2026-10-13; as licenças ESU habilitadas pelo Azure Arc são desativadas às 00:00 UTC de 2026-10-14. O ESU pelo Arc para o 2012 exige o agente 1.34 ou superior."
+      },
+      "tokens": ["'2026-10-14'"],
+      "sources": [{"title": "Prepare to deliver Extended Security Updates for Windows Server through Azure Arc", "url": "https://learn.microsoft.com/en-us/azure/azure-arc/servers/prepare-extended-security-updates"}],
+      "evidence": "\"The three-year ESU period ends on October 13, 2026 ... At midnight UTC on October 14, 2026, Windows Server 2012 ESU licenses enabled by Azure Arc are deactivated\".",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "ESU-2016",
+      "status": "VERIFIED_OFFICIAL",
+      "checks": ["CHK-51"],
+      "claim": {
+        "en-US": "Windows Server 2016 reaches end of support on 2027-01-12; ESU can be configured in the Azure portal from 2026-08-03 and billing through Azure Arc starts on 2027-01-13; the agent must be 1.62 or later.",
+        "pt-BR": "O Windows Server 2016 chega ao fim do suporte em 2027-01-12; o ESU pode ser configurado no portal do Azure a partir de 2026-08-03 e a cobrança pelo Azure Arc começa em 2027-01-13; o agente deve ser 1.62 ou superior."
+      },
+      "tokens": ["-lt 62"],
+      "sources": [{"title": "Prepare to deliver Extended Security Updates for Windows Server through Azure Arc", "url": "https://learn.microsoft.com/en-us/azure/azure-arc/servers/prepare-extended-security-updates"}],
+      "evidence": "\"Windows Server 2016 reaches end of support on January 12, 2027 ... starting August 3, 2026 ... Billing ... begins January 13, 2027 ... use agent version 1.62 or higher.\"",
+      "verifiedOn": "2026-11-06",
+      "reviewBy": "2027-01-12"
+    },
+    {
+      "id": "ESU-2008",
+      "status": "UNVERIFIED",
+      "checks": ["CHK-51"],
+      "claim": {
+        "en-US": "Windows Server 2008 is outside the ESU cycle delivered through Azure Arc.",
+        "pt-BR": "O Windows Server 2008 está fora do ciclo de ESU entregue pelo Azure Arc."
+      },
+      "tokens": [],
+      "sources": [],
+      "todo": "Confirm in the ESU pages whether Windows Server 2008 is covered by Arc; the pages opened cover 2012 and 2016 only.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "AGENT-PORTS-CHANNELS",
+      "status": "VERIFIED_OFFICIAL",
+      "checks": ["CHK-21"],
+      "claim": {
+        "en-US": "incomingconnections.ports lists the local ports the Azure Arc connectivity channel may reach (several ports are separated by commas). SSH uses port 22 by default (a single port per service configuration) and Windows Admin Center is deployed through the AdminCenter extension on a configurable port (the examples use 6516). Any other port is reported as unclassified.",
+        "pt-BR": "incomingconnections.ports lista as portas locais que o canal de conectividade do Azure Arc pode alcançar (várias portas se separam por vírgula). O SSH usa a porta 22 por padrão (uma única porta por configuração de serviço) e o Windows Admin Center é implantado pela extensão AdminCenter em uma porta configurável (os exemplos usam 6516). Qualquer outra porta é reportada como não classificada."
+      },
+      "tokens": ["'6516' = 'Windows Admin Center'"],
+      "sources": [
+        {"title": "Manage Azure Arc-enabled servers using Windows Admin Center in Azure", "url": "https://learn.microsoft.com/en-us/windows-server/manage/windows-admin-center/azure/manage-arc-hybrid-machines"},
+        {"title": "SSH access to Azure Arc-enabled servers", "url": "https://learn.microsoft.com/en-us/azure/azure-arc/servers/ssh-arc-overview"},
+        {"title": "CLI reference for azcmagent config", "url": "https://learn.microsoft.com/en-us/azure/azure-arc/servers/azcmagent-config"}
+      ],
+      "evidence": "WAC page: \"azcmagent config set incomingconnections.ports <port> ... you can specify multiple ports separated by a comma\"; deployment example `$wacPort = \"6516\"` with extension AdminCenter (publisher Microsoft.AdminCenter). SSH page: \"You may only allow connection to a single port\", default 22.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "SQL-USAGE-24H",
+      "status": "UNVERIFIED",
+      "checks": ["CHK-64"],
+      "claim": {
+        "en-US": "A SQL usage upload older than 24 hours is reported as stale.",
+        "pt-BR": "Um envio de uso do SQL com mais de 24 horas é reportado como atrasado."
+      },
+      "tokens": ["-gt 24"],
+      "sources": [],
+      "todo": "Confirm the documented upload cadence of the SQL Server extension before presenting 24 hours as the expected interval.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "SQL-PAYG-30D",
+      "status": "UNVERIFIED",
+      "checks": ["CHK-64"],
+      "claim": {
+        "en-US": "Pay-as-you-go SQL licensing expires after 30 days without connection.",
+        "pt-BR": "O licenciamento SQL pay-as-you-go expira após 30 dias sem conexão."
+      },
+      "tokens": ["30 days"],
+      "sources": [],
+      "todo": "Find the Learn page for SQL Server pay-as-you-go through Azure Arc and quote the disconnection limit.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "ACTIVITYLOG-90D",
+      "status": "UNVERIFIED",
+      "checks": ["CHK-43"],
+      "claim": {
+        "en-US": "The Activity Log keeps 90 days natively.",
+        "pt-BR": "O Activity Log guarda 90 dias de forma nativa."
+      },
+      "tokens": ["90 days"],
+      "sources": [],
+      "todo": "Quote the Azure Monitor Activity Log retention statement.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "LA-RETENTION-90D",
+      "status": "KIT_CRITERION",
+      "checks": ["CHK-45"],
+      "claim": {
+        "en-US": "A Log Analytics workspace that receives Arc data and keeps less than 90 days is a warning.",
+        "pt-BR": "Um workspace do Log Analytics que recebe dados do Arc e retém menos de 90 dias é um alerta."
+      },
+      "tokens": ["-lt 90"],
+      "sources": [],
+      "rationale": "Microsoft does not set a minimum retention for security investigations; 90 days matches the native Activity Log window and is the kit's default for detection and audit.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "DEFENDER-OPEN-90D",
+      "status": "KIT_CRITERION",
+      "checks": ["CHK-33"],
+      "claim": {
+        "en-US": "Defender recommendations open for 90 days or more are counted separately in the detail (informational).",
+        "pt-BR": "Recomendações do Defender abertas há 90 dias ou mais são contadas à parte no detalhe (informativo)."
+      },
+      "tokens": ["-ge 90"],
+      "sources": [],
+      "rationale": "A reading aid for stale recommendations; it does not change the result.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "DEFENDER-HIGH-FAIL",
+      "status": "KIT_CRITERION",
+      "checks": ["CHK-33"],
+      "claim": {
+        "en-US": "A Defender recommendation with High severity that affects an Arc machine is a verified gap (FAIL); only lower severities are an improvement opportunity (WARN).",
+        "pt-BR": "Uma recomendação do Defender de severidade High que afeta uma máquina Arc é uma lacuna verificada (FAIL); só severidades menores são oportunidade de melhoria (WARN)."
+      },
+      "tokens": [],
+      "sources": [],
+      "rationale": "The recommendation exists and is unhealthy in Defender for Cloud, so the condition is observed. The mapping from High severity to FAIL is the kit's.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "PRICES-LIST",
+      "status": "UNVERIFIED",
+      "checks": ["CHK-53"],
+      "claim": {
+        "en-US": "List prices in USD used for the monthly estimate (Defender for Servers P1/P2, Update Manager, Machine Configuration, Windows Server pay-as-you-go).",
+        "pt-BR": "Preços de tabela em USD usados na estimativa mensal (Defender for Servers P1/P2, Update Manager, Machine Configuration, Windows Server pay-as-you-go)."
+      },
+      "tokens": ["$P_DEF1 = 5", "$P_DEF2 = 15", "$P_AUM = 5", "$P_GC = 6", "$P_WSPAYG = 33.58"],
+      "sources": [{"title": "Azure Arc pricing", "url": "https://azure.microsoft.com/pricing/details/azure-arc/"}],
+      "todo": "Prices are dynamic and were last checked by the author on 2026-10-22. Re-check each value on the pricing pages; the report states it is an estimate, not an invoice.",
+      "verifiedOn": "2026-11-06",
+      "reviewBy": "2026-12-06"
+    },
+    {
+      "id": "KIT-INDEX",
+      "status": "KIT_CRITERION",
+      "checks": [],
+      "claim": {
+        "en-US": "The kit index is not the Defender for Cloud Secure Score. Microsoft gives each control a fixed maximum score and divides it by the healthy and unhealthy resources; the kit weights controls by severity (High 3, Medium 2, Low 1) and scores them by the share of healthy machines.",
+        "pt-BR": "O índice do kit não é o Secure Score do Defender for Cloud. A Microsoft dá a cada controle uma pontuação máxima fixa e a divide entre os recursos saudáveis e não saudáveis; o kit pondera os controles por severidade (Alta 3, Média 2, Baixa 1) e os pontua pela proporção de máquinas saudáveis."
+      },
+      "tokens": ["High 3, Medium 2, Low 1"],
+      "file": "arc-posture-review.en-US.html",
+      "sources": [{"title": "Cloud Secure Score in Microsoft Defender for Cloud", "url": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/secure-score-security-controls"}],
+      "rationale": "A reading aid to rank work inside this report. The official measure is the Secure Score of Defender for Cloud.",
+      "evidence": "Learn: \"Max score ... is fixed for every environment\"; \"Score per resource = max score / (healthy + unhealthy resources)\".",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "PRIORITY-SCALE",
+      "status": "KIT_CRITERION",
+      "checks": [],
+      "claim": {
+        "en-US": "Residual risk scores map to priorities P0 (80 or more), P1 (60), P2 (35) and P3. It prioritizes posture work; it is not an incident severity.",
+        "pt-BR": "As pontuações de risco residual se traduzem em prioridades P0 (80 ou mais), P1 (60), P2 (35) e P3. Prioriza trabalho de postura; não é severidade de incidente."
+      },
+      "tokens": ["score >= 80", "score >= 60", "score >= 35"],
+      "file": "assurance/v4/checkpoint4/engine/deterministic_engine.py",
+      "sources": [],
+      "rationale": "Deterministic model defined by this project (checkpoint 3 and 4); documented in docs/v4/methodology-v4.md.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "SCENARIOS-AS",
+      "status": "KIT_CRITERION",
+      "checks": [],
+      "claim": {
+        "en-US": "The 11 security scenarios (AS01-AS11) and their attack paths are hypotheses written by the author; an attack is never asserted as confirmed.",
+        "pt-BR": "Os 11 cenários de segurança (AS01-AS11) e seus caminhos de ataque são hipóteses escritas pelo autor; um ataque nunca é afirmado como confirmado."
+      },
+      "tokens": [],
+      "sources": [],
+      "rationale": "Scenarios link controls to a reading of risk. They carry attackConfirmation=NOT_ASSERTED.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "MCSB-ZT-MAPPING",
+      "status": "KIT_CRITERION",
+      "checks": [],
+      "claim": {
+        "en-US": "The mapping of each check to Microsoft Cloud Security Benchmark controls, Zero Trust principles and pillars, and tiers is the author's reading, with a mapping confidence per check.",
+        "pt-BR": "O mapeamento de cada verificação para controles do Microsoft Cloud Security Benchmark, princípios e pilares do Zero Trust e tiers é a leitura do autor, com um nível de confiança por verificação."
+      },
+      "tokens": [],
+      "sources": [],
+      "rationale": "Reading aid; not a compliance mapping. See mappingConfidence in assurance/v4/checkpoint3/data/checks.enriched.json.",
+      "verifiedOn": "2026-11-06"
+    }
+  ]
+}

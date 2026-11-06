@@ -1,4 +1,4 @@
-# Known issues — v4.1.5
+# Known issues — v4.2.0
 
 ## KI-V4-001 — pypdf Dependabot alerts
 
@@ -35,3 +35,8 @@ Still open (documented, not regressions): F3 (FAIL/WARN is not gated by missing 
 First end-to-end run in Cloud Shell: verified-gap action cards used incident-response wording (fixed in v4.1.4: *Remediate*), the PT-BR v4 report showed engine and collector sentences in English (fixed in v4.1.4, display-only), and a Portuguese rule rewrote already-Portuguese text ("controle(s)" became "contpapel(is)"; fixed in v4.1.5 and guarded by `tools/Test-PtBrContent.py`). See `docs/v4.1.4-wording-and-pt-br.md`.
 
 Still open (documented, not regressions): scenarios with a high residual score are P0 (NOW) even for small estates (the priority scale prioritizes posture work, it is not an incident severity); collector sentences that did not appear in a real run may remain in English in the PT-BR report (add a rule to the app table and regenerate `criteria/v4/pt-br-detail-rules.json`); the CHK-55 branch for a missing assignment is unreachable because an empty result counts as one row.
+
+## v4.2.0 review notes
+
+A review of the foundations of the claims found two collector labels without support (CHK-21 port names) and CVE ranges that disagreed with the NVD (CHK-29); both are fixed and the rest is tracked in the register (docs/sources.en-US.md). Still to verify: the 45-day expiry, the SQL extension minimum, the 24-hour usage upload, the 30-day pay-as-you-go limit, the Activity Log retention, Windows Server 2008 in ESU and the list prices. Still open: guide and catalog texts and the report do not yet show the state of each claim; the local block of automatic upgrade is visible only on the machine; CHK-37 mixes the sample with the estate under -MaxMachines.
+
