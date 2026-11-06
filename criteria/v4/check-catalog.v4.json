@@ -1623,8 +1623,8 @@
         "pt-BR": "publicNetworkAccess de cada Azure Arc Private Link Scope."
       },
       "criterion": {
-        "en-US": "FAIL if any scope allows public access; N/A without Private Link.",
-        "pt-BR": "FAIL se algum escopo aceitar acesso público; N/A sem Private Link."
+        "en-US": "FAIL if any scope explicitly allows public access; PARTIAL if the setting is not returned; N/A without Private Link.",
+        "pt-BR": "FAIL se algum escopo permitir acesso público explicitamente; PARTIAL se a configuração não for retornada; N/A sem Private Link."
       },
       "ownership": {
         "owner": "Network",
@@ -2076,8 +2076,8 @@
         "pt-BR": "extensionsAllowList e extensionsBlockList configurados no agente."
       },
       "criterion": {
-        "en-US": "FAIL when at least half of applicable machines accept any extension; WARN when a smaller subset does; PASS when every applicable machine has an allowlist or blocklist.",
-        "pt-BR": "FAIL quando pelo menos metade das máquinas aplicáveis aceitar qualquer extensão; WARN quando isso ocorrer em uma parcela menor; PASS quando toda máquina aplicável tiver allowlist ou blocklist."
+        "en-US": "WARN (hardening opportunity) when any applicable machine accepts any extension (no allowlist or blocklist); PASS when every applicable machine has an allowlist or blocklist.",
+        "pt-BR": "WARN (oportunidade de hardening) quando alguma máquina aplicável aceitar qualquer extensão (sem allowlist nem blocklist); PASS quando toda máquina aplicável tiver allowlist ou blocklist."
       },
       "ownership": {
         "owner": "Security",
@@ -2841,8 +2841,8 @@
         "pt-BR": "Plano VirtualMachines por subscription (tier e subplano)."
       },
       "criterion": {
-        "en-US": "FAIL if Free.",
-        "pt-BR": "FAIL se Free."
+        "en-US": "FAIL if Free; PARTIAL if the plan cannot be read.",
+        "pt-BR": "FAIL se Free; PARTIAL se o plano não puder ser lido."
       },
       "ownership": {
         "owner": "Security",
@@ -3998,8 +3998,8 @@
         "pt-BR": "Diagnostic settings da subscription para Log Analytics."
       },
       "criterion": {
-        "en-US": "FAIL if there is no export (native retention of 90 days).",
-        "pt-BR": "FAIL se não houver exportação (retenção nativa de 90 dias)."
+        "en-US": "FAIL if there is no export (native retention of 90 days); PARTIAL if the settings cannot be read.",
+        "pt-BR": "FAIL se não houver exportação (retenção nativa de 90 dias); PARTIAL se as configurações não puderem ser lidas."
       },
       "ownership": {
         "owner": "Security",
@@ -5226,8 +5226,8 @@
         "pt-BR": "Auditoria do grupo Administradores local por Machine Configuration (políticas built-in de membros do grupo Administradores) nas máquinas Windows conectadas."
       },
       "criterion": {
-        "en-US": "FAIL when no connected Windows machine has the local-administrators audit; WARN for non-compliance when audit coverage exists; INFO when only part of the estate is covered; PASS when all applicable machines are audited and compliant.",
-        "pt-BR": "FAIL quando nenhuma máquina Windows conectada tiver auditoria dos administradores locais; WARN para não conformidade quando houver cobertura; INFO quando somente parte do parque estiver coberta; PASS quando todas as máquinas aplicáveis estiverem auditadas e conformes."
+        "en-US": "WARN (visibility gap) when no connected Windows machine has the local-administrators audit, and WARN for non-compliance when audit coverage exists; INFO when only part of the estate is covered; PASS when all applicable machines are audited and compliant.",
+        "pt-BR": "WARN (lacuna de visibilidade) quando nenhuma máquina Windows conectada tiver auditoria dos administradores locais, e WARN para não conformidade quando houver cobertura; INFO quando somente parte do parque estiver coberta; PASS quando todas as máquinas aplicáveis estiverem auditadas e conformes."
       },
       "ownership": {
         "owner": "Security",

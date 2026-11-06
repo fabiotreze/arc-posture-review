@@ -16,10 +16,16 @@ expected = m.group(1)
 
 RULES = [
     ("index.html", r"Canonical project guide for v(\d+\.\d+\.\d+)"),
+    ("index.html", r"Canonical guide v(\d+\.\d+\.\d+)"),
+    ("index.html", r"var VERSION = \"v(\d+\.\d+\.\d+)\""),
     ("index.html", r"<strong>Version v(\d+\.\d+\.\d+) "),
     ("arc-posture-review.en-US.html", r"Canonical project guide for v(\d+\.\d+\.\d+)"),
+    ("arc-posture-review.en-US.html", r"Canonical guide v(\d+\.\d+\.\d+)"),
+    ("arc-posture-review.en-US.html", r"var VERSION = \"v(\d+\.\d+\.\d+)\""),
     ("arc-posture-review.en-US.html", r"<strong>Version v(\d+\.\d+\.\d+) "),
     ("arc-posture-review.pt-BR.html", r"Guia can.nico do projeto para a v(\d+\.\d+\.\d+)"),
+    ("arc-posture-review.pt-BR.html", r"Guia can.nico v(\d+\.\d+\.\d+)"),
+    ("arc-posture-review.pt-BR.html", r"var VERSION = \"v(\d+\.\d+\.\d+)\""),
     ("arc-posture-review.pt-BR.html", r"<strong>Vers.o v(\d+\.\d+\.\d+) "),
     ("docs/guide.en-US.md", r"\*\*Version v(\d+\.\d+\.\d+) "),
     ("docs/guide.pt-BR.md", r"\*\*Vers.o v(\d+\.\d+\.\d+) "),

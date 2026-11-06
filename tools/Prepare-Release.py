@@ -9,6 +9,7 @@ import datetime
 import hashlib
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -48,6 +49,15 @@ def checksums() -> int:
         lines.append(f"{digest(path)}  {rel}")
     (folder / "SHA256SUMS").write_bytes(("\n".join(lines) + "\n").encode("utf-8"))
     print(f"[OK] release/{release}/SHA256SUMS: {len(lines)} entries")
+    return repository_checksums()
+
+
+def repository_checksums() -> int:
+    # Root SHA256SUMS.txt covers every tracked file except itself, so it cannot go stale or list files that no longer exist.
+    tracked = subprocess.run(["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], cwd=ROOT, capture_output=True, check=True).stdout.decode("utf-8").split("\0")
+    paths = sorted(p for p in dict.fromkeys(tracked) if p and p != "SHA256SUMS.txt" and (ROOT / p).is_file())
+    (ROOT / "SHA256SUMS.txt").write_bytes(("\n".join(f"{digest(ROOT / p)}  {p}" for p in paths) + "\n").encode("utf-8"))
+    print(f"[OK] SHA256SUMS.txt: {len(paths)} entries")
     return 0
 
 

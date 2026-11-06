@@ -66,7 +66,8 @@ def check_fixture() -> None:
 
 def check_collector() -> None:
     script = (ROOT / "scripts/Invoke-ArcPostureReview.ps1").read_text(encoding="utf-8")
-    need("$ScriptVersion = 'v4.1.0'" in script, "collector version")
+    version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+    need(f"$ScriptVersion = 'v{version}'" in script, "collector version")
     need('"title":"MDE extension deployed through Arc"' in script, "CHK-32 title must describe the Arc extension proxy")
     need('"id":"CHK-33"' in script and '"title":"Defender recommendations","sev":"High"' in script, "CHK-33 severity")
     need("'ERRO'" not in script and "'PARCIAL'" not in script, "collector must emit canonical ERROR/PARTIAL statuses")
@@ -74,17 +75,17 @@ def check_collector() -> None:
     checks = {
         "CHK-05": ["Write-Result 'PARTIAL'", "data-residency policy was not supplied"],
         "CHK-15": ["kvPurgePresent", "kvRbacPresent", "Missing/null is evidence unknown", "Write-Result 'PARTIAL'"],
-        "CHK-23": ["Write-Result 'FAIL'", "Ceiling($m.Count / 2)"],
+        "CHK-23": ["Write-Result 'WARN'", "Hardening opportunity"],
         "CHK-32": ["Write-Result 'PARTIAL'", "confirm sensor onboarding and health in the Defender portal"],
         "CHK-33": ["if ($hi -gt 0)", "Write-Result 'FAIL'", "body is intentionally summarized", "findings/CHK-33.csv"],
         "CHK-39": ["$rows.Count -eq $m.Count", "Write-Result 'FAIL'"],
         "CHK-40": ["Assessment blocked", "Write-Result 'PARTIAL'"],
-        "CHK-41": ["Write-Result 'FAIL'", "conclusive failure for the observed workspace", "Evidence Coverage is PARTIAL"],
+        "CHK-41": ["Write-Result 'FAIL'", "visibility gap for the observed workspace", "Evidence Coverage is PARTIAL"],
         "CHK-42": ["$duplicates", "validTimestamp", "exactly one successful, timestamped assessment row", "Write-Result 'PARTIAL'"],
         "CHK-45": ["resolve CHK-39 (AMA) and CHK-40 (DCR association)"],
         "CHK-54": ["Zero findings without confirmed coverage", "Write-Result 'PARTIAL'"],
         "CHK-55": ["$baselinePattern", "validTimestamp", "Write-Result 'FAIL'", "Write-Result 'PARTIAL'"],
-        "CHK-56": ["$none.Count -eq $m.Count", "Write-Result 'FAIL'"],
+        "CHK-56": ["$none.Count -eq $m.Count", "Write-Result 'WARN'", "visibility gap"],
         "CHK-57": ["Conclusive negative Defender evidence takes precedence", "[string]$k[$key] -ne 'Succeeded'", "Write-Result 'PARTIAL'"],
         "CHK-58": ["$blind.Count -eq $rows.Count", "Write-Result 'FAIL'"],
         "CHK-63": ["unread resource plan is unknown evidence", "$notRead", "Write-Result 'PARTIAL'"],
@@ -104,6 +105,7 @@ def check_collector() -> None:
 
 
 def check_apps() -> None:
+    version = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
     for name in ["arc-posture-review.en-US.html", "arc-posture-review.pt-BR.html", "index.html"]:
         text = (ROOT / name).read_text(encoding="utf-8")
         need("Assessment Coverage" in text or "Cobertura da avaliação" in text, f"{name}: coverage metric")
@@ -112,14 +114,14 @@ def check_apps() -> None:
         need("full-evidence" in text, f"{name}: complete CSV evidence link")
         need(not re.search(r"\.st-ERRO(?!R)|\.st-PARCIAL", text), f"{name}: legacy CSS taxonomy")
         need("btnGuideMd" not in text and 'id="mdSource"' not in text, f"{name}: retired Guide Markdown surface")
-        need("Canonical project guide for v4.1.0" in text or "Guia canônico do projeto para a v4.1.0" in text, f"{name}: canonical HTML guide marker")
+        need(f"Canonical project guide for v{version}" in text or f"Guia canônico do projeto para a v{version}" in text, f"{name}: canonical HTML guide marker")
         need("Executive assessment" in text or "Avaliação executiva" in text, f"{name}: executive assessment boundary")
         need("Evidence appendix" in text or "Apêndice de evidências" in text, f"{name}: evidence appendix boundary")
         need("Control Result and Evidence Coverage are independent" in text or "Resultado do controle e Cobertura da evidência são eixos independentes" in text, f"{name}: result semantics")
 
     en = (ROOT / "arc-posture-review.en-US.html").read_text(encoding="utf-8")
     pt = (ROOT / "arc-posture-review.pt-BR.html").read_text(encoding="utf-8")
-    need('"id":"CHK-23"' in en and "FAIL when at least half" in en, "CHK-23 Result x Criteria sync")
+    need('"id":"CHK-23"' in en and "WARN (hardening opportunity) when any applicable machine accepts any extension" in en, "CHK-23 Result x Criteria sync")
     need("High severity" in en and '"id":"CHK-33"' in en, "CHK-33 Result x Criteria sync")
     need("no connected machine has AMA" in en, "CHK-39 Result x Criteria sync")
     need("Sentinel exists in the collected scope" in en, "CHK-41 Result x Criteria sync")
