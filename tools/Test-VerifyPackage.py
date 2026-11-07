@@ -28,6 +28,22 @@ def package(tmp: Path, *, found21=2, found23=3, defender_machines=3) -> Path:
     return path
 
 
+def real_run_package(tmp: Path) -> Path:
+    """Shapes seen in real runs: capped sample of a larger scope, disconnected machines with a failing baseline, Windows Server 2016."""
+    machines = [M("a", status="Disconnected"), M("b", osSku="Windows Server 2016 Standard"), M("c", osSku="Windows Server 2012 R2 Standard")]
+    results = {"generatedAt": "2026-11-06T10:00:00+00:00", "scope": {"machinesTotal": 328, "maxMachines": 3}, "results": [
+        {"id": "CHK-37", "found": 1, "detail": ""}, {"id": "CHK-51", "found": 2, "detail": ""}, {"id": "CHK-55", "found": 0, "detail": ""},
+        {"id": "CHK-33", "found": 1, "detail": ""}]}
+    files = {"results.json": results, "data/machines.json": machines, "data/extensions.json": [],
+             "data/defender.json": [{"assessment": "x", "machines": 167}],
+             "data/gcComp.json": [{"machine": "a", "resourceGroup": "rg", "name": "Windows security baseline", "complianceStatus": "NonCompliant"}]}
+    path = tmp / "real.zip"
+    with zipfile.ZipFile(path, "w") as z:
+        for name, value in files.items():
+            z.writestr("run/" + name, json.dumps(value))
+    return path
+
+
 def failing(path: Path) -> set[str]:
     return {r["rule"] for r in verify.verify(verify.Package(path)) if r["status"] == "FAIL"}
 
@@ -45,7 +61,11 @@ def main() -> int:
             if rule not in got:
                 print(f"[FAIL] {rule} was not detected (got {sorted(got)})")
                 return 1
-    print("[PASS] verifier: consistent package accepted; port count, allowlist count and machine inflation are detected")
+        got = failing(real_run_package(tmp))
+        if got:
+            print(f"[FAIL] a capped run, disconnected baseline or Windows Server 2016 was rejected: {sorted(got)}")
+            return 1
+    print("[PASS] verifier: consistent package accepted; port count, allowlist count and machine inflation are detected; capped runs, disconnected baselines and Windows Server 2016 are accepted")
     return 0
 
 

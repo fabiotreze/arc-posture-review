@@ -62,8 +62,12 @@ def verify(pkg: Package) -> list[dict]:
         skip("V00", "all", "data/machines.json is missing; nothing to recompute")
         return rows
     total = (results.get("scope") or {}).get("machinesTotal")
+    cap = int((results.get("scope") or {}).get("maxMachines") or 0)
+    capped = bool(cap and total is not None and total > cap)
     if total is not None:
-        add("V01", "scope", len(machines), total, len(machines) == total, "machines in data/machines.json = machinesTotal in results.json")
+        expected = min(cap, total) if capped else total
+        add("V01", "scope", len(machines), expected, len(machines) == expected,
+            "machines in data/machines.json = machinesTotal in results.json (or the maxMachines sample when the run was capped)")
     keys = [key(m) for m in machines]
     add("V02", "scope", len(keys), len(set(keys)), len(keys) == len(set(keys)), "machine key (resource group + name) is unique")
 
@@ -98,10 +102,12 @@ def verify(pkg: Package) -> list[dict]:
     if "CHK-33" in by_id and defender:
         add("V20", "CHK-33", len(defender), by_id["CHK-33"]["found"], len(defender) == by_id["CHK-33"]["found"], "recommendation rows")
         most = max(int(d.get("machines") or 0) for d in defender)
-        add("V21", "CHK-33", f"<= {len(machines)}", most, most <= len(machines),
-            "no recommendation can affect more machines than exist in scope (nested resources counted as machines inflate it)")
+        limit = total if capped else len(machines)
+        add("V21", "CHK-33", f"<= {limit}", most, most <= limit,
+            "no recommendation can affect more machines than exist in scope (nested resources counted as machines inflate it; a capped run still queries Defender for the whole scope)")
     if "CHK-55" in by_id and gc:
-        bad = {key(g) for g in gc if "baseline" in str(g.get("name", "")).lower() and str(g.get("complianceStatus")) == "NonCompliant"}
+        connected = {key(m) for m in machines if str(m.get("status")) == "Connected"}
+        bad = {key(g) for g in gc if "baseline" in str(g.get("name", "")).lower() and str(g.get("complianceStatus")) == "NonCompliant" and key(g) in connected}
         found = by_id["CHK-55"]["found"]
         add("V22", "CHK-55", f">= {len(bad)}", found, found >= len(bad), "machines with a NonCompliant baseline are all counted")
     if "CHK-51" in by_id:
@@ -113,7 +119,9 @@ def verify(pkg: Package) -> list[dict]:
                 legacy += 1
             elif "2012" in sku and (now >= "2026-10-14" or str(m.get("esu")) != "Assigned"):
                 legacy += 1
-        add("V23", "CHK-51", legacy, by_id["CHK-51"]["found"], legacy == by_id["CHK-51"]["found"], "2008/2012 machines without security updates on the collection date")
+            elif "2016" in sku and "Windows" in sku:
+                legacy += 1
+        add("V23", "CHK-51", legacy, by_id["CHK-51"]["found"], legacy == by_id["CHK-51"]["found"], "2008/2012 machines without security updates on the collection date, plus every Windows Server 2016 (the collector lists each one with its ESU situation)")
     return rows
 
 

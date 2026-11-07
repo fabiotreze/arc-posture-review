@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v4.3.6 — 2026-11-06.** Claim register: the list prices (Defender for Servers, Azure Update Manager, Windows Server pay-as-you-go) now cite the Azure Arc pricing page, and CVE-2025-26627 is verified against MSRC: it affects the Group Policy onboarding script, not the Connected Machine agent. App, collector logic and results are unchanged. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
+**Version v4.3.7 — 2026-11-07.** `tools/Verify-Package.py` no longer reports false disagreements found in two real collections: a capped run (maxMachines) against the whole-scope totals, a failing baseline on disconnected machines, and Windows Server 2016 rows in CHK-51. Collector, app and results are unchanged. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 
