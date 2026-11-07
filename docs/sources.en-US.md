@@ -18,7 +18,7 @@ Every threshold, date and label used by the collector and the reports is registe
 | `AGENT-SEC-FLOOR-61` | Agents below 1.61 are affected by CVE-2026-26117 (local elevation of privilege, CVSS 7.8). The floor 1.61 is the highest fixed version among the Arc agent CVEs listed here. | CHK-29 | Official CVE record | 2026-11-06 |
 | `AGENT-CVE-2025-55316` | CVE-2025-55316 affects agents below 1.56. | CHK-29 | Official CVE record | 2026-11-06 |
 | `AGENT-CVE-2025-49692` | CVE-2025-49692 affects agents below 1.49. | CHK-29 | Official CVE record | 2026-11-06 |
-| `AGENT-CVE-2025-26627` | CVE-2025-26627 is not mapped to an agent version: NVD lists product 'Azure ARC' below 1.0.10, which does not correspond to the Connected Machine agent numbering. It is not shown per machine. | CHK-29 | To verify | 2026-11-06 |
+| `AGENT-CVE-2025-26627` | CVE-2025-26627 (Azure Arc Installer, local elevation of privilege) affects only machines onboarded with the Group Policy onboarding script (ArcEnabledServersGroupPolicy) below 1.0.10. It is not a Connected Machine agent version issue, so it is not mapped to an agent version or shown per machine. | CHK-29 | Official CVE record | 2026-11-06 |
 | `AGENT-AUTOUPGRADE-MIN-167` | Automatic agent upgrade requires agent 1.67 or later (Windows: PowerShell execution policy RemoteSigned; Linux: cron). It is available only in the Azure public cloud. | CHK-29 | Official source | 2026-11-06 |
 | `AGENT-AUTOUPGRADE-LOCALBLOCK` | The local setting automaticupgrade.blocklocally takes precedence over the Azure property enableAutomaticUpgrade: when true, automatic upgrades are blocked even if the Azure property is true. It is read on the machine with 'azcmagent config get automaticupgrade.blocklocally', not through Azure. | CHK-29, CHK-36 | Official source | 2026-11-06 |
 | `AGENT-OLD-6M` | A supported agent more than 6 months old is a warning. | CHK-29 | Kit criterion | 2026-11-06 |
@@ -39,7 +39,7 @@ Every threshold, date and label used by the collector and the reports is registe
 | `DEFENDER-OPEN-90D` | Defender recommendations open for 90 days or more are counted separately in the detail (informational). | CHK-33 | Kit criterion | 2026-11-06 |
 | `DEFENDER-HIGH-FAIL` | A Defender recommendation with High severity that affects an Arc machine is a verified gap (FAIL); only lower severities are an improvement opportunity (WARN). | CHK-33 | Kit criterion | 2026-11-06 |
 | `PRICES-GC` | Azure Policy guest configuration (machine configuration) and Change Tracking & Inventory list at USD 6 per server per month. | CHK-53 | Official source | 2026-11-06 |
-| `PRICES-LIST` | List prices in USD used for the monthly estimate (Defender for Servers P1/P2, Update Manager, Machine Configuration, Windows Server pay-as-you-go). | CHK-53 | To verify | 2026-11-06 |
+| `PRICES-LIST` | List prices in USD used for the monthly estimate: Defender for Servers Plan 1 USD 5 and Plan 2 USD 15 per server per month, Azure Update Manager USD 5 per server per month, Windows Server pay-as-you-go USD 33.58 per core per month. | CHK-53 | Official source | 2026-11-06 |
 | `KIT-INDEX` | The kit index is not the Defender for Cloud Secure Score. Microsoft gives each control a fixed maximum score and divides it by the healthy and unhealthy resources; the kit weights controls by severity (High 3, Medium 2, Low 1) and scores them by the share of healthy machines. | - | Kit criterion | 2026-11-06 |
 | `PRIORITY-SCALE` | Residual risk scores map to priorities P0 (80 or more), P1 (60), P2 (35) and P3. It prioritizes posture work; it is not an incident severity. | - | Kit criterion | 2026-11-06 |
 | `SCENARIOS-AS` | The 11 security scenarios (AS01-AS11) and their attack paths are hypotheses written by the author; an attack is never asserted as confirmed. | - | Kit criterion | 2026-11-06 |
@@ -85,12 +85,13 @@ CVE-2025-49692 affects agents below 1.49.
 - **Evidence:** NVD: Azure Connected Machine Agent, affected 1.0.0 up to (excluding) 1.49.
 - [NVD: CVE-2025-49692](https://nvd.nist.gov/vuln/detail/CVE-2025-49692)
 
-### AGENT-CVE-2025-26627 — To verify
+### AGENT-CVE-2025-26627 — Official CVE record
 
-CVE-2025-26627 is not mapped to an agent version: NVD lists product 'Azure ARC' below 1.0.10, which does not correspond to the Connected Machine agent numbering. It is not shown per machine.
+CVE-2025-26627 (Azure Arc Installer, local elevation of privilege) affects only machines onboarded with the Group Policy onboarding script (ArcEnabledServersGroupPolicy) below 1.0.10. It is not a Connected Machine agent version issue, so it is not mapped to an agent version or shown per machine.
 
-- **To do:** NVD (checked 2026-11-06) confirms: published 2025-03-11, command injection in Azure Arc allowing local elevation of privilege, affected product Azure Arc below 1.0.10. The MSRC advisory page was unavailable, so the component and the fixed Connected Machine agent version remain unconfirmed; retry the MSRC page before listing it per machine.
+- **Evidence:** MSRC (CVRF 2025-Mar): title "Azure Arc Installer Elevation of Privilege Vulnerability"; "Only machines onboarded via Group Policy that have the GPO applied to them are affected"; fixed build 1.0.10 (github.com/Azure/ArcEnabledServersGroupPolicy releases 1.0.10). NVD: product Azure Arc below 1.0.10.
 - [NVD: CVE-2025-26627](https://nvd.nist.gov/vuln/detail/CVE-2025-26627)
+- [MSRC: CVE-2025-26627](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-26627)
 
 ### AGENT-AUTOUPGRADE-MIN-167 — Official source
 
@@ -231,12 +232,13 @@ Azure Policy guest configuration (machine configuration) and Change Tracking & I
 - **Evidence:** "Azure Policy Guest Configuration and Change Tracking & Inventory | $6/server/month | $0.009/server/hour". Prices change; the report states it is an estimate, not an invoice.
 - [Azure Arc pricing - core control plane](https://azure.microsoft.com/en-us/pricing/details/azure-arc/core-control-plane/)
 
-### PRICES-LIST — To verify
+### PRICES-LIST — Official source
 
-List prices in USD used for the monthly estimate (Defender for Servers P1/P2, Update Manager, Machine Configuration, Windows Server pay-as-you-go).
+List prices in USD used for the monthly estimate: Defender for Servers Plan 1 USD 5 and Plan 2 USD 15 per server per month, Azure Update Manager USD 5 per server per month, Windows Server pay-as-you-go USD 33.58 per core per month.
 
-- **To do:** The Update Manager FAQ (checked 2026-11-06) confirms the pricing model (per Arc server per month, 31 days of connected usage, prorated daily; included with ESU enabled by Arc, Defender for Servers Plan 2 and Azure Local) but the Update Manager pricing page shows no numeric value. Only the guest configuration price (USD 6) is published on the Azure Arc pricing page checked on 2026-11-06 (see PRICES-GC); the page shows placeholders for Defender for Servers and Update Manager and does not list the Windows Server pay-as-you-go rate. Re-check these values on the Defender for Cloud, Update Manager and Windows Server pay-as-you-go pricing pages; the report states it is an estimate, not an invoice.
-- [Azure Arc pricing](https://azure.microsoft.com/pricing/details/azure-arc/)
+- **Evidence:** Pricing page: Defender for Servers Plan 1 "$5/server/month", Plan 2 "$15/server/month", Azure Update Manager "$5/server/month", Windows Server Pay-as-you-go enabled by Azure Arc "$33.58/core/month". Prices change; the report states it is an estimate, not an invoice.
+- [Azure Arc pricing - core control plane](https://azure.microsoft.com/en-us/pricing/details/azure-arc/core-control-plane/)
+- [Azure Update Manager FAQ - pricing](https://learn.microsoft.com/en-us/azure/update-manager/update-manager-faq#what-is-the-pricing-for-update-manager)
 - **Review by:** 2026-12-06
 
 ### KIT-INDEX — Kit criterion

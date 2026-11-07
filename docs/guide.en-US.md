@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v4.3.5 — 2026-11-06.** CHK-34 now reports a SQL Server extension released more than 12 months before the run date (the same window as the other extension checks, computed from the Microsoft release table) instead of the fixed 1.1.2859.223 threshold, which is not a documented minimum. Registered as a kit criterion; the register also records the NVD confirmation for CVE-2025-26627 and the Update Manager pricing model. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
+**Version v4.3.6 — 2026-11-06.** Claim register: the list prices (Defender for Servers, Azure Update Manager, Windows Server pay-as-you-go) now cite the Azure Arc pricing page, and CVE-2025-26627 is verified against MSRC: it affects the Group Policy onboarding script, not the Connected Machine agent. App, collector logic and results are unchanged. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 
