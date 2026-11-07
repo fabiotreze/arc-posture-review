@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v4.3.3 — 2026-11-06.** The SQL Server pay-as-you-go 30-day limit now cites Microsoft Learn, and the wording is corrected: after 30 days without connection, billing switches to recurring charges based on the last known configuration (not an expired subscription). App, collector logic and results are unchanged. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
+**Version v4.3.4 — 2026-11-06.** Claim register: four more claims now cite official Microsoft pages (Activity Log 90-day retention, SQL usage upload older than 24 hours, ESU through Arc for Windows Server 2012, 2012 R2 and 2016, and the USD 6 guest configuration price); the remaining open items state what is still to be decided. App, collector logic and results are unchanged. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 

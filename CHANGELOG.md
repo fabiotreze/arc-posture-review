@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.3.4] — 2026-11-06
+
+### Sources and test coverage
+
+- Claim register: Activity Log 90-day retention, SQL usage upload 24 hours, ESU through Arc (2012, 2012 R2, 2016) and the USD 6 guest configuration price cite official Microsoft pages.
+- Open items state what is still to be decided (SQL extension threshold, remaining prices). No threshold, price or result changed.
+- App, collector logic and results are unchanged.
+
 ## [4.3.3] — 2026-11-06
 
 ### Sources and test coverage

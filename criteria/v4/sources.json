@@ -185,7 +185,7 @@
       },
       "tokens": ["[version]'1.1.2859.223'"],
       "sources": [{"title": "Release notes - SQL Server enabled by Azure Arc", "url": "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/release-notes?view=sql-server-ver17"}],
-      "todo": "The release notes list 1.1.2859.223 (November 2024) but the page does not say it is a minimum. Find the documented minimum for automatic extension upgrade or replace this threshold by the 12-month window.",
+      "todo": "The release notes (checked 2026-11-06) do not state a minimum version. 1.1.2859.223 is a November 2024 release (\"Minor bug fixes\") and the current auto-upgrade target is 1.1.3518.465 (August 2026). Decide whether to keep it as a kit criterion with a rationale or replace it by a 12-month window computed from the release table.",
       "verifiedOn": "2026-11-06"
     },
     {
@@ -243,15 +243,15 @@
     },
     {
       "id": "ESU-2008",
-      "status": "UNVERIFIED",
+      "status": "VERIFIED_OFFICIAL",
       "checks": ["CHK-51"],
       "claim": {
-        "en-US": "Windows Server 2008 is outside the ESU cycle delivered through Azure Arc.",
-        "pt-BR": "O Windows Server 2008 está fora do ciclo de ESU entregue pelo Azure Arc."
+        "en-US": "ESU delivered through Azure Arc is documented for Windows Server 2012, 2012 R2 and 2016; Windows Server 2008 is not listed.",
+        "pt-BR": "O ESU entregue pelo Azure Arc está documentado para Windows Server 2012, 2012 R2 e 2016; o Windows Server 2008 não consta."
       },
       "tokens": [],
-      "sources": [],
-      "todo": "Confirm in the ESU pages whether Windows Server 2008 is covered by Arc; the pages opened cover 2012 and 2016 only.",
+      "sources": [{"title": "Extended Security Updates (ESU) for Windows Server with Azure Update Manager", "url": "https://learn.microsoft.com/en-us/azure/update-manager/extended-security-updates"}],
+      "evidence": "\"By using Azure Update Manager, you can deploy Extended Security Updates for your Azure Arc-enabled Windows Server 2012, 2012 R2, and 2016 machines.\" The Arc ESU pages list no other Windows Server version.",
       "verifiedOn": "2026-11-06"
     },
     {
@@ -273,15 +273,15 @@
     },
     {
       "id": "SQL-USAGE-24H",
-      "status": "UNVERIFIED",
+      "status": "VERIFIED_OFFICIAL",
       "checks": ["CHK-64"],
       "claim": {
         "en-US": "A SQL usage upload older than 24 hours is reported as stale.",
-        "pt-BR": "Um envio de uso do SQL com mais de 24 horas é reportado como atrasado."
+        "pt-BR": "Um envio de uso do SQL com mais de 24 horas é reportado como desatualizado."
       },
       "tokens": ["-gt 24"],
-      "sources": [],
-      "todo": "Confirm the documented upload cadence of the SQL Server extension before presenting 24 hours as the expected interval.",
+      "sources": [{"title": "Manage Licensing and Billing - SQL Server enabled by Azure Arc", "url": "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/manage-license-billing?view=sql-server-ver17"}],
+      "evidence": "\"If usage uploads aren't received for more than 24 hours, check the following things\"; \"Periodically verify that usage reporting is functioning correctly by reviewing the Last Usage Upload Time in the Azure portal.\"",
       "verifiedOn": "2026-11-06"
     },
     {
@@ -299,15 +299,15 @@
     },
     {
       "id": "ACTIVITYLOG-90D",
-      "status": "UNVERIFIED",
+      "status": "VERIFIED_OFFICIAL",
       "checks": ["CHK-43"],
       "claim": {
         "en-US": "The Activity Log keeps 90 days natively.",
         "pt-BR": "O Activity Log guarda 90 dias de forma nativa."
       },
       "tokens": ["90 days"],
-      "sources": [],
-      "todo": "Quote the Azure Monitor Activity Log retention statement.",
+      "sources": [{"title": "Activity log in Azure Monitor - Retention period", "url": "https://learn.microsoft.com/en-us/azure/azure-monitor/fundamentals/activity-log#retention-period"}],
+      "evidence": "\"Azure retains activity log events for 90 days and then deletes them.\" Longer retention needs a diagnostic setting that sends the entries elsewhere.",
       "verifiedOn": "2026-11-06"
     },
     {
@@ -350,6 +350,19 @@
       "verifiedOn": "2026-11-06"
     },
     {
+      "id": "PRICES-GC",
+      "status": "VERIFIED_OFFICIAL",
+      "checks": ["CHK-53"],
+      "claim": {
+        "en-US": "Azure Policy guest configuration (machine configuration) and Change Tracking & Inventory list at USD 6 per server per month.",
+        "pt-BR": "Azure Policy guest configuration (machine configuration) e Change Tracking & Inventory custam USD 6 por servidor por mês (preço de lista)."
+      },
+      "tokens": ["$P_GC = 6"],
+      "sources": [{"title": "Azure Arc pricing - core control plane", "url": "https://azure.microsoft.com/en-us/pricing/details/azure-arc/core-control-plane/"}],
+      "evidence": "\"Azure Policy Guest Configuration and Change Tracking & Inventory | $6/server/month | $0.009/server/hour\". Prices change; the report states it is an estimate, not an invoice.",
+      "verifiedOn": "2026-11-06"
+    },
+    {
       "id": "PRICES-LIST",
       "status": "UNVERIFIED",
       "checks": ["CHK-53"],
@@ -357,9 +370,9 @@
         "en-US": "List prices in USD used for the monthly estimate (Defender for Servers P1/P2, Update Manager, Machine Configuration, Windows Server pay-as-you-go).",
         "pt-BR": "Preços de tabela em USD usados na estimativa mensal (Defender for Servers P1/P2, Update Manager, Machine Configuration, Windows Server pay-as-you-go)."
       },
-      "tokens": ["$P_DEF1 = 5", "$P_DEF2 = 15", "$P_AUM = 5", "$P_GC = 6", "$P_WSPAYG = 33.58"],
+      "tokens": ["$P_DEF1 = 5", "$P_DEF2 = 15", "$P_AUM = 5", "$P_WSPAYG = 33.58"],
       "sources": [{"title": "Azure Arc pricing", "url": "https://azure.microsoft.com/pricing/details/azure-arc/"}],
-      "todo": "Prices are dynamic and were last checked by the author on 2026-10-22. Re-check each value on the pricing pages; the report states it is an estimate, not an invoice.",
+      "todo": "Only the guest configuration price (USD 6) is published on the Azure Arc pricing page checked on 2026-11-06 (see PRICES-GC); the page shows placeholders for Defender for Servers and Update Manager and does not list the Windows Server pay-as-you-go rate. Re-check these values on the Defender for Cloud, Update Manager and Windows Server pay-as-you-go pricing pages; the report states it is an estimate, not an invoice.",
       "verifiedOn": "2026-11-06",
       "reviewBy": "2026-12-06"
     },

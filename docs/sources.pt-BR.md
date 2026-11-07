@@ -30,14 +30,15 @@ Cada limiar, data e rótulo usado pelo coletor e pelos relatórios está registr
 | `AGENT-DISCONNECT-30D` | Uma máquina desconectada por 30 a 44 dias está na faixa de alerta, antes da expiração de 45 dias. | CHK-37 | Critério do kit | 2026-11-06 |
 | `ESU-2012-END` | O ESU do Windows Server 2012/2012 R2 termina em 2026-10-13; as licenças ESU habilitadas pelo Azure Arc são desativadas às 00:00 UTC de 2026-10-14. O ESU pelo Arc para o 2012 exige o agente 1.34 ou superior. | CHK-51 | Fonte oficial | 2026-11-06 |
 | `ESU-2016` | O Windows Server 2016 chega ao fim do suporte em 2027-01-12; o ESU pode ser configurado no portal do Azure a partir de 2026-08-03 e a cobrança pelo Azure Arc começa em 2027-01-13; o agente deve ser 1.62 ou superior. | CHK-51 | Fonte oficial | 2026-11-06 |
-| `ESU-2008` | O Windows Server 2008 está fora do ciclo de ESU entregue pelo Azure Arc. | CHK-51 | A verificar | 2026-11-06 |
+| `ESU-2008` | O ESU entregue pelo Azure Arc está documentado para Windows Server 2012, 2012 R2 e 2016; o Windows Server 2008 não consta. | CHK-51 | Fonte oficial | 2026-11-06 |
 | `AGENT-PORTS-CHANNELS` | incomingconnections.ports lista as portas locais que o canal de conectividade do Azure Arc pode alcançar (várias portas se separam por vírgula). O SSH usa a porta 22 por padrão (uma única porta por configuração de serviço) e o Windows Admin Center é implantado pela extensão AdminCenter em uma porta configurável (os exemplos usam 6516). Qualquer outra porta é reportada como não classificada. | CHK-21 | Fonte oficial | 2026-11-06 |
-| `SQL-USAGE-24H` | Um envio de uso do SQL com mais de 24 horas é reportado como atrasado. | CHK-64 | A verificar | 2026-11-06 |
+| `SQL-USAGE-24H` | Um envio de uso do SQL com mais de 24 horas é reportado como desatualizado. | CHK-64 | Fonte oficial | 2026-11-06 |
 | `SQL-PAYG-30D` | Uma máquina SQL Server com pay-as-you-go precisa se comunicar com o Azure ao menos a cada 30 dias; acima de 30 dias desconectada, a cobrança passa a ser recorrente com base na última configuração conhecida. | CHK-64 | Fonte oficial | 2026-11-06 |
-| `ACTIVITYLOG-90D` | O Activity Log guarda 90 dias de forma nativa. | CHK-43 | A verificar | 2026-11-06 |
+| `ACTIVITYLOG-90D` | O Activity Log guarda 90 dias de forma nativa. | CHK-43 | Fonte oficial | 2026-11-06 |
 | `LA-RETENTION-90D` | Um workspace do Log Analytics que recebe dados do Arc e retém menos de 90 dias é um alerta. | CHK-45 | Critério do kit | 2026-11-06 |
 | `DEFENDER-OPEN-90D` | Recomendações do Defender abertas há 90 dias ou mais são contadas à parte no detalhe (informativo). | CHK-33 | Critério do kit | 2026-11-06 |
 | `DEFENDER-HIGH-FAIL` | Uma recomendação do Defender de severidade High que afeta uma máquina Arc é uma lacuna verificada (FAIL); só severidades menores são oportunidade de melhoria (WARN). | CHK-33 | Critério do kit | 2026-11-06 |
+| `PRICES-GC` | Azure Policy guest configuration (machine configuration) e Change Tracking & Inventory custam USD 6 por servidor por mês (preço de lista). | CHK-53 | Fonte oficial | 2026-11-06 |
 | `PRICES-LIST` | Preços de tabela em USD usados na estimativa mensal (Defender for Servers P1/P2, Update Manager, Machine Configuration, Windows Server pay-as-you-go). | CHK-53 | A verificar | 2026-11-06 |
 | `KIT-INDEX` | O índice do kit não é o Secure Score do Defender for Cloud. A Microsoft dá a cada controle uma pontuação máxima fixa e a divide entre os recursos saudáveis e não saudáveis; o kit pondera os controles por severidade (Alta 3, Média 2, Baixa 1) e os pontua pela proporção de máquinas saudáveis. | - | Critério do kit | 2026-11-06 |
 | `PRIORITY-SCALE` | As pontuações de risco residual se traduzem em prioridades P0 (80 ou mais), P1 (60), P2 (35) e P3. Prioriza trabalho de postura; não é severidade de incidente. | - | Critério do kit | 2026-11-06 |
@@ -137,7 +138,7 @@ O alvo atual do upgrade automático da extensão do Azure para SQL Server é 1.1
 
 Extensão SQL abaixo de 1.1.2859.223 é reportada.
 
-- **Pendência:** The release notes list 1.1.2859.223 (November 2024) but the page does not say it is a minimum. Find the documented minimum for automatic extension upgrade or replace this threshold by the 12-month window.
+- **Pendência:** The release notes (checked 2026-11-06) do not state a minimum version. 1.1.2859.223 is a November 2024 release ("Minor bug fixes") and the current auto-upgrade target is 1.1.3518.465 (August 2026). Decide whether to keep it as a kit criterion with a rationale or replace it by a 12-month window computed from the release table.
 - [Release notes - SQL Server enabled by Azure Arc](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/release-notes?view=sql-server-ver17)
 
 ### AGENT-DISCONNECT-45D — Fonte oficial
@@ -168,11 +169,12 @@ O Windows Server 2016 chega ao fim do suporte em 2027-01-12; o ESU pode ser conf
 - [Prepare to deliver Extended Security Updates for Windows Server through Azure Arc](https://learn.microsoft.com/en-us/azure/azure-arc/servers/prepare-extended-security-updates)
 - **Rever até:** 2027-01-12
 
-### ESU-2008 — A verificar
+### ESU-2008 — Fonte oficial
 
-O Windows Server 2008 está fora do ciclo de ESU entregue pelo Azure Arc.
+O ESU entregue pelo Azure Arc está documentado para Windows Server 2012, 2012 R2 e 2016; o Windows Server 2008 não consta.
 
-- **Pendência:** Confirm in the ESU pages whether Windows Server 2008 is covered by Arc; the pages opened cover 2012 and 2016 only.
+- **Evidência:** "By using Azure Update Manager, you can deploy Extended Security Updates for your Azure Arc-enabled Windows Server 2012, 2012 R2, and 2016 machines." The Arc ESU pages list no other Windows Server version.
+- [Extended Security Updates (ESU) for Windows Server with Azure Update Manager](https://learn.microsoft.com/en-us/azure/update-manager/extended-security-updates)
 
 ### AGENT-PORTS-CHANNELS — Fonte oficial
 
@@ -183,11 +185,12 @@ incomingconnections.ports lista as portas locais que o canal de conectividade do
 - [SSH access to Azure Arc-enabled servers](https://learn.microsoft.com/en-us/azure/azure-arc/servers/ssh-arc-overview)
 - [CLI reference for azcmagent config](https://learn.microsoft.com/en-us/azure/azure-arc/servers/azcmagent-config)
 
-### SQL-USAGE-24H — A verificar
+### SQL-USAGE-24H — Fonte oficial
 
-Um envio de uso do SQL com mais de 24 horas é reportado como atrasado.
+Um envio de uso do SQL com mais de 24 horas é reportado como desatualizado.
 
-- **Pendência:** Confirm the documented upload cadence of the SQL Server extension before presenting 24 hours as the expected interval.
+- **Evidência:** "If usage uploads aren't received for more than 24 hours, check the following things"; "Periodically verify that usage reporting is functioning correctly by reviewing the Last Usage Upload Time in the Azure portal."
+- [Manage Licensing and Billing - SQL Server enabled by Azure Arc](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/manage-license-billing?view=sql-server-ver17)
 
 ### SQL-PAYG-30D — Fonte oficial
 
@@ -196,11 +199,12 @@ Uma máquina SQL Server com pay-as-you-go precisa se comunicar com o Azure ao me
 - **Evidência:** "Azure Arc-connected servers must check in with Azure at least once every 30 days." / "If the machine remains disconnected for more than 30 days, the SQL Arc service switches to recurring billing based on the last known configuration." Charges include backfill for the previous 30 days; a changed VM ID can cause double billing.
 - [Manage the transition to pay-as-you-go billing - SQL Server enabled by Azure Arc](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/manage-pay-as-you-go-transition?view=sql-server-ver17#solution-overview)
 
-### ACTIVITYLOG-90D — A verificar
+### ACTIVITYLOG-90D — Fonte oficial
 
 O Activity Log guarda 90 dias de forma nativa.
 
-- **Pendência:** Quote the Azure Monitor Activity Log retention statement.
+- **Evidência:** "Azure retains activity log events for 90 days and then deletes them." Longer retention needs a diagnostic setting that sends the entries elsewhere.
+- [Activity log in Azure Monitor - Retention period](https://learn.microsoft.com/en-us/azure/azure-monitor/fundamentals/activity-log#retention-period)
 
 ### LA-RETENTION-90D — Critério do kit
 
@@ -220,11 +224,18 @@ Uma recomendação do Defender de severidade High que afeta uma máquina Arc é 
 
 - **Justificativa:** The recommendation exists and is unhealthy in Defender for Cloud, so the condition is observed. The mapping from High severity to FAIL is the kit's.
 
+### PRICES-GC — Fonte oficial
+
+Azure Policy guest configuration (machine configuration) e Change Tracking & Inventory custam USD 6 por servidor por mês (preço de lista).
+
+- **Evidência:** "Azure Policy Guest Configuration and Change Tracking & Inventory | $6/server/month | $0.009/server/hour". Prices change; the report states it is an estimate, not an invoice.
+- [Azure Arc pricing - core control plane](https://azure.microsoft.com/en-us/pricing/details/azure-arc/core-control-plane/)
+
 ### PRICES-LIST — A verificar
 
 Preços de tabela em USD usados na estimativa mensal (Defender for Servers P1/P2, Update Manager, Machine Configuration, Windows Server pay-as-you-go).
 
-- **Pendência:** Prices are dynamic and were last checked by the author on 2026-10-22. Re-check each value on the pricing pages; the report states it is an estimate, not an invoice.
+- **Pendência:** Only the guest configuration price (USD 6) is published on the Azure Arc pricing page checked on 2026-11-06 (see PRICES-GC); the page shows placeholders for Defender for Servers and Update Manager and does not list the Windows Server pay-as-you-go rate. Re-check these values on the Defender for Cloud, Update Manager and Windows Server pay-as-you-go pricing pages; the report states it is an estimate, not an invoice.
 - [Azure Arc pricing](https://azure.microsoft.com/pricing/details/azure-arc/)
 - **Rever até:** 2026-12-06
 
