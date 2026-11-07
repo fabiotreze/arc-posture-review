@@ -25,7 +25,7 @@ Every threshold, date and label used by the collector and the reports is registe
 | `AMA-SUPPORT-12M` | Microsoft supports Azure Monitor Agent versions released within the last year only. | CHK-30 | Official source | 2026-11-06 |
 | `SQLEXT-SUPPORT-12M` | Only Azure extension for SQL Server versions released within the last year are supported. | CHK-30, CHK-34 | Official source | 2026-11-06 |
 | `SQLEXT-TARGET` | The current auto-upgrade target of the Azure extension for SQL Server is 1.1.3518.465 (August 2026); the live value read from Azure takes precedence when higher. | CHK-30, CHK-34 | Official source | 2026-11-06 |
-| `SQLEXT-MIN-2859` | SQL extension below 1.1.2859.223 is reported. | CHK-34 | To verify | 2026-11-06 |
+| `SQLEXT-12M` | A SQL Server extension released more than 12 months before the run date, or without automatic upgrade, is reported. | CHK-34 | Kit criterion | 2026-11-06 |
 | `AGENT-DISCONNECT-45D` | A machine that stays disconnected for 45 days might become Expired and needs to be disconnected and reconnected (new onboarding) to be managed again. | CHK-37 | Official source | 2026-11-06 |
 | `AGENT-DISCONNECT-30D` | A machine disconnected for 30 to 44 days is in the warning band, before the 45-day expiry. | CHK-37 | Kit criterion | 2026-11-06 |
 | `ESU-2012-END` | Windows Server 2012/2012 R2 ESU ends on 2026-10-13; ESU licenses enabled by Azure Arc are deactivated at 00:00 UTC on 2026-10-14. ESU through Arc for 2012 needs agent 1.34 or later. | CHK-51 | Official source | 2026-11-06 |
@@ -89,7 +89,7 @@ CVE-2025-49692 affects agents below 1.49.
 
 CVE-2025-26627 is not mapped to an agent version: NVD lists product 'Azure ARC' below 1.0.10, which does not correspond to the Connected Machine agent numbering. It is not shown per machine.
 
-- **To do:** Confirm in the MSRC advisory which component and fixed agent version apply before listing it per machine.
+- **To do:** NVD (checked 2026-11-06) confirms: published 2025-03-11, command injection in Azure Arc allowing local elevation of privilege, affected product Azure Arc below 1.0.10. The MSRC advisory page was unavailable, so the component and the fixed Connected Machine agent version remain unconfirmed; retry the MSRC page before listing it per machine.
 - [NVD: CVE-2025-26627](https://nvd.nist.gov/vuln/detail/CVE-2025-26627)
 
 ### AGENT-AUTOUPGRADE-MIN-167 — Official source
@@ -134,11 +134,11 @@ The current auto-upgrade target of the Azure extension for SQL Server is 1.1.351
 - [Release notes - SQL Server enabled by Azure Arc](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/release-notes?view=sql-server-ver17)
 - **Review by:** 2026-12-06
 
-### SQLEXT-MIN-2859 — To verify
+### SQLEXT-12M — Kit criterion
 
-SQL extension below 1.1.2859.223 is reported.
+A SQL Server extension released more than 12 months before the run date, or without automatic upgrade, is reported.
 
-- **To do:** The release notes (checked 2026-11-06) do not state a minimum version. 1.1.2859.223 is a November 2024 release ("Minor bug fixes") and the current auto-upgrade target is 1.1.3518.465 (August 2026). Decide whether to keep it as a kit criterion with a rationale or replace it by a 12-month window computed from the release table.
+- **Rationale:** The release notes publish the release month of each extension version, state that versions are cumulative and mark older ones as no longer available, and give the current auto-upgrade target (1.1.3518.465, checked 2026-11-06). They do not publish a minimum supported version, so the kit uses the same 12-month window as the other extension checks, computed from that release table. Replaces the earlier fixed 1.1.2859.223 threshold.
 - [Release notes - SQL Server enabled by Azure Arc](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/release-notes?view=sql-server-ver17)
 
 ### AGENT-DISCONNECT-45D — Official source
@@ -235,7 +235,7 @@ Azure Policy guest configuration (machine configuration) and Change Tracking & I
 
 List prices in USD used for the monthly estimate (Defender for Servers P1/P2, Update Manager, Machine Configuration, Windows Server pay-as-you-go).
 
-- **To do:** Only the guest configuration price (USD 6) is published on the Azure Arc pricing page checked on 2026-11-06 (see PRICES-GC); the page shows placeholders for Defender for Servers and Update Manager and does not list the Windows Server pay-as-you-go rate. Re-check these values on the Defender for Cloud, Update Manager and Windows Server pay-as-you-go pricing pages; the report states it is an estimate, not an invoice.
+- **To do:** The Update Manager FAQ (checked 2026-11-06) confirms the pricing model (per Arc server per month, 31 days of connected usage, prorated daily; included with ESU enabled by Arc, Defender for Servers Plan 2 and Azure Local) but the Update Manager pricing page shows no numeric value. Only the guest configuration price (USD 6) is published on the Azure Arc pricing page checked on 2026-11-06 (see PRICES-GC); the page shows placeholders for Defender for Servers and Update Manager and does not list the Windows Server pay-as-you-go rate. Re-check these values on the Defender for Cloud, Update Manager and Windows Server pay-as-you-go pricing pages; the report states it is an estimate, not an invoice.
 - [Azure Arc pricing](https://azure.microsoft.com/pricing/details/azure-arc/)
 - **Review by:** 2026-12-06
 

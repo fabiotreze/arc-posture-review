@@ -1229,7 +1229,7 @@
       "extensions"
     ],
     "title": "SQL Server: Defender for SQL and least privilege",
-    "what": "Machines with SQL, Defender for SQL plan, SQL extension version/automatic upgrade (least privilege starting with 1.1.2859.223), SQL on a machine associated with Private Link (the data processing service *.<region>.arcdataservices.com does not support Private Link) and SQL on an unsupported OS (earlier than Windows Server 2016).",
+    "what": "Machines with SQL, Defender for SQL plan, SQL extension version/automatic upgrade (extension released within the last 12 months), SQL on a machine associated with Private Link (the data processing service *.<region>.arcdataservices.com does not support Private Link) and SQL on an unsupported OS (earlier than Windows Server 2016).",
     "crit": "WARN if any of these cases occur; N/A without SQL.",
     "refs": [
       "CTL-04",

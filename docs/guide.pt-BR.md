@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v4.3.4 — 06/11/2026.** Registro de fontes: mais quatro afirmações agora citam páginas oficiais da Microsoft (retenção de 90 dias do Activity Log, envio de uso do SQL com mais de 24 horas, ESU pelo Arc para Windows Server 2012, 2012 R2 e 2016, e o preço de USD 6 do guest configuration); os itens ainda abertos dizem o que falta decidir. App, lógica do coletor e resultados não mudam. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
+**Versão v4.3.5 — 06/11/2026.** O CHK-34 agora reporta extensão do SQL Server lançada há mais de 12 meses da data da execução (a mesma janela das demais verificações de extensão, calculada pela tabela de versões da Microsoft) em vez do limite fixo 1.1.2859.223, que não é um mínimo documentado. Registrado como critério do kit; o registro também traz a confirmação do NVD para o CVE-2025-26627 e o modelo de preço do Update Manager. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 
@@ -611,7 +611,7 @@ flowchart TD
 #### CTL-04 — Least privilege no SQL Arc
 
 - Aplicar modelo oficial de menor privilégio da extensão SQL Arc.
-- A partir da extensão **1.1.2859.223**, com atualização automática habilitada, o menor privilégio é aplicado automaticamente.
+- Com atualização automática habilitada e uma versão atual da extensão, o menor privilégio é aplicado por padrão.
 - O *deployer* da extensão roda como `NT AUTHORITY\SYSTEM` e precisa do login com **CONNECT SQL** em cada instância; hardening que remove esse login faz a extensão falhar.
 
 **Rede da extensão SQL (documentação oficial — Prerequisites e Overview › Unsupported configurations):**
@@ -1040,7 +1040,7 @@ Mesma lista, na mesma ordem, do `arc-posture-review.pt-BR.html`. Camada: 1 MCSB 
 | CHK-31 | Defender for Servers | Automático | Alta | 1 | LT-1 | D6 | Plano VirtualMachines por subscription (tier e subplano). | FAIL se Free; PARTIAL se o plano não puder ser lido. | CTL-06 |
 | CHK-32 | Defender for Endpoint | Automático | Alta | 1 | ES-1 | D6 | Máquinas conectadas sem extensão MDE.Windows/MDE.Linux. | WARN se houver máquinas sem o sensor via Arc. | CTL-06, Movimento lateral |
 | CHK-33 | Recomendações do Defender | Automático | Média | 1 | PV-5, PV-4 | D6 | Avaliações Unhealthy em máquinas Arc, por severidade. | WARN se houver recomendações pendentes. | CTL-06 |
-| CHK-34 | SQL Server: Defender for SQL e menor privilégio | Automático | Média | 1 | LT-1, PA-7 | D6 | Máquinas com SQL, plano Defender for SQL, versão/atualização automática da extensão SQL (menor privilégio a partir de 1.1.2859.223), SQL em máquina associada a Private Link (o serviço de processamento de dados *.<region>.arcdataservices.com não suporta Private Link) e SQL em SO não suportado (anterior ao Windows Server 2016). | WARN se houver qualquer um desses casos; N/A sem SQL. | CTL-04, DEC-05 |
+| CHK-34 | SQL Server: Defender for SQL e menor privilégio | Automático | Média | 1 | LT-1, PA-7 | D6 | Máquinas com SQL, plano Defender for SQL, versão/atualização automática da extensão SQL (extensão lançada nos últimos 12 meses), SQL em máquina associada a Private Link (o serviço de processamento de dados *.<region>.arcdataservices.com não suporta Private Link) e SQL em SO não suportado (anterior ao Windows Server 2016). | WARN se houver qualquer um desses casos; N/A sem SQL. | CTL-04, DEC-05 |
 | CHK-35 | Contas locais e GPO do HIMDS | Documental | Média | 3 | — | D4 | Direito Log on as a service para NT SERVICE\himds; contas padrão do agente preservadas. | Evidência: GPO/configuração local em amostra. | CTL-05 |
 | CHK-36 | Coleta local em amostra (agente e serviços) | Documental | Média | 3 | — | D6 | azcmagent show, azcmagent check, azcmagent config list e serviços Windows do catálogo em amostra por perfil. Inclui tarefas agendadas do agente (azcmagent) e da implantação por GPO, e o tipo de início dos serviços. | Evidência: saídas anexadas ao pacote. | CTL-05, Catálogo de serviços, Matriz de evidências |
 | CHK-54 | Ameaças e vulnerabilidades (Defender for Cloud) | Automático | Alta | 1 | LT-1, PV-5, IR-3 | D6 | Alertas de segurança ativos nas máquinas Arc, vulnerabilidades (CVE) por alcance e severidade, e Secure Score por subscription, com a classificação do próprio Defender. | FAIL se houver alerta ativo High; WARN se houver alerta ativo ou vulnerabilidade High/Critical; o Secure Score é informativo. | CTL-06, Movimento lateral |

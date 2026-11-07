@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v4.3.4 — 2026-11-06.** Claim register: four more claims now cite official Microsoft pages (Activity Log 90-day retention, SQL usage upload older than 24 hours, ESU through Arc for Windows Server 2012, 2012 R2 and 2016, and the USD 6 guest configuration price); the remaining open items state what is still to be decided. App, collector logic and results are unchanged. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
+**Version v4.3.5 — 2026-11-06.** CHK-34 now reports a SQL Server extension released more than 12 months before the run date (the same window as the other extension checks, computed from the Microsoft release table) instead of the fixed 1.1.2859.223 threshold, which is not a documented minimum. Registered as a kit criterion; the register also records the NVD confirmation for CVE-2025-26627 and the Update Manager pricing model. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 
@@ -611,7 +611,7 @@ flowchart TD
 #### CTL-04 — Least privilege in SQL Arc
 
 - Apply the official least-privilege model of the SQL Arc extension.
-- Starting with extension **1.1.2859.223**, with automatic update enabled, least privilege is applied automatically.
+- With automatic update enabled and a current extension version, least privilege is applied by default.
 - The extension *deployer* runs as `NT AUTHORITY\SYSTEM` and needs the login with **CONNECT SQL** on each instance; hardening that removes this login causes the extension to fail.
 
 **SQL extension network (official documentation — Prerequisites and Overview › Unsupported configurations):**
@@ -1040,7 +1040,7 @@ Same list, in the same order, as `arc-posture-review.en-US.html`. Layer: 1 MCSB 
 | CHK-31 | Defender for Servers | Automated | High | 1 | LT-1 | D6 | VirtualMachines plan per subscription (tier and subplan). | FAIL if Free; PARTIAL if the plan cannot be read. | CTL-06 |
 | CHK-32 | Defender for Endpoint | Automated | High | 1 | ES-1 | D6 | Connected machines without the MDE.Windows/MDE.Linux extension. | WARN if there are machines without the sensor via Arc. | CTL-06, Lateral movement |
 | CHK-33 | Defender recommendations | Automated | Medium | 1 | PV-5, PV-4 | D6 | Unhealthy assessments on Arc machines, by severity. | WARN if there are pending recommendations. | CTL-06 |
-| CHK-34 | SQL Server: Defender for SQL and least privilege | Automated | Medium | 1 | LT-1, PA-7 | D6 | Machines with SQL, Defender for SQL plan, SQL extension version/automatic upgrade (least privilege starting with 1.1.2859.223), SQL on a machine associated with Private Link (the data processing service *.<region>.arcdataservices.com does not support Private Link) and SQL on an unsupported OS (earlier than Windows Server 2016). | WARN if any of these cases occur; N/A without SQL. | CTL-04, DEC-05 |
+| CHK-34 | SQL Server: Defender for SQL and least privilege | Automated | Medium | 1 | LT-1, PA-7 | D6 | Machines with SQL, Defender for SQL plan, SQL extension version/automatic upgrade (extension released within the last 12 months), SQL on a machine associated with Private Link (the data processing service *.<region>.arcdataservices.com does not support Private Link) and SQL on an unsupported OS (earlier than Windows Server 2016). | WARN if any of these cases occur; N/A without SQL. | CTL-04, DEC-05 |
 | CHK-35 | Local accounts and HIMDS GPO | Documentary | Medium | 3 | — | D4 | Log on as a service right for NT SERVICE\himds; default agent accounts preserved. | Evidence: GPO/local configuration on a sample. | CTL-05 |
 | CHK-36 | Local collection on a sample (agent and services) | Documentary | Medium | 3 | — | D6 | azcmagent show, azcmagent check, azcmagent config list, and catalog Windows services on a sample per profile. Includes the agent scheduled tasks (azcmagent) and the GPO deployment task, and the service startup types. | Evidence: outputs attached to the package. | CTL-05, Service catalog, Evidence matrix |
 | CHK-54 | Threats and vulnerabilities (Defender for Cloud) | Automated | High | 1 | LT-1, PV-5, IR-3 | D6 | Active security alerts on Arc machines, vulnerabilities (CVE) by reach and severity, and Secure Score by subscription, with the Defender classification itself. | FAIL if there is an active High alert; WARN if there is an active alert or a High/Critical vulnerability; the Secure Score is informational. | CTL-06, Lateral movement |
