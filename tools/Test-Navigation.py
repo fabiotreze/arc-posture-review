@@ -69,8 +69,13 @@ def anchors_of(path: Path, cache: dict[Path, set[str]] = {}) -> set[str]:
 
 
 def markdown_files() -> list[Path]:
-    listed = subprocess.run(["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard", "*.md"], cwd=ROOT, capture_output=True, check=True).stdout.decode("utf-8")
-    return [ROOT / p for p in listed.split("\0") if p and (ROOT / p).is_file()]
+    # git when the folder is a repository (the gate's isolated copy may not be), otherwise a walk of the tree
+    result = subprocess.run(["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard", "*.md"], cwd=ROOT, capture_output=True)
+    if result.returncode == 0 and result.stdout.strip(b"\0"):
+        listed = result.stdout.decode("utf-8").split("\0")
+        return [ROOT / p for p in listed if p and (ROOT / p).is_file()]
+    ignored = {".git", "build", ".ruff_cache", "__pycache__", "node_modules"}
+    return [p for p in ROOT.rglob("*.md") if p.is_file() and not ignored & set(p.relative_to(ROOT).parts)]
 
 
 LINK = re.compile(r"(?<!\!)\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
