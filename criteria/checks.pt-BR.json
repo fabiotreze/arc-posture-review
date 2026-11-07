@@ -1357,7 +1357,7 @@
     "owner": "Operação",
     "steps": [
       "Desconectadas: verificar serviço himds, rede e proxy (azcmagent check) e reconectar.",
-      "Expired (mais de 45 dias sem conexão): refazer o onboarding.",
+      "Expired (pode ocorrer após 45 dias sem conexão): refazer o onboarding.",
       "Desativadas ou migradas: remover o recurso Arc para não deixar órfãos."
     ],
     "how": "Se a máquina não existe mais, remover. Se existe, reconectar. Expired sempre exige novo onboarding.",

@@ -1357,7 +1357,7 @@
     "owner": "Operations",
     "steps": [
       "Disconnected: check the himds service, network, and proxy (azcmagent check) and reconnect.",
-      "Expired (more than 45 days without connection): redo the onboarding.",
+      "Expired (can occur after 45 days without connection): redo the onboarding.",
       "Decommissioned or migrated: remove the Arc resource to avoid leaving orphans."
     ],
     "how": "If the machine no longer exists, remove it. If it exists, reconnect it. Expired always requires new onboarding.",

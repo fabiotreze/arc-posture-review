@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.3.8] — 2026-11-07
+
+### Sources and test coverage
+
+- CHK-51 lists only Windows Server 2016 with a pending item; 45-day wording follows Microsoft; known issues updated; Safari (macOS) keyboard check confirmed.
+- App, collector logic and results are unchanged.
+
 ## [4.3.7] — 2026-11-07
 
 ### Sources and test coverage

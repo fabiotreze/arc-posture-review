@@ -30,8 +30,8 @@ def package(tmp: Path, *, found21=2, found23=3, defender_machines=3) -> Path:
 
 def real_run_package(tmp: Path) -> Path:
     """Shapes seen in real runs: capped sample of a larger scope, disconnected machines with a failing baseline, Windows Server 2016."""
-    machines = [M("a", status="Disconnected"), M("b", osSku="Windows Server 2016 Standard"), M("c", osSku="Windows Server 2012 R2 Standard")]
-    results = {"generatedAt": "2026-11-06T10:00:00+00:00", "scope": {"machinesTotal": 328, "maxMachines": 3}, "results": [
+    machines = [M("a", status="Disconnected"), M("b", osSku="Windows Server 2016 Standard"), M("c", osSku="Windows Server 2012 R2 Standard"), M("e", osSku="Windows Server 2016 Standard", esu="Assigned")]
+    results = {"generatedAt": "2026-11-06T10:00:00+00:00", "scope": {"machinesTotal": 328, "maxMachines": 4}, "results": [
         {"id": "CHK-37", "found": 1, "detail": ""}, {"id": "CHK-51", "found": 2, "detail": ""}, {"id": "CHK-55", "found": 0, "detail": ""},
         {"id": "CHK-33", "found": 1, "detail": ""}]}
     files = {"results.json": results, "data/machines.json": machines, "data/extensions.json": [],
