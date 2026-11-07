@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.3.5] — 2026-11-06
+
+### Sources and test coverage
+
+- CHK-34: SQL Server extension reported when released more than 12 months before the run date (kit criterion), replacing the fixed 1.1.2859.223 threshold.
+- Register: NVD data for CVE-2025-26627 and the Update Manager pricing model recorded. Results of CHK-34 can change for old extensions.
+- Other thresholds, prices and checks are unchanged.
+
 ## [4.3.4] — 2026-11-06
 
 ### Sources and test coverage

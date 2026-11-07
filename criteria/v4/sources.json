@@ -93,7 +93,7 @@
       },
       "tokens": [],
       "sources": [{"title": "NVD: CVE-2025-26627", "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-26627"}],
-      "todo": "Confirm in the MSRC advisory which component and fixed agent version apply before listing it per machine.",
+      "todo": "NVD (checked 2026-11-06) confirms: published 2025-03-11, command injection in Azure Arc allowing local elevation of privilege, affected product Azure Arc below 1.0.10. The MSRC advisory page was unavailable, so the component and the fixed Connected Machine agent version remain unconfirmed; retry the MSRC page before listing it per machine.",
       "verifiedOn": "2026-11-06"
     },
     {
@@ -176,16 +176,16 @@
       "reviewBy": "2026-12-06"
     },
     {
-      "id": "SQLEXT-MIN-2859",
-      "status": "UNVERIFIED",
+      "id": "SQLEXT-12M",
+      "status": "KIT_CRITERION",
       "checks": ["CHK-34"],
       "claim": {
-        "en-US": "SQL extension below 1.1.2859.223 is reported.",
-        "pt-BR": "Extensão SQL abaixo de 1.1.2859.223 é reportada."
+        "en-US": "A SQL Server extension released more than 12 months before the run date, or without automatic upgrade, is reported.",
+        "pt-BR": "Uma extensão do SQL Server lançada há mais de 12 meses da data da execução, ou sem atualização automática, é reportada."
       },
-      "tokens": ["[version]'1.1.2859.223'"],
+      "tokens": ["$minLpBuild = "],
       "sources": [{"title": "Release notes - SQL Server enabled by Azure Arc", "url": "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/release-notes?view=sql-server-ver17"}],
-      "todo": "The release notes (checked 2026-11-06) do not state a minimum version. 1.1.2859.223 is a November 2024 release (\"Minor bug fixes\") and the current auto-upgrade target is 1.1.3518.465 (August 2026). Decide whether to keep it as a kit criterion with a rationale or replace it by a 12-month window computed from the release table.",
+      "rationale": "The release notes publish the release month of each extension version, state that versions are cumulative and mark older ones as no longer available, and give the current auto-upgrade target (1.1.3518.465, checked 2026-11-06). They do not publish a minimum supported version, so the kit uses the same 12-month window as the other extension checks, computed from that release table. Replaces the earlier fixed 1.1.2859.223 threshold.",
       "verifiedOn": "2026-11-06"
     },
     {
@@ -372,7 +372,7 @@
       },
       "tokens": ["$P_DEF1 = 5", "$P_DEF2 = 15", "$P_AUM = 5", "$P_WSPAYG = 33.58"],
       "sources": [{"title": "Azure Arc pricing", "url": "https://azure.microsoft.com/pricing/details/azure-arc/"}],
-      "todo": "Only the guest configuration price (USD 6) is published on the Azure Arc pricing page checked on 2026-11-06 (see PRICES-GC); the page shows placeholders for Defender for Servers and Update Manager and does not list the Windows Server pay-as-you-go rate. Re-check these values on the Defender for Cloud, Update Manager and Windows Server pay-as-you-go pricing pages; the report states it is an estimate, not an invoice.",
+      "todo": "The Update Manager FAQ (checked 2026-11-06) confirms the pricing model (per Arc server per month, 31 days of connected usage, prorated daily; included with ESU enabled by Arc, Defender for Servers Plan 2 and Azure Local) but the Update Manager pricing page shows no numeric value. Only the guest configuration price (USD 6) is published on the Azure Arc pricing page checked on 2026-11-06 (see PRICES-GC); the page shows placeholders for Defender for Servers and Update Manager and does not list the Windows Server pay-as-you-go rate. Re-check these values on the Defender for Cloud, Update Manager and Windows Server pay-as-you-go pricing pages; the report states it is an estimate, not an invoice.",
       "verifiedOn": "2026-11-06",
       "reviewBy": "2026-12-06"
     },

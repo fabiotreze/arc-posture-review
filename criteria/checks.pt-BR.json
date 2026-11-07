@@ -1229,7 +1229,7 @@
       "extensions"
     ],
     "title": "SQL Server: Defender for SQL e menor privilégio",
-    "what": "Máquinas com SQL, plano Defender for SQL, versão/atualização automática da extensão SQL (menor privilégio a partir de 1.1.2859.223), SQL em máquina associada a Private Link (o serviço de processamento de dados *.<region>.arcdataservices.com não suporta Private Link) e SQL em SO não suportado (anterior ao Windows Server 2016).",
+    "what": "Máquinas com SQL, plano Defender for SQL, versão/atualização automática da extensão SQL (extensão lançada nos últimos 12 meses), SQL em máquina associada a Private Link (o serviço de processamento de dados *.<region>.arcdataservices.com não suporta Private Link) e SQL em SO não suportado (anterior ao Windows Server 2016).",
     "crit": "WARN se houver qualquer um desses casos; N/A sem SQL.",
     "refs": [
       "CTL-04",

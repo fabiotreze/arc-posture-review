@@ -3131,8 +3131,8 @@
         "extensions"
       ],
       "description": {
-        "en-US": "Machines with SQL, Defender for SQL plan, SQL extension version/automatic upgrade (least privilege starting with 1.1.2859.223), SQL on a machine associated with Private Link (the data processing service *.<region>.arcdataservices.com does not support Private Link) and SQL on an unsupported OS (earlier than Windows Server 2016).",
-        "pt-BR": "Máquinas com SQL, plano Defender for SQL, versão/atualização automática da extensão SQL (menor privilégio a partir de 1.1.2859.223), SQL em máquina associada a Private Link (o serviço de processamento de dados *.<region>.arcdataservices.com não suporta Private Link) e SQL em SO não suportado (anterior ao Windows Server 2016)."
+        "en-US": "Machines with SQL, Defender for SQL plan, SQL extension version/automatic upgrade (extension released within the last 12 months), SQL on a machine associated with Private Link (the data processing service *.<region>.arcdataservices.com does not support Private Link) and SQL on an unsupported OS (earlier than Windows Server 2016).",
+        "pt-BR": "Máquinas com SQL, plano Defender for SQL, versão/atualização automática da extensão SQL (extensão lançada nos últimos 12 meses), SQL em máquina associada a Private Link (o serviço de processamento de dados *.<region>.arcdataservices.com não suporta Private Link) e SQL em SO não suportado (anterior ao Windows Server 2016)."
       },
       "criterion": {
         "en-US": "WARN if any of these cases occur; N/A without SQL.",
