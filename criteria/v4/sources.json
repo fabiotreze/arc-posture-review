@@ -85,15 +85,18 @@
     },
     {
       "id": "AGENT-CVE-2025-26627",
-      "status": "UNVERIFIED",
+      "status": "VERIFIED_CVE",
       "checks": ["CHK-29"],
       "claim": {
-        "en-US": "CVE-2025-26627 is not mapped to an agent version: NVD lists product 'Azure ARC' below 1.0.10, which does not correspond to the Connected Machine agent numbering. It is not shown per machine.",
-        "pt-BR": "O CVE-2025-26627 não é mapeado a uma versão do agente: o NVD lista o produto 'Azure ARC' abaixo de 1.0.10, que não corresponde à numeração do agente Connected Machine. Ele não aparece por máquina."
+        "en-US": "CVE-2025-26627 (Azure Arc Installer, local elevation of privilege) affects only machines onboarded with the Group Policy onboarding script (ArcEnabledServersGroupPolicy) below 1.0.10. It is not a Connected Machine agent version issue, so it is not mapped to an agent version or shown per machine.",
+        "pt-BR": "O CVE-2025-26627 (Azure Arc Installer, elevação local de privilégio) afeta apenas máquinas integradas pelo script de onboarding por Group Policy (ArcEnabledServersGroupPolicy) abaixo da 1.0.10. Não é um problema de versão do agente Connected Machine, por isso não é mapeado a uma versão do agente nem exibido por máquina."
       },
       "tokens": [],
-      "sources": [{"title": "NVD: CVE-2025-26627", "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-26627"}],
-      "todo": "NVD (checked 2026-11-06) confirms: published 2025-03-11, command injection in Azure Arc allowing local elevation of privilege, affected product Azure Arc below 1.0.10. The MSRC advisory page was unavailable, so the component and the fixed Connected Machine agent version remain unconfirmed; retry the MSRC page before listing it per machine.",
+      "sources": [
+        {"title": "NVD: CVE-2025-26627", "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-26627"},
+        {"title": "MSRC: CVE-2025-26627", "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-26627"}
+      ],
+      "evidence": "MSRC (CVRF 2025-Mar): title \"Azure Arc Installer Elevation of Privilege Vulnerability\"; \"Only machines onboarded via Group Policy that have the GPO applied to them are affected\"; fixed build 1.0.10 (github.com/Azure/ArcEnabledServersGroupPolicy releases 1.0.10). NVD: product Azure Arc below 1.0.10.",
       "verifiedOn": "2026-11-06"
     },
     {
@@ -364,15 +367,18 @@
     },
     {
       "id": "PRICES-LIST",
-      "status": "UNVERIFIED",
+      "status": "VERIFIED_OFFICIAL",
       "checks": ["CHK-53"],
       "claim": {
-        "en-US": "List prices in USD used for the monthly estimate (Defender for Servers P1/P2, Update Manager, Machine Configuration, Windows Server pay-as-you-go).",
-        "pt-BR": "Preços de tabela em USD usados na estimativa mensal (Defender for Servers P1/P2, Update Manager, Machine Configuration, Windows Server pay-as-you-go)."
+        "en-US": "List prices in USD used for the monthly estimate: Defender for Servers Plan 1 USD 5 and Plan 2 USD 15 per server per month, Azure Update Manager USD 5 per server per month, Windows Server pay-as-you-go USD 33.58 per core per month.",
+        "pt-BR": "Preços de tabela em USD usados na estimativa mensal: Defender for Servers Plano 1 USD 5 e Plano 2 USD 15 por servidor por mês, Azure Update Manager USD 5 por servidor por mês, Windows Server pay-as-you-go USD 33,58 por core por mês."
       },
       "tokens": ["$P_DEF1 = 5", "$P_DEF2 = 15", "$P_AUM = 5", "$P_WSPAYG = 33.58"],
-      "sources": [{"title": "Azure Arc pricing", "url": "https://azure.microsoft.com/pricing/details/azure-arc/"}],
-      "todo": "The Update Manager FAQ (checked 2026-11-06) confirms the pricing model (per Arc server per month, 31 days of connected usage, prorated daily; included with ESU enabled by Arc, Defender for Servers Plan 2 and Azure Local) but the Update Manager pricing page shows no numeric value. Only the guest configuration price (USD 6) is published on the Azure Arc pricing page checked on 2026-11-06 (see PRICES-GC); the page shows placeholders for Defender for Servers and Update Manager and does not list the Windows Server pay-as-you-go rate. Re-check these values on the Defender for Cloud, Update Manager and Windows Server pay-as-you-go pricing pages; the report states it is an estimate, not an invoice.",
+      "sources": [
+        {"title": "Azure Arc pricing - core control plane", "url": "https://azure.microsoft.com/en-us/pricing/details/azure-arc/core-control-plane/"},
+        {"title": "Azure Update Manager FAQ - pricing", "url": "https://learn.microsoft.com/en-us/azure/update-manager/update-manager-faq#what-is-the-pricing-for-update-manager"}
+      ],
+      "evidence": "Pricing page: Defender for Servers Plan 1 \"$5/server/month\", Plan 2 \"$15/server/month\", Azure Update Manager \"$5/server/month\", Windows Server Pay-as-you-go enabled by Azure Arc \"$33.58/core/month\". Prices change; the report states it is an estimate, not an invoice.",
       "verifiedOn": "2026-11-06",
       "reviewBy": "2026-12-06"
     },

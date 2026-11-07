@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.3.6] — 2026-11-06
+
+### Sources and test coverage
+
+- Claim register: list prices cite the Azure Arc pricing page; CVE-2025-26627 verified against MSRC (Group Policy onboarding script, not the agent).
+- App, collector logic and results are unchanged.
+
 ## [4.3.5] — 2026-11-06
 
 ### Sources and test coverage
