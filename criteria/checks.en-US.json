@@ -2443,7 +2443,7 @@
     "owner": "DBA",
     "steps": [
       "First fix machines with no usage upload for more than 24 hours or with uploadStatus other than OK: allow outbound HTTPS 443 to dataprocessingservice.<region>.arcdataservices.com and telemetry.<region>.arcdataservices.com, use a proxy without authentication and confirm the Microsoft.AzureArcData provider is registered.",
-      "Reconnect SQL machines that are not Connected within 30 days: with PAYG, the subscription expires and use is no longer authorized.",
+      "Reconnect SQL machines that are not Connected within 30 days: with PAYG, after 30 days the SQL Arc service switches to recurring billing based on the last known configuration (with backfill charges for the previous 30 days), and a changed VM ID can cause double billing; disconnect the machine from Azure Arc before operations that change the VM ID.",
       "Set the LicenseType of each extension (PAYG, Paid or LicenseOnly) according to the contract; with a physical core license (pCore), set UsePhysicalCoreLicense and align LicenseType with the license billingPlan.",
       "Fix failed extensions and plan to retire Windows Server versions older than 2016, which don't meet the TLS required by the data processing service."
     ],

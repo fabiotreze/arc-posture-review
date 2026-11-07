@@ -6057,13 +6057,13 @@
         "steps": {
           "en-US": [
             "First fix machines with no usage upload for more than 24 hours or with uploadStatus other than OK: allow outbound HTTPS 443 to dataprocessingservice.<region>.arcdataservices.com and telemetry.<region>.arcdataservices.com, use a proxy without authentication and confirm the Microsoft.AzureArcData provider is registered.",
-            "Reconnect SQL machines that are not Connected within 30 days: with PAYG, the subscription expires and use is no longer authorized.",
+            "Reconnect SQL machines that are not Connected within 30 days: with PAYG, after 30 days the SQL Arc service switches to recurring billing based on the last known configuration (with backfill charges for the previous 30 days), and a changed VM ID can cause double billing; disconnect the machine from Azure Arc before operations that change the VM ID.",
             "Set the LicenseType of each extension (PAYG, Paid or LicenseOnly) according to the contract; with a physical core license (pCore), set UsePhysicalCoreLicense and align LicenseType with the license billingPlan.",
             "Fix failed extensions and plan to retire Windows Server versions older than 2016, which don't meet the TLS required by the data processing service."
           ],
           "pt-BR": [
             "Corrigir primeiro as máquinas sem envio de uso há mais de 24 horas ou com uploadStatus diferente de OK: liberar a saída HTTPS 443 para dataprocessingservice.<região>.arcdataservices.com e telemetry.<região>.arcdataservices.com, usar proxy sem autenticação e confirmar o registro do provedor Microsoft.AzureArcData.",
-            "Reconectar antes de 30 dias as máquinas com SQL fora de Connected: com PAYG, a assinatura expira e o uso deixa de ser autorizado.",
+            "Reconectar antes de 30 dias as máquinas com SQL fora de Connected: com PAYG, após 30 dias o serviço SQL Arc passa a cobrar de forma recorrente com base na última configuração conhecida (com cobrança retroativa dos 30 dias anteriores), e a mudança do VM ID pode gerar cobrança em duplicidade; desconecte a máquina do Azure Arc antes de operações que alterem o VM ID.",
             "Definir o LicenseType de cada extensão (PAYG, Paid ou LicenseOnly) conforme o contrato; com licença de core físico (pCore), marcar UsePhysicalCoreLicense e alinhar o LicenseType ao billingPlan da licença.",
             "Corrigir as extensões com falha e planejar a saída do Windows Server anterior ao 2016, que não atende o TLS exigido pelo serviço de processamento de dados."
           ]

@@ -2443,7 +2443,7 @@
     "owner": "DBA",
     "steps": [
       "Corrigir primeiro as máquinas sem envio de uso há mais de 24 horas ou com uploadStatus diferente de OK: liberar a saída HTTPS 443 para dataprocessingservice.<região>.arcdataservices.com e telemetry.<região>.arcdataservices.com, usar proxy sem autenticação e confirmar o registro do provedor Microsoft.AzureArcData.",
-      "Reconectar antes de 30 dias as máquinas com SQL fora de Connected: com PAYG, a assinatura expira e o uso deixa de ser autorizado.",
+      "Reconectar antes de 30 dias as máquinas com SQL fora de Connected: com PAYG, após 30 dias o serviço SQL Arc passa a cobrar de forma recorrente com base na última configuração conhecida (com cobrança retroativa dos 30 dias anteriores), e a mudança do VM ID pode gerar cobrança em duplicidade; desconecte a máquina do Azure Arc antes de operações que alterem o VM ID.",
       "Definir o LicenseType de cada extensão (PAYG, Paid ou LicenseOnly) conforme o contrato; com licença de core físico (pCore), marcar UsePhysicalCoreLicense e alinhar o LicenseType ao billingPlan da licença.",
       "Corrigir as extensões com falha e planejar a saída do Windows Server anterior ao 2016, que não atende o TLS exigido pelo serviço de processamento de dados."
     ],
