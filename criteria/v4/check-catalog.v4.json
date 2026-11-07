@@ -3427,12 +3427,12 @@
         "steps": {
           "en-US": [
             "Disconnected: check the himds service, network, and proxy (azcmagent check) and reconnect.",
-            "Expired (more than 45 days without connection): redo the onboarding.",
+            "Expired (can occur after 45 days without connection): redo the onboarding.",
             "Decommissioned or migrated: remove the Arc resource to avoid leaving orphans."
           ],
           "pt-BR": [
             "Desconectadas: verificar serviço himds, rede e proxy (azcmagent check) e reconectar.",
-            "Expired (mais de 45 dias sem conexão): refazer o onboarding.",
+            "Expired (pode ocorrer após 45 dias sem conexão): refazer o onboarding.",
             "Desativadas ou migradas: remover o recurso Arc para não deixar órfãos."
           ]
         },

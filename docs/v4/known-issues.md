@@ -42,5 +42,5 @@ Still open (documented, not regressions): scenarios with a high residual score a
 
 ## v4.2.0 review notes
 
-A review of the foundations of the claims found two collector labels without support (CHK-21 port names) and CVE ranges that disagreed with the NVD (CHK-29); both are fixed and the rest is tracked in the register (docs/sources.en-US.md). Still to verify: the 45-day expiry, the SQL extension minimum, the 24-hour usage upload, the 30-day pay-as-you-go limit, the Activity Log retention, Windows Server 2008 in ESU and the list prices. Still open: guide and catalog texts and the report do not yet show the state of each claim; the local block of automatic upgrade is visible only on the machine; CHK-37 mixes the sample with the estate under -MaxMachines.
+A review of the foundations of the claims found two collector labels without support (CHK-21 port names) and CVE ranges that disagreed with the NVD (CHK-29); both are fixed and the rest is tracked in the register (docs/sources.en-US.md), where every claim is now classified (official source, CVE or kit criterion). Still open: guide and catalog texts and the report do not yet show the state of each claim; the local block of automatic upgrade is visible only on the machine; CHK-37 mixes the sample with the estate under -MaxMachines.
 

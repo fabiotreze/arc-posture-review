@@ -120,8 +120,11 @@ def verify(pkg: Package) -> list[dict]:
             elif "2012" in sku and (now >= "2026-10-14" or str(m.get("esu")) != "Assigned"):
                 legacy += 1
             elif "2016" in sku and "Windows" in sku:
-                legacy += 1
-        add("V23", "CHK-51", legacy, by_id["CHK-51"]["found"], legacy == by_id["CHK-51"]["found"], "2008/2012 machines without security updates on the collection date, plus every Windows Server 2016 (the collector lists each one with its ESU situation)")
+                parts = str(m.get("agentVersion") or "").split(".")
+                minor = int(re.sub(r"\D", "0", parts[1])) if len(parts) > 1 else -1
+                if str(m.get("esu")) != "Assigned" or 0 <= minor < 62:
+                    legacy += 1
+        add("V23", "CHK-51", legacy, by_id["CHK-51"]["found"], legacy == by_id["CHK-51"]["found"], "2008/2012 machines without security updates on the collection date, plus Windows Server 2016 without ESU ready (not assigned, or agent below 1.62)")
     return rows
 
 

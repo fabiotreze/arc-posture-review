@@ -42,7 +42,7 @@
         "contractName": {"const": "assessment-result.v4"},
         "contractVersion": {"const": "4.0.0"},
         "checkpoint": {"const": 5},
-        "pipelineVersion": {"const": "4.3.7-checkpoint5"},
+        "pipelineVersion": {"const": "4.3.8-checkpoint5"},
         "engineVersion": {"const": "4.0.0-checkpoint4"},
         "sourceCheckpointCommit": {"const": "2d512a3"},
         "runId": {"type": "string", "pattern": "^ER-[A-F0-9]{20}$"},
