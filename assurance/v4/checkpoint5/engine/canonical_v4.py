@@ -26,7 +26,7 @@ load_evidence = _CP4_ENGINE.load_evidence
 
 CONTRACT_NAME = "assessment-result.v4"
 CONTRACT_VERSION = "4.0.0"
-PIPELINE_VERSION = "4.3.6-checkpoint5"
+PIPELINE_VERSION = "4.3.7-checkpoint5"
 BASELINE_COMMIT = "2d512a3"
 DEFENSE_FUNCTIONS = ("Prevent", "Detect", "Respond", "Recover")
 

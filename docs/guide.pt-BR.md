@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v4.3.6 — 06/11/2026.** Registro de fontes: os preços de tabela (Defender for Servers, Azure Update Manager, Windows Server pay-as-you-go) agora citam a página de preços do Azure Arc, e o CVE-2025-26627 foi verificado no MSRC: afeta o script de onboarding por Group Policy, não o agente Connected Machine. App, lógica do coletor e resultados não mudam. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
+**Versão v4.3.7 — 07/11/2026.** O `tools/Verify-Package.py` deixa de reportar divergências falsas encontradas em duas coletas reais: execução limitada (maxMachines) contra os totais do escopo inteiro, baseline com falha em máquinas desconectadas e linhas de Windows Server 2016 no CHK-51. Coletor, app e resultados não mudam. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 

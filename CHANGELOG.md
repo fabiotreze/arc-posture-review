@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.3.7] — 2026-11-07
+
+### Sources and test coverage
+
+- Package verifier: capped runs, disconnected baselines and Windows Server 2016 no longer produce false disagreements; regression case added.
+- App, collector logic and results are unchanged.
+
 ## [4.3.6] — 2026-11-06
 
 ### Sources and test coverage
