@@ -1,6 +1,6 @@
 # Azure Arc — Security playbook (public × private)
 
-**Version v4.3.0 — 2026-11-06.** Calm, presentation-ready design for the browser app (analysis and guide) and the canonical v4 report: soft surfaces, tinted status colors instead of solid ones, numbered sections with a one-line purpose, one table style, and the same look in dark mode and print/PDF. Content, checks, results and claims are unchanged: the register of sources (`docs/sources.en-US.md`) still states which thresholds are official, which are criteria of the kit and which are still to verify. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
+**Version v4.3.1 — 2026-11-06.** Download guidance and development-tool update: the README and `DISCLAIMER.md` say how to get a working offline copy of the app (*Download raw file*, not *Save as* on the GitHub page), and the development dependencies are updated. App, collector logic, results and claims are unchanged. Guide, collector, canonical JSON and bilingual reports remain aligned 1:1.
 
 > Personal, independent project: it consolidates field experience and public Microsoft documentation, with AI assistance and author review. Not official documentation. Read Appendix I before use.
 
