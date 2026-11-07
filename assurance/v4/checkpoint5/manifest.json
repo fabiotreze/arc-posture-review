@@ -1,6 +1,6 @@
 {
   "name": "arc-posture-review-checkpoint5",
-  "version": "4.2.3",
+  "version": "4.3.0",
   "checkpoint": 5,
   "baseCheckpoint": "4.1",
   "baseCommit": "2d512a3",

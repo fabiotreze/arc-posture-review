@@ -1,5 +1,7 @@
 # Arc Posture Review v4 threat model
 
+**English** · [Português](threat-model-v4.pt-BR.md)
+
 ## Scope
 
 This model covers the read-only collector package, evidence ZIP, deterministic Evaluation Engine, canonical `assessment-result.v4.json`, static reports, repository gates and CI workflows.

@@ -1,5 +1,7 @@
-# Keeps the GitHub Actions used by the workflows up to date.
-# One grouped pull request per month; commit messages start with "ci".
+# Keeps the GitHub Actions used by the workflows and the Python development dependencies
+# (requirements-dev.txt) up to date. One grouped pull request per month per ecosystem.
+# pypdf is pinned by tests (Test-DevSecOpsWorkflows.py, Test-SecurityReviewPackage.py): a new pin must be approved there.
+# Commit messages start with "ci" (Actions) or "deps" (Python).
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -11,4 +13,14 @@ updates:
         patterns: ["*"]
     commit-message:
       prefix: ci
+    open-pull-requests-limit: 5
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      python-dev:
+        patterns: ["*"]
+    commit-message:
+      prefix: deps
     open-pull-requests-limit: 5

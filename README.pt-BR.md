@@ -14,6 +14,13 @@ Avaliação somente leitura da postura de segurança de **servidores habilitados
 
 *Exemplo gerado a partir da fixture sanitizada de teste (dados sintéticos, não é um ambiente real).*
 
+## Para quem é e escopo
+
+- **Para quem:** equipes de segurança, governança e operações e consultores autorizados pelo dono do ambiente, que precisam de um primeiro diagnóstico, baseado em evidências, de servidores habilitados pelo Azure Arc e do SQL Server habilitado pelo Azure Arc.
+- **O que cobre:** 64 controles e 11 cenários de segurança nas subscriptions ou no management group escolhidos; tudo é somente leitura (Azure Resource Graph e comandos de leitura do Azure CLI).
+- **O que não cobre:** não é uma auditoria, um teste de intrusão, uma certificação de conformidade nem uma investigação de incidente, e não acessa as máquinas em si. Veja [DISCLAIMER.md](DISCLAIMER.md).
+- **O que você precisa:** Reader no escopo, Azure Cloud Shell (PowerShell) ou PowerShell 7 com o Azure CLI e Python 3.10+ para a etapa do relatório (o Cloud Shell já tem).
+
 ## Comece aqui — 3 passos
 
 **Coletar → Abrir → Entregar.** Tudo é somente leitura.
@@ -36,7 +43,7 @@ A etapa do relatório precisa de Python 3.10+ (o Cloud Shell já tem). O coletor
 
 ### 2 · Abrir a análise
 
-Abra o app em <https://fabiotreze.github.io/arc-posture-review/> (ou o `index.html` deste repositório), vá ao passo 3 e carregue o `.zip`. O passo 4 mostra a análise. Ela abre com um **veredito** (lacunas verificadas, oportunidades de melhoria e o que ainda não foi verificado, mais as três ações a fazer primeiro), seguido de índice do kit, domínios, prioridades, evidências e plano de ação. **Abrir relatório v4 (Zero Trust)** abre o relatório canônico v4 que veio no mesmo `.zip`.
+**Prefira a cópia offline.** Baixe `arc-posture-review.pt-BR.html` (ou `arc-posture-review.en-US.html`) deste repositório (abra o arquivo no GitHub e escolha *Download raw file*, ou use o `index.html` de um clone ou de um ZIP da tag da release) e abra-o do disco no navegador; o SHA-256 dele está em [SHA256SUMS.txt](SHA256SUMS.txt). Nos dois casos a análise fica na sua máquina (a página bloqueia qualquer conexão de rede), mas a cópia offline elimina a dependência do site hospedado, então **com pacotes reais use sempre a cópia offline**. A página hospedada <https://fabiotreze.github.io/arc-posture-review/> serve apenas como conveniência para uma primeira olhada ou para o exemplo sanitizado. Vá ao passo 3 e carregue o `.zip`. O passo 4 mostra a análise. Ela abre com um **veredito** (lacunas verificadas, oportunidades de melhoria e o que ainda não foi verificado, mais as três ações a fazer primeiro), seguido de índice do kit, domínios, prioridades, evidências e plano de ação. **Abrir relatório v4 (Zero Trust)** abre o relatório canônico v4 que veio no mesmo `.zip`.
 
 ### 3 · Entregar
 
@@ -61,11 +68,11 @@ Use `--locale en-US` para a versão em inglês. Mais opções (baseline, antes/d
 |---|---|
 | Executar a avaliação | Esta página, passos 1–3 |
 | Entender cada check e o que fazer | [docs/guide.pt-BR.md](docs/guide.pt-BR.md) (também dentro do app, passo 1) |
-| Saber como os resultados são decididos (evidência, cobertura, linguagem) | [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) e [docs/v4.1.1-posture-vs-evidence.md](docs/v4.1.1-posture-vs-evidence.md) |
-| Ver quais consultas e permissões são usadas | [docs/v4/query-evidence-matrix.md](docs/v4/query-evidence-matrix.md) |
-| Saber em que cada limiar e rótulo se baseia (fonte oficial, critério do kit ou ainda a verificar) | [docs/sources.pt-BR.md](docs/sources.pt-BR.md) e [docs/v4.2.0-foundations.md](docs/v4.2.0-foundations.md) |
-| Revisar segurança e limitações conhecidas | [docs/v4/threat-model-v4.md](docs/v4/threat-model-v4.md), [docs/v4/known-issues.md](docs/v4/known-issues.md), [SECURITY.md](SECURITY.md) |
-| Ver o que mudou | [CHANGELOG.md](CHANGELOG.md) |
+| Saber como os resultados são decididos (evidência, cobertura, linguagem) | [docs/v4/methodology-v4.pt-BR.md](docs/v4/methodology-v4.pt-BR.md) e [docs/v4.1.1-posture-vs-evidence.pt-BR.md](docs/v4.1.1-posture-vs-evidence.pt-BR.md) |
+| Ver quais consultas e permissões são usadas | [docs/v4/query-evidence-matrix.pt-BR.md](docs/v4/query-evidence-matrix.pt-BR.md) |
+| Saber em que cada limiar e rótulo se baseia (fonte oficial, critério do kit ou ainda a verificar) | [docs/sources.pt-BR.md](docs/sources.pt-BR.md) e [docs/v4.2.0-foundations.pt-BR.md](docs/v4.2.0-foundations.pt-BR.md) |
+| Revisar segurança e limitações conhecidas | [docs/v4/threat-model-v4.pt-BR.md](docs/v4/threat-model-v4.pt-BR.md), [docs/v4/known-issues.pt-BR.md](docs/v4/known-issues.pt-BR.md), [SECURITY.md](SECURITY.md) |
+| Ver o que mudou | [CHANGELOG.md](CHANGELOG.md) (em inglês) |
 
 Escopo: `-Subscriptions <id1>,<id2>` ou `-ManagementGroup <nome>` (padrão: somente a subscription atual do CLI, o que raramente é o desejado).
 
@@ -134,7 +141,7 @@ az login
 ./scripts/Invoke-ArcPostureReview.ps1 -Subscriptions "<nome ou id da subscription>"
 ```
 
-Revise o script antes de executar. O acesso ao Azure é somente leitura (Azure Resource Graph e comandos de leitura do Azure CLI).
+Revise o script antes de executar. O acesso ao Azure é somente leitura (Azure Resource Graph e comandos de leitura do Azure CLI). A única alteração local é instalar, uma vez e se estiver ausente, a extensão `resource-graph` do Azure CLI.
 </details>
 
 <details>
@@ -160,8 +167,8 @@ Revise o script antes de executar. O acesso ao Azure é somente leitura (Azure R
 
 O guia HTML offline gera o coletor, registra as decisões do checklist e analisa o `.zip` localmente no navegador (sem rede: `connect-src 'none'`).
 
-- Online: https://fabiotreze.github.io/arc-posture-review/arc-posture-review.pt-BR.html · [English](https://fabiotreze.github.io/arc-posture-review/)
-- Offline: [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html) · [`arc-posture-review.en-US.html`](arc-posture-review.en-US.html)
+- **Offline (recomendado; use sempre com pacotes reais):** [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html) · [`arc-posture-review.en-US.html`](arc-posture-review.en-US.html)
+- Online (conveniência, para uma primeira olhada ou o exemplo sanitizado): https://fabiotreze.github.io/arc-posture-review/arc-posture-review.pt-BR.html · [English](https://fabiotreze.github.io/arc-posture-review/)
 </details>
 
 <details>
@@ -191,10 +198,10 @@ arc-posture-review.*.html, index.html guia offline e análise no navegador
 ```
 </details>
 
-Metodologia: [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) · Revisão de segurança: [docs/v4/security-review-record-v4.1.5.md](docs/v4/security-review-record-v4.1.5.md) · Mudanças: [CHANGELOG.md](CHANGELOG.md)
+Metodologia: [docs/v4/methodology-v4.pt-BR.md](docs/v4/methodology-v4.pt-BR.md) · Registros da revisão de segurança (um por versão, em inglês): [docs/v4/](docs/v4/) · Mudanças: [CHANGELOG.md](CHANGELOG.md) (em inglês)
 
 ## Contribuições e licença
 
 Dúvidas e correções por [issues](../../issues), citando a documentação oficial da Microsoft; nunca inclua dados de clientes ou do ambiente. Questões de segurança: [SECURITY.md](SECURITY.md).
 
-Código: [MIT](LICENSE). Documentação e textos: [CC BY 4.0](LICENSE-DOCS) — crédito: *"Arc Posture Review" por Fabio Rodrigues Vieira Costa, https://github.com/fabiotreze/arc-posture-review*. Conteúdo de terceiros e marcas (Microsoft, Azure, Azure Arc) continuam com seus donos.
+Código: [MIT](LICENSE). Documentação e textos: [CC BY 4.0](LICENSE-DOCS) — crédito: *"Arc Posture Review" por Fabio Rodrigues Vieira Costa, https://github.com/fabiotreze/arc-posture-review*. Conteúdo de terceiros e marcas (Microsoft, Azure, Azure Arc) continuam com seus donos; os componentes de terceiros estão listados em [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
