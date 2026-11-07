@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.3.2] — 2026-11-06
+
+### Sources and test coverage
+
+- The 45-day Expired timeline cites the Microsoft Learn Agent status section; the 30 to 44 day warning band is registered as a kit criterion.
+- `tools/Test-Keyboard.py` (Tab order, Enter/Space, visible focus, menu highlight while scrolling) joins the gate; `tools/Test-Navigation.py` gains `--browser` and passes in Chromium, Firefox and WebKit.
+- App, collector logic and results are unchanged.
+
 ## [4.3.1] — 2026-11-06
 
 ### Download guidance and tooling

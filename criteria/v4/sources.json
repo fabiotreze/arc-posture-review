@@ -190,15 +190,28 @@
     },
     {
       "id": "AGENT-DISCONNECT-45D",
-      "status": "UNVERIFIED",
+      "status": "VERIFIED_OFFICIAL",
       "checks": ["CHK-37"],
       "claim": {
-        "en-US": "A machine disconnected for 45 days expires and needs a new onboarding; 30 to 44 days is the warning band.",
-        "pt-BR": "Uma máquina desconectada por 45 dias expira e exige novo onboarding; de 30 a 44 dias é a faixa de alerta."
+        "en-US": "A machine that stays disconnected for 45 days might become Expired and needs to be disconnected and reconnected (new onboarding) to be managed again.",
+        "pt-BR": "Uma máquina que permanece desconectada por 45 dias pode passar para Expired e precisa ser desconectada e reconectada (novo onboarding) para voltar a ser gerenciada."
       },
-      "tokens": ["-ge 30", "-lt 45", "44 days"],
+      "tokens": ["-lt 45"],
+      "sources": [{"title": "Azure Arc-enabled servers overview - Agent status", "url": "https://learn.microsoft.com/en-us/azure/azure-arc/servers/overview#agent-status"}],
+      "evidence": "\"If a machine remains disconnected for 45 days, its status might change to Expired. An expired machine can't be managed through Azure Arc until a server administrator disconnects and then reconnects it to Azure. ... The credential is valid for up to 90 days and renews every 45 days.\"",
+      "verifiedOn": "2026-11-06"
+    },
+    {
+      "id": "AGENT-DISCONNECT-30D",
+      "status": "KIT_CRITERION",
+      "checks": ["CHK-37"],
+      "claim": {
+        "en-US": "A machine disconnected for 30 to 44 days is in the warning band, before the 45-day expiry.",
+        "pt-BR": "Uma máquina desconectada por 30 a 44 dias está na faixa de alerta, antes da expiração de 45 dias."
+      },
+      "tokens": ["-ge 30", "44 days"],
       "sources": [],
-      "todo": "The agent overview and manage-agent pages do not state the 45-day expiry. Find the Learn page that documents the Expired status and its timeline.",
+      "rationale": "Microsoft documents the 45-day point, not a 30-day one. The kit warns 15 days earlier so the machine can be reconnected before it expires and a new onboarding is needed.",
       "verifiedOn": "2026-11-06"
     },
     {
