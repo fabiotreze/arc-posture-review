@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v4.3.1 — 06/11/2026.** Orientação de download e atualização de ferramentas de desenvolvimento: o README e o `DISCLAIMER.md` explicam como obter uma cópia offline funcional do app (*Download raw file*, não *Salvar como* na página do GitHub), e as dependências de desenvolvimento foram atualizadas. App, lógica do coletor, resultados e afirmações não mudam. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
+**Versão v4.3.2 — 06/11/2026.** O prazo de 45 dias para Expired agora cita a seção Agent status do Microsoft Learn, e a faixa de alerta de 30 a 44 dias está registrada como critério do kit. Novo teste de teclado e de destaque do menu ao rolar, e o teste de navegação também roda no Firefox e no WebKit. App, lógica do coletor e resultados não mudam. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 

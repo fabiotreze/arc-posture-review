@@ -26,7 +26,8 @@ Every threshold, date and label used by the collector and the reports is registe
 | `SQLEXT-SUPPORT-12M` | Only Azure extension for SQL Server versions released within the last year are supported. | CHK-30, CHK-34 | Official source | 2026-11-06 |
 | `SQLEXT-TARGET` | The current auto-upgrade target of the Azure extension for SQL Server is 1.1.3518.465 (August 2026); the live value read from Azure takes precedence when higher. | CHK-30, CHK-34 | Official source | 2026-11-06 |
 | `SQLEXT-MIN-2859` | SQL extension below 1.1.2859.223 is reported. | CHK-34 | To verify | 2026-11-06 |
-| `AGENT-DISCONNECT-45D` | A machine disconnected for 45 days expires and needs a new onboarding; 30 to 44 days is the warning band. | CHK-37 | To verify | 2026-11-06 |
+| `AGENT-DISCONNECT-45D` | A machine that stays disconnected for 45 days might become Expired and needs to be disconnected and reconnected (new onboarding) to be managed again. | CHK-37 | Official source | 2026-11-06 |
+| `AGENT-DISCONNECT-30D` | A machine disconnected for 30 to 44 days is in the warning band, before the 45-day expiry. | CHK-37 | Kit criterion | 2026-11-06 |
 | `ESU-2012-END` | Windows Server 2012/2012 R2 ESU ends on 2026-10-13; ESU licenses enabled by Azure Arc are deactivated at 00:00 UTC on 2026-10-14. ESU through Arc for 2012 needs agent 1.34 or later. | CHK-51 | Official source | 2026-11-06 |
 | `ESU-2016` | Windows Server 2016 reaches end of support on 2027-01-12; ESU can be configured in the Azure portal from 2026-08-03 and billing through Azure Arc starts on 2027-01-13; the agent must be 1.62 or later. | CHK-51 | Official source | 2026-11-06 |
 | `ESU-2008` | Windows Server 2008 is outside the ESU cycle delivered through Azure Arc. | CHK-51 | To verify | 2026-11-06 |
@@ -139,11 +140,18 @@ SQL extension below 1.1.2859.223 is reported.
 - **To do:** The release notes list 1.1.2859.223 (November 2024) but the page does not say it is a minimum. Find the documented minimum for automatic extension upgrade or replace this threshold by the 12-month window.
 - [Release notes - SQL Server enabled by Azure Arc](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/release-notes?view=sql-server-ver17)
 
-### AGENT-DISCONNECT-45D — To verify
+### AGENT-DISCONNECT-45D — Official source
 
-A machine disconnected for 45 days expires and needs a new onboarding; 30 to 44 days is the warning band.
+A machine that stays disconnected for 45 days might become Expired and needs to be disconnected and reconnected (new onboarding) to be managed again.
 
-- **To do:** The agent overview and manage-agent pages do not state the 45-day expiry. Find the Learn page that documents the Expired status and its timeline.
+- **Evidence:** "If a machine remains disconnected for 45 days, its status might change to Expired. An expired machine can't be managed through Azure Arc until a server administrator disconnects and then reconnects it to Azure. ... The credential is valid for up to 90 days and renews every 45 days."
+- [Azure Arc-enabled servers overview - Agent status](https://learn.microsoft.com/en-us/azure/azure-arc/servers/overview#agent-status)
+
+### AGENT-DISCONNECT-30D — Kit criterion
+
+A machine disconnected for 30 to 44 days is in the warning band, before the 45-day expiry.
+
+- **Rationale:** Microsoft documents the 45-day point, not a 30-day one. The kit warns 15 days earlier so the machine can be reconnected before it expires and a new onboarding is needed.
 
 ### ESU-2012-END — Official source
 

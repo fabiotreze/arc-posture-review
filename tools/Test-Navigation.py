@@ -337,6 +337,7 @@ def check_external(urls: set[str]) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--browser", choices=["chromium", "firefox", "webkit"], default="chromium", help="engine to drive (the gate uses chromium)")
     parser.add_argument("--external", action="store_true", help="also request every external URL (needs network)")
     args = parser.parse_args()
 
@@ -345,12 +346,12 @@ def main() -> int:
         external |= set(re.findall(r'href="(https?://[^"#]+)', app.read_text(encoding="utf-8")))
 
     launch = {"headless": True}
-    if os.environ.get("ARC_REVIEW_BROWSER"):
+    if args.browser == "chromium" and os.environ.get("ARC_REVIEW_BROWSER"):
         launch["executable_path"] = os.environ["ARC_REVIEW_BROWSER"]
     with tempfile.TemporaryDirectory(prefix="arc-nav-report-") as temp, sync_playwright() as playwright:
         assessment = Path(temp) / "assessment.v4.json"
         subprocess.run([sys.executable, str(CLI), "evaluate", "--evidence", str(FIXTURE), "--output", str(assessment)], check=True, capture_output=True)
-        browser = playwright.chromium.launch(**launch)
+        browser = getattr(playwright, args.browser).launch(**launch)
         for locale in APPS:
             check_app(browser, locale)
             report = Path(temp) / f"report.{locale}.html"
@@ -366,7 +367,7 @@ def main() -> int:
             print(" - " + line)
         return 1
     scope = ", ".join(f"{n} {k}" for k, n in checked.items()) + (f", {len(external)} external URLs" if args.external else "")
-    print(f"[PASS] navigation: {scope} resolve and work (EN-US and pt-BR)")
+    print(f"[PASS] navigation: {scope} resolve and work in {args.browser} (EN-US and pt-BR)")
     return 0
 
 
