@@ -1,5 +1,7 @@
 # Arc Posture Review v4 methodology
 
+**English** · [Português](methodology-v4.pt-BR.md)
+
 **Release:** v4.0.1 (methodology unchanged since v4.0.0-rc.1)\
 **Canonical result:** `assessment-result.v4.json`  
 **Evidence layer:** exactly `CHK-01` through `CHK-64`

@@ -4,15 +4,18 @@ Copyright (c) 2026 Fabio Rodrigues Vieira Costa
 
 Scope
 - Licensed under CC BY 4.0: the documentation and playbook text in docs/,
-  the README files, DISCLAIMER.md and the human-readable text inside the
-  HTML files.
+  the README files, CHANGELOG.md, CONTRIBUTING.md, SECURITY.md, DISCLAIMER.md,
+  the release notes in release/, the human-readable text in criteria/ (the
+  source of the check texts shown in the HTML files) and the human-readable
+  text inside the HTML files.
 - Licensed under the MIT License (see LICENSE): all source code, including the
   PowerShell script in scripts/ and the JavaScript, CSS and embedded PowerShell
   inside the HTML files.
 - Not covered by this license: third-party content that is referenced or
   briefly quoted (including Microsoft Learn documentation and public security
-  research) and third-party trademarks (Microsoft, Azure, Azure Arc and
-  others), which remain the property of their respective owners.
+  research), third-party trademarks (Microsoft, Azure, Azure Arc and others),
+  which remain the property of their respective owners, and the third-party
+  components listed in THIRD-PARTY-NOTICES.md, which keep their own license.
 
 Legal code: https://creativecommons.org/licenses/by/4.0/legalcode
 Summary:    https://creativecommons.org/licenses/by/4.0/

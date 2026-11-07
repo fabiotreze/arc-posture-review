@@ -909,6 +909,7 @@ SUMMARY_CSS = r"""
 .badge.NOT_APPLICABLE{background:#eef1f5;color:#4b586a}
 """
 _CATALOG_TITLES: dict[str, dict[str, str]] | None = None
+# Icons: copied or adapted from Feather Icons (MIT, Copyright (c) 2013-2023 Cole Bemis). See THIRD-PARTY-NOTICES.md.
 _STAT_ICONS = {
     "gap": '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
     "imp": '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
@@ -1096,6 +1097,7 @@ TEXT["pt-BR"].update({
     "uxFilter": "Filtrar checks por ID, título ou texto", "uxAll": "Todos", "uxShowing": "Exibindo",
     "uxPackage": "Pacote", "uxCollector": "Coletor", "uxGenerated": "Gerado em", "uxIntegrity": "Integridade", "uxRun": "Execução",
 })
+# Icons: copied or adapted from Feather Icons (MIT, Copyright (c) 2013-2023 Cole Bemis). See THIRD-PARTY-NOTICES.md.
 _ICONS = {
     "executive-narrative": '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
     "action-plan": '<polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
@@ -1185,6 +1187,7 @@ def _ux_checks(page: str, document: dict[str, Any], locale: str) -> str:
 
 
 UX_CSS = r"""
+/* Icons: copied or adapted from Feather Icons (MIT, Copyright (c) 2013-2023 Cole Bemis). See THIRD-PARTY-NOTICES.md. */
 body{font:14px/1.6 "Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
 .shell{grid-template-columns:272px minmax(0,1fr)}
 .side{background:#fff;color:var(--ink);border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:4px;box-shadow:none}

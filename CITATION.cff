@@ -16,6 +16,7 @@ repository-code: "https://github.com/fabiotreze/arc-posture-review"
 url: "https://fabiotreze.github.io/arc-posture-review/"
 version: "4.3.0"
 date-released: "2026-11-06"
+# Code: MIT (LICENSE). Documentation and text: CC BY 4.0 (LICENSE-DOCS).
 license: MIT
 keywords:
   - azure-arc

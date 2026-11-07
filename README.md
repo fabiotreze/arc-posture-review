@@ -14,6 +14,13 @@ Read-only security posture review for **Azure Arc-enabled servers** and **SQL Se
 
 *Example rendered from the sanitized test fixture (synthetic data, not a real environment).*
 
+## Who it is for and scope
+
+- **For:** security, governance and operations teams, and consultants authorized by the owner of the environment, who need a first, evidence-based diagnosis of Azure Arc-enabled servers and SQL Server enabled by Azure Arc.
+- **Covers:** 64 controls and 11 security scenarios over the subscriptions or the management group you choose; everything is read-only (Azure Resource Graph and Azure CLI read commands).
+- **Does not cover:** it is not an audit, a penetration test, a compliance certification or an incident investigation, and it does not access the machines themselves. See [DISCLAIMER.md](DISCLAIMER.md).
+- **You need:** Reader on the scope, Azure Cloud Shell (PowerShell) or PowerShell 7 with the Azure CLI, and Python 3.10+ for the report step (Cloud Shell has it).
+
 ## Start here — 3 steps
 
 **Collect → Open → Deliver.** Everything is read-only.
@@ -36,7 +43,7 @@ The report step needs Python 3.10+ (Cloud Shell has it). The collector downloads
 
 ### 2 · Open the analysis
 
-Open the app at <https://fabiotreze.github.io/arc-posture-review/> (or the `index.html` from this repository), go to step 3 and load the `.zip`. Step 4 shows the analysis. It opens with a **verdict** (verified gaps, improvement opportunities and what is still not verified, plus the three actions to do first), followed by kit index, domains, priorities, evidence and the action plan. **Open v4 report (Zero Trust)** opens the canonical v4 report that came in the same `.zip`.
+**Prefer the offline copy.** Download `arc-posture-review.en-US.html` (or `arc-posture-review.pt-BR.html`) from this repository (open the file on GitHub and choose *Download raw file*, or use the `index.html` of a clone or of a ZIP of the release tag) and open it from disk in your browser; its SHA-256 is listed in [SHA256SUMS.txt](SHA256SUMS.txt). In both cases the analysis stays on your machine (the page blocks every network connection), but the offline copy removes the dependency on the hosted site, so **with real packages always use the offline copy**. The hosted page <https://fabiotreze.github.io/arc-posture-review/> is only a convenience for a first look or for the sanitized example. Go to step 3 and load the `.zip`. Step 4 shows the analysis. It opens with a **verdict** (verified gaps, improvement opportunities and what is still not verified, plus the three actions to do first), followed by kit index, domains, priorities, evidence and the action plan. **Open v4 report (Zero Trust)** opens the canonical v4 report that came in the same `.zip`.
 
 ### 3 · Deliver
 
@@ -134,7 +141,7 @@ az login
 ./scripts/Invoke-ArcPostureReview.ps1 -Subscriptions "<subscription name or id>"
 ```
 
-Review the script before running it. Azure access is read-only (Azure Resource Graph and Azure CLI read commands).
+Review the script before running it. Azure access is read-only (Azure Resource Graph and Azure CLI read commands). The only local change is installing the Azure CLI `resource-graph` extension, once, if it is missing.
 </details>
 
 <details>
@@ -160,8 +167,8 @@ Review the script before running it. Azure access is read-only (Azure Resource G
 
 The offline HTML guide generates the collector, records checklist decisions and analyzes the `.zip` locally in the browser (no network: `connect-src 'none'`).
 
-- Online: https://fabiotreze.github.io/arc-posture-review/ · [Português](https://fabiotreze.github.io/arc-posture-review/arc-posture-review.pt-BR.html)
-- Offline: [`arc-posture-review.en-US.html`](arc-posture-review.en-US.html) · [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html)
+- **Offline (recommended; always use it with real packages):** [`arc-posture-review.en-US.html`](arc-posture-review.en-US.html) · [`arc-posture-review.pt-BR.html`](arc-posture-review.pt-BR.html)
+- Online (convenience, for a first look or the sanitized example): https://fabiotreze.github.io/arc-posture-review/ · [Português](https://fabiotreze.github.io/arc-posture-review/arc-posture-review.pt-BR.html)
 </details>
 
 <details>
@@ -191,10 +198,10 @@ arc-posture-review.*.html, index.html offline guide and browser analysis
 ```
 </details>
 
-Methodology: [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) · Security review: [docs/v4/security-review-record-v4.1.5.md](docs/v4/security-review-record-v4.1.5.md) · Changes: [CHANGELOG.md](CHANGELOG.md)
+Methodology: [docs/v4/methodology-v4.md](docs/v4/methodology-v4.md) · Security review records (one per release): [docs/v4/](docs/v4/) · Changes: [CHANGELOG.md](CHANGELOG.md)
 
 ## Feedback and license
 
 Questions and corrections via [issues](../../issues), citing official Microsoft documentation; never include customer or environment data. Security issues: [SECURITY.md](SECURITY.md).
 
-Code: [MIT](LICENSE). Documentation and text: [CC BY 4.0](LICENSE-DOCS) — credit: *"Arc Posture Review" by Fabio Rodrigues Vieira Costa, https://github.com/fabiotreze/arc-posture-review*. Third-party content and trademarks (Microsoft, Azure, Azure Arc) remain with their owners.
+Code: [MIT](LICENSE). Documentation and text: [CC BY 4.0](LICENSE-DOCS) — credit: *"Arc Posture Review" by Fabio Rodrigues Vieira Costa, https://github.com/fabiotreze/arc-posture-review*. Third-party content and trademarks (Microsoft, Azure, Azure Arc) remain with their owners; third-party components are listed in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

@@ -75,9 +75,9 @@ def approve(reviewer: str) -> int:
     if other:
         sys.exit(f"[FAIL] open blockers remain: {other}")
     today = datetime.date.today().isoformat()
-    record.write_bytes(re.sub(r"^\*\*Decision:\*\* PENDING.*$", f"**Decision:** APPROVED — {reviewer}, {today} ({done}/{done})", text, flags=re.M).encode("utf-8"))
+    record.write_bytes(re.sub(r"^\*\*Decision:\*\* PENDING.*$", f"**Decision:** APPROVED — {done}/{done} checklist items verified by the release gates, recorded at the request of the maintainer ({reviewer}) on {today}. This is the project's own checklist, not an independent audit.", text, flags=re.M).encode("utf-8"))
     notes = folder / "RELEASE-NOTES.md"
-    notes.write_bytes(re.sub(r"^\*\*Status:\*\* .*$", f"**Status:** APPROVED_FOR_PUBLICATION — security review approved by {reviewer} on {today} ({done}/{done}). Tagging and publishing remain a separate, manual step.", notes.read_text(encoding="utf-8"), flags=re.M).encode("utf-8"))
+    notes.write_bytes(re.sub(r"^\*\*Status:\*\* .*$", f"**Status:** APPROVED_FOR_PUBLICATION — {done}/{done} checklist items verified by the release gates and recorded at the request of the maintainer ({reviewer}) on {today}. This is the project's own checklist, not an independent audit. Tagging and publishing remain a separate, manual step.", notes.read_text(encoding="utf-8"), flags=re.M).encode("utf-8"))
     manifest.update(status="APPROVED_FOR_PUBLICATION", publishable=True, blockers=[])
     review.update(reviewer=reviewer, date=today, decision="APPROVED", items=done, itemsApproved=done)
     jsave(folder / "release-manifest.json", manifest)

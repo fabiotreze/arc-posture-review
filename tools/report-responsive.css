@@ -71,6 +71,7 @@
 
 .portal-link { margin-left: 4px; font-size: 12px; white-space: nowrap; }
 
+/* Icons: copied or adapted from Feather Icons (MIT, Copyright (c) 2013-2023 Cole Bemis). See THIRD-PARTY-NOTICES.md. */
 /* Calm design system (v4.3.0). Single source of truth for the app, the saved analysis and the samples:
    soft surfaces, a navy anchor, thin borders and tinted (never solid) status colors. */
 :root {

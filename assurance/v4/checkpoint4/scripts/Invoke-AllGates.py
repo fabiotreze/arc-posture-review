@@ -32,6 +32,7 @@ def main() -> int:
         ("zero-target-query-evidence", [sys.executable, "tools/Test-ZeroTarget.py"]),
         ("zero-connected-estate", [sys.executable, "tools/Test-ZeroConnectedEstate.py"]),
         ("posture-wording", [sys.executable, "tools/Test-PostureWording.py"]),
+        ("doc-parity", [sys.executable, "tools/Test-DocParity.py"]),
         ("claim-register", [sys.executable, "tools/Test-ClaimRegister.py"]),
         ("code-quality", [sys.executable, "tools/Test-CodeQuality.py"]),
         ("claim-register-docs", [sys.executable, "tools/Sync-Sources.py", "--check"]),

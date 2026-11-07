@@ -8,6 +8,18 @@
 - v4 report: a one-line purpose under each section (EN-US and pt-BR); KPI tiles and numbered actions in the executive summary and the action plan.
 - App analysis: the kit-index explanation and the two reading notes are folded; the Quick read no longer repeats the top gains already shown in "Do first"; the Executive assessment and the Evidence appendix are numbered parts.
 - Fixed a stray `\1` next to the scope selector in "Prepare collection" (since v4.1.3).
+
+### Documentation and governance
+
+- Portuguese twins of six English-only documents (`docs/v4/methodology-v4`, `threat-model-v4`, `query-evidence-matrix`, `known-issues`, `docs/v4.1.1-posture-vs-evidence`, `docs/v4.2.0-foundations`) and complete Portuguese `CONTRIBUTING.md`, `DISCLAIMER.md` and `SECURITY.md`. `tools/Test-DocParity.py` (in the gate) keeps structure, URLs, code blocks and numbers aligned between EN-US and pt-BR.
+- `THIRD-PARTY-NOTICES.md` for the Feather Icons (MIT) used or adapted in the app and the report; `LICENSE-DOCS` scope clarified (CHANGELOG, CONTRIBUTING, SECURITY, release notes, `criteria/` text) and `CITATION.cff` points to both licenses. No license was changed.
+- `SECURITY.md`: fallback when private vulnerability reporting is unavailable and a rule against publishing credentials. README: who it is for, what it covers and does not cover. `DISCLAIMER.md` and README disclose the collector's one local change (the Azure CLI `resource-graph` extension) and the author's field experience.
+- Two documentation URLs that returned 404 (RBAC Resource Graph samples; Permissions for a subscription) corrected in the collector (`officialSource` in every package) and in `docs/v4/query-evidence-matrix.md`.
+- Outdated documents (`docs/v4/known-issues.md`, checkpoint 8 README) carry a historical banner; spelling reviewed in EN-US and pt-BR (British spellings fixed in live files; published release notes and records are kept as they were).
+- `tools/Prepare-Release.py approve` writes neutral, verifiable approval text (checklist items verified by the release gates, recorded at the maintainer's request; not an independent audit).
+- Repository: Dependabot also watches `requirements-dev.txt`; settings aligned (squash merge only, branch deleted on merge, Dependabot security updates on, empty wiki and projects off).
+- Offline first: the README (EN-US and pt-BR) now recommends the offline copy of the app with real packages (and says where to download it and its SHA-256), and lists the hosted page only as a convenience; `DISCLAIMER.md` and the privacy notice of the app say the same.
+- `tools/Test-Navigation.py` (in the gate) clicks every wizard step, guide and checklist jump, Start-here button, guide search, analysis jump and back button of the app, every menu and CHK link, filter and the mobile menu of the v4 report, and checks every anchor of the saved analysis and the samples and every internal Markdown link. `--external` also requests every external URL.
 - Presentation only: collector logic, results, scores, priorities and the canonical contract are unchanged. See `docs/v4.3.0-calm-design.md`.
 
 ## [4.2.3] — 2026-11-06

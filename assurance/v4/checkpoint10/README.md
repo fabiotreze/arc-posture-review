@@ -1,4 +1,4 @@
-# Checkpoint 10 — release preparation (version-parametrised)
+# Checkpoint 10 — release preparation (version-parameterized)
 
 The target release is read from `assurance/v4/checkpoint10/manifest.json` (`release`). The gate validates `release/<release>/release-manifest.json`, `RELEASE-NOTES.md` and `SHA256SUMS`, the collector version, `CITATION.cff` and the CHANGELOG section.
 

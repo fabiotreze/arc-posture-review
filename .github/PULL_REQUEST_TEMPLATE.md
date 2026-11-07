@@ -8,4 +8,4 @@
 - [ ] The collector stays read-only; BOM and line endings of `scripts/Invoke-ArcPostureReview.ps1` are intact.
 - [ ] Posture vocabulary kept (verified gap / improvement opportunity / not verified); EN-US and PT-BR both updated.
 - [ ] `python tools/Invoke-V4FinalGates.py --profile release` passes (after `Build-Kit.py --write-hash`, `Sync-ReportAssets.py` and `Prepare-Release.py checksums` when applicable).
-- [ ] README, guide and CHANGELOG updated when behaviour changes.
+- [ ] README, guide and CHANGELOG updated when behavior changes.

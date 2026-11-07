@@ -36,4 +36,4 @@ body:
     id: reference
     attributes:
       label: Official Microsoft documentation (if it applies)
-      description: Link that supports the expected behaviour.
+      description: Link that supports the expected behavior.

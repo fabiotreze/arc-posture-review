@@ -24,6 +24,7 @@ var UXT = (document.documentElement.lang === "en") ? {
   s3: "Entregar", s3d: "Salve a análise (.html) e o relatório v4, ou imprima em PDF.", go: "Abrir →",
   search: "Buscar no guia: CHK-23, extensão, baseline…", found: "seção(ões) encontrada(s)"
 };
+// Icons: copied or adapted from Feather Icons (MIT, Copyright (c) 2013-2023 Cole Bemis). See THIRD-PARTY-NOTICES.md.
 var UXI = {
   gap: '<circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>',
   imp: '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
