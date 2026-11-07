@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.3.1] — 2026-11-06
+
+### Download guidance and tooling
+
+- README and `DISCLAIMER.md` (EN-US and pt-BR): download the offline app with *Download raw file*; *Save as* on the GitHub page saves the web page and cannot load a `.zip`.
+- `requirements-dev.txt`: playwright 1.64.1, beautifulsoup4 4.15.0, jsonschema, referencing, PyYAML, ruff 0.17.3.
+- Presentation, collector logic and results are unchanged.
+
 ## [4.3.0] — 2026-11-06
 
 ### Calm visual design

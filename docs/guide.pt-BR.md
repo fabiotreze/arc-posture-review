@@ -1,6 +1,6 @@
 # Azure Arc — Playbook de segurança (público × privado)
 
-**Versão v4.3.0 — 06/11/2026.** Design calmo e pronto para apresentação no app (análise e guia) e no relatório v4 canônico: superfícies suaves, cores de status em tons claros em vez de sólidas, seções numeradas com uma linha de propósito, um único estilo de tabela e o mesmo visual no modo escuro e na impressão/PDF. Conteúdo, checks, resultados e afirmações não mudam: o registro de fontes (`docs/sources.pt-BR.md`) continua dizendo quais limiares são oficiais, quais são critérios do kit e quais ainda estão a verificar. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
+**Versão v4.3.1 — 06/11/2026.** Orientação de download e atualização de ferramentas de desenvolvimento: o README e o `DISCLAIMER.md` explicam como obter uma cópia offline funcional do app (*Download raw file*, não *Salvar como* na página do GitHub), e as dependências de desenvolvimento foram atualizadas. App, lógica do coletor, resultados e afirmações não mudam. Guia, coletor, JSON canônico e relatórios bilíngues permanecem alinhados 1:1.
 
 > Projeto pessoal e independente: consolida experiência de campo e documentação pública da Microsoft, com apoio de IA e revisão do autor. Não é documentação oficial. Leia o Anexo I antes de usar.
 
