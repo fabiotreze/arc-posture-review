@@ -286,15 +286,15 @@
     },
     {
       "id": "SQL-PAYG-30D",
-      "status": "UNVERIFIED",
+      "status": "VERIFIED_OFFICIAL",
       "checks": ["CHK-64"],
       "claim": {
-        "en-US": "Pay-as-you-go SQL licensing expires after 30 days without connection.",
-        "pt-BR": "O licenciamento SQL pay-as-you-go expira após 30 dias sem conexão."
+        "en-US": "A SQL Server machine with pay-as-you-go must check in with Azure at least every 30 days; beyond 30 days disconnected, billing switches to recurring charges based on the last known configuration.",
+        "pt-BR": "Uma máquina SQL Server com pay-as-you-go precisa se comunicar com o Azure ao menos a cada 30 dias; acima de 30 dias desconectada, a cobrança passa a ser recorrente com base na última configuração conhecida."
       },
       "tokens": ["30 days"],
-      "sources": [],
-      "todo": "Find the Learn page for SQL Server pay-as-you-go through Azure Arc and quote the disconnection limit.",
+      "sources": [{"title": "Manage the transition to pay-as-you-go billing - SQL Server enabled by Azure Arc", "url": "https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/manage-pay-as-you-go-transition?view=sql-server-ver17#solution-overview"}],
+      "evidence": "\"Azure Arc-connected servers must check in with Azure at least once every 30 days.\" / \"If the machine remains disconnected for more than 30 days, the SQL Arc service switches to recurring billing based on the last known configuration.\" Charges include backfill for the previous 30 days; a changed VM ID can cause double billing.",
       "verifiedOn": "2026-11-06"
     },
     {

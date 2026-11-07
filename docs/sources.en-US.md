@@ -33,7 +33,7 @@ Every threshold, date and label used by the collector and the reports is registe
 | `ESU-2008` | Windows Server 2008 is outside the ESU cycle delivered through Azure Arc. | CHK-51 | To verify | 2026-11-06 |
 | `AGENT-PORTS-CHANNELS` | incomingconnections.ports lists the local ports the Azure Arc connectivity channel may reach (several ports are separated by commas). SSH uses port 22 by default (a single port per service configuration) and Windows Admin Center is deployed through the AdminCenter extension on a configurable port (the examples use 6516). Any other port is reported as unclassified. | CHK-21 | Official source | 2026-11-06 |
 | `SQL-USAGE-24H` | A SQL usage upload older than 24 hours is reported as stale. | CHK-64 | To verify | 2026-11-06 |
-| `SQL-PAYG-30D` | Pay-as-you-go SQL licensing expires after 30 days without connection. | CHK-64 | To verify | 2026-11-06 |
+| `SQL-PAYG-30D` | A SQL Server machine with pay-as-you-go must check in with Azure at least every 30 days; beyond 30 days disconnected, billing switches to recurring charges based on the last known configuration. | CHK-64 | Official source | 2026-11-06 |
 | `ACTIVITYLOG-90D` | The Activity Log keeps 90 days natively. | CHK-43 | To verify | 2026-11-06 |
 | `LA-RETENTION-90D` | A Log Analytics workspace that receives Arc data and keeps less than 90 days is a warning. | CHK-45 | Kit criterion | 2026-11-06 |
 | `DEFENDER-OPEN-90D` | Defender recommendations open for 90 days or more are counted separately in the detail (informational). | CHK-33 | Kit criterion | 2026-11-06 |
@@ -189,11 +189,12 @@ A SQL usage upload older than 24 hours is reported as stale.
 
 - **To do:** Confirm the documented upload cadence of the SQL Server extension before presenting 24 hours as the expected interval.
 
-### SQL-PAYG-30D — To verify
+### SQL-PAYG-30D — Official source
 
-Pay-as-you-go SQL licensing expires after 30 days without connection.
+A SQL Server machine with pay-as-you-go must check in with Azure at least every 30 days; beyond 30 days disconnected, billing switches to recurring charges based on the last known configuration.
 
-- **To do:** Find the Learn page for SQL Server pay-as-you-go through Azure Arc and quote the disconnection limit.
+- **Evidence:** "Azure Arc-connected servers must check in with Azure at least once every 30 days." / "If the machine remains disconnected for more than 30 days, the SQL Arc service switches to recurring billing based on the last known configuration." Charges include backfill for the previous 30 days; a changed VM ID can cause double billing.
+- [Manage the transition to pay-as-you-go billing - SQL Server enabled by Azure Arc](https://learn.microsoft.com/en-us/sql/sql-server/azure-arc/manage-pay-as-you-go-transition?view=sql-server-ver17#solution-overview)
 
 ### ACTIVITYLOG-90D — To verify
 

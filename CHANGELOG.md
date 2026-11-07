@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.3.3] — 2026-11-06
+
+### Sources and test coverage
+
+- The SQL Server pay-as-you-go 30-day limit cites Microsoft Learn; after 30 days without connection billing becomes recurring on the last known configuration (the texts said the subscription expires).
+- CHK-64 thresholds and results are unchanged.
+- App, collector logic and results are unchanged.
+
 ## [4.3.2] — 2026-11-06
 
 ### Sources and test coverage
